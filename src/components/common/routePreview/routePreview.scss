@@ -1,0 +1,36 @@
+@use "@/styles/main.scss" as *;
+
+.route-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-xs;
+
+  .route-item {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-sm + $pu-spacing-xs; // 12px gap
+  }
+
+  .type-indicator {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border-radius: $pu-radius-full;
+  }
+
+  .indicator-type-start {
+    background-color: $pu-color-green;
+  }
+
+  .indicator-type-end {
+    background-color: $pu-color-red;
+  }
+
+  .address {
+    @include pu-font("label-large");
+    color: $pu-color-on-surface;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,0 +1,53 @@
+@use "@/styles/main.scss" as *;
+
+.badge {
+  position: relative;
+  vertical-align: middle;
+  display: inline-block;
+
+  &__content {
+    display: inline-block;
+    box-sizing: content-box;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 6px;
+    background-color: $pu-color-error; /* default danger */
+    border-radius: $pu-radius-lg;
+    color: $pu-color-primary-on; /* foreground on colored bg */
+
+    text-align: center;
+    white-space: nowrap;
+
+    @include pu-font("label-medium");
+
+    &.is-fixed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translateY(-50%) translateX(50%);
+    }
+
+    &.is-dot {
+      height: 8px;
+      width: 8px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    &--primary {
+      background-color: $pu-color-primary;
+    }
+    &--success {
+      background-color: $pu-color-green;
+    }
+    &--warning {
+      background-color: $pu-color-warning;
+    }
+    &--info {
+      background-color: $pu-color-neutral-variant;
+    }
+    &--danger {
+      background-color: $pu-color-error;
+    }
+  }
+}

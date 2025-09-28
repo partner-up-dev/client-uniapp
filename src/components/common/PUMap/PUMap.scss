@@ -1,0 +1,42 @@
+@use "@/styles/main.scss" as *;
+
+.pu-map {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: $pu-radius-sm;
+
+  .map-view {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 地图操作按钮容器 */
+  .map-operations {
+    position: absolute;
+    bottom: $pu-spacing-sm;
+    right: $pu-spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-xs;
+    opacity: 0.8;
+
+    .operation-button {
+      width: $pu-icon-size-medium;
+      height: $pu-icon-size-medium;
+      background-color: $pu-color-surface-container;
+      border-radius: $pu-radius-xs;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      color: $pu-color-on-surface;
+
+      @include pu-font-size("body-large");
+
+      &:active {
+        background-color: $pu-color-neutral-container;
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "initVue": {
+    "scope": "vue",
+    "prefix": "init-vue-sfc",
+    "body": [
+      "<script lang=\"ts\">",
+      "export default {",
+      "    name: \"\",",
+      "    options: BasicComponentOptions,",
+      "}",
+      "</script>",
+      "<script setup lang=\"ts\">",
+      "import { BasicComponentOptions } from '@/utils/vue';",
+      "",
+      "",
+      "</script>",
+      "",
+      "<template>",
+      "",
+      "</template>",
+      "",
+      "<style lang=\"scss\" scoped>",
+      "@import \"./index.scss\";",
+      "</style>"
+    ]
+  },
+  "componentSCSS": {
+    "scope": "scss",
+    "prefix": "comp-scss-head",
+    "body": ["@use '@/styles/main.scss' as *;"]
+  },
+  "useTranslate": {
+    "scope": "vue,ts",
+    "prefix": "use-translate",
+    "body": [
+      "import { useTranslate } from '@/locale/use';",
+      "const { dt } = useTranslate('$1');"
+    ]
+  }
+}

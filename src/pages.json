@@ -1,0 +1,50 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    {
+      "path": "pages/explore/explore",
+      "style": {
+        "navigationBarTitleText": "探索"
+      }
+    },
+    {
+      "path": "pages/partner_request/detail/detail",
+      "style": {
+        "navigationBarTitleText": "搭子请求"
+      }
+    }
+  ],
+  "tabBar": {
+    "custom": true,
+    "color": "#333333",
+    "selectedColor": "#000000",
+    "borderStyle": "white",
+    "backgroundColor": "#eeefe3",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "static/icon/home-selected.png",
+        "selectedIconPath": "static/icon/home-selected.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/explore/explore",
+        "iconPath": "static/icon/discover-selected.png",
+        "selectedIconPath": "static/icon/discover-selected.png",
+        "text": "探索"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationStyle": "custom",
+    "navigationBarTitleText": "PartnerUp",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#eeefe3",
+    "enablePullDownRefresh": false
+  }
+}

@@ -1,0 +1,352 @@
+/*
+ * Design reference variables (SCSS) - converted from CSS custom properties
+ * These variables are intended to be imported by other SCSS files.
+ */
+
+/* Individual color variables (convenience) */
+/* Primary */
+$ref-color-primary-10: #f3f9e9;
+$ref-color-primary-20: #e6f3d3;
+$ref-color-primary-30: #d9edbd;
+$ref-color-primary-40: #cdeda4;
+$ref-color-primary-50: #bfe77f;
+$ref-color-primary-60: #a3dd5f;
+$ref-color-primary-70: #86d43f;
+$ref-color-primary-80: #96d945;
+$ref-color-primary-90: #5e8c24;
+$ref-color-primary-100: #102000;
+
+/* Secondary */
+$ref-color-secondary-10: #f5f7f0;
+$ref-color-secondary-20: #eef3e3;
+$ref-color-secondary-30: #e6edd6;
+$ref-color-secondary-40: #dbe7c8;
+$ref-color-secondary-50: #cedfb5;
+$ref-color-secondary-60: #b7c58f;
+$ref-color-secondary-70: #9aaf66;
+$ref-color-secondary-80: #85976e;
+$ref-color-secondary-90: #2d3a24;
+$ref-color-secondary-100: #151e0b;
+
+/* Tertiary */
+$ref-color-tertiary-10: #f2faf9;
+$ref-color-tertiary-20: #e6f6f5;
+$ref-color-tertiary-30: #cceeea;
+$ref-color-tertiary-40: #bbece8;
+$ref-color-tertiary-50: #99e0db;
+$ref-color-tertiary-60: #78d3ce;
+$ref-color-tertiary-70: #5fbfba;
+$ref-color-tertiary-80: #4c9e99;
+$ref-color-tertiary-90: #1a726f;
+$ref-color-tertiary-100: #00201e;
+
+/* Error */
+$ref-color-error-10: #fff5f5;
+$ref-color-error-20: #ffeded;
+$ref-color-error-30: #ffdada;
+$ref-color-error-40: #ffdad6;
+$ref-color-error-50: #ffb4b4;
+$ref-color-error-60: #ff8a8a;
+$ref-color-error-70: #e95b5b;
+$ref-color-error-80: #d32f2f;
+$ref-color-error-90: #8b0000;
+$ref-color-error-100: #410002;
+
+/* Warning */
+$ref-color-warning-10: #fffbee;
+$ref-color-warning-20: #fff6dc;
+$ref-color-warning-30: #fff0c8;
+$ref-color-warning-40: #f6c430;
+$ref-color-warning-50: #e6b020;
+$ref-color-warning-60: #cca50d;
+$ref-color-warning-70: #997a00;
+$ref-color-warning-80: #755600;
+$ref-color-warning-90: #241a00;
+$ref-color-warning-100: #1a1200;
+
+/* Surface */
+$ref-color-surface-10: #ffffff;
+$ref-color-surface-20: #fbfbf7;
+$ref-color-surface-30: #f9faef;
+$ref-color-surface-40: #f3f4e9;
+$ref-color-surface-50: #eeefe3;
+$ref-color-surface-60: #e8e9de;
+$ref-color-surface-70: #e2e3d8;
+$ref-color-surface-80: #050a00;
+$ref-color-surface-90: #bfbfb0;
+$ref-color-surface-100: #000000;
+
+/* Misc / blue */
+$ref-color-blue-80: #4c9e99;
+
+/* Neutral */
+$ref-color-neutral-10: #f9faf8;
+$ref-color-neutral-20: #f3f4f1;
+$ref-color-neutral-30: #edeee9;
+$ref-color-neutral-40: #75796c;
+$ref-color-neutral-50: #6d7164;
+$ref-color-neutral-60: #65695c;
+$ref-color-neutral-70: #5d6154;
+$ref-color-neutral-80: #55594c;
+$ref-color-neutral-90: #e2e3d8;
+$ref-color-neutral-96: #f3f4e9;
+$ref-color-neutral-100: #45493c;
+
+/* Neutral variant */
+$ref-color-neutral-variant-10: #f7f8f6;
+$ref-color-neutral-variant-20: #eff0ec;
+$ref-color-neutral-variant-30: #44483d;
+$ref-color-neutral-variant-40: #c5c8ba;
+$ref-color-neutral-variant-50: #bdc0b2;
+$ref-color-neutral-variant-60: #b5b8aa;
+$ref-color-neutral-variant-70: #adb0a2;
+$ref-color-neutral-variant-80: #a5a89a;
+$ref-color-neutral-variant-90: #9da092;
+$ref-color-neutral-variant-100: #95988a;
+
+/* Spacing (named) */
+$ref-spacing-xs: 4px;
+$ref-spacing-sm: 8px;
+$ref-spacing-med: 16px;
+$ref-spacing-lg: 32px;
+
+/* Border radius */
+$ref-radius-none: 0px;
+$ref-radius-xs: 0px;
+$ref-radius-sm: 0px;
+$ref-radius-med: 16px;
+$ref-radius-lg: 24px;
+$ref-radius-full: 50%;
+
+/* Sizes */
+$ref-size-xSmall: 20px;
+$ref-size-small: 24px;
+$ref-size-medium: 32px;
+$ref-size-large: 44px;
+$ref-size-xLarge: 56px;
+
+/* Icon sizes */
+$ref-icon-size-small: 20px;
+$ref-icon-size-medium: 24px;
+$ref-icon-size-large: 40px;
+
+/* Icon font sizes */
+$ref-icon-font-size-small: 12px;
+$ref-icon-font-size-medium: 16px;
+$ref-icon-font-size-large: 36px;
+
+/* Shadows - mirror design.ts */
+$ref-shadow-0: none;
+$ref-shadow-1: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+  0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+$ref-shadow-2: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+  0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+$ref-shadow-3: 0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+  0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+$ref-shadow-4: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+  0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+$ref-shadow-6: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+  0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+$ref-shadow-8: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+$ref-shadow-12: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
+  0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
+$ref-shadow-16: 0px 8px 9px -5px rgba(0, 0, 0, 0.2),
+  0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+$ref-shadow-24: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+  0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+
+/* Color map for programmatic access */
+$ref-colors: (
+  primary: (
+    10: $ref-color-primary-10,
+    20: $ref-color-primary-20,
+    30: $ref-color-primary-30,
+    40: $ref-color-primary-40,
+    50: $ref-color-primary-50,
+    60: $ref-color-primary-60,
+    70: $ref-color-primary-70,
+    80: $ref-color-primary-80,
+    90: $ref-color-primary-90,
+    100: $ref-color-primary-100,
+  ),
+  secondary: (
+    10: $ref-color-secondary-10,
+    20: $ref-color-secondary-20,
+    30: $ref-color-secondary-30,
+    40: $ref-color-secondary-40,
+    50: $ref-color-secondary-50,
+    60: $ref-color-secondary-60,
+    70: $ref-color-secondary-70,
+    80: $ref-color-secondary-80,
+    90: $ref-color-secondary-90,
+    100: $ref-color-secondary-100,
+  ),
+  tertiary: (
+    10: $ref-color-tertiary-10,
+    20: $ref-color-tertiary-20,
+    30: $ref-color-tertiary-30,
+    40: $ref-color-tertiary-40,
+    50: $ref-color-tertiary-50,
+    60: $ref-color-tertiary-60,
+    70: $ref-color-tertiary-70,
+    80: $ref-color-tertiary-80,
+    90: $ref-color-tertiary-90,
+    100: $ref-color-tertiary-100,
+  ),
+  error: (
+    10: $ref-color-error-10,
+    20: $ref-color-error-20,
+    30: $ref-color-error-30,
+    40: $ref-color-error-40,
+    50: $ref-color-error-50,
+    60: $ref-color-error-60,
+    70: $ref-color-error-70,
+    80: $ref-color-error-80,
+    90: $ref-color-error-90,
+    100: $ref-color-error-100,
+  ),
+  warning: (
+    10: $ref-color-warning-10,
+    20: $ref-color-warning-20,
+    30: $ref-color-warning-30,
+    40: $ref-color-warning-40,
+    50: $ref-color-warning-50,
+    60: $ref-color-warning-60,
+    70: $ref-color-warning-70,
+    80: $ref-color-warning-80,
+    90: $ref-color-warning-90,
+    100: $ref-color-warning-100,
+  ),
+  surface: (
+    10: $ref-color-surface-10,
+    20: $ref-color-surface-20,
+    30: $ref-color-surface-30,
+    40: $ref-color-surface-40,
+    50: $ref-color-surface-50,
+    60: $ref-color-surface-60,
+    70: $ref-color-surface-70,
+    80: $ref-color-surface-80,
+    90: $ref-color-surface-90,
+    100: $ref-color-surface-100,
+  ),
+  neutral: (
+    10: $ref-color-neutral-10,
+    20: $ref-color-neutral-20,
+    30: $ref-color-neutral-30,
+    40: $ref-color-neutral-40,
+    50: $ref-color-neutral-50,
+    60: $ref-color-neutral-60,
+    70: $ref-color-neutral-70,
+    80: $ref-color-neutral-80,
+    90: $ref-color-neutral-90,
+    100: $ref-color-neutral-100,
+  ),
+  neutral-variant: (
+    10: $ref-color-neutral-variant-10,
+    20: $ref-color-neutral-variant-20,
+    30: $ref-color-neutral-variant-30,
+    40: $ref-color-neutral-variant-40,
+    50: $ref-color-neutral-variant-50,
+    60: $ref-color-neutral-variant-60,
+    70: $ref-color-neutral-variant-70,
+    80: $ref-color-neutral-variant-80,
+    90: $ref-color-neutral-variant-90,
+    100: $ref-color-neutral-variant-100,
+  ),
+);
+
+/* Shadows map */
+$ref-shadows: (
+  0: $ref-shadow-0,
+  1: $ref-shadow-1,
+  2: $ref-shadow-2,
+  3: $ref-shadow-3,
+  4: $ref-shadow-4,
+  6: $ref-shadow-6,
+  8: $ref-shadow-8,
+  12: $ref-shadow-12,
+  16: $ref-shadow-16,
+  24: $ref-shadow-24,
+);
+
+/* Helper mixins for using ref variables in SCSS */
+@mixin ref-color($family, $step) {
+  $family-map: map-get($ref-colors, $family);
+  @if $family-map == null {
+    @error "Unknown color family `#{$family}`. Available: #{map-keys($ref-colors)}";
+  }
+  $val: map-get($family-map, $step);
+  @if $val == null {
+    @error "Unknown color step `#{$step}` for family `#{$family}`. Available: #{map-keys($family-map)}";
+  }
+  color: $val;
+}
+
+/* Typography tokens (from Figma) */
+/* Keys are strings; use @include ref-font('display-large') */
+$ref-fonts: (
+  "display-large": (
+    size: 42px,
+    weight: 200,
+    line-height: 48px,
+  ),
+  "headline-large": (
+    size: 32px,
+    weight: 200,
+    line-height: 48px,
+  ),
+  "title-large": (
+    size: 22px,
+    weight: 400,
+    line-height: 32px,
+  ),
+  "body-large": (
+    size: 16px,
+    weight: 400,
+    line-height: 24px,
+  ),
+  "label-large": (
+    size: 14px,
+    weight: 400,
+    line-height: 20px,
+  ),
+  "label-medium": (
+    size: 12px,
+    weight: 400,
+    line-height: 16px,
+  ),
+  "label-small": (
+    size: 10px,
+    weight: 400,
+    line-height: 16px,
+  ),
+  "label-large-mono": (
+    family: "JetBrains Mono",
+    size: 14px,
+    weight: 400,
+    line-height: 20px,
+  ),
+  "label-small-mono": (
+    family: "JetBrains Mono",
+    size: 10px,
+    weight: 400,
+    line-height: 16px,
+  ),
+);
+
+@mixin ref-font($key) {
+  $font: map-get($ref-fonts, $key);
+  @if $font == null {
+    @error "Unknown font token `#{$key}`. Available: #{map-keys($ref-fonts)}";
+  }
+  $family: map-get($font, family);
+  $size: map-get($font, size);
+  $weight: map-get($font, weight);
+  $lh: map-get($font, line-height);
+
+  font-family: $family;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $lh;
+}

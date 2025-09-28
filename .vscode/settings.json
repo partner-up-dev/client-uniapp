@@ -1,0 +1,14 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "iis.configDir": "",
+  "files.exclude": {
+    ".VSCodeCounter": true,
+    "dist": true,
+    "node_modules": true
+  },
+  "editor.rulers": [
+    {
+      "column": 82
+    }
+  ]
+}

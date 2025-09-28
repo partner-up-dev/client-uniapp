@@ -1,0 +1,15 @@
+@use "@/styles/main.scss" as *;
+
+.pr-type-filter {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pr-type-filter__group {
+  display: block;
+}
+
+.pr-type-filter__item {
+  display: block;
+  margin-bottom: 8px;
+}

@@ -1,0 +1,41 @@
+@use "@/styles/main.scss" as *;
+
+.pu-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $pu-spacing-xs $pu-spacing-med;
+  background-color: $pu-color-surface-container;
+  color: $pu-color-on-surface;
+
+  // text
+  .text {
+    @include pu-font-size("label-large");
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  &.rounded {
+    border-radius: $pu-radius-full; // radius/full
+  }
+
+  &.outlined {
+    // emulate inset 1px border layer from Figma
+    border: 1px solid $pu-color-outline-variant;
+  }
+
+  // sizes: allow slight variations if needed later
+  &.small {
+    padding: $pu-spacing-xs $pu-spacing-sm;
+    .text {
+      @include pu-font-size("label-medium");
+    }
+  }
+  &.medium {
+    padding: $pu-spacing-xs $pu-spacing-med;
+    .text {
+      @include pu-font-size("label-large");
+    }
+  }
+}

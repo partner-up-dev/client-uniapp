@@ -1,0 +1,183 @@
+/*
+ * Project tokens (namespaced with `pu` prefix) using SCSS variables
+ * These tokens reference $ref- variables defined in `_ref.scss`.
+ */
+
+@use "./_ref.scss" as ref;
+
+/* PU tokens (SCSS variables) */
+/* Primary */
+$pu-color-primary: ref.$ref-color-primary-80;
+$pu-color-primary-container: ref.$ref-color-primary-40;
+$pu-color-primary-on: ref.$ref-color-primary-100;
+
+/* Secondary */
+$pu-color-secondary: ref.$ref-color-secondary-80;
+$pu-color-secondary-container: ref.$ref-color-secondary-40;
+$pu-color-secondary-on: ref.$ref-color-secondary-100;
+
+/* Tertiary */
+$pu-color-tertiary: ref.$ref-color-tertiary-80;
+$pu-color-tertiary-container: ref.$ref-color-tertiary-40;
+$pu-color-tertiary-on: ref.$ref-color-tertiary-100;
+
+/* Error */
+$pu-color-error: ref.$ref-color-error-80;
+$pu-color-error-container: ref.$ref-color-error-40;
+$pu-color-error-on: ref.$ref-color-error-100;
+
+/* Warning */
+$pu-color-warning: ref.$ref-color-warning-40;
+$pu-color-warning-on: ref.$ref-color-warning-90;
+
+/* Surface */
+$pu-color-surface: ref.$ref-color-surface-30;
+$pu-color-surface-container-highest: ref.$ref-color-neutral-90;
+$pu-color-surface-container: ref.$ref-color-surface-50;
+$pu-color-surface-container-low: ref.$ref-color-neutral-96;
+$pu-color-on-surface: ref.$ref-color-surface-80;
+$pu-color-on-surface-variant: ref.$ref-color-neutral-variant-30;
+
+/* Blue misc */
+$pu-color-blue: ref.$ref-color-blue-80;
+
+/* Neutral */
+$pu-color-neutral: ref.$ref-color-neutral-80;
+$pu-color-neutral-container: ref.$ref-color-neutral-40;
+$pu-color-neutral-on: ref.$ref-color-neutral-100;
+
+/* Neutral variant */
+$pu-color-neutral-variant: ref.$ref-color-neutral-variant-80;
+$pu-color-neutral-variant-container: ref.$ref-color-neutral-variant-40;
+$pu-color-neutral-variant-on: ref.$ref-color-neutral-variant-100;
+
+/* Standard Color */
+$pu-color-green: ref.$ref-color-primary-80;
+$pu-color-red: ref.$ref-color-error-80;
+$pu-color-yellow: ref.$ref-color-warning-40;
+$pu-color-blue: ref.$ref-color-tertiary-80;
+
+/* Outline */
+$pu-color-outline: ref.$ref-color-neutral-40;
+$pu-color-outline-variant: ref.$ref-color-neutral-variant-40;
+
+/* Spacing */
+$pu-spacing-xs: ref.$ref-spacing-xs;
+$pu-spacing-sm: ref.$ref-spacing-sm;
+$pu-spacing-med: ref.$ref-spacing-med;
+$pu-spacing-lg: ref.$ref-spacing-lg;
+
+/* Radius */
+$pu-radius-none: ref.$ref-radius-none;
+$pu-radius-xs: ref.$ref-radius-xs;
+$pu-radius-sm: ref.$ref-radius-sm;
+$pu-radius-med: ref.$ref-radius-med;
+$pu-radius-lg: ref.$ref-radius-lg;
+$pu-radius-full: ref.$ref-radius-full;
+
+/* Sizes */
+$pu-size-xSmall: ref.$ref-size-xSmall;
+$pu-size-small: ref.$ref-size-small;
+$pu-size-medium: ref.$ref-size-medium;
+$pu-size-large: ref.$ref-size-large;
+$pu-size-xLarge: ref.$ref-size-xLarge;
+
+/* Icon sizes */
+$pu-icon-size-small: ref.$ref-icon-size-small;
+$pu-icon-size-medium: ref.$ref-icon-size-medium;
+$pu-icon-size-large: ref.$ref-icon-size-large;
+
+/* Icon font sizes */
+$pu-icon-font-size-small: ref.$ref-icon-font-size-small;
+$pu-icon-font-size-medium: ref.$ref-icon-font-size-medium;
+$pu-icon-font-size-large: ref.$ref-icon-font-size-large;
+
+/* Shadows (map access) */
+$pu-shadow-0: map-get(ref.$ref-shadows, 0);
+$pu-shadow-1: map-get(ref.$ref-shadows, 1);
+$pu-shadow-2: map-get(ref.$ref-shadows, 2);
+$pu-shadow-3: map-get(ref.$ref-shadows, 3);
+$pu-shadow-4: map-get(ref.$ref-shadows, 4);
+$pu-shadow-6: map-get(ref.$ref-shadows, 6);
+$pu-shadow-8: map-get(ref.$ref-shadows, 8);
+$pu-shadow-12: map-get(ref.$ref-shadows, 12);
+$pu-shadow-16: map-get(ref.$ref-shadows, 16);
+$pu-shadow-24: map-get(ref.$ref-shadows, 24);
+
+/* Utility mixins */
+@mixin pu-elevation($n) {
+  $val: map-get(ref.$ref-shadows, $n);
+  @if $val == null {
+    @warn "Unknown elevation #{$n}. Available: #{map-keys(ref.$ref-shadows)}";
+  }
+  box-shadow: $val;
+}
+
+/* Helper mixin for color usage */
+@mixin pu-color($family, $step) {
+  $family-map: map-get(ref.$ref-colors, $family);
+  @if $family-map == null {
+    @error "Unknown color family `#{$family}`. Available: #{map-keys(ref.$ref-colors)}";
+  }
+  $val: map-get($family-map, $step);
+  @if $val == null {
+    @error "Unknown color step `#{$step}` for family `#{$family}`. Available: #{map-keys($family-map)}";
+  }
+  color: $val;
+}
+
+/* Typography mixins - delegate to ref.ref-font */
+@mixin pu-font($key) {
+  @include ref.ref-font($key);
+}
+
+/* Convenience font mixins used across the project (map to Figma tokens) */
+@mixin pu-font-headline-large {
+  @include pu-font("display-large");
+}
+
+@mixin pu-font-headline-small {
+  @include pu-font("title-large");
+}
+
+@mixin pu-font-title-medium {
+  @include pu-font("title-large");
+}
+
+/* Provide some size variables for compatibility */
+$pu-font-title-medium-size: map-get(map-get(ref.$ref-fonts, "title-large"), size);
+$pu-font-headline-small-size: map-get(
+  map-get(ref.$ref-fonts, "label-large"),
+  size
+);
+
+@mixin pu-font-size($key) {
+  $font: map-get(ref.$ref-fonts, $key);
+  @if $font == null {
+    @error "Unknown font key `#{$key}`. Available: #{map-keys(ref.$ref-fonts)}";
+  }
+  $size: map-get($font, size);
+  @if $size == null {
+    @error "No `size` property for font key `#{$key}`.";
+  }
+  font-size: $size;
+}
+
+/* Icon mixin - applies width, height, and font-size for icons */
+@mixin pu-icon($key) {
+  @if $key == "small" {
+    width: $pu-icon-size-small;
+    height: $pu-icon-size-small;
+    font-size: $pu-icon-font-size-small;
+  } @else if $key == "medium" {
+    width: $pu-icon-size-medium;
+    height: $pu-icon-size-medium;
+    font-size: $pu-icon-font-size-medium;
+  } @else if $key == "large" {
+    width: $pu-icon-size-large;
+    height: $pu-icon-size-large;
+    font-size: $pu-icon-font-size-large;
+  } @else {
+    @error "Unknown icon size `#{$key}`. Available: small, medium, large";
+  }
+}

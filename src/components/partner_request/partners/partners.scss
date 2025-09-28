@@ -1,0 +1,35 @@
+@use "@/styles/main.scss" as *;
+
+.partners {
+  display: flex;
+  align-items: center;
+  gap: $pu-spacing-sm;
+
+  .avatars {
+    display: flex;
+    align-items: center;
+    padding: 0 $pu-spacing-sm 0 0;
+  }
+
+  .avatar {
+    margin-right: -$pu-spacing-sm;
+  }
+
+  .joinable-indicator {
+    border: 1px dotted $pu-color-outline;
+
+    border-radius: $pu-radius-full;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // Align with Avatar.size
+    width: $pu-size-small;
+    height: $pu-size-small;
+
+    .text {
+      @include pu-font-size("label-medium");
+      color: $pu-color-on-surface-variant;
+    }
+  }
+}

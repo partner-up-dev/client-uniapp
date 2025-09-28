@@ -1,0 +1,55 @@
+@use "@/styles/main.scss" as *;
+
+.explore-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 $pu-spacing-med;
+  gap: $pu-spacing-med;
+  flex: 1;
+  overflow-y: scroll;
+
+  margin-bottom: $pu-spacing-med;
+}
+
+.header {
+  height: $pu-size-large;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .filters {
+    display: flex;
+    gap: $pu-spacing-sm;
+    align-items: center;
+
+    .fixed-filters {
+      display: flex;
+      gap: $pu-spacing-sm;
+      align-items: center;
+    }
+  }
+}
+
+.pr-filters {
+  height: calc(22vh + 60px + 8px);
+}
+
+.pr-filter {
+  height: calc(22vh + 60px + 8px);
+  overflow-y: scroll;
+}
+
+.pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+  overflow-y: scroll;
+  flex: 1;
+}

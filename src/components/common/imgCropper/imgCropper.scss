@@ -1,0 +1,67 @@
+@use "@/styles/main.scss" as *;
+
+.img-cropper {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+
+  &__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+  }
+
+  &__image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+  }
+
+  &__mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  &__grid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  &__round-mask {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  }
+
+  &__square-mask {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  }
+
+  &__controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+  }
+}

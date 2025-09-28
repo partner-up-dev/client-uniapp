@@ -1,0 +1,41 @@
+@use "@/styles/main.scss" as *;
+
+.avatar {
+  position: relative;
+  display: inline-block;
+
+  // Image element sizing by size token
+  .img {
+    display: block;
+  }
+
+  .editing-indicator {
+    position: absolute;
+    z-index: 2;
+    right: 50%;
+    bottom: 50%;
+    transform: translate(50%, 50%);
+    color: $pu-color-neutral-on;
+    @include pu-font-size("label-large");
+  }
+
+  .error-indicator {
+    color: $pu-color-error;
+    @include pu-font-size("label-large");
+  }
+
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.error-wrap,
+.loading-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

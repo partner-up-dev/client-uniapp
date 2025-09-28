@@ -1,0 +1,12 @@
+@use "@/styles/main.scss" as *;
+
+.pu-checkbox-group {
+  // button layout container spacing similar to reference
+  &.is-button {
+    width: 100%;
+    padding: 8px 3px 20px 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: auto;
+  }
+}

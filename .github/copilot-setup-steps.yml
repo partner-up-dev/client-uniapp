@@ -1,0 +1,54 @@
+name: Setup Anana Uniapp Development Environment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+            
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build TailwindCSS
+        run: pnpm run tailwind:build
+        
+      - name: Run type check
+        run: pnpm run type-check
+        
+      - name: Install Uniapp CLI (if needed)
+        run: |
+          if ! command -v uni &> /dev/null; then
+            npm install -g @dcloudio/cli
+          fi
+          
+      - name: Verify setup
+        run: |
+          echo "Node.js version: $(node --version)"
+          echo "pnpm version: $(pnpm --version)"
+          echo "Dependencies installed successfully"
+          echo "TailwindCSS built successfully"
+          echo "TypeScript types checked successfully"
+          echo "Environment is ready for development"

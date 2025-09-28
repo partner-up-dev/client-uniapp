@@ -1,0 +1,73 @@
+@use "@/styles/main.scss" as *;
+
+.pr-card {
+  position: relative;
+  border: 1px solid $pu-color-outline;
+  border-radius: $pu-radius-sm;
+  background-color: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  padding: $pu-spacing-med;
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-med;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  .partners-and-type {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .pr-type {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .type-text {
+        @include pu-font-size("label-medium");
+        color: $ref-color-neutral-100;
+        font-weight: normal;
+        line-height: 16px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .primary-info {
+    display: flex;
+    align-items: center;
+
+    .primary-text {
+      @include pu-font-size("body-large");
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .secondary-info {
+    display: flex;
+    align-items: center;
+
+    .secondary-text {
+      @include pu-font-size("label-large");
+      color: $pu-color-on-surface-variant;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.operations {
+  display: flex;
+  gap: $pu-spacing-sm;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}

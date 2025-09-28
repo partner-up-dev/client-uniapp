@@ -1,0 +1,207 @@
+@use "@/styles/main.scss" as *;
+
+// BEM root
+.pu-checkbox {
+  display: inline-block;
+  margin-right: $pu-spacing-sm;
+  line-height: 1.2;
+  vertical-align: middle;
+
+  &.is-inline {
+    display: inline-block;
+  }
+
+  &.is-button {
+    margin-right: $pu-spacing-sm;
+  }
+
+  &.is-large {
+    .pu-checkbox__shape {
+      width: $pu-size-large;
+      height: $pu-size-large;
+      font-size: $pu-size-large;
+    }
+    .pu-checkbox__label {
+      font-size: $pu-font-title-medium-size;
+    }
+  }
+}
+
+.pu-checkbox__shape {
+  position: relative;
+  display: inline-block;
+  width: $pu-size-small;
+  height: $pu-size-small;
+  border: 2px solid $pu-color-outline;
+  border-radius: $pu-radius-full;
+  color: $pu-color-primary;
+  background: $pu-color-surface;
+  vertical-align: middle;
+  box-sizing: border-box;
+
+  &.is-square {
+    border-radius: $pu-radius-xs;
+  }
+}
+
+.pu-checkbox__check {
+  // icon in center; using Uno icon class for content
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  opacity: 0; // hidden by default
+}
+
+.pu-checkbox__label {
+  position: relative;
+  display: inline-block;
+  margin-left: $pu-spacing-xs;
+  vertical-align: middle;
+  font-size: 14px;
+  color: $pu-color-on-surface;
+}
+
+.pu-checkbox__txt {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 20px;
+}
+
+.pu-checkbox.is-checked {
+  .pu-checkbox__shape {
+    background: currentColor;
+    border-color: currentColor;
+  }
+  .pu-checkbox__check {
+    opacity: 1;
+  }
+}
+
+// button shape styles
+.pu-checkbox.is-button {
+  .pu-checkbox__shape {
+    // hidden in button mode
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    border: none;
+  }
+
+  .pu-checkbox__label {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-width: 60px;
+    height: 30px;
+    font-size: 14px;
+    margin-left: 0;
+    padding: $pu-spacing-xs $pu-spacing-sm;
+    border: 1px solid $pu-color-outline-variant;
+    background-color: $pu-color-surface;
+    border-radius: $pu-radius-sm;
+    box-sizing: border-box;
+  }
+
+  &.is-checked {
+    .pu-checkbox__label {
+      color: $pu-color-primary;
+      background-color: $pu-color-surface;
+      border-color: $pu-color-primary;
+    }
+  }
+}
+
+.pu-checkbox.is-disabled {
+  .pu-checkbox__shape {
+    border-color: $pu-color-outline-variant;
+    background: $pu-color-surface-container-low;
+  }
+  .pu-checkbox__label {
+    color: $pu-color-on-surface-variant;
+  }
+  &.is-checked {
+    .pu-checkbox__shape {
+      color: $pu-color-outline-variant;
+    }
+    .pu-checkbox__label {
+      color: $pu-color-on-surface-variant;
+    }
+  }
+  &.is-button {
+    .pu-checkbox__label {
+      background: $pu-color-surface-container-low;
+      border-color: $pu-color-outline-variant;
+      color: $pu-color-on-surface-variant;
+    }
+    &.is-checked .pu-checkbox__label {
+      border-color: $pu-color-outline-variant;
+    }
+  }
+}
+
+// Bar 类型样式（来自设计稿）
+.pu-checkbox.is-bar {
+  display: block;
+  margin-right: 0; // 占满一行
+
+  @include pu-font-size("label-large");
+
+  .pu-checkbox__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $pu-spacing-sm $pu-spacing-med;
+    box-sizing: border-box;
+    position: relative;
+    // 背景 surface 容器色：可由外层控制；默认给出接近值
+    background-color: $pu-color-surface-container-low;
+  }
+
+  // 未选中：左侧 20px 方框，描边 color/outline
+  .pu-checkbox__bar-shape {
+    width: $pu-size-xSmall;
+    height: $pu-size-xSmall;
+    box-sizing: border-box;
+    border: 1px solid $pu-color-outline;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pu-checkbox__bar-check {
+    color: $pu-color-primary-on;
+    opacity: 0; // 未选中时隐藏
+  }
+
+  .pu-checkbox__bar-label {
+    color: $pu-color-on-surface;
+  }
+
+  // 选中：外描边与方框背景为 color/primary
+  &.is-checked {
+    .pu-checkbox__bar {
+      outline: 1px solid $pu-color-primary;
+      outline-offset: -1px;
+    }
+    .pu-checkbox__bar-shape {
+      border-color: $pu-color-primary;
+      background-color: $pu-color-primary;
+    }
+    .pu-checkbox__bar-check {
+      color: #fff;
+      opacity: 1;
+    }
+  }
+
+  // 禁用态（可按需细化）
+  &.is-disabled {
+    .pu-checkbox__bar {
+      opacity: 0.6;
+    }
+  }
+}

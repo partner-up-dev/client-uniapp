@@ -1,0 +1,23 @@
+<view class="tab-bar {{show ? '' : 'hide'}}">
+    <view class="cont">
+        <block wx:for="{{list}}" wx:key="index">
+            <view 
+                data-path="{{item.pagePath}}" data-index="{{item.pagePath}}" 
+                bindtap="switchTab" class="item {{ selected === index ? '' : 'unselected-item' }}"
+            >
+                <view 
+                    class="icon-container {{ selected === index ? 'selected-icon-container' : '' }}"
+                >
+                    <image 
+                        class="icon {{ item.round ? 'round-icon' : '' }}" 
+                        src="{{badges[index] === 0 ? item.iconPath : item.noticeIconPath}}"
+                    ></image>
+                </view>
+                <view class="txt">{{item.text}}</view>
+                <!-- <view class="badge" 
+                    wx:if="{{badges[index]}}"
+                ></view> -->
+            </view>
+        </block>
+    </view>
+</view>

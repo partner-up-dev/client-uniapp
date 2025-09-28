@@ -1,0 +1,19 @@
+@use "@/styles/main.scss" as *;
+
+.pr-geo-element-filter {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+}
+
+.geo-elements {
+  height: 60px; // exactly the GeoElement height
+
+  &.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $pu-color-on-surface-variant;
+    @include pu-font-size("label-large");
+  }
+}

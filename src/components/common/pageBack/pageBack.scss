@@ -1,0 +1,23 @@
+@use "@/styles/main.scss" as *;
+
+.page-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $pu-radius-full;
+  transition: background 0.15s ease;
+  &:active {
+    background: $pu-color-surface-container;
+  }
+
+  &.small {
+    @include pu-icon("small");
+  }
+  &.large {
+    @include pu-icon("large");
+  }
+
+  &icon {
+    @include pu-font-size("label-large");
+  }
+}
