@@ -28,7 +28,7 @@
     "@dcloudio/uni-mp-xhs": "3.0.0-4070620250821001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-4070620250821001",
     "@iconify-json/mdi": "^1.2.3",
-    "@types/weixin-app": "^2.9.7",
+    "@uni-helper/uni-network": "^0.22.0",
     "@unocss/preset-icons": "^66.5.1",
     "cross-env": "^10.0.0",
     "crypto-js": "^4.2.0",
@@ -42,6 +42,7 @@
     "weapp-cookie": "^1.4.8"
   },
   "devDependencies": {
+    "@types/weixin-app": "^2.9.7",
     "@dcloudio/types": "^3.4.21",
     "@dcloudio/uni-automator": "3.0.0-4070620250821001",
     "@dcloudio/uni-cli-shared": "3.0.0-4070620250821001",

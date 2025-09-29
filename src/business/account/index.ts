@@ -1,76 +1,30 @@
 
 import { hideLoading, showLoading } from "@/utils/vendor";
-import { API } from "../api";
+import { APIClient } from "../api";
 import { computed, ref } from "vue";
 import { useAccountStore } from "@/store/account";
-import { Business } from "../index";
+import { V, nullable } from "../index";
+import * as v from 'valibot';
+import { errorReport } from "@/utils/vendor";
+import { useTranslate } from "@/locale/use";
+const { dt } = useTranslate('account');
 
-/** UUID */
+
 export type AccountRef = string;
+export const AccountRefV = v.string();
 
 
-export class Account extends API {
-
-  static MODULE_PREFIX = '/account';
-
-  static login(show_loading: boolean): Promise<AccountBaseProfile> {
-    if (show_loading) {
-      showLoading();
-    }
-
-    // #ifdef MP-WEIXIN
-    return this.V2WXMPLogin()
-      .finally(hideLoading);
-    // #endif
-  }
-
-  /** https://app.apifox.com/link/project/4406548/apis/api-180181847?branchId=5433542 */
-  static V2WXMPLogin(): Promise<AccountBaseProfile> {
-    const that = this;
-
-    return new Promise((resolve, reject) => {
-      uni.login({
-        provider: 'weixin',
-        success(res) {
-          that.requestAPI({
-            method: 'POST',
-            endpoint: '/wxmp/wxmp_mp/login',
-            data: {
-              code: res.code
-            }
-          }
-          ).then(({ data }) => {
-            const baseProfile = AccountBaseProfile.parse(data);
-            useAccountStore().$patch({
-              account_id: baseProfile._id
-            })
-            resolve(baseProfile);
-          }).catch(reject);
-        },
-        fail() {
-          errorReport(dt('login_from_weixin.uni_login_fail'))
-          reject();
-        }
-      })
-    });
-  }
-}
-
-
-export class AccountBaseProfile extends Business {
-  constructor(
-    public _id: string = '',
-    public created_at: Date = new Date(),
-    public nickname: string = '',
-    public bio: string | null = null,
-    public wallpaper: string | null = null,
-    public avatar: string | null = null,
-    public age_range: number | null = null,
-    public gender: string | null = null,
-    public mbti: string | null = null
-  ) {
-    super();
-  }
+export class AccountBaseProfile extends V.class(v.object({
+  _id: v.string(),
+  created_at: v.fallback(v.date(), new Date()),
+  nickname: v.string(),
+  bio: nullable(v.string()),
+  wallpaper: nullable(v.string()),
+  avatar: nullable(v.string()),
+  age_range: nullable(v.number()),
+  gender: nullable(v.string()),
+  mbti: nullable(v.string()),
+})) {
 
   static use() {
 
@@ -102,12 +56,64 @@ export class AccountBaseProfile extends Business {
         return Promise.reject();
       }
     }
-    return Account.requestAPI({
+    return Account.api.requestHTTP({
       method: 'GET',
-      endpoint: `/profile/base/${accountId}`
-    }).then(({ data }) => {
-      return AccountBaseProfile.parse(data);
-    })
+      endpoint: `/profile/base/${accountId}`,
+      schema: AccountBaseProfile.V,
+    }).then(({ body }) => body.parsed as AccountBaseProfile)
   }
 
+}
+
+
+export class Account extends APIClient {
+
+  static api = new APIClient({
+    modulePrefix: '/account',
+    dt: useTranslate('account').dt,
+    fallbackSchema: AccountBaseProfile,
+  })
+
+
+  static login(show_loading: boolean): Promise<AccountBaseProfile> {
+    if (show_loading) {
+      showLoading();
+    }
+
+    // #ifdef MP-WEIXIN
+    return this.V2WXMPLogin()
+      .finally(hideLoading);
+    // #endif
+  }
+
+  /** https://app.apifox.com/link/project/4406548/apis/api-180181847?branchId=5433542 */
+  static V2WXMPLogin(): Promise<AccountBaseProfile> {
+    const that = this;
+
+    return new Promise((resolve, reject) => {
+      uni.login({
+        provider: 'weixin',
+        success(res) {
+          that.api.requestHTTP({
+            method: 'POST',
+            endpoint: '/wxmp/wxmp_mp/login',
+            data: {
+              code: res.code
+            },
+            schema: AccountBaseProfile.V,
+          }).then(({ body }) => {
+            const baseProfile = body.parsed as AccountBaseProfile;
+            useAccountStore().$patch({
+              account_id: baseProfile._id
+            })
+            resolve(baseProfile as AccountBaseProfile);
+          }).catch(reject);
+        },
+        fail() {
+          errorReport(dt('login_from_weixin.uni_login_fail'))
+          reject();
+        }
+      })
+    });
+  }
 }

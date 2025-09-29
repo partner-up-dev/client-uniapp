@@ -1,5 +1,5 @@
-import { type AccountRef } from "../account";
-import { Business } from "../index";
+import * as v from 'valibot';
+
 
 export enum PRStatus {
     Draft = "draft",
@@ -42,7 +42,7 @@ export enum PRType {
     Travel = "travel",
 }
 
-const PRType2L1Type: Record<PRType, PRL1Type> = {
+export const PRType2L1Type: Record<PRType, PRL1Type> = {
     [PRType.Undefined]: PRL1Type.Undefined,
     [PRType.Commute]: PRL1Type.Trip,
     [PRType.RideHailing]: PRL1Type.Trip,
@@ -52,23 +52,4 @@ const PRType2L1Type: Record<PRType, PRL1Type> = {
 }
 
 export type PRRef = number;
-
-export class PartnerRequest extends Business {
-    constructor(
-        public _id: PRRef,
-        public created_at: Date,
-        public created_by: AccountRef,
-        public type: PRType,
-        public status: PRStatus,
-        public title: string | null = null,
-        public introduction: string | null = null,
-        public chat: number | null = null,
-        public contract: number
-    ) {
-        super();
-    }
-
-    public getL1Type(type: PRType): PRL1Type {
-        return PRType2L1Type[type] || PRL1Type.Undefined;
-    }
-}
+export const PRRefV = v.number();

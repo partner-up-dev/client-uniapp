@@ -1,5 +1,6 @@
 import { computed, type ComputedRef, ref, type Ref, watch } from "vue";
-import { BusinessWithAPI, Business } from "..";
+import { V } from "..";
+import * as v from 'valibot';
 import { decompressPolyline, QQMapSDK } from "@/utils/lbs/index.js";
 import { QQMapDirectionMode, type QQMapDirectionResult } from "@/utils/lbs/types";
 import log from "@/utils/log";
@@ -7,28 +8,34 @@ import { errorReport } from "@/utils/vendor";
 import { useTranslate } from "@/locale/use";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
+import { APIClient } from "@/business/api";
 
-const { dt: domain_t } = useTranslate('route');
+const { dt: domain_t } = useTranslate('base.route_map');
 
 export type LocationRef = string;
 
-export class Location extends BusinessWithAPI {
-  static MODULE_PREFIX: string = '/base/location';
+export class Location extends V.class(v.object({
+  address: v.array(v.string()),
+  friendly_address: v.string(),
+  lat: v.number(),
+  lng: v.number(),
+  _id: v.optional(v.string()),
+})) {
   static locationStore = useBaseLocationStore(store);
+  private static api = new APIClient({
+    modulePrefix: '/base/location',
+    dt: useTranslate('base.location').dt,
+    fallbackSchema: Location,
+  });
 
-
-  constructor(
-    public address: string[],
-    public friendly_address: string,
-    public lat: number,
-    public lng: number,
-    public _id?: LocationRef,
-  ) {
-    super();
-  }
+  address!: string[];
+  friendly_address!: string;
+  lat!: number;
+  lng!: number;
+  _id?: LocationRef;
 
   protected put() {
-    Location.requestAPI({
+    Location.api.requestHTTP({
       method: "PUT",
       endpoint: '',
       data: {
@@ -36,9 +43,9 @@ export class Location extends BusinessWithAPI {
         friendly_address: this.friendly_address,
         lat: this.lat,
         lng: this.lng,
-      }
-    }).then(({ data }) => {
-      this._id = (data as Location)._id;
+      },
+    }).then(({ body }) => {
+      this._id = body.parsed._id;
     });
   }
 
@@ -49,11 +56,11 @@ export class Location extends BusinessWithAPI {
     }
 
     // 没有缓存，通过 API 获取
-    return this.requestAPI({
+    return this.api.requestHTTP({
       method: "GET",
       endpoint: `/${id}`,
-    }).then(({ data }) => {
-      const location = this.parse(data);
+    }).then(({ body }) => {
+      const location = body.parsed;
       this.locationStore.upsert(location);
       return location;
     })
@@ -64,33 +71,26 @@ export class Location extends BusinessWithAPI {
   }
 }
 
-export class POI extends Business {
-  constructor() {
-    super();
-  }
+export class POI extends V.class(v.object({})) { }
+
+export class RouteItemDatetime extends V.class(v.object({
+  datetime: v.nullable(v.pipe(v.union([v.string(), v.number(), v.date()]), v.transform((i) => i instanceof Date ? i : new Date(i)))),
+  time: v.nullable(v.string()),
+  bring_ahead: v.nullable(v.number()),
+  put_off: v.nullable(v.number()),
+})) {
 }
 
-export class RouteItemDatetime extends Business {
-  constructor(
-    public datetime: Date | null = null,
-    public time: string | null = null,
-    public bring_ahead: number | null = null,
-    public put_off: number | null = null,
-  ) {
-    super();
-  }
-}
+export class RouteItem extends V.class(v.object({
+  datetime: RouteItemDatetime.V,
+  location: v.string(),
+})) {
 
-export class RouteItem extends Business {
-  constructor(
-    public datetime: RouteItemDatetime = new RouteItemDatetime(),
-    public location: LocationRef,
-  ) {
-    super();
-  }
-
-  static use(routeItem: RouteItem) {
-    const _routeItem = ref<RouteItem>(routeItem);
+  static use(routeItem: RouteItem | { datetime: RouteItemDatetime; location: LocationRef }) {
+    const normalize = (ri: RouteItem | { datetime: RouteItemDatetime; location: LocationRef }): RouteItem => {
+      return ri instanceof RouteItem ? ri : RouteItem.parse(ri);
+    };
+    const _routeItem = ref<RouteItem>(normalize(routeItem));
     const _location = ref<Location>();
     const loading = ref(false);
 
@@ -117,29 +117,21 @@ export interface Coord {
   longitude: number;
 }
 
-export class RoutePlan extends Business {
-
-  constructor(
-    public distance: number,
-    public duration: number,
-    public polyline: Coord[],
-    public waypoints?: Location[]
-  ) {
-    super();
-  }
-
+export class RoutePlan extends V.class(v.object({
+  distance: v.number(),
+  duration: v.number(),
+  polyline: v.array(v.object({ latitude: v.number(), longitude: v.number() })),
+  waypoints: v.optional(v.array(Location.V)),
+})) {
 }
 
-export class RoutePlanning extends Business {
-  constructor(
-    public mode: QQMapDirectionMode = QQMapDirectionMode.Driving,
-    public plans?: RoutePlan[],
-  ) {
-    super();
-  }
+export class RoutePlanning extends V.class(v.object({
+  mode: v.picklist(Object.values(QQMapDirectionMode) as [QQMapDirectionMode, ...QQMapDirectionMode[]]),
+  plans: v.optional(v.array(RoutePlan.V)),
+})) {
 
   static use(routeRef: Ref<Route>, mode?: QQMapDirectionMode) {
-    const _planning = ref<RoutePlanning>(new RoutePlanning(mode));
+    const _planning = ref<RoutePlanning>(RoutePlanning.parse({ mode: mode ?? QQMapDirectionMode.Driving }));
     const loading = ref(false);
 
     // Move Route.use logic inside to avoid circular dependencies
@@ -161,17 +153,17 @@ export class RoutePlanning extends Business {
             success: (res: QQMapDirectionResult<typeof _planning.value.mode>) => {
               if (res.status === 0) {
                 _planning.value.plans = res.result.routes.map(plan_route => {
-                  return new RoutePlan(
-                    plan_route.distance,
-                    plan_route.duration,
-                    decompressPolyline(plan_route.polyline),
-                    plan_route.waypoints?.map(wp => new Location(
-                      [],
-                      wp.title,
-                      wp.location.lat,
-                      wp.location.lng
-                    ))
-                  );
+                  return RoutePlan.parse({
+                    distance: plan_route.distance,
+                    duration: plan_route.duration,
+                    polyline: decompressPolyline(plan_route.polyline),
+                    waypoints: plan_route.waypoints?.map(wp => Location.parse({
+                      address: [],
+                      friendly_address: wp.title,
+                      lat: wp.location.lat,
+                      lng: wp.location.lng,
+                    }))
+                  });
                 });
               } else {
                 errorReport(domain_t('toast.fail_to_plan'));
@@ -195,18 +187,9 @@ export class RoutePlanning extends Business {
   }
 }
 
-export class Route extends Business {
-  constructor(
-    public items: RouteItem[],
-  ) {
-    super();
-    if (this.items.length < 2) {
-      this.items = [
-        new RouteItem(new RouteItemDatetime(), ""),
-        new RouteItem(new RouteItemDatetime(), "")
-      ];
-    }
-  }
+export class Route extends V.class(v.object({
+  items: v.array(RouteItem.V),
+})) {
 
   get startItem(): RouteItem {
     return this.items[0];
@@ -244,7 +227,8 @@ export class Route extends Business {
 
     watch(_route, (newRoute) => {
       _locations.value = newRoute.items.map((ri) => {
-        const { location } = RouteItem.use(ri);
+        const normalizedItem = ri instanceof RouteItem ? ri : RouteItem.parse(ri);
+        const { location } = RouteItem.use(normalizedItem);
         return location;
       })
     }, { immediate: true });
