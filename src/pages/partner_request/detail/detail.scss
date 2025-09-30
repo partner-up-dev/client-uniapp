@@ -21,6 +21,10 @@
   .content {
     flex: 1;
     overflow-y: scroll;
+
+    .drawer-placeholder {
+      height: 60px;
+    }
   }
 
   .section {
@@ -45,158 +49,9 @@
       flex-direction: column;
       gap: $pu-spacing-sm;
     }
-
-    .role-card {
-      background: $pu-color-surface-container;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: $pu-spacing-sm $pu-spacing-med;
-
-      .meta {
-        display: flex;
-        gap: $pu-spacing-sm;
-        align-items: center;
-        .id {
-          color: $pu-color-on-surface-variant;
-        }
-        .name {
-          color: $pu-color-on-surface;
-        }
-      }
-
-      .right {
-        display: flex;
-        gap: $pu-spacing-sm;
-        align-items: center;
-        .player {
-          display: flex;
-          gap: $pu-spacing-xs;
-          align-items: center;
-          .avatar {
-            width: $pu-icon-size-small;
-            height: $pu-icon-size-small;
-            border-radius: $pu-radius-full;
-            background: $pu-color-neutral-container;
-          }
-          .player-name {
-            color: $pu-color-on-surface;
-            @include pu-font("label-small");
-          }
-          .hint {
-            color: $pu-color-on-surface;
-            @include pu-font("label-small");
-          }
-        }
-
-        .chevron {
-          width: $pu-icon-size-small;
-          height: $pu-icon-size-small;
-          background: transparent;
-        }
-      }
-    }
   }
 
-  .route {
-    display: flex;
-    flex-direction: column;
-    gap: $pu-spacing-sm;
-
-    .map-preview {
-      position: relative;
-      height: 180px;
-      width: 100%;
-      overflow: hidden;
-      border-radius: 8px;
-
-      .map-image {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .map-ops {
-        position: absolute;
-        right: $pu-spacing-sm;
-        bottom: $pu-spacing-sm;
-        display: flex;
-        gap: $pu-spacing-sm;
-        opacity: 0.8;
-      }
-    }
-
-    .date-and-type {
-      display: flex;
-      align-items: center;
-      gap: $pu-spacing-xs;
-
-      .date {
-        color: $pu-color-on-surface;
-        @include pu-font("label-small");
-      }
-      .dot,
-      .type {
-        color: $pu-color-on-surface-variant;
-        @include pu-font("label-small");
-      }
-    }
-
-    .route-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      .route-item {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .type-indicator {
-        width: 19px;
-        height: $pu-icon-size-small;
-        &.start {
-          background: $pu-color-green;
-          border-radius: $pu-radius-full;
-        }
-        &.end {
-          background: $pu-color-red;
-          border-radius: $pu-radius-full;
-        }
-        &.waypoint {
-          background: $pu-color-secondary;
-        }
-      }
-
-      .content {
-        display: flex;
-        flex-direction: column;
-        gap: $pu-spacing-xs;
-        .address {
-          color: $pu-color-on-surface;
-          @include pu-font("label-large");
-        }
-        .meta {
-          display: flex;
-          gap: $pu-spacing-xs;
-          align-items: center;
-          .time {
-            color: $pu-color-on-surface-variant;
-            @include pu-font("label-small");
-          }
-          .sep {
-            color: $pu-color-on-surface-variant;
-          }
-          .hint {
-            color: $pu-color-on-surface-variant;
-            @include pu-font("label-small");
-          }
-        }
-      }
-    }
-  }
+  // .route styles moved to PRRoute component
 
   .drawer-placeholder {
     height: 155px; // drawer folded height
@@ -220,6 +75,18 @@
     );
     backdrop-filter: blur(0.5px);
 
+    /* smooth snap animation */
+    transition: transform 220ms ease-out;
+
+    &.dragging {
+      transition: none;
+    }
+
+    &.expanded {
+      gap: $pu-spacing-lg;
+      backdrop-filter: blur(8px);
+    }
+
     .page-metadata {
       display: flex;
       flex-direction: column;
@@ -240,6 +107,7 @@
         .id {
           font-weight: 100;
           color: $pu-color-on-surface-variant;
+          @include pu-font("headline-large", true);
         }
         .title {
           color: $pu-color-on-surface;
@@ -260,12 +128,6 @@
         .description {
           color: $pu-color-on-surface-variant;
         }
-      }
-    }
-
-    .operations {
-      .apply-btn {
-        width: 100%;
       }
     }
   }

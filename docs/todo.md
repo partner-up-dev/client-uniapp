@@ -4,13 +4,26 @@
 - [ ] PUButton 通过 inject/provide 读取属性（可以用于 ButtonGroup 或者常见的 Operations 中）
 - [x] Avatar组件、Partners组件
 - [ ] 在 business/ 中将 computed 与类再进一步结合
-- [ ] 移除 Business 或者 Business 基于 valibot
+- [x] 移除 Business 或者 Business 基于 valibot
 - [x] Location.get 使用 Store 做缓存
 - [ ] TabBar 改为普通的版本，不用悬浮
 - [ ] PRList 可以使用 scroll-view
 - [ ] uniuse (<https://uni-helper.js.org/uni-use/guide/installation>)
 - [ ] 基于对 wd-transition 原理的总结，再次尝试实现 wd-transition
 - [ ] vue-i18n types support
+- [ ] BusinessClass.use 的某些值的双向绑定问题解决方案作成 composable
+- [ ] 硬编码文本放到国际化中
+
+## Explore
+
+- [x] 添加 GeoElementFilter Button 到 FixedFilters （目前只有这两种 Filter，所以可以这么做）
+
+## PRDetail
+
+- [x] Partners Section
+- [ ] Partner Header 都可点击，有点击反馈
+- [x] Route Section
+- [ ] Drawer expand
 
 ## PRGeoElementFilter
 
@@ -28,4 +41,3 @@
 - [ ] 随着视野的缩放加载更多路线（lazyPlan）
 - [ ] simplify props
 - [ ] 添加 operations slot
-- [ ] 添加 GeoElementFilter Button 到 FixedFilters （目前只有这两种 Filter，所以可以这么做）

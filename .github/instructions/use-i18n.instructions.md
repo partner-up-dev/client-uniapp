@@ -4,7 +4,7 @@ applyTo: "**/*.vue"
 
 本指南指导如何在 Vue 组件中进行国际化。
 
-基础使用方法：
+基础使用：
 
 ```typescript
 import { useTranslate } from "@/locale";

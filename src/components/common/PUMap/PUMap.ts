@@ -1,28 +1,15 @@
 import type { PropType } from "vue";
 import { type Coord } from "@/business/base/route";
 import type { GeoElement } from "../GeoElement/GeoElement";
+import { makeBooleanProp } from "@/utils/props";
 
-// ==================== 地图相关类型定义 ====================
-/**
- * 地图折线类型
- */
-export interface MapPolyline {
-  points: Array<{
-    latitude: number;
-    longitude: number;
-  }>;
-  color?: string;
-  width?: number;
-  dottedLine?: boolean;
-  arrowLine?: boolean;
-  borderColor?: string;
-  borderWidth?: number;
-}
+// ==================== 地图相关类型定义 ===================='
 
-export interface GeoElementWithIndex extends GeoElement {
+
+export interface GeoElementWithIndex {
+  value: GeoElement;
   index: number;
 }
-
 
 // ==================== 组件 Props 定义 ====================
 export const puMapProps = {
@@ -82,13 +69,7 @@ export const puMapProps = {
     type: Boolean as PropType<boolean>,
     default: true,
   },
-  /**
-   * 是否显示重置按钮
-   */
-  showResetButton: {
-    type: Boolean as PropType<boolean>,
-    default: true,
-  },
+  showResetBtn: makeBooleanProp(true),
   /**
    * 地图容器高度
    */
@@ -107,16 +88,16 @@ export const puMapProps = {
    * 当前激活的地理元素
    */
   activeElement: {
-    type: Object as PropType<GeoElementWithIndex | undefined>,
+    type: Object as PropType<GeoElementWithIndex | null | undefined>,
     default: undefined,
   },
 };
 
 // ==================== 组件 Emits 定义 ====================
 export const puMapEmits = {
-  "update:activeElement": (element: GeoElementWithIndex | undefined) => true,
+  "update:activeElement": (element: GeoElementWithIndex | null | undefined) => true,
   "update:center": (center: Coord | undefined) => true,
-  reset: () => true,
+  defaultBtnClick: () => true,
 };
 
 // ==================== 组件常量定义 ====================

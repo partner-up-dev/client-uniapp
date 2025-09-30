@@ -6,7 +6,6 @@ import log from "@/utils/log";
 import { un } from "@uni-helper/uni-network";
 import { errorReport } from "@/utils/vendor";
 import * as v from "valibot";
-import type { ValibotClass } from "./index";
 
 // Base URL from env; instance clients will set this when constructed
 const BASE_URL: string = (import.meta.env.VITE_BACKEND_MAIN_URL || "") as string;
@@ -14,13 +13,15 @@ const DEFAULT_TIMEOUT = 5000;
 const DEFAULT_RETRY_DELAY = 1000;
 const DEFAULT_SUCCESS_CODES = [200, 201, 204, 307, 302, 301] as const;
 
-// ParseTarget: either a Valibot schema or the constructor type returned by V.class(...)
-type ParseTarget = v.BaseSchema<any, any, any> | ValibotClass<any>;
+// ParseTarget: either a Valibot schema or any class constructor (e.g., returned by V.class(...))
+type ParseTarget = v.BaseSchema<any, any, any> | (abstract new (...args: any) => any);
 
 // Given a ParseTarget, infer the parsed output type
 export type ParsedOf<S> =
+  // If S is a class constructor, infer its instance type (e.g., Location)
+  S extends abstract new (...args: any) => infer I ? I :
+  // If S is a Valibot schema, infer its output
   S extends v.BaseSchema<any, infer O, any> ? O :
-  S extends ValibotClass<any> ? InstanceType<S> :
   unknown;
 
 export class Body<S extends ParseTarget | undefined = undefined> {

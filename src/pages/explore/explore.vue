@@ -116,7 +116,8 @@ import { ref } from "vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PRCard from "@/components/partner_request/PRCard/PRCard.vue";
-import { PartnerRequest, PRType, PRStatus } from "@/business/partner_request";
+import { PRType, PRStatus } from "@/business/partner_request";
+import { PartnerRequest } from "@/business/partner_request/base";
 import { AccountBaseProfile } from "@/business/account";
 import { onShow } from "@dcloudio/uni-app";
 import PRGeoElementFilter from "@/components/partner_request/PRGeoElementFilter/PRGeoElementFilter.vue";
@@ -166,7 +167,6 @@ const mockPartners = ref<AccountBaseProfile[]>([
     nickname: "小明",
     avatar: "/static/icon/avatar1.png",
     gender: "male",
-    mbti: null,
   }),
   AccountBaseProfile.parse({
     _id: "550e8400-e29b-41d4-a716-446655440001",

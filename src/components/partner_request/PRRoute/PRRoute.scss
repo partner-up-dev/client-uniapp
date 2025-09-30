@@ -1,0 +1,28 @@
+@use "@/styles/main.scss" as *;
+
+.pr-route {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  .setoff-date {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-xs;
+
+    .date {
+      color: $pu-color-on-surface;
+      @include pu-font("label-medium", true);
+    }
+
+    .label {
+      @include pu-font("label-medium");
+      color: $pu-color-on-surface-variant;
+    }
+  }
+
+  .route-list {
+    display: flex;
+    flex-direction: column;
+  }
+}

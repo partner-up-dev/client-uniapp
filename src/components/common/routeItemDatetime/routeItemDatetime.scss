@@ -1,0 +1,14 @@
+@use "@/styles/main.scss" as *;
+
+.ri-datetime {
+  display: flex;
+  align-items: center;
+  gap: $pu-spacing-xs;
+
+  @include pu-font("label-small");
+  color: $pu-color-on-surface-variant;
+
+  .time-range {
+    @include pu-font("label-small", true);
+  }
+}

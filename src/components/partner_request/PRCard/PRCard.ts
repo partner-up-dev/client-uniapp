@@ -1,5 +1,6 @@
 import type { PropType } from "vue";
-import { PartnerRequest, PRType, PRStatus } from "@/business/partner_request";
+import { PRType, PRStatus } from "@/business/partner_request";
+import { PartnerRequest } from "@/business/partner_request/base";
 import { type AccountRef } from "@/business/account";
 import { useTranslate } from "@/locale/use";
 
@@ -38,7 +39,7 @@ export const prCardEmits = {
  */
 export function generateMockPartnerRequest(): PartnerRequest {
   return PartnerRequest.parse({
-    _id: Math.floor(Math.random() * 10000),
+    _id: 103,
     created_at: new Date(),
     created_by: "f2db3156-b3df-4bc7-a48e-22fd77a6616c",
     type: PRType.RideHailing,

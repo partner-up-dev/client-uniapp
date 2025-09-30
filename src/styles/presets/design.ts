@@ -113,20 +113,8 @@ const fonts = {
         'font-weight': 400,
         'line-height': '16px',
     },
-    'label-large-mono': {
-        'font-family': 'JetBrains Mono',
-        'font-size': '14px',
-        'font-weight': 400,
-        'line-height': '20px',
-    },
-    'label-small-mono': {
-        'font-family': 'JetBrains Mono',
-        'font-size': '10px',
-        'font-weight': 400,
-        'line-height': '16px',
-    },
     'mono': {
-        'font-family': 'JetBrains Mono',
+        'font-family': 'ui-monospace',
     }
 }
 
@@ -192,6 +180,15 @@ export default definePreset(() => ({
             const font = fonts[key as keyof typeof fonts]
             if (font) {
                 return font
+            }
+        }],
+        [/^font-(.+)$-mono/, ([, key]) => {
+            const font = fonts[key as keyof typeof fonts]
+            if (font) {
+                return {
+                    ...font,
+                    'font-family': 'ui-monospace',
+                }
             }
         }],
         // Spacing utilities

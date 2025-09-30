@@ -127,8 +127,11 @@ $pu-shadow-24: map-get(ref.$ref-shadows, 24);
 }
 
 /* Typography mixins - delegate to ref.ref-font */
-@mixin pu-font($key) {
+@mixin pu-font($key, $mono: false) {
   @include ref.ref-font($key);
+  @if $mono == true {
+    font-family: ui-monospace;
+  }
 }
 
 /* Convenience font mixins used across the project (map to Figma tokens) */

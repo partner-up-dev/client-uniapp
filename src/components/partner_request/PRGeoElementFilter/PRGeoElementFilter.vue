@@ -7,8 +7,11 @@
       :elements="elements"
       :map-id="'pr-geo-filter-map'"
       :height="props.mapHeight"
-      @reset="onReset"
-    />
+    >
+      <view class="pu-map-operation" @tap="onReset">
+        <text class="i-mdi-filter-off"></text>
+      </view>
+    </PUMap>
     <!-- 所有元素预览：使用 swiper；当前展示的元素即 activeElement -->
     <swiper
       class="geo-elements"
@@ -62,14 +65,7 @@ const props = defineProps({
 const elements = ref<GeoElement[]>(mockElements);
 
 const mapCenter = ref<Coord>();
-const activeElement = ref<GeoElementWithIndex | undefined>(
-  elements.value[0]
-    ? {
-        index: 0,
-        ...elements.value[0],
-      }
-    : undefined
-);
+const activeElement = ref<GeoElementWithIndex | undefined | null>();
 
 // swiper 与 activeElement 双向同步
 const swiperCurrent = computed<number | undefined>(
@@ -80,13 +76,13 @@ function onSwiperChange(e: any) {
   const idx = e?.detail?.current ?? 0;
   const el = elements.value[idx];
   if (el) {
-    activeElement.value = { index: idx, ...el };
+    activeElement.value = { index: idx, value: el };
   }
 }
 
 // Methods
 function onReset() {
-  activeElement.value = undefined;
+  activeElement.value = null;
 }
 </script>
 

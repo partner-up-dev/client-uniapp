@@ -20,10 +20,12 @@
     />
 
     <!-- 地图操作按钮 -->
-    <view v-if="showResetButton" class="map-operations">
-      <view class="operation-button" @tap="onResetClick">
-        <text class="i-mdi-filter-off icon"></text>
-      </view>
+    <view class="operations">
+      <slot>
+        <view class="pu-map-operation" v-if="showResetBtn" @tap="onReset">
+          <text class="i-mdi-crosshairs-gps"></text>
+        </view>
+      </slot>
     </view>
   </view>
 </template>
@@ -45,10 +47,10 @@ import {
   watch,
 } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
+import { useOptionalVModel } from "@/composables/base";
 import {
   puMapProps,
   puMapEmits,
-  type MapPolyline,
   type GeoElementWithIndex,
   getUserLocation,
   DEFAULT_MARKER_ICONS,
@@ -61,8 +63,7 @@ import {
   Route,
   RoutePlan,
 } from "@/business/base/route";
-import { GeoElementType } from "../GeoElement/GeoElement";
-import type { MapMarker } from "@uni-helper/uni-app-types";
+import type { MapMarker, MapPolyline } from "@uni-helper/uni-app-types";
 
 // Props & Emits
 const props = defineProps(puMapProps);
@@ -70,21 +71,28 @@ const emit = defineEmits(puMapEmits);
 
 const mapRef = ref<UniNamespace.MapContext>();
 
+// v-model:activeElement (optional)
+const activeElement = useOptionalVModel<GeoElementWithIndex | null | undefined>({
+  props,
+  emit,
+  modelName: "activeElement",
+});
+
 /**
  * 创建 GeoElementWithIndex 对象
  */
 function createGeoElementWithIndex(elementIndex: number): GeoElementWithIndex {
   return {
-    ...props.elements[elementIndex],
+    value: props.elements[elementIndex],
     index: elementIndex,
   };
 }
 
 const routesPlans = computed((): ComputedRef<RoutePlan[] | undefined>[] => {
   return props.elements
-    .filter((element) => element.type === GeoElementType.Route)
+    .filter((element) => element instanceof Route)
     .map((element) => {
-      const routeRef = computed(() => element.value as Route);
+      const routeRef = computed(() => element);
       const { plans } = RoutePlanning.use(routeRef);
       return plans;
     });
@@ -102,7 +110,7 @@ const markers = computed((): MapMarker[] => {
 
     // Use the first planning result for each route
     const plan = routePlans.value[0];
-    const isActiveElement = index === props.activeElement?.index;
+    const isActiveElement = index === activeElement.value?.index;
     const alpha = isActiveElement ? 1.0 : 0.7;
 
     // Start point: first point of polyline
@@ -164,7 +172,7 @@ const polylines = computed((): MapPolyline[] => {
       return;
     }
     const plan = routePlans.value[0];
-    const isActiveElement = index === props.activeElement?.index;
+    const isActiveElement = index === activeElement.value?.index;
     const alpha = isActiveElement ? 1.0 : 0.7;
 
     allPolylines.push({
@@ -182,7 +190,7 @@ const polylines = computed((): MapPolyline[] => {
 
 // Computed properties
 const currentCenter = computed((): Coord | undefined => {
-  if (props.activeElement) {
+  if (activeElement.value) {
     return undefined;
   }
   if (!props.center) {
@@ -193,7 +201,58 @@ const currentCenter = computed((): Coord | undefined => {
   return props.center;
 });
 
+watch(
+  () => [props.elements.length, activeElement.value] as const,
+  ([len, current]) => {
+    if (current === undefined && len > 0) {
+      activeElement.value = createGeoElementWithIndex(0);
+    }
+  },
+  { immediate: true }
+);
+
 // Methods
+
+/**
+ * 将当前激活元素（activeElement）对应的路线包含到地图视野
+ * - 只在 activeElement 存在、且有对应的 polyline 时生效
+ */
+function moveActiveElementIntoView() {
+  const _activeElement = activeElement.value;
+  const currentPolylines = polylines.value;
+
+  const hasActive = _activeElement != null && _activeElement.index >= 0;
+  const hasPolylines = currentPolylines.length > 0;
+  if (!hasActive || !hasPolylines) return;
+
+  // 找到激活元素对应的 polyline 索引（仅计算 Route 类型）
+  let polylineIndex = -1;
+  let routeElementCount = 0;
+  for (let i = 0; i < props.elements.length; i++) {
+    if (props.elements[i] instanceof Route) {
+      const isActive = i === _activeElement.index;
+      if (isActive) {
+        polylineIndex = routeElementCount;
+        break;
+      }
+      routeElementCount++;
+    }
+  }
+
+  const isValidIndex =
+    polylineIndex >= 0 && polylineIndex < currentPolylines.length;
+  if (!isValidIndex) return;
+
+  const activeRoutePoints = currentPolylines[polylineIndex].points;
+  const hasPoints =
+    Array.isArray(activeRoutePoints) && activeRoutePoints.length > 0;
+  if (!hasPoints) return;
+
+  mapRef.value?.includePoints({
+    points: activeRoutePoints,
+    padding: [25, 50, 25, 50], // FIXME 假设了长宽比
+  });
+}
 
 /**
  * 标记点击事件处理
@@ -214,7 +273,7 @@ function onMarkerClick(event: any) {
       const element = props.elements[i];
 
       // 只处理Route类型的元素
-      if (element.type !== GeoElementType.Route) {
+      if (!(element instanceof Route)) {
         continue;
       }
 
@@ -261,7 +320,7 @@ function onMarkerClick(event: any) {
 
     // 如果找到了对应的元素，激活它
     if (elementIndex !== -1) {
-      emit("update:activeElement", createGeoElementWithIndex(elementIndex));
+      activeElement.value = createGeoElementWithIndex(elementIndex);
     }
   }
 }
@@ -305,23 +364,12 @@ function onMapClick(event: any) {
   if (clickedElementIndex >= 0) {
     console.log("Polyline clicked:", clickedElementIndex);
 
-    emit("update:activeElement", createGeoElementWithIndex(clickedElementIndex));
+    activeElement.value = createGeoElementWithIndex(clickedElementIndex);
   }
 }
 
-/**
- * 重置按钮点击事件处理
- */
-function onResetClick() {
-  console.log("Reset clicked");
-
-  // reset includePoints
-  mapRef.value?.includePoints({
-    points: [currentCenter.value!],
-  });
-
-  emit("update:center", undefined);
-  emit("reset");
+function onReset() {
+  moveActiveElementIntoView();
 }
 
 watch(currentCenter, (newVal) => {
@@ -337,39 +385,9 @@ watch(currentCenter, (newVal) => {
 
 // Watch polylines changes to adjust map view
 watch(
-  [polylines, () => props.activeElement],
-  ([newPolylines, activeElement]) => {
-    if (!activeElement) return;
-    if (
-      newPolylines.length > 0 &&
-      activeElement !== null &&
-      activeElement?.index >= 0
-    ) {
-      // Find the corresponding polyline index for the active element
-      let polylineIndex = -1;
-      let routeElementCount = 0;
-
-      for (let i = 0; i < props.elements.length; i++) {
-        if (props.elements[i].type === GeoElementType.Route) {
-          if (i === activeElement.index) {
-            polylineIndex = routeElementCount;
-            break;
-          }
-          routeElementCount++;
-        }
-      }
-
-      if (polylineIndex >= 0 && polylineIndex < newPolylines.length) {
-        const activeRoutePoints = newPolylines[polylineIndex].points;
-
-        if (activeRoutePoints.length > 0) {
-          mapRef.value?.includePoints({
-            points: activeRoutePoints,
-            padding: [25, 50, 25, 50], // FIXME 假设了长宽比
-          });
-        }
-      }
-    }
+  [polylines, activeElement],
+  () => {
+    moveActiveElementIntoView();
   },
   { immediate: true }
 );
@@ -389,3 +407,24 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped src="./PUMap.scss"></style>
+<style lang="scss">
+@use "@/styles/main.scss" as *;
+
+.pu-map-operation {
+  width: 32px;
+  height: 32px;
+  background-color: $pu-color-surface-container;
+  border-radius: $pu-radius-xs;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $pu-shadow-1;
+  color: $pu-color-on-surface;
+
+  @include pu-font-size("body-large");
+
+  &:active {
+    background-color: $pu-color-neutral-container;
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 import { computed, type ComputedRef, ref, type Ref, watch } from "vue";
-import { V } from "..";
+import { nullable, V } from "..";
 import * as v from 'valibot';
 import { decompressPolyline, QQMapSDK } from "@/utils/lbs/index.js";
 import { QQMapDirectionMode, type QQMapDirectionResult } from "@/utils/lbs/types";
@@ -9,6 +9,7 @@ import { useTranslate } from "@/locale/use";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
 import { APIClient } from "@/business/api";
+import dayjs from "dayjs";
 
 const { dt: domain_t } = useTranslate('base.route_map');
 
@@ -22,7 +23,7 @@ export class Location extends V.class(v.object({
   _id: v.optional(v.string()),
 })) {
   static locationStore = useBaseLocationStore(store);
-  private static api = new APIClient({
+  private static api = new APIClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
@@ -74,15 +75,31 @@ export class Location extends V.class(v.object({
 export class POI extends V.class(v.object({})) { }
 
 export class RouteItemDatetime extends V.class(v.object({
-  datetime: v.nullable(v.pipe(v.union([v.string(), v.number(), v.date()]), v.transform((i) => i instanceof Date ? i : new Date(i)))),
-  time: v.nullable(v.string()),
-  bring_ahead: v.nullable(v.number()),
-  put_off: v.nullable(v.number()),
+  datetime: nullable(v.date()),
+  time: nullable(v.string()),
+  bring_ahead: nullable(v.number()),
+  put_off: nullable(v.number()),
 })) {
+
+  get dateString(): string | undefined {
+    if (this.datetime) {
+      return dayjs(this.datetime).format('YYYY.MM.DD');
+    }
+  }
+
+  get timeRange(): { start?: string; end?: string } {
+    if (!this.datetime && !this.time) return { start: undefined, end: undefined };
+    const time = dayjs(this.datetime || this.time, "HH:mm");
+    return {
+      start: time.subtract(this.bring_ahead ?? 0, 'minute').format("HH:mm"),
+      end: time.add(this.put_off ?? 0, 'minute').format("HH:mm"),
+    }
+
+  }
 }
 
 export class RouteItem extends V.class(v.object({
-  datetime: RouteItemDatetime.V,
+  datetime: v.instance(RouteItemDatetime),
   location: v.string(),
 })) {
 
@@ -187,9 +204,8 @@ export class RoutePlanning extends V.class(v.object({
   }
 }
 
-export class Route extends V.class(v.object({
-  items: v.array(RouteItem.V),
-})) {
+export class Route {
+  constructor(public items: RouteItem[]) { }
 
   get startItem(): RouteItem {
     return this.items[0];
@@ -227,7 +243,7 @@ export class Route extends V.class(v.object({
 
     watch(_route, (newRoute) => {
       _locations.value = newRoute.items.map((ri) => {
-        const normalizedItem = ri instanceof RouteItem ? ri : RouteItem.parse(ri);
+        const normalizedItem: RouteItem = RouteItem.parse(ri as unknown);
         const { location } = RouteItem.use(normalizedItem);
         return location;
       })

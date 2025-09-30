@@ -8,15 +8,11 @@
 
 - `src/`: 源代码目录
   - `business/`: 业务逻辑模块
-    - `api.ts`: API 基础
-    - `index.ts`：业务逻辑模块基础
-    - `base/`: 各业务的基础 (shared business)
-    - `account/`: 账户模块的业务逻辑
-    - `partner_request/`: 搭子请求模块的业务逻辑
-  - `components/`: 组件目录
+  - `components/`: 组件
     - `common/`: 通用组件
     - `partner_request/`: 搭子请求模块的组件
-  - `pages/`: 页面目录
+  - `composables/`: 组合式函数
+  - `pages/`: 页面
     - `explore/`: 探索页面
     - `home/`: 首页
     - `partner_request/`：搭子请求模块的页面
@@ -33,7 +29,7 @@
   - `data/`: 数据常量和枚举
     - `enum.ts`
     - `const.ts`
-- `docs/`: 文档目录
+- `docs/`: 文档
 - 根目录配置文件: `package.json`, `tsconfig.json`, `vite.config.ts`, `uno.config.ts`, etc.
 
 ## 架构总览
@@ -45,16 +41,19 @@
   - UniApp 类型标注： [UniTyped](https://uni-helper.js.org/uni-typed/guide/getting-started)
 - 状态管理: Pinia (+ `pinia-plugin-unistorage` 持久化)
 - 样式管理: SCSS, UnoCSS
-- 数据模型: [Valibot](https://valibot.dev/llms.txt)
+- 数据模型: Valibot
+- 网络请求: uni-network
+- 日期处理: day.js
 
 ## 代码质量
 
-> 参考 `.github/instructions/coding.instructions.md`
+参考 `.github/instructions/coding.instructions.md`
+
+- 你无需运行 type-check 或者 build
 
 ### TypeScript
 
-- No `any` types allowed
-- Complete type definitions for all components
+参考 `.github/instructions/typescript.instructions.md`
 
 ### 命名约定
 
@@ -62,9 +61,27 @@
 - 常量：UPPER_SNAKE_CASE
 - 函数/方法: camelCase
 
+### 数据模型
+
+尽可能使用类而不是对象（可以避免 `type` 字段以及类型推断的复杂 ），如：
+
+```typescript
+// don't do
+interface GeoElement<T extends "route" | "poi"> {
+  type: "route" | "poi";
+  value: T extends "route" ? Route : T extends "poi" ? POI : never;
+}
+if (element.type === "route") {
+  // ...
+}
+// do
+type GeoElement = Route | POI; // Route and POI are classes
+element instanceof Route; // type guard
+```
+
 ## MCP
 
 ### Available MCPs
 
-- context7, exa：用于检索技术文档；对于 Uniapp 、Vue 相关问题，使用中文检索
-- APIDoc
+- context7, exa: 用于检索技术文档；对于 Uniapp 、Vue 相关问题，使用中文检索
+- APIDoc: 数据模型、API 接口文档

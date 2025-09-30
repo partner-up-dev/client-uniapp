@@ -1,15 +1,7 @@
 import type { PropType } from "vue";
 import { Route, POI } from "@/business/base/route";
 
-export enum GeoElementType {
-  Route = 'route',
-  POI = 'poi',
-}
-
-export interface GeoElement<T extends GeoElementType = GeoElementType> {
-  type: T;
-  value: T extends GeoElementType.Route ? Route : T extends GeoElementType.POI ? POI : never;
-}
+export type GeoElement = Route | POI;
 
 // ==================== 组件 Props 定义 ====================
 export const geoElementProps = {

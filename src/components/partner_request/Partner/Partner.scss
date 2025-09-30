@@ -1,0 +1,99 @@
+@use "@/styles/main.scss" as *;
+
+.partner {
+  display: flex;
+  background-color: $pu-color-surface-container;
+  padding: $pu-spacing-sm $pu-spacing-med;
+
+  &--fold {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  &--expand {
+    align-items: stretch;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+
+    .header {
+      .left {
+        .role-name {
+          @include pu-font("body-large");
+        }
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+
+      .id-text {
+        @include pu-font("label-large", true);
+        color: $pu-color-on-surface-variant;
+      }
+
+      .role-name {
+        @include pu-font("label-large");
+        color: $pu-color-on-surface;
+      }
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: $pu-spacing-sm;
+
+      .player {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: $pu-spacing-xs;
+        color: $pu-color-on-surface;
+        @include pu-font-size("label-small");
+      }
+
+      .chevron {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include pu-icon("small");
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-xs;
+    width: 100%;
+    .rule {
+      @include pu-font-size("label-large");
+      color: $pu-color-on-surface;
+    }
+
+    .editor {
+      .textarea-wrapper {
+        background-color: $pu-color-surface-container;
+        padding: $pu-spacing-xs;
+      }
+      // use pseudo container approach; do not style native tag directly
+      .textarea {
+        width: 100%;
+        min-height: 72px;
+        @include pu-font-size("label-large");
+        color: $pu-color-on-surface;
+      }
+    }
+  }
+}

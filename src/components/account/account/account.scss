@@ -1,0 +1,25 @@
+@use "@/styles/main.scss" as *;
+
+.account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $pu-spacing-xs;
+  border-radius: $pu-radius-sm;
+
+  .name {
+    @include pu-font("label-small");
+    color: $pu-color-on-surface;
+    white-space: nowrap;
+  }
+
+  &.type-default {
+    background: transparent;
+    padding: 0;
+  }
+
+  &.type-tag {
+    background: $pu-color-surface-container-highest;
+    padding: $pu-spacing-xs $pu-spacing-sm;
+  }
+}

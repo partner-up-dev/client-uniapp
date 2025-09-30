@@ -31,82 +31,25 @@
 
     <!-- Scrollable Content -->
     <view class="content">
+      <!-- Route -->
+      <view class="section route">
+        <text class="section-title">{{ dt("route.title") }}</text>
+        <PRRoute :route="mockRoute" />
+      </view>
+
       <!-- Partners -->
       <view class="section partners">
         <text class="section-title">{{ dt("partners.title") }}</text>
         <view class="roles">
-          <!-- Partner item 1 -->
-          <view class="role-card">
-            <view class="meta">
-              <text class="mono id">#1</text>
-              <text class="name">打车</text>
-            </view>
-            <view class="right">
-              <view class="player">
-                <view class="avatar" />
-                <text class="player-name">蓝汁酱</text>
-                <text class="hint">{{ dt("partners.status.playing") }}</text>
-              </view>
-              <view class="chevron" />
-            </view>
-          </view>
-          <!-- Partner item 2 -->
-          <view class="role-card">
-            <view class="meta">
-              <text class="mono id">#2</text>
-              <text class="name">乘客</text>
-            </view>
-            <view class="right">
-              <text class="hint">{{ dt("partners.status.free") }}</text>
-              <view class="chevron" />
-            </view>
-          </view>
+          <Partner
+            v-for="(partner, index) in partners"
+            :key="index"
+            :partner="partner"
+          />
         </view>
       </view>
 
-      <!-- Route -->
-      <view class="section route">
-        <text class="section-title">{{ dt("route.title") }}</text>
-        <view class="map-preview">
-          <!-- Placeholder for map preview image -->
-        </view>
-
-        <!-- Datetime summary -->
-        <view class="date-and-type">
-          <text class="date">2025.09.03</text>
-          <text>出发</text>
-        </view>
-
-        <!-- Simple route list (placeholder) -->
-        <view class="route-list">
-          <view class="route-item">
-            <view class="type-indicator start" />
-            <view class="content">
-              <text class="address">广东外语外贸大学南校区3号门</text>
-              <view class="meta">
-                <text class="time mono">23:16 ~ HH:MM</text>
-                <text class="sep">·</text>
-                <text class="hint">不可提前</text>
-              </view>
-            </view>
-          </view>
-
-          <view class="route-item">
-            <view class="type-indicator waypoint" />
-            <text class="address">大学城北站（E口）</text>
-          </view>
-
-          <view class="route-item">
-            <view class="type-indicator end" />
-            <view class="content">
-              <text class="address">广州白云机场T3航站楼</text>
-              <view class="meta">
-                <text class="time mono">00:56 ~ HH:MM</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
+      <view class="drawer-placeholder"></view>
     </view>
 
     <view class="drawer-placeholder"></view>
@@ -115,14 +58,24 @@
     <SafeAreaInset position="bottom" />
 
     <!-- Drawer (metadata + operations) -->
-    <view class="drawer">
-      <view class="page-metadata">
+    <view
+      class="drawer"
+      :class="{ expanded: drawerExpanded, dragging: dragging }"
+      :style="drawerStyle"
+    >
+      <view
+        class="page-metadata"
+        @touchstart.stop="onHandleTouchStart"
+        @touchmove.stop="onHandleTouchMove"
+        @touchend.stop="onHandleTouchEnd"
+        @touchcancel.stop="onHandleTouchEnd"
+      >
         <view class="tags">
           <PUTag :text="t('partner_request.status.joinable')" />
           <PUTag :text="t('partner_request.type.ride_hailing')" />
         </view>
         <view class="identifier">
-          <text class="id font-mono">#128</text>
+          <text class="id">#128</text>
           <text class="title">搭子请求</text>
         </view>
         <view class="summary">
@@ -153,15 +106,19 @@ import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PUTag from "@/components/common/PUTag/PUTag.vue";
 import pageBack from "@/components/common/pageBack/pageBack.vue";
+import Partner from "@/components/partner_request/Partner/Partner.vue";
 import { useTranslate } from "@/locale/use";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import * as v from "valibot";
 import { onLoad } from "@dcloudio/uni-app";
 import SafeArea from "@/components/common/safeArea/safeArea.vue";
+import { PartnerRequest } from "@/business/partner_request/base";
+import PRRoute from "@/components/partner_request/PRRoute/PRRoute.vue";
+import { Route, RouteItemDatetime } from "@/business/base/route";
+import { getWindowInfo } from "@/utils/vendor";
+import { makeNumberPX } from "@/utils/style";
 
 const { dt, t } = useTranslate("partner_request.detail");
-
-// Refs
 
 const propsSchema = v.object({
   id: v.pipe(
@@ -171,10 +128,102 @@ const propsSchema = v.object({
 });
 const props = ref<v.InferOutput<typeof propsSchema>>();
 
+const { partners, bindPRId } = PartnerRequest.usePartners(props.value?.id); // TEST need to verify reactivity
+bindPRId(() => props.value?.id);
+
+// TODO: Replace with real route data when API is ready
+const mockRoute = new Route([
+  {
+    datetime: new RouteItemDatetime({
+      datetime: new Date("2024-09-24 23:15:00"),
+      time: null,
+      bring_ahead: null,
+      put_off: null,
+    }),
+    location: "a128acc5d8153c97bb771fccb5efe990",
+  },
+  {
+    datetime: new RouteItemDatetime({
+      datetime: null,
+      time: null,
+      bring_ahead: null,
+      put_off: null,
+    }),
+    location: "1c18c2e3b8dc6f0ffb83b68810bbb29d",
+  },
+]);
 // Handlers
 const onForkClick = () => {};
 const onBookmarkClick = () => {};
-const onApplyClick = () => {};
+const onApplyClick = () => {
+  expandDrawer();
+};
+
+// Drawer state
+const windowInfo = getWindowInfo();
+const HEADER_HEIGHT_PX = 60; // matches header height
+
+const drawerExpanded = ref(false);
+const drawerY = ref(0); // current translateY(px)
+const dragging = ref(false);
+
+let touchStartY = 0;
+let startOffset = 0;
+
+const drawerStyle = computed(() => {
+  if (drawerExpanded.value) {
+    return {
+      top: makeNumberPX(HEADER_HEIGHT_PX + windowInfo.safeAreaInsets.top),
+    };
+  } else if (dragging.value) {
+    return {
+      transform: `translateY(${makeNumberPX(drawerY.value)})`,
+    };
+  } else {
+    return {};
+  }
+});
+
+function expandDrawer() {
+  drawerExpanded.value = true;
+  drawerY.value = 0;
+}
+
+function collapseDrawer() {
+  drawerExpanded.value = false;
+  drawerY.value = 0;
+}
+
+type TouchLikeEvent = {
+  touches?: Array<{ clientY: number }>;
+  changedTouches?: Array<{ clientY: number }>;
+};
+
+const onHandleTouchStart = (e: TouchLikeEvent) => {
+  const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
+  touchStartY = y;
+  startOffset = drawerY.value;
+  dragging.value = true;
+};
+
+const onHandleTouchMove = (e: TouchLikeEvent) => {
+  if (!dragging.value) return;
+  const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
+  const delta = y - touchStartY;
+  const next = Math.min(startOffset + delta, 155);
+  drawerY.value = next;
+};
+
+const onHandleTouchEnd = () => {
+  if (!dragging.value) return;
+  dragging.value = false;
+  const shouldCollapse = drawerY.value > 155 / 2;
+  if (shouldCollapse) {
+    collapseDrawer();
+  } else {
+    expandDrawer();
+  }
+};
 
 // Lifecycle
 

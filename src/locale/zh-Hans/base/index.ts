@@ -17,7 +17,7 @@ export default {
         unit: {
             age_year: '岁',
             year: '年',
-            minute: '分钟', 
+            minute: '分钟',
         }
     },
     money: {
@@ -56,7 +56,7 @@ export default {
         marker: {
             from: "出发地",
             to: "目的地",
-            waypoint: ({named}: {named: named}) => `途经点${named('index')}`
+            waypoint: ({ named }: { named: named }) => `途经点${named('index')}`
         },
         static_driven_info: {
             fare: {
@@ -141,7 +141,7 @@ export default {
             railway_pickup: "下火车",
             airport_pickup: "下飞机",
             airport_dropoff: "赶飞机",
-            commute: "上下班" 
+            commute: "上下班"
         }
     },
     /**
@@ -170,5 +170,9 @@ export default {
         value: {
             placeholder: "点击选择地点"
         }
+    },
+    route_item_datetime: {
+        no_bring_ahead: "不可提前",
+        no_put_off: "不可推迟",
     }
 }

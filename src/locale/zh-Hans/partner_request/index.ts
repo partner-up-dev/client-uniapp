@@ -84,13 +84,16 @@ export default {
     },
     partners: {
       title: "搭子角色",
-      status: {
-        playing: "扮演",
-        free: "等待扮演"
-      }
     },
     route: {
       title: "路线"
+    }
+  },
+  partner: {
+    status: {
+      playing: "扮演",
+      free: "等待扮演",
+      playing_by_you: "由你扮演"
     }
   },
   "specific_content": {

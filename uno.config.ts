@@ -14,7 +14,10 @@ const safeListOfIcons = [
   'i-mdi-map-marker-circle',
   'i-mdi-map-marker-check',
   'i-mdi-directions',
-  'i-mdi-vector-polygon'
+  'i-mdi-vector-polygon',
+  // dynamically used in Partner component
+  'i-mdi-chevron-down',
+  'i-mdi-chevron-up'
 ]
 
 export default {

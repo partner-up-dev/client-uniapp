@@ -82,6 +82,8 @@ export function helperFunction() {
 ### compName.md
 
 ````markdown
+# compName 组件中文名
+
 ## Rationale
 
 这个组件存在的原由。

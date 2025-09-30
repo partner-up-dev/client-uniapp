@@ -321,18 +321,6 @@ $ref-fonts: (
     weight: 400,
     line-height: 16px,
   ),
-  "label-large-mono": (
-    family: "JetBrains Mono",
-    size: 14px,
-    weight: 400,
-    line-height: 20px,
-  ),
-  "label-small-mono": (
-    family: "JetBrains Mono",
-    size: 10px,
-    weight: 400,
-    line-height: 16px,
-  ),
 );
 
 @mixin ref-font($key) {

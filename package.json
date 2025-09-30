@@ -32,6 +32,7 @@
     "@unocss/preset-icons": "^66.5.1",
     "cross-env": "^10.0.0",
     "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.18",
     "js-base64": "^3.7.8",
     "pinia": "^3.0.3",
     "pinia-plugin-unistorage": "^0.1.2",
@@ -42,12 +43,12 @@
     "weapp-cookie": "^1.4.8"
   },
   "devDependencies": {
-    "@types/weixin-app": "^2.9.7",
     "@dcloudio/types": "^3.4.21",
     "@dcloudio/uni-automator": "3.0.0-4070620250821001",
     "@dcloudio/uni-cli-shared": "3.0.0-4070620250821001",
     "@dcloudio/uni-stacktracey": "3.0.0-4070620250821001",
     "@dcloudio/vite-plugin-uni": "3.0.0-4070620250821001",
+    "@types/weixin-app": "^2.9.7",
     "@uni-helper/uni-app-types": "1.0.0-alpha.6",
     "@uni-helper/unocss-preset-uni": "^0.2.11",
     "@unocss/transformer-directives": "^66.1.1",

@@ -36,5 +36,10 @@
       "import { useTranslate } from '@/locale/use';",
       "const { dt } = useTranslate('$1');"
     ]
+  },
+  "importValibot": {
+    "scope": "ts,vue",
+    "prefix": "import-valibot",
+    "body": ["import * as v from 'valibot';"]
   }
 }

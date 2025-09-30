@@ -49,16 +49,37 @@ export const V = {
       }
     }
 
-    return ValibotClass as unknown as {
+    // Build an embedded schema that transforms parsed output into a class instance.
+    // This ensures when used inside other Valibot schemas (e.g. v.object entries),
+    // the resulting parsed value is an instance of the declared class.
+    const embeddedSchema = v.pipe(
+      schema,
+      v.transform((parsed: Output) => {
+        const inst = Object.create(ValibotClass.prototype) as Output;
+        Object.assign(inst as object, parsed);
+        return inst as unknown;
+      })
+    );
+
+    // Make the class itself act like the transformed Valibot schema at runtime by copying
+    // the embedded schema's properties onto the constructor function.
+    Object.assign(ValibotClass, embeddedSchema);
+
+    // Return the constructor intersected with a BaseSchema whose output is the instance type.
+    return ValibotClass as unknown as v.BaseSchema<
+      v.InferInput<TSchema>,
+      Output,
+      v.InferIssue<TSchema>
+    > & {
       new(value: Input): Output;
       V: TSchema;
       schema(): TSchema;
-      parse<T = InstanceType<any>>(data: unknown): T;
-      parseAsync<T = InstanceType<any>>(data: unknown): Promise<T>;
-      safeParse<T = InstanceType<any>>(data: unknown):
+      parse<T = InstanceType<typeof ValibotClass>>(data: unknown): T;
+      parseAsync<T = InstanceType<typeof ValibotClass>>(data: unknown): Promise<T>;
+      safeParse<T = InstanceType<typeof ValibotClass>>(data: unknown):
         | { success: true; output: T }
         | { success: false; issues: v.BaseIssue<unknown>[] };
-      parseJSON<T = InstanceType<any>>(json: string): T;
+      parseJSON<T = InstanceType<typeof ValibotClass>>(json: string): T;
     };
   }
 };
@@ -68,7 +89,11 @@ export const V = {
 // "typeof ValibotClass" without importing a concrete implementation.
 export type ValibotClass<
   TSchema extends v.BaseSchema<any, any, any> = v.BaseSchema<any, any, any>
-> = {
+> = v.BaseSchema<
+  v.InferInput<TSchema>,
+  v.InferOutput<TSchema>,
+  v.InferIssue<TSchema>
+> & {
   new(value: v.InferInput<TSchema>): v.InferOutput<TSchema>;
   V: TSchema;
   schema(): TSchema;
@@ -82,5 +107,5 @@ export type ValibotClass<
 
 
 export function nullable(schema: v.BaseSchema<any, any, any>) {
-  return v.optional(v.nullable(schema));
+  return v.optional(v.nullable(schema), null);
 }
