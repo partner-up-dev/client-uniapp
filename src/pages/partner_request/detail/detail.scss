@@ -75,15 +75,12 @@
     );
     backdrop-filter: blur(0.5px);
 
-    /* smooth snap animation */
-    transition: transform 220ms ease-out;
-
-    &.dragging {
-      transition: none;
-    }
+    /* smooth snap animation via top change (computed in script) */
+    transition: top 220ms ease-out;
 
     &.expanded {
       gap: $pu-spacing-lg;
+      padding-top: $pu-spacing-sm;
       backdrop-filter: blur(8px);
     }
 

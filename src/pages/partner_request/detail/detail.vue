@@ -60,7 +60,8 @@
     <!-- Drawer (metadata + operations) -->
     <view
       class="drawer"
-      :class="{ expanded: drawerExpanded, dragging: dragging }"
+      id="pr-drawer"
+      :class="{ expanded: drawerExpanded }"
       :style="drawerStyle"
     >
       <view
@@ -83,11 +84,12 @@
           <text class="description">赶时间，不要拖</text>
         </view>
       </view>
+      <view class="content"> </view>
       <view class="operations">
         <PUButton
           class="apply-btn"
           theme="Primary"
-          :text="dt('drawer.apply')"
+          :text="drawerExpanded ? dt('drawer.submit_apply') : dt('drawer.apply')"
           @click="onApplyClick"
         />
       </view>
@@ -108,7 +110,7 @@ import PUTag from "@/components/common/PUTag/PUTag.vue";
 import pageBack from "@/components/common/pageBack/pageBack.vue";
 import Partner from "@/components/partner_request/Partner/Partner.vue";
 import { useTranslate } from "@/locale/use";
-import { computed, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, ref } from "vue";
 import * as v from "valibot";
 import { onLoad } from "@dcloudio/uni-app";
 import SafeArea from "@/components/common/safeArea/safeArea.vue";
@@ -156,7 +158,9 @@ const mockRoute = new Route([
 const onForkClick = () => {};
 const onBookmarkClick = () => {};
 const onApplyClick = () => {
-  expandDrawer();
+  if (!drawerExpanded.value) {
+    expandDrawer();
+  }
 };
 
 // Drawer state
@@ -164,34 +168,29 @@ const windowInfo = getWindowInfo();
 const HEADER_HEIGHT_PX = 60; // matches header height
 
 const drawerExpanded = ref(false);
-const drawerY = ref(0); // current translateY(px)
-const dragging = ref(false);
+const drawerTopCollapsed = ref<number | null>(null); // Measured collapsed top (px) of the drawer after first render
+const SWIPE_THRESHOLD_PX = 30; // min distance to trigger toggle
 
 let touchStartY = 0;
-let startOffset = 0;
+let lastTouchY = 0;
 
 const drawerStyle = computed(() => {
+  const expandedTop = HEADER_HEIGHT_PX + windowInfo.safeAreaInsets.top;
   if (drawerExpanded.value) {
-    return {
-      top: makeNumberPX(HEADER_HEIGHT_PX + windowInfo.safeAreaInsets.top),
-    };
-  } else if (dragging.value) {
-    return {
-      transform: `translateY(${makeNumberPX(drawerY.value)})`,
-    };
-  } else {
-    return {};
+    return { top: makeNumberPX(expandedTop) };
   }
+  if (drawerTopCollapsed.value != null) {
+    return { top: makeNumberPX(drawerTopCollapsed.value) };
+  }
+  return {};
 });
 
 function expandDrawer() {
   drawerExpanded.value = true;
-  drawerY.value = 0;
 }
 
 function collapseDrawer() {
   drawerExpanded.value = false;
-  drawerY.value = 0;
 }
 
 type TouchLikeEvent = {
@@ -202,25 +201,23 @@ type TouchLikeEvent = {
 const onHandleTouchStart = (e: TouchLikeEvent) => {
   const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
   touchStartY = y;
-  startOffset = drawerY.value;
-  dragging.value = true;
+  lastTouchY = y;
 };
 
 const onHandleTouchMove = (e: TouchLikeEvent) => {
-  if (!dragging.value) return;
+  // No smooth dragging required; just record last Y
   const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
-  const delta = y - touchStartY;
-  const next = Math.min(startOffset + delta, 155);
-  drawerY.value = next;
+  lastTouchY = y;
 };
 
 const onHandleTouchEnd = () => {
-  if (!dragging.value) return;
-  dragging.value = false;
-  const shouldCollapse = drawerY.value > 155 / 2;
-  if (shouldCollapse) {
+  const delta = lastTouchY - touchStartY;
+  if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return; // ignore tiny drags
+  if (delta > 0) {
+    // drag down -> collapse
     collapseDrawer();
   } else {
+    // drag up -> expand
     expandDrawer();
   }
 };
@@ -229,6 +226,33 @@ const onHandleTouchEnd = () => {
 
 onLoad((query) => {
   props.value = v.parse(propsSchema, query);
+});
+
+// Measure the collapsed top after initial render to support `transition: top`
+const instance = getCurrentInstance();
+function measureDrawerCollapsedTop() {
+  return new Promise<void>((resolve) => {
+    // Use a small delay to ensure layout is ready
+    setTimeout(() => {
+      const q = uni.createSelectorQuery();
+      if (instance?.proxy) q.in(instance.proxy as any);
+      q.select("#pr-drawer")
+        .boundingClientRect((rect) => {
+          const r = rect as any;
+          if (r && typeof r.top === "number") {
+            drawerTopCollapsed.value = r.top as number;
+          }
+          resolve();
+        })
+        .exec();
+    }, 0);
+  });
+}
+
+onMounted(() => {
+  // Ensure we measure while collapsed
+  drawerExpanded.value = false;
+  measureDrawerCollapsedTop();
 });
 </script>
 
