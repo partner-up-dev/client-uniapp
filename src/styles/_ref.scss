@@ -131,9 +131,9 @@ $ref-icon-size-medium: 24px;
 $ref-icon-size-large: 40px;
 
 /* Icon font sizes */
-$ref-icon-font-size-small: 12px;
-$ref-icon-font-size-medium: 16px;
-$ref-icon-font-size-large: 36px;
+$ref-icon-font-size-small: 14px; // mdi already added 2px padding
+$ref-icon-font-size-medium: 20px;
+$ref-icon-font-size-large: 40px;
 
 /* Shadows - mirror design.ts */
 $ref-shadow-0: none;
@@ -298,27 +298,26 @@ $ref-fonts: (
   ),
   "title-large": (
     size: 22px,
-    weight: 400,
     line-height: 32px,
+  ),
+  "title-medium": (
+    size: 18px,
+    line-height: 24px,
   ),
   "body-large": (
     size: 16px,
-    weight: 400,
     line-height: 24px,
   ),
   "label-large": (
     size: 14px,
-    weight: 400,
     line-height: 20px,
   ),
   "label-medium": (
     size: 12px,
-    weight: 400,
     line-height: 16px,
   ),
   "label-small": (
     size: 10px,
-    weight: 400,
     line-height: 16px,
   ),
 );
