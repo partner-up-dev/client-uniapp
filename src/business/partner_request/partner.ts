@@ -4,7 +4,9 @@ import { AccountRefV } from "../account";
 import { APIClient } from "../api";
 import { V } from "../index";
 import * as v from 'valibot';
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import store from "@/store";
+import { usePartnerStore } from "@/store/partner_request/partner";
 
 
 export type PartnerRoleRef = number;
@@ -21,28 +23,49 @@ export class PartnerRole extends V.class(v.object({
     fallbackSchema: PartnerRole,
   })
 
-  static get(id: PartnerRoleRef): Promise<PartnerRole> {
+  static partnerRoleStore = usePartnerStore(store)
+
+  static async get(id: PartnerRoleRef): Promise<PartnerRole> {
+    const cachedRole = this.partnerRoleStore.fetchById(id);
+    if (cachedRole) {
+      return cachedRole;
+    }
+
     return this.api.requestHTTP({
       method: "GET",
       endpoint: `/${id}`,
-    }).then(({ body }) => body.parsed);
+    }).then(({ body }) => {
+      const role = body.parsed;
+      this.partnerRoleStore.upsert(role);
+      return role;
+    });
   }
 
-  static use(id: PartnerRoleRef) {
-    const roleId = ref<PartnerRoleRef>(id);
-    const _role = ref<PartnerRole>();
+  static use(id?: PartnerRoleRef, role?: PartnerRole) {
+    const roleId = ref<PartnerRoleRef | undefined>(id);
+    const _role = ref<PartnerRole | undefined>(role);
+    const loading = ref(false);
 
     const partnerRole = computed((): PartnerRole | undefined => {
-      if (!_role.value) {
+      if (!_role.value && roleId.value) {
+        loading.value = true;
         this.get(roleId.value).then((role) => {
           _role.value = role;
+          loading.value = false;
         });
       }
       return _role.value;
     })
 
+    function bindId(idWatch: any) {  // FIXME: idWatch type is the same as vue.watch first param
+      watch(idWatch, (val) => {
+        roleId.value = val;
+        _role.value = undefined;
+      });
+    }
+
     return {
-      partnerRole, roleId
+      partnerRole, roleId, loading, bindId
     }
 
   }
@@ -60,6 +83,13 @@ export class Partner extends V.class(v.object({
   history: v.array(AccountRefV),
   disabled: v.boolean(),
 })) {
+
+  get isFree(): boolean {
+    return this.player === null;
+  }
+
+  get isApplicable(): boolean {
+    return !this.disabled && this.isFree;
+  }
+
 }
-
-

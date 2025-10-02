@@ -59,7 +59,7 @@ export class AccountBaseProfile extends V.class(v.object({
     return Account.api.requestHTTP({
       method: 'GET',
       endpoint: `/profile/base/${accountId}`,
-      schema: AccountBaseProfile.V,
+      schema: AccountBaseProfile,
     }).then(({ body }) => body.parsed as AccountBaseProfile)
   }
 
@@ -71,7 +71,6 @@ export class Account extends APIClient {
   static api = new APIClient({
     modulePrefix: '/account',
     dt: useTranslate('account').dt,
-    fallbackSchema: AccountBaseProfile,
   })
 
 
@@ -100,13 +99,13 @@ export class Account extends APIClient {
             data: {
               code: res.code
             },
-            schema: AccountBaseProfile.V,
+            schema: AccountBaseProfile,
           }).then(({ body }) => {
-            const baseProfile = body.parsed as AccountBaseProfile;
+            const baseProfile = body.parsed;
             useAccountStore().$patch({
               account_id: baseProfile._id
             })
-            resolve(baseProfile as AccountBaseProfile);
+            resolve(baseProfile);
           }).catch(reject);
         },
         fail() {

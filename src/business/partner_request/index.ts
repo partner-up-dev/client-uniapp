@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import { type PropType } from 'vue';
 
 
 export enum PRStatus {
@@ -52,4 +53,5 @@ export const PRType2L1Type: Record<PRType, PRL1Type> = {
 }
 
 export type PRRef = number;
+export const PRRefProp = Object as PropType<PRRef>
 export const PRRefV = v.number();

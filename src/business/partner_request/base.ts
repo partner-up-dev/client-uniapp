@@ -2,7 +2,7 @@ import { Partner } from "./partner";
 import { APIClient } from "../api";
 import { useTranslate } from "@/locale/use";
 import { computed, ref, watch } from "vue";
-import { V } from "../index";
+import { instance, V } from "../index";
 import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".";
 import * as v from 'valibot';
 
@@ -35,7 +35,7 @@ export class PartnerRequest extends V.class(v.object({
     return this.api.requestHTTP({
       method: "GET",
       endpoint: `/${pr_id}/partners`,
-      schema: v.array(Partner.V),
+      schema: v.array(instance(Partner)),
     }).then(({ body }) => body.parsed);
   }
 
