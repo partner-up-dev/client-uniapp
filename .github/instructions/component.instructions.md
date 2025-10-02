@@ -35,23 +35,24 @@ import { BasicComponentOptions } from "@/utils/vue";
 import { compNameProps, compNameEmits } from "./<compName>";
 
 const props = defineProps(compNameProps);
+// const model = defineModel({ type: String }); use defineModel for v-model
 const emit = defineEmits(compNameEmits);
 </script>
 
 <style lang="scss" scoped src="./compName.scss"></style>
 ```
 
+当你修改 `compName.vue` 时，遵循[该规则](.github/instructions/vue.instructions.md)
+
 ### compName.ts
 
 ```typescript
 import type { PropType } from "vue";
+import { makeStringProp } from "@/utils/props";  // use utils for defining props
 
 // ==================== 组件 Props 定义 ====================
 export const compNameProps = {
-  propName: {
-    type: String as PropType<"option1" | "option2">,
-    default: "option1",
-  },
+  propName: makeStringProp<"option1" | "option2">("option1"),
   requiredProp: {
     type: Object as PropType<SomeInterface>,
     required: true,
@@ -154,6 +155,10 @@ function methodName(param: ParamType): ReturnType {}
 - 高内聚低耦合
 - 便于测试和维护
 - 清晰的 API 设计
+
+### 业务逻辑
+
+- API 请求实现在对应数据模型类的方法上 [参考](.github/instructions/business.instructions.md)
 
 ### 状态管理
 

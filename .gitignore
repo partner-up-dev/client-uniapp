@@ -30,3 +30,5 @@ pnpm-lock.yaml
 **/*.svg
 
 .env.*
+
+*.key

@@ -24,9 +24,11 @@
 - [ ] Partner Header 都可点击，有点击反馈
 - [x] Route Section
 - [x] Drawer expand
-  - [ ] PRApplyForm
-  - [ ] AddPartner
-  - [ ] DeletePartner
+  - [x] PRApplyForm
+  - [x] AddPartner
+  - [x] DeletePartner
+  - [x] Available PartnerRoles 抽屉效果优化（点击遮罩层收起、动画）（独立的组件）
+  - [ ] PartnerRole 组件
 
 ## PRGeoElementFilter
 

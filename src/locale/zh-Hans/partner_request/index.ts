@@ -80,7 +80,8 @@ export default {
     },
     drawer: {
       apply: "申请加入",
-      submit_apply: "提交申请"
+      submit_apply: "提交申请",
+      add_role: "申请更多角色"
     },
     partners: {
       title: "搭子角色",
@@ -94,7 +95,14 @@ export default {
       playing: "扮演",
       free: "等待扮演",
       playing_by_you: "由你扮演"
+    },
+    rationale_editor: {
+      placeholder: "申请该角色的补充说明"
     }
+  },
+  apply_form: {
+    title: "加入搭子请求",
+    subtitle: "每个搭子角色有对应的义务和权利，扮演即成为搭子。",
   },
   "specific_content": {
     "ride_hailing_config": {

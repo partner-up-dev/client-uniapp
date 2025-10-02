@@ -10,5 +10,7 @@
     {
       "column": 82
     }
-  ]
+  ],
+  "miniprogram.miniprogramPath": "dist/dev/mp-weixin",
+  "miniprogram.idePath": "E:\\Program\\微信web开发者工具\\微信开发者工具.exe"
 }

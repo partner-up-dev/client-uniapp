@@ -18,7 +18,7 @@ Uniapp 内置组件：
 
 不可以使用的组件：
 
-- Vue Transition
+- Vue Transition `<transition>`
 
 ## 最佳实践
 

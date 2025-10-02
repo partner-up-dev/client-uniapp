@@ -47,4 +47,6 @@ styles/
     查看 `src/styles/_design.scss` 了解可用的设计代币
   - 在模板中, 使用 UnoCSS （查看`uno.config.ts`以了解可用的预设）
 - 不必考虑响应式设计
-- 使用 SCSS 的嵌套式语法
+- 使用 `utils/style` 提供的工具函数帮助处理样式
+- 使用基于 SCSS 特性的 BEM 命名方法
+- 使状态类型选择器 （如 `is-<state>`, `--state`） 放在最后，这样在相同特异性下可以覆盖前面的样式
