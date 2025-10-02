@@ -127,5 +127,18 @@
         }
       }
     }
+
+    .content {
+      flex: 1;
+      overflow-y: scroll;
+
+      --pu-textarea-bg-color: #{$pu-color-surface-container-highest};
+    }
+
+    .operations {
+      display: flex;
+      flex-direction: column;
+      gap: $pu-spacing-sm;
+    }
   }
 }

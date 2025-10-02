@@ -63,6 +63,7 @@
       id="pr-drawer"
       :class="{ expanded: drawerExpanded }"
       :style="drawerStyle"
+      @transitionend="drawerTransitioning = false"
     >
       <view
         class="page-metadata"
@@ -84,8 +85,24 @@
           <text class="description">赶时间，不要拖</text>
         </view>
       </view>
-      <view class="content"> </view>
+      <view
+        :style="drawerTransitioning ? { flex: 1 } : { flex: 0 }"
+        v-if="!drawerExpanded"
+      ></view>
+      <view class="content" v-show="drawerExpanded">
+        <PRApplyForm
+          :PRId="props?.id || 0"
+          :externalOps="true"
+          ref="PRApplyFormRef"
+        />
+      </view>
       <view class="operations">
+        <PUButton
+          v-if="drawerExpanded"
+          theme="SurfaceOutlined"
+          :text="dt('drawer.add_role')"
+          @click="onAddRoleClick"
+        />
         <PUButton
           class="apply-btn"
           theme="Primary"
@@ -119,6 +136,8 @@ import PRRoute from "@/components/partner_request/PRRoute/PRRoute.vue";
 import { Route, RouteItemDatetime } from "@/business/base/route";
 import { getWindowInfo } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";
+import PRApplyForm from "@/components/partner_request/PRApplyForm/PRApplyForm.vue";
+import type { TouchEvent } from "@uni-helper/uni-app-types";
 
 const { dt, t } = useTranslate("partner_request.detail");
 
@@ -160,7 +179,12 @@ const onBookmarkClick = () => {};
 const onApplyClick = () => {
   if (!drawerExpanded.value) {
     expandDrawer();
+  } else {
+    PRApplyFormRef.value?.submit();
   }
+};
+const onAddRoleClick = () => {
+  PRApplyFormRef.value?.toggleRoleDrawer();
 };
 
 // Drawer state
@@ -168,6 +192,7 @@ const windowInfo = getWindowInfo();
 const HEADER_HEIGHT_PX = 60; // matches header height
 
 const drawerExpanded = ref(false);
+const drawerTransitioning = ref(false);
 const drawerTopCollapsed = ref<number | null>(null); // Measured collapsed top (px) of the drawer after first render
 const SWIPE_THRESHOLD_PX = 30; // min distance to trigger toggle
 
@@ -187,26 +212,23 @@ const drawerStyle = computed(() => {
 
 function expandDrawer() {
   drawerExpanded.value = true;
+  drawerTransitioning.value = true;
 }
 
 function collapseDrawer() {
   drawerExpanded.value = false;
+  drawerTransitioning.value = true;
 }
 
-type TouchLikeEvent = {
-  touches?: Array<{ clientY: number }>;
-  changedTouches?: Array<{ clientY: number }>;
-};
-
-const onHandleTouchStart = (e: TouchLikeEvent) => {
-  const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
+const onHandleTouchStart = (e: TouchEvent) => {
+  const y = e.touches[0].clientY ?? e.changedTouches[0].clientY ?? 0;
   touchStartY = y;
   lastTouchY = y;
 };
 
-const onHandleTouchMove = (e: TouchLikeEvent) => {
+const onHandleTouchMove = (e: TouchEvent) => {
   // No smooth dragging required; just record last Y
-  const y = e.touches?.[0]?.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
+  const y = e.touches[0].clientY ?? e.changedTouches[0].clientY ?? 0;
   lastTouchY = y;
 };
 
@@ -221,6 +243,8 @@ const onHandleTouchEnd = () => {
     expandDrawer();
   }
 };
+
+const PRApplyFormRef = ref<InstanceType<typeof PRApplyForm> | null>(null);
 
 // Lifecycle
 

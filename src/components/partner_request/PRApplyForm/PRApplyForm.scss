@@ -1,0 +1,27 @@
+@use "@/styles/main.scss" as *;
+
+.pr-apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-med;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    .title-text {
+      color: $pu-color-on-surface;
+      @include pu-font("title-medium");
+    }
+    .subtitle {
+      color: $pu-color-on-surface-variant;
+      @include pu-font("label-medium");
+    }
+  }
+
+  .applying-roles {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+    overflow-y: auto;
+  }
+}
