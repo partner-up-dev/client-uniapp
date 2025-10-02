@@ -47,7 +47,7 @@ import {
   watch,
 } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { useOptionalVModel } from "@/composables/base";
+import { useOptionalVModel } from "@/composables/props";
 import {
   puMapProps,
   puMapEmits,

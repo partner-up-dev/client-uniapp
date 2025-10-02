@@ -29,7 +29,7 @@ export default {
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useOptionalVModel } from "@/composables/base";
+import { useOptionalVModel } from "@/composables/props";
 import { puDrawerProps, puDrawerEmits } from "./PUDrawer";
 
 const props = defineProps(puDrawerProps);

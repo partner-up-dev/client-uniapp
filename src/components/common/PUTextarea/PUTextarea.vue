@@ -55,7 +55,7 @@ export default {
 import { computed, ref } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { puTextareaProps, puTextareaEmits } from "./PUTextarea";
-import { useOptionalVModel } from "@/composables/base";
+import { useOptionalVModel } from "@/composables/props";
 
 const props = defineProps(puTextareaProps);
 const emit = defineEmits(puTextareaEmits);
