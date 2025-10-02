@@ -25,6 +25,7 @@
   gap: $pu-spacing-med;
 
   padding: $pu-spacing-med $pu-spacing-lg 0 $pu-spacing-lg;
+  box-sizing: border-box;
 
   .drawer-header {
     display: flex;
