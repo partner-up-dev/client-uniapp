@@ -109,3 +109,19 @@ export type ValibotClass<
 export function nullable(schema: v.BaseSchema<any, any, any>) {
   return v.optional(v.nullable(schema), null);
 }
+
+export function instance<T extends ValibotClass>(cls: T) {
+  // Accept either an existing instance of the class or a raw value that
+  // the class (which itself behaves like a Valibot schema) can parse.
+  const schema = v.pipe(
+    v.transform((i) => {
+      if (typeof i === 'object') {
+        return cls.parse(i);
+      }
+      return i
+    }),
+    v.instance(cls as unknown as new (...args: any[]) => object),
+  );
+
+  return schema as unknown as v.BaseSchema<unknown, InstanceType<T>, v.BaseIssue<unknown>>;
+}

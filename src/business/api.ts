@@ -6,6 +6,7 @@ import log from "@/utils/log";
 import { un } from "@uni-helper/uni-network";
 import { errorReport } from "@/utils/vendor";
 import * as v from "valibot";
+import { Account } from "@/business/account";
 
 // Base URL from env; instance clients will set this when constructed
 const BASE_URL: string = (import.meta.env.VITE_BACKEND_MAIN_URL || "") as string;
@@ -65,7 +66,7 @@ export interface APIResponse<S extends ParseTarget | undefined = undefined> {
 export interface requestAPIParams<S extends ParseTarget | undefined = undefined> {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   endpoint: string;
-  data?: Record<string, unknown> | string | ArrayBuffer | ArrayBufferView | URLSearchParams;
+  data?: object | Array<any> | string | ArrayBuffer | ArrayBufferView | URLSearchParams;
   headers?: Record<string, unknown>;
   timeout?: number;
   retry_left?: number;
@@ -149,7 +150,6 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
     // Backoff then try login and retry once
     await new Promise<void>((r) => setTimeout(r, retryDelay));
     try {
-      const { Account } = await import("@/business/account");
       await Account.login(false);
       const newCfg: any = { ...(response as any).config };
       newCfg.__apiExtras = { ...(newCfg.__apiExtras ?? {}), __retry_left: retryLeft - 1 };
