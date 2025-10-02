@@ -14,7 +14,7 @@
 
 - 折叠：单行布局；展开：纵向布局显示规则与编辑器
 - 扮演状态包含：已被他人扮演、由你扮演、等待扮演
-- 右侧折叠箭头切换展开/折叠
+- 右侧在默认模式显示折叠箭头切换展开/折叠；编辑模式不显示箭头，改为仅图标的删除按钮
 
 ## Implementation
 
@@ -38,6 +38,7 @@
 | update:state     | `(next: 'Fold'\|'Expand')`  | v-model:state   |
 | update:modelValue| `(value: string)`           | v-model 内容    |
 | input            | `(value: string)`           | 输入回调        |
+| delete           | `(partner: Partner)`        | 编辑模式删除项  |
 
 ### Slots
 

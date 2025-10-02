@@ -8,7 +8,7 @@
     ]"
   >
     <!-- Header: always visible -->
-    <view class="header">
+    <view class="header" :class="[typeClass]">
       <view class="left">
         <view class="id">
           <text class="id-text">{{ idText }}</text>
@@ -16,7 +16,7 @@
         <text class="role-name">{{ roleName }}</text>
       </view>
 
-      <view class="right" @click.stop="onToggleClick">
+      <view class="right">
         <template v-if="type === 'Default'">
           <view class="player" v-if="isPlaying">
             <Account v-if="isPlayingByOther" size="xSmall" />
@@ -32,21 +32,35 @@
           </view>
         </template>
 
-        <view role="button" class="chevron">
+        <view
+          v-if="type === 'Default'"
+          role="button"
+          class="chevron"
+          @click.stop="onToggleClick"
+        >
           <text :class="chevronIcon"></text>
         </view>
+        <PUButton
+          v-else-if="type === 'Editor'"
+          theme="Surface"
+          type="OnlyIcon"
+          size="Small"
+          prefix-icon="i-mdi-delete-outline"
+          @click.stop="onDeleteClick"
+        />
       </view>
     </view>
 
-    <!-- Content: only in Expand -->
-    <view v-if="expand" class="content">
+    <view v-if="expand || type === 'Editor'" class="content">
       <text class="rule">{{ roleRule }}</text>
 
-      <view v-if="type === 'Editor'" class="editor">
-        <view class="textarea-wrapper">
-          <textarea class="textarea" :value="editorValue" />
-        </view>
-      </view>
+      <PUTextarea
+        v-if="type === 'Editor'"
+        v-model="rationale"
+        :placeholder="dt('rationale_editor.placeholder')"
+        :height="28"
+        :focusHeight="56"
+      />
     </view>
   </view>
 </template>
@@ -61,12 +75,15 @@ export default {
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { useOptionalVModel } from "@/composables/base";
+import { useOptionalVModel } from "@/composables/props";
 import { partnerProps, partnerEmits } from "./Partner";
 import { useTranslate } from "@/locale/use";
 import Account from "@/components/account/account/account.vue";
 import { PartnerRole } from "@/business/partner_request/partner";
 import { useAccountStore } from "@/store/account";
+import { PartnerSubApplication } from "@/business/partner_request/application";
+import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
+import PUButton from "@/components/common/PUButton/PUButton.vue";
 
 const props = defineProps(partnerProps);
 const emit = defineEmits(partnerEmits);
@@ -104,7 +121,7 @@ const tPlayed = "扮演";
 const tWaiting = "等待扮演";
 const tPlayedByYou = "由你扮演";
 
-const editorValue = ref("");
+const rationale = ref("");
 
 // Make expand v-model optional via composable
 const expand = useOptionalVModel<boolean>({
@@ -121,6 +138,21 @@ const stateClass = computed(() =>
 const onToggleClick = () => {
   expand.value = !expand.value;
 };
+
+const onDeleteClick = () => {
+  emit("delete", props.partner);
+};
+
+// Methods
+
+function getForm(): PartnerSubApplication {
+  return new PartnerSubApplication({
+    role: props.partner.role,
+    rationale: rationale.value.trim() || null,
+  });
+}
+
+defineExpose({ getForm });
 </script>
 
 <style lang="scss" scoped src="./Partner.scss"></style>

@@ -2,35 +2,23 @@
 
 .partner {
   display: flex;
-  background-color: $pu-color-surface-container;
-  padding: $pu-spacing-sm $pu-spacing-med;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
 
-  &--fold {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0;
+  &.type-default {
+    padding: $pu-spacing-sm $pu-spacing-med;
+    background-color: $pu-color-surface-container;
   }
 
-  &--expand {
-    align-items: stretch;
-    flex-direction: column;
-    gap: $pu-spacing-med;
-
-    .header {
-      .left {
-        .role-name {
-          @include pu-font("body-large");
-        }
-      }
-    }
+  &.type-editor {
+    padding: 0 0;
+    background-color: transparent;
   }
 
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
 
     .left {
       display: flex;
@@ -75,24 +63,39 @@
   .content {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-xs;
-    width: 100%;
+    gap: $pu-spacing-sm;
+
     .rule {
       @include pu-font-size("label-large");
       color: $pu-color-on-surface;
     }
+  }
 
-    .editor {
-      .textarea-wrapper {
-        background-color: $pu-color-surface-container;
-        padding: $pu-spacing-xs;
+  &--expand {
+    .type-default.header,
+    .type-editor.header {
+      .left {
+        .id-text {
+          @include pu-font("body-large", true);
+        }
+
+        .role-name {
+          @include pu-font("body-large");
+        }
       }
-      // use pseudo container approach; do not style native tag directly
-      .textarea {
-        width: 100%;
-        min-height: 72px;
-        @include pu-font-size("label-large");
-        color: $pu-color-on-surface;
+    }
+  }
+
+  &--fold {
+    .type-editor.header {
+      .left {
+        .id-text {
+          @include pu-font("body-large", true);
+        }
+
+        .role-name {
+          @include pu-font("body-large");
+        }
       }
     }
   }

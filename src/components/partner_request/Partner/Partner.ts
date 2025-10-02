@@ -25,4 +25,5 @@ export const partnerProps = {
 // ==================== 组件 Emits 定义 ====================
 export const partnerEmits = {
   'update:expand': (value: boolean) => true,
+  'delete': (partner: Partner) => true,
 };
