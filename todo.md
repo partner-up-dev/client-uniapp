@@ -19,6 +19,7 @@
 - [x] 编写测试
 - [ ] 改进 Card 组件 （Expandable）
 - [ ] 添加手风琴组件，控制只能展开几个
+- [ ] 其它状态的推荐操作
 
 ## Explore
 
@@ -36,6 +37,8 @@
   - [x] Available PartnerRoles 抽屉效果优化（点击遮罩层收起、动画）（独立的组件）
   - [x] PartnerRole 组件
 - [ ] 点击 PRStatusTag 则抽屉展开并且显示 Timeline (Tag背景色更深，表示 toggled)
+- [ ] 点击 More-Btn 弹出底部 ActionSheet
+- [ ] Share 操作（选择分享目标）
 
 ## PRGeoElementFilter
 

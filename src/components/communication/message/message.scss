@@ -1,0 +1,32 @@
+@use "@/styles/main.scss" as *;
+
+.msg {
+  display: flex;
+  gap: $pu-spacing-xs;
+  width: 100%;
+
+  &--mine {
+    flex-direction: row-reverse;
+  }
+
+  &__A {
+    flex-shrink: 0;
+  }
+
+  &__B {
+    gap: $pu-spacing-xs;
+    max-width: 70%;
+    min-width: 50%;
+  }
+
+  &__nickname {
+    @include pu-font("label-small");
+    color: $pu-color-on-surface-variant;
+    white-space: nowrap;
+  }
+
+  &__content {
+    margin-top: $pu-spacing-xs;
+    width: max-content;
+  }
+}

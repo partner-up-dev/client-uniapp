@@ -1,0 +1,23 @@
+@use "@/styles/main.scss" as *;
+
+.plain-msg {
+  text-align: start;
+  padding: $pu-spacing-sm 12px;
+  box-sizing: border-box;
+  border-radius: 0 $pu-radius-med $pu-radius-med $pu-radius-med;
+
+  background: $pu-color-surface-container-lowest;
+  color: $pu-color-on-surface;
+
+  &__text {
+    word-wrap: break-word;
+    @include pu-font("label-large");
+  }
+
+  &--mine {
+    background: $pu-color-primary-container;
+    color: $pu-color-primary-container-on;
+    border-radius: $pu-radius-med 0 $pu-radius-med $pu-radius-med;
+    text-align: end;
+  }
+}

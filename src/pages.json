@@ -17,6 +17,12 @@
       "style": {
         "navigationBarTitleText": "搭子请求"
       }
+    },
+    {
+      "path": "pages/test/message",
+      "style": {
+        "navigationBarTitleText": "Message Test"
+      }
     }
   ],
   "tabBar": {
