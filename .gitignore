@@ -32,3 +32,5 @@ pnpm-lock.yaml
 .env.*
 
 *.key
+
+tests/__screenshots__/*
