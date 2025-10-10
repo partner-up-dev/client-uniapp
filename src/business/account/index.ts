@@ -11,11 +11,11 @@ const { dt } = useTranslate('account');
 
 
 export type AccountRef = string;
-export const AccountRefV = v.string();
+export const AccountRefV = v.pipe(v.string(), v.uuid());
 
 
 export class AccountBaseProfile extends V.class(v.object({
-  _id: v.string(),
+  id: v.string(),
   created_at: v.fallback(v.date(), new Date()),
   nickname: v.string(),
   bio: nullable(v.string()),
@@ -26,15 +26,16 @@ export class AccountBaseProfile extends V.class(v.object({
   mbti: nullable(v.string()),
 })) {
 
-  static use() {
+  static use(accountId?: AccountRef) {
 
     const loading = ref(false);
+    const _accountId = ref<AccountRef | undefined>(accountId);
     const _baseProfile = ref<AccountBaseProfile>();
 
     const baseProfile = computed(() => {
       if (!_baseProfile.value) {
         loading.value = true
-        this.get().then(profile => {
+        this.get(_accountId.value).then(profile => {
           _baseProfile.value = profile;
           loading.value = false;
         });
@@ -103,7 +104,7 @@ export class Account extends APIClient {
           }).then(({ body }) => {
             const baseProfile = body.parsed;
             useAccountStore().$patch({
-              account_id: baseProfile._id
+              account_id: baseProfile.id
             })
             resolve(baseProfile);
           }).catch(reject);
@@ -115,4 +116,11 @@ export class Account extends APIClient {
       })
     });
   }
+}
+
+
+export interface AccountSimple {
+  _id: AccountRef;
+  nickname: string;
+  avatar: string;
 }

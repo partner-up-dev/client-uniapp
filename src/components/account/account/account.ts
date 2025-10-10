@@ -1,16 +1,17 @@
 import type { PropType } from "vue";
 import { baseProps, makeStringProp } from "@/utils/props";
 import type { Size, Radius } from "@/utils/style";
+import type { AccountSimple, AccountRef } from "@/business/account";
 
 // ==================== 组件 Props 定义 ====================
-export type AccountType = "Default" | "Tag";
+export type AccountType = "Default" | "Tag" | "Avatar";
 
 export const accountProps = {
-  /** 昵称文案 */
-  nickname: makeStringProp<string>("用户昵称"),
+  /** 账户信息 */
+  account: { type: Object as PropType<AccountSimple | null>, default: null },
 
-  /** 头像图片链接，可为空以使用默认头像 */
-  avatarSrc: { type: String as PropType<string | null>, default: null },
+  /** 账户ID，如果提供，将异步获取账户信息 */
+  accountId: { type: String as PropType<AccountRef | null>, default: null },
 
   /** 展示类型：默认/标签底色 */
   type: makeStringProp<AccountType>("Default"),
