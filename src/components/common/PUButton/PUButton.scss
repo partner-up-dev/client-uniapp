@@ -53,11 +53,16 @@
 }
 
 .bar {
-  padding: 0 $pu-spacing-xs;
+  padding: 0 0;
+  justify-content: space-between;
 
   .text {
     flex: 1;
     padding: 0 $pu-spacing-xs;
+  }
+
+  &.small {
+    height: $pu-size-xSmall;
   }
 }
 
@@ -175,6 +180,15 @@
   background-color: transparent;
   color: $pu-color-on-surface;
   border: 1px solid $pu-color-outline;
+
+  .text {
+    color: $pu-color-on-surface;
+  }
+}
+
+.plain {
+  background-color: transparent;
+  color: $pu-color-on-surface;
 
   .text {
     color: $pu-color-on-surface;

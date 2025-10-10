@@ -7,9 +7,9 @@
     </view>
 
     <!-- Text Content -->
-    <text v-if="type !== 'OnlyIcon' && text" class="font-label-large">
-      {{ text }}
-    </text>
+    <view v-if="type !== 'OnlyIcon' && text" class="text font-label-large">
+      <text>{{ text }}</text>
+    </view>
 
     <!-- Suffix Icon -->
     <view v-if="suffixIcon" class="suffix-icon icon-wrapper">
@@ -47,7 +47,12 @@ interface Props {
   active?: boolean;
 
   // Button variants
-  theme?: "Primary" | "PrimaryContainer" | "Surface" | "SurfaceOutlined";
+  theme?:
+    | "Primary"
+    | "PrimaryContainer"
+    | "Surface"
+    | "SurfaceOutlined"
+    | "Plain";
   type?: "WithText" | "OnlyIcon" | "Bar";
   size?: "xSmall" | "Small" | "Medium" | "Large";
   rounded?: boolean;
