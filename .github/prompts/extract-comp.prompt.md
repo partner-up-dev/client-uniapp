@@ -1,3 +1,10 @@
+---
+description: 提取组件
+mode: agent
+model: Grok Code Fast 1 (Preview) (copilot)
+tools: ['createFile', 'createDirectory', 'editFiles', 'search', 'usages', 'changes', 'fetch', 'todos', 'context7', 'get-library-docs', 'resolve-library-id', 'exa', 'get_code_context_exa', 'web_search_exa']
+---
+
 分离组件的步骤：
 
 1. 明确要分离的内容，包括模板、数据逻辑和样式代码

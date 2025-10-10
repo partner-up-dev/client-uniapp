@@ -8,10 +8,22 @@
     },
     "lib": ["esnext", "dom"],
     "moduleResolution": "Bundler",
-    "types": ["@dcloudio/types", "@uni-helper/uni-app-types"]
+    "types": [
+      "@dcloudio/types",
+      "@uni-helper/uni-app-types",
+      "vitest/jsdom",
+      "node",
+      "types/node"
+    ]
   },
   "vueCompilerOptions": {
     "plugins": ["@uni-helper/uni-app-types/volar-plugin"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.test.ts"
+  ]
 }

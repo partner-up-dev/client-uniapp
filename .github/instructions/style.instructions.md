@@ -1,5 +1,5 @@
 ---
-applyTo: "*.scss, src/styles/**"
+applyTo: "**/*.scss, src/styles/**"
 ---
 
 本指南指导样式代码的编写。

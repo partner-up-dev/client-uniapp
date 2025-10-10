@@ -1,7 +1,20 @@
 import * as v from 'valibot';
 import { type PropType } from 'vue';
 
-
+/**
+ * ```mermaid
+ * graph TD
+ *   草稿 --> 可加入
+ *   可加入 --> 已就绪
+ *   可加入 --> 已合并
+ *   已就绪 --> 执行中
+ *   执行中 --> 结算中
+ *   结算中 --> 已关闭
+ *   结算中 --> 可加入
+ *   结算中 --> 已就绪
+ *   可加入 --> 已取消
+ * ```
+ */
 export enum PRStatus {
     Draft = "draft",
     Joinable = "joinable",

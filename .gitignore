@@ -29,7 +29,10 @@ pnpm-lock.yaml
 **/*.jpg
 **/*.svg
 
-.env.*
+.env.local
+.env.development
+.env.staging
+.env.production
 
 *.key
 

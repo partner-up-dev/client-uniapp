@@ -7,7 +7,7 @@
 /* Primary */
 $ref-color-primary-10: #f3f9e9;
 $ref-color-primary-20: #e6f3d3;
-$ref-color-primary-30: #d9edbd;
+$ref-color-primary-30: #102000;
 $ref-color-primary-40: #cdeda4;
 $ref-color-primary-50: #bfe77f;
 $ref-color-primary-60: #a3dd5f;
@@ -321,6 +321,10 @@ $ref-fonts: (
     line-height: 16px,
   ),
 );
+
+/* Opacity values */
+$ref-opacity-disabled: 0.6;
+$ref-opacity-invalid: 0.6;
 
 @mixin ref-font($key) {
   $font: map-get($ref-fonts, $key);

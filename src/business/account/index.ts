@@ -3,7 +3,7 @@ import { hideLoading, showLoading } from "@/utils/vendor";
 import { APIClient } from "../api";
 import { computed, ref } from "vue";
 import { useAccountStore } from "@/store/account";
-import { V, nullable } from "../index";
+import { V, nullable } from "..";
 import * as v from 'valibot';
 import { errorReport } from "@/utils/vendor";
 import { useTranslate } from "@/locale/use";

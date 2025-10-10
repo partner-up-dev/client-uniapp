@@ -10,6 +10,7 @@
 $pu-color-primary: ref.$ref-color-primary-80;
 $pu-color-primary-container: ref.$ref-color-primary-40;
 $pu-color-primary-on: ref.$ref-color-primary-100;
+$pu-color-primary-container-on: ref.$ref-color-primary-30;
 
 /* Secondary */
 $pu-color-secondary: ref.$ref-color-secondary-80;
@@ -92,6 +93,10 @@ $pu-icon-font-size-small: ref.$ref-icon-font-size-small;
 $pu-icon-font-size-medium: ref.$ref-icon-font-size-medium;
 $pu-icon-font-size-large: ref.$ref-icon-font-size-large;
 
+/* Opacity */
+$pu-opacity-disabled: ref.$ref-opacity-disabled;
+$pu-opacity-invalid: ref.$ref-opacity-invalid;
+
 /* Shadows (map access) */
 $pu-shadow-0: map-get(ref.$ref-shadows, 0);
 $pu-shadow-1: map-get(ref.$ref-shadows, 1);
@@ -167,7 +172,7 @@ $pu-font-headline-small-size: map-get(
 }
 
 /* Icon mixin - applies width, height, and font-size for icons */
-@mixin pu-icon($key) {
+@mixin pu-icon($key, $layout: false) {
   @if $key == "small" {
     width: $pu-icon-size-small;
     height: $pu-icon-size-small;
@@ -182,5 +187,11 @@ $pu-font-headline-small-size: map-get(
     font-size: $pu-icon-font-size-large;
   } @else {
     @error "Unknown icon size `#{$key}`. Available: small, medium, large";
+  }
+
+  @if $layout == true {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

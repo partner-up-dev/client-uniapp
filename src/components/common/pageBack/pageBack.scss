@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: $pu-radius-full;
   transition: background 0.15s ease;
   &:active {
     background: $pu-color-surface-container;

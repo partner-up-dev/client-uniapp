@@ -13,10 +13,11 @@ export function useOptionalVModel<T>(options: {
   props: Record<string, unknown>
   emit: (...args: any[]) => void
   modelName: string
+  defaultValue?: T
 }) {
-  const { props, emit, modelName } = options
+  const { props, emit, modelName, defaultValue } = options
 
-  const inner = ref<T>((props[modelName] as T));
+  const inner = ref<T>(props[modelName] !== undefined ? (props[modelName] as T) : (defaultValue as T));
 
   watch(() => props[modelName], (val) => inner.value = val)
 

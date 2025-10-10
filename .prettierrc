@@ -1,3 +1,11 @@
 {
-  "printWidth": 82
+  "printWidth": 82,
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "embeddedLanguageFormatting": "off"
+      }
+    }
+  ]
 }

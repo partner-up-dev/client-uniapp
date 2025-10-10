@@ -14,6 +14,12 @@
 - [ ] BusinessClass.use 的某些值的双向绑定问题解决方案作成 composable
 - [ ] 硬编码文本放到国际化中
 
+## PRTimeline
+
+- [x] 编写测试
+- [ ] 改进 Card 组件 （Expandable）
+- [ ] 添加手风琴组件，控制只能展开几个
+
 ## Explore
 
 - [x] 添加 GeoElementFilter Button 到 FixedFilters （目前只有这两种 Filter，所以可以这么做）
@@ -28,7 +34,8 @@
   - [x] AddPartner
   - [x] DeletePartner
   - [x] Available PartnerRoles 抽屉效果优化（点击遮罩层收起、动画）（独立的组件）
-  - [ ] PartnerRole 组件
+  - [x] PartnerRole 组件
+- [ ] 点击 PRStatusTag 则抽屉展开并且显示 Timeline (Tag背景色更深，表示 toggled)
 
 ## PRGeoElementFilter
 
@@ -45,4 +52,4 @@
 - [x] 双向绑定 `v-model:activeElement` ，删除 `emit:element-click`
 - [ ] 随着视野的缩放加载更多路线（lazyPlan）
 - [ ] simplify props
-- [ ] 添加 operations slot
+- [x] 添加 operations slot

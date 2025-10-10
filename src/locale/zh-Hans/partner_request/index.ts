@@ -306,6 +306,80 @@ export default {
       title: "选择二级类型以继续"
     }
   },
+  timeline: {
+    title: "进展"
+  },
+  timeline_item: {
+    "draft": {
+      title: "草稿",
+      description: "搭子请求处于草稿状态，需要完善信息后发布",
+      actions: {
+        edit: "编辑",
+        publish: "发布",
+        delete: "删除"
+      }
+    },
+    "joinable": {
+      title: "可加入",
+      description: "其它用户可以申请加入该搭子请求\n系统会为您匹配合适的搭子",
+      actions: {
+        approve_applications: "审批申请",
+        ready: "已就绪",
+        share: "分享"
+      }
+    },
+    "ready": {
+      title: "已就绪",
+      description: "搭子已组成，可以开始执行活动",
+      actions: {
+        start: "开始",
+        view_contract: "查看契约",
+        cancel: "取消"
+      }
+    },
+    "performing": {
+      title: "执行中",
+      description: "搭子活动正在进行中",
+      actions: {
+        view_progress: "查看进度",
+        contact: "联系搭子",
+        report: "举报"
+      }
+    },
+    "settling": {
+      title: "结算中",
+      description: "活动已完成，正在进行费用结算",
+      actions: {
+        view_settlement: "查看结算",
+        confirm: "确认",
+        dispute: "申诉"
+      }
+    },
+    "closed": {
+      title: "已关闭",
+      description: "搭子请求已完成并关闭",
+      actions: {
+        view_summary: "查看总结",
+        rate: "评价",
+        share: "分享"
+      }
+    },
+    "cancelled": {
+      title: "已取消",
+      description: "搭子请求已被取消",
+      actions: {
+        view_reason: "查看原因",
+        repost: "重新发布"
+      }
+    },
+    "merged": {
+      title: "已合并",
+      description: "搭子请求已与其他请求合并",
+      actions: {
+        view_merged: "查看合并后的请求"
+      }
+    }
+  },
   /** 搭子请求模块API翻译 */
   api: {
     v1_partner_request_get_list: {
