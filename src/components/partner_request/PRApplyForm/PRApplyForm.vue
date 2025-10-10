@@ -8,13 +8,11 @@
     </view>
 
     <view class="applying-roles">
-      <Partner
-        v-for="(partner, index) in selectedPartners"
-        :key="partner._id"
-        :ref="setPartnerRef"
-        :partner="partner"
-        type="Editor"
-        :expand="true"
+      <SubApplication
+        v-for="(subApplication, index) in applyingPartners"
+        :key="subApplication.role"
+        :subApplication="subApplication"
+        :editable="true"
         @delete="onDeleteRole(index)"
       />
     </view>
@@ -50,6 +48,7 @@
 
 <script lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
+import SubApplication from "../SubApplication/SubApplication.vue";
 export default {
   name: "PRApplyForm",
   options: BasicComponentOptions,
@@ -60,10 +59,8 @@ export default {
 import { computed, onBeforeUpdate, onMounted, ref, watch } from "vue";
 import { useTranslate } from "@/locale/use";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
-import Partner from "@/components/partner_request/Partner/Partner.vue";
 import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
-import { PartnerRole } from "@/business/partner_request/partner";
 import { PartnerRequest } from "@/business/partner_request/base";
 import {
   PartnerApplicationForm,
@@ -107,25 +104,6 @@ const availableRoles = computed<PartnerRoleRef[]>(() => {
     .map((p) => p.role);
 });
 
-// 已选中的 Partner 实体，用于渲染编辑器（按选择顺序）
-const selectedPartners = computed(() => {
-  const map = new Map(partners.value.map((p) => [p.role, p] as const));
-  return selectedRoles.value
-    .map((role) => map.get(role))
-    .filter((p): p is NonNullable<typeof p> => !!p);
-});
-
-const partnerRefs = ref<InstanceType<typeof Partner>[]>([]);
-onBeforeUpdate(() => {
-  partnerRefs.value.length = 0;
-});
-
-function setPartnerRef(el: any) {
-  if (el && typeof el.getForm === "function") {
-    partnerRefs.value.push(el as InstanceType<typeof Partner>);
-  }
-}
-
 function onDeleteRole(index: number) {
   applyingPartners.value.splice(index, 1);
   emit("change", selectedRoles.value);
@@ -146,7 +124,7 @@ function onSelectRole(roleId: PartnerRoleRef) {
 function submit() {
   new PartnerApplicationForm({
     partner_request: props.PRId,
-    sub_applications: partnerRefs.value.map((ref) => ref.getForm()),
+    sub_applications: applyingPartners.value,
   })
     .submit()
     .then((app) => {

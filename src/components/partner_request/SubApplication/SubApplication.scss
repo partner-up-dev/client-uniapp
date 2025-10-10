@@ -1,0 +1,75 @@
+@use "@/styles/main.scss" as *;
+
+.sub-application {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+  padding: 0 0;
+  background-color: transparent;
+
+  &--readonly {
+    border: 1px solid $pu-color-outline;
+    border-radius: $pu-radius-xs;
+    padding: $pu-spacing-xs $pu-spacing-sm;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+
+      .id-text {
+        @include pu-font("body-large", true);
+        color: $pu-color-on-surface-variant;
+      }
+
+      .role-name {
+        @include pu-font("body-large");
+        color: $pu-color-on-surface;
+      }
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: $pu-spacing-sm;
+    }
+  }
+
+  .rule {
+    @include pu-font-size("label-large");
+    color: $pu-color-on-surface;
+  }
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+
+  .rule {
+    @include pu-font("label-medium");
+    color: $pu-color-on-surface;
+  }
+
+  .rationale {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-sm;
+
+    .rationale-label {
+      @include pu-font("label-large");
+      color: $pu-color-on-surface-variant;
+    }
+
+    .rationale-text {
+      @include pu-font("label-large");
+      color: $pu-color-on-surface;
+    }
+  }
+}
