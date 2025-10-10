@@ -1,0 +1,19 @@
+@use "@/styles/main.scss" as *;
+
+.pr-timeline {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  .section-title {
+    @include pu-font("title-large");
+    color: $pu-color-on-surface;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

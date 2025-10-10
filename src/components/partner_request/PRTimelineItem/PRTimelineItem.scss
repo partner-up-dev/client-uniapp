@@ -1,0 +1,74 @@
+@use "@/styles/main.scss" as *;
+
+.pr-ti {
+  padding: $pu-spacing-sm $pu-spacing-med;
+  background-color: $pu-color-surface-container;
+  color: $pu-color-on-surface;
+  border-radius: $pu-radius-sm;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  &--current {
+    border: 2px solid $pu-color-primary;
+  }
+
+  &--past {
+    .pr-ti__header {
+      opacity: $pu-opacity-invalid;
+    }
+  }
+
+  &--expanded {
+    .pr-ti__header {
+      opacity: 1;
+    }
+  }
+
+  // Header section
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    @include pu-font("label-large");
+    color: $pu-color-on-surface;
+
+    // Current state title color override
+    .pr-ti--current & {
+      color: $pu-color-primary-on;
+    }
+  }
+
+  &__expand-icon {
+    @include pu-icon("small", true);
+  }
+
+  // Content section
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+  }
+
+  &__description {
+    @include pu-font("label-medium");
+    color: $pu-color-on-surface;
+  }
+
+  // Actions section
+  &__actions {
+    display: flex;
+    flex-direction: column;
+
+    // Apply disabled opacity to actions for non-current states
+    .pr-ti--past &,
+    .pr-ti--future & {
+      opacity: $pu-opacity-disabled;
+    }
+  }
+}
