@@ -81,13 +81,26 @@ export default {
     drawer: {
       apply: "申请加入",
       submit_apply: "提交申请",
-      add_role: "申请更多角色"
+      add_role: "申请更多角色",
+      application_approving: "加入申请审核中",
+      application_rejected: "加入申请被拒绝",
     },
     partners: {
       title: "搭子角色",
     },
     route: {
       title: "路线"
+    },
+    application_chat: {
+      title: "沟通"
+    },
+    sub_applications: {
+      title: "申请的角色",
+      submitted_at: "提交于"
+    },
+    application_eclose: {
+      title_rejected: "驳回原因",
+      title_withdrawn: "撤回原因",
     }
   },
   partner: {

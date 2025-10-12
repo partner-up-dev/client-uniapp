@@ -72,8 +72,8 @@ const borderRadius = {
     none: '0px',
     xs: '0px',
     sm: '0px',
-    med: '16px',
-    lg: '24px',
+    med: '8px',
+    lg: '16px',
     full: '50%',
 }
 
@@ -130,6 +130,10 @@ const paddingPropertyMap: Record<string, string[]> = {
 const marginPropertyMap: Record<string, string[]> = {
     x: ['margin-left', 'margin-right'],
     y: ['margin-top', 'margin-bottom'],
+    t: ['margin-top'],
+    b: ['margin-bottom'],
+    r: ['margin-right'],
+    l: ['margin-left'],
     lt: ['margin-left', 'margin-top'],
     rt: ['margin-right', 'margin-top'],
     rb: ['margin-right', 'margin-bottom'],
@@ -156,10 +160,10 @@ export default definePreset(() => ({
             }
         }],
         // Shape utilities
-        [/^shape-(none|sm|med|lg|full)$/, ([, size]) => ({
+        [/^radius-(none|sm|med|lg|full)$/, ([, size]) => ({
             'border-radius': borderRadius[size as keyof typeof borderRadius]
         })],
-        [/^shape-(x|y|lt|rt|rb|lb)-(none|sm|med|lg|full)$/, ([, pos, size]) => {
+        [/^radius-(x|y|lt|rt|rb|lb)-(none|sm|med|lg|full)$/, ([, pos, size]) => {
             const value = borderRadius[size as keyof typeof borderRadius]
             if (pos === 'x') {
                 return { 'border-radius': `${value} 0 0 ${value}` }
@@ -210,7 +214,7 @@ export default definePreset(() => ({
                 }, {} as Record<string, string>)
             }
         }],
-        [/^space-m-(x|y|lt|rt|rb|lb)-(xs|sm|med|lg)$/, ([, pos, size]) => {
+        [/^space-m-(x|y|lt|rt|rb|lb|t|r|l|b)-(xs|sm|med|lg)$/, ([, pos, size]) => {
             const properties = marginPropertyMap[pos]
             if (properties) {
                 return properties.reduce((acc, prop) => {

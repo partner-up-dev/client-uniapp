@@ -20,6 +20,9 @@
 
   .content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
     overflow-y: scroll;
 
     .drawer-placeholder {
@@ -28,15 +31,19 @@
   }
 
   .section {
-    display: flex;
     flex-direction: column;
     gap: $pu-spacing-sm;
     padding: $pu-spacing-sm $pu-spacing-med;
+  }
 
-    .section-title {
-      @include pu-font("title-large");
-      color: $pu-color-on-surface;
-    }
+  .section-title {
+    @include pu-font("title-large");
+    color: $pu-color-on-surface;
+  }
+
+  .section-subtitle {
+    @include pu-font("label-medium");
+    color: $pu-color-on-surface-variant;
   }
 
   .partners {
@@ -68,11 +75,7 @@
     flex-direction: column;
     gap: $pu-spacing-med;
 
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      $pu-color-surface-container 30%
-    );
+    background: linear-gradient(180deg, transparent 0%, $pu-color-surface 30%);
     backdrop-filter: blur(0.5px);
 
     /* smooth snap animation via top change (computed in script) */
@@ -132,7 +135,8 @@
       flex: 1;
       overflow-y: scroll;
 
-      --pu-textarea-bg-color: #{$pu-color-surface-container-highest};
+      // --pu-textarea-bg-color: #{$pu-color-surface-container};
+      --chat-content-bg-color: #{$pu-color-surface-container};
     }
 
     .operations {

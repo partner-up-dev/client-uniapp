@@ -9,22 +9,43 @@
       <view class="header">
         <pageBack size="large" />
         <view class="ops">
-          <PUButton
-            class="fork-btn"
-            theme="Surface"
-            type="OnlyIcon"
-            size="Large"
-            prefix-icon="i-mdi-content-copy"
-            @click="onForkClick"
-          />
-          <PUButton
-            class="bookmark-btn"
-            theme="Surface"
-            size="Large"
-            prefix-icon="i-mdi-bookmark-outline"
-            :text="dt('header.favorite')"
-            @click="onBookmarkClick"
-          />
+          <template v-if="Iam !== 'partner'">
+            <PUButton
+              theme="Surface"
+              type="OnlyIcon"
+              size="Large"
+              prefix-icon="i-mdi-content-copy"
+              @click="onForkClick"
+            />
+            <PUButton
+              theme="Surface"
+              size="Large"
+              prefix-icon="i-mdi-bookmark-outline"
+              :text="dt('header.favorite')"
+              @click="onBookmarkClick"
+            />
+          </template>
+          <template v-else>
+            <PUButton
+              theme="Surface"
+              type="OnlyIcon"
+              size="Large"
+              prefix-icon="i-mdi-chat-outline"
+              :dot="hasUnread"
+            />
+            <PUButton
+              theme="Surface"
+              type="OnlyIcon"
+              size="Large"
+              prefix-icon="i-mdi-share-variant-outline"
+            />
+            <PUButton
+              theme="Surface"
+              type="OnlyIcon"
+              size="Large"
+              prefix-icon="i-mdi-dots-vertical"
+            />
+          </template>
         </view>
       </view>
     </SafeArea>
@@ -89,26 +110,82 @@
         :style="drawerTransitioning ? { flex: 1 } : { flex: 0 }"
         v-if="!drawerExpanded"
       ></view>
-      <view class="content" v-show="drawerExpanded">
-        <PRApplyForm
-          :PRId="props?.id || 0"
-          :externalOps="true"
-          ref="PRApplyFormRef"
-        />
+      <view
+        class="content"
+        :style="{ display: drawerExpanded ? 'flex' : 'none' }"
+      >
+        <template v-if="Iam === 'passby'">
+          <PRApplyForm
+            :PRId="props?.id || 0"
+            :externalOps="true"
+            ref="PRApplyFormRef"
+          />
+        </template>
+        <template v-if="Iam === 'applicant'">
+          <!-- SubApplications -->
+          <view class="flex flex-col gap-sm">
+            <view>
+              <view class="section-title">
+                {{ dt("sub_applications.title") }}
+              </view>
+              <view class="section-subtitle">
+                {{ dt("sub_applications.submitted_at") }}
+                <text class="space-m-r-xs">
+                  {{ formatDate(undefined, myApplication?.created_at) }}
+                </text>
+              </view>
+            </view>
+            <SubApplication
+              v-for="(subApplication, index) in myApplication?.sub_applications"
+              :key="index"
+              :sub-application="subApplication"
+            />
+          </view>
+          <!-- Application Chat -->
+          <view
+            class="flex flex-col gap-sm overflow-y-scroll"
+            style="min-height: 160px"
+          >
+            <view class="section-title">
+              {{ dt("application_chat.title") }}
+            </view>
+            <ChatContent
+              class="flex-1 radius-med space-p-x-med space-p-y-sm"
+              :chatId="123"
+              mode="flex"
+            />
+            <!-- TODO: replace with pr.chat -->
+          </view>
+          <!-- EClose Reason (If has) -->
+          <view class="flex flex-col gap-sm" v-if="myApplication?.eclose_reason">
+            <view class="section-title">
+              {{ dt(`application_eclose.title_${myApplication?.status}`) }}
+            </view>
+            <view class="font-label-large color-surface-on">
+              {{ myApplication?.eclose_reason }}
+            </view>
+          </view>
+        </template>
+        <template v-if="Iam === 'partner'">
+          <PRTimeline :current-status="PRStatus.Joinable" />
+        </template>
       </view>
       <view class="operations">
-        <PUButton
-          v-if="drawerExpanded"
-          theme="SurfaceOutlined"
-          :text="dt('drawer.add_role')"
-          @click="onAddRoleClick"
-        />
-        <PUButton
-          class="apply-btn"
-          theme="Primary"
-          :text="drawerExpanded ? dt('drawer.submit_apply') : dt('drawer.apply')"
-          @click="onApplyClick"
-        />
+        <template v-if="Iam !== 'partner'">
+          <PUButton
+            v-if="drawerExpanded && Iam === 'passby'"
+            theme="SurfaceOutlined"
+            :text="dt('drawer.add_role')"
+            @click="onAddRoleClick"
+          />
+          <PUButton
+            class="apply-btn"
+            :theme="Iam === 'passby' ? 'Primary' : 'SurfaceOutlined'"
+            :text="applyBtnText"
+            :disabled="Iam === 'applicant'"
+            @click="onApplyClick"
+          />
+        </template>
       </view>
     </view>
   </view>
@@ -121,23 +198,33 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { computed, getCurrentInstance, onMounted, ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import type { TouchEvent } from "@uni-helper/uni-app-types";
+import * as v from "valibot";
+
+import { PartnerRequest } from "@/business/partner_request/base";
+import { PRStatus } from "@/business/partner_request";
+import { PartnerApplication } from "@/business/partner_request/application";
+import { Route, RouteItemDatetime } from "@/business/base/route";
+
+import ChatContent from "@/components/communication/ChatContent/ChatContent.vue";
+import SafeArea from "@/components/common/safeArea/safeArea.vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
+import pageBack from "@/components/common/pageBack/pageBack.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PUTag from "@/components/common/PUTag/PUTag.vue";
-import pageBack from "@/components/common/pageBack/pageBack.vue";
+
 import Partner from "@/components/partner_request/Partner/Partner.vue";
-import { useTranslate } from "@/locale/use";
-import { computed, getCurrentInstance, onMounted, ref } from "vue";
-import * as v from "valibot";
-import { onLoad } from "@dcloudio/uni-app";
-import SafeArea from "@/components/common/safeArea/safeArea.vue";
-import { PartnerRequest } from "@/business/partner_request/base";
+import PRApplyForm from "@/components/partner_request/PRApplyForm/PRApplyForm.vue";
 import PRRoute from "@/components/partner_request/PRRoute/PRRoute.vue";
-import { Route, RouteItemDatetime } from "@/business/base/route";
+import PRTimeline from "@/components/partner_request/PRTimeline/PRTimeline.vue";
+
+import { useTranslate } from "@/locale/use";
 import { getWindowInfo } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";
-import PRApplyForm from "@/components/partner_request/PRApplyForm/PRApplyForm.vue";
-import type { TouchEvent } from "@uni-helper/uni-app-types";
+import { formatDate } from "@/utils/time";
+import SubApplication from "@/components/partner_request/SubApplication/SubApplication.vue";
 
 const { dt, t } = useTranslate("partner_request.detail");
 
@@ -146,11 +233,32 @@ const propsSchema = v.object({
     v.string(),
     v.transform((value) => parseInt(value))
   ),
+  role: v.picklist(["passby", "applicant", "partner"]),
 });
 const props = ref<v.InferOutput<typeof propsSchema>>();
 
 const { partners, bindPRId } = PartnerRequest.usePartners(props.value?.id); // TEST need to verify reactivity
 bindPRId(() => props.value?.id);
+
+const Iam = computed(() => props.value?.role);
+
+const hasUnread = true; // TODO: Replace with real data
+
+const myApplication = ref<PartnerApplication>();
+
+const applyBtnText = computed(() => {
+  if (Iam.value === "passby") {
+    return drawerExpanded.value ? dt("drawer.submit_apply") : dt("drawer.apply");
+  } else if (Iam.value === "applicant") {
+    const applicationStatus = myApplication.value?.status;
+    if (applicationStatus === "pending") {
+      return dt("drawer.application_approving");
+    } else if (applicationStatus === "rejected") {
+      return dt("drawer.application_rejected");
+    }
+  }
+  return "";
+});
 
 // TODO: Replace with real route data when API is ready
 const mockRoute = new Route([
@@ -185,6 +293,12 @@ const onApplyClick = () => {
 };
 const onAddRoleClick = () => {
   PRApplyFormRef.value?.toggleRoleDrawer();
+};
+
+const onTimelineAction = (status: PRStatus, actionKey: string) => {
+  // Handle timeline actions
+  console.log("Timeline action:", status, actionKey);
+  // TODO: Implement actual action handling
 };
 
 // Drawer state
@@ -250,6 +364,11 @@ const PRApplyFormRef = ref<InstanceType<typeof PRApplyForm> | null>(null);
 
 onLoad((query) => {
   props.value = v.parse(propsSchema, query);
+  if (props.value?.role === "applicant" && props.value.id) {
+    PartnerApplication.get_mine(props.value.id).then((applications) => {
+      myApplication.value = applications[0] || null;
+    });
+  }
 });
 
 // Measure the collapsed top after initial render to support `transition: top`

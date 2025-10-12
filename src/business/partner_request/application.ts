@@ -1,10 +1,12 @@
-import { PRRefV } from '.';
-import { nullable, V } from '..';
+import { PRRefV, type PRRef } from '.';
+import { nullable, instance, V } from '..';
 import * as v from 'valibot';
 import { AccountRefV } from '../account';
-import { ChatRefV } from '../chat';
+import { ChatRefV } from '../communication';
 import { PartnerRoleRefV } from './partner';
 import { APIClient } from '../api';
+import { useTranslate } from '@/locale/use';
+import { DatetimeV } from '../base';
 
 export type PartnerApplicationRef = number;
 export const PartnerApplicationRefV = v.number();
@@ -27,7 +29,7 @@ export class PartnerSubApplication extends V.class(v.object({
 
 
 const SubApplicationsV = v.pipe(
-  v.array(v.instance(PartnerSubApplication)),
+  v.array(instance(PartnerSubApplication)),
   v.minLength(1),
   v.custom((arr) => {
     const roles = (arr as PartnerSubApplication[]).map(item => item.role);
@@ -38,7 +40,7 @@ const SubApplicationsV = v.pipe(
 
 export class PartnerApplication extends V.class(v.object({
   _id: PartnerApplicationRefV,
-  created_at: v.date(),
+  created_at: DatetimeV,
   applicant: AccountRefV,
   status: v.enum(PartnerApplicationStatus),
   partner_request: PRRefV,
@@ -46,6 +48,22 @@ export class PartnerApplication extends V.class(v.object({
   eclose_reason: nullable(v.string()),  // 撤销、驳回原因
   sub_applications: SubApplicationsV,
 })) {
+
+  static api = new APIClient<typeof PartnerApplication>({
+    modulePrefix: '/partner_request/application',
+    dt: useTranslate('partner_request.application').dt,
+    fallbackSchema: PartnerApplication,
+  });
+
+  static async get_mine(pr_id?: PRRef): Promise<PartnerApplication[]> {
+    return this.api.requestHTTP({
+      method: "GET",
+      endpoint: '/mine',
+      data: { pr_id },
+      operation_id: "PRV1GetMyApplications",
+      schema: v.array(instance(PartnerApplication)),
+    }).then(({ body }) => body.parsed);
+  }
 
 }
 

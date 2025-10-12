@@ -5,13 +5,11 @@ import { computed, ref, watch } from "vue";
 import { instance, V } from "../index";
 import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".";
 import * as v from 'valibot';
+import { DatetimeV } from "../base";
 
 export class PartnerRequest extends V.class(v.object({
   _id: PRRefV,
-  created_at: v.pipe(
-    v.union([v.string(), v.number(), v.date()]),
-    v.transform((i) => i instanceof Date ? i : new Date(i))
-  ),
+  created_at: DatetimeV,
   created_by: v.string(),
   type: v.enum(PRType),
   status: v.enum(PRStatus),

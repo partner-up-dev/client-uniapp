@@ -6,6 +6,8 @@
   color: $pu-color-on-surface;
   border-radius: $pu-radius-sm;
   cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
