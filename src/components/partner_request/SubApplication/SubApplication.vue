@@ -17,7 +17,7 @@
           v-if="editable"
           theme="Plain"
           type="OnlyIcon"
-          size="Small"
+          size="xSmall"
           prefix-icon="i-mdi-delete-outline"
           @click.stop="onDeleteClick"
         />
@@ -25,7 +25,7 @@
           v-else
           theme="Plain"
           type="OnlyIcon"
-          size="Small"
+          size="xSmall"
           prefix-icon="i-mdi-chevron-right"
           @click.stop="onExpandClick"
         />
@@ -43,14 +43,17 @@
     />
   </view>
 
-  <root-portal :enable="true">
-    <PUDrawer :visible="drawerVisible" :title="roleName">
+  <root-portal :enable="true" :style="{ position: 'absolute' }">
+    <PUDrawer
+      v-model:visible="drawerVisible"
+      :title="`#${roleId} ${roleName}`"
+      height="30vh"
+    >
       <view class="drawer-content">
         <text class="rule">{{ roleRule }}</text>
-        <view class="rationale">
-          <text class="rationale-label">申请理由：</text>
-          <text class="rationale-text">{{ rationale || "你没有填写" }}</text>
-        </view>
+        <text class="rationale">
+          {{ rationale || "你没有填写" }}
+        </text>
       </view>
     </PUDrawer>
   </root-portal>
@@ -83,6 +86,7 @@ const role = computed((): PartnerRole | undefined => {
 });
 
 const roleName = computed(() => role.value?.name ?? "角色名称");
+const roleId = computed(() => role.value?.id ?? "00");
 const roleRule = computed(() => role.value?.rule ?? "角色的权利与义务明细");
 
 const rationale = computed(() => props.subApplication.rationale || "");

@@ -51,25 +51,15 @@
 .drawer-content {
   display: flex;
   flex-direction: column;
+  gap: $pu-spacing-sm;
 
   .rule {
     @include pu-font("label-medium");
-    color: $pu-color-on-surface;
+    color: $pu-color-on-surface-variant;
   }
 
   .rationale {
-    display: flex;
-    flex-direction: column;
-    gap: $pu-spacing-sm;
-
-    .rationale-label {
-      @include pu-font("label-large");
-      color: $pu-color-on-surface-variant;
-    }
-
-    .rationale-text {
-      @include pu-font("label-large");
-      color: $pu-color-on-surface;
-    }
+    @include pu-font("label-large");
+    color: $pu-color-on-surface;
   }
 }
