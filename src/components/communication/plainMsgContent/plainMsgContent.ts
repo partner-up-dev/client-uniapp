@@ -1,6 +1,6 @@
 import { makeBooleanProp, makeRequiredProp } from "@/utils/props";
 import type { PropType } from "vue";
-import type { PlainMessageContent } from "@/business/chat/message";
+import type { PlainMessageContent } from "@/business/communication/message";
 
 export const plainMsgContentProps = {
   content: {

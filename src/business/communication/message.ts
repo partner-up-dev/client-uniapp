@@ -5,6 +5,8 @@ import store from "@/store";
 import { AccountRefV } from "../account";
 import { APIClient } from "../api";
 import { useTranslate } from "@/locale/use";
+import { DatetimeV } from "../base";
+import { ChatRefV } from ".";
 
 export type MessageRef = number;
 export const MessageRefV = v.number();
@@ -17,14 +19,15 @@ export enum MessageType {
   ThreadEntry = "thread_entry",
   Approval = "approval",
   NewMember = "new_member",
+  SplitBill = "split_bill",
 }
 
 export class Message extends V.class(v.object({
   _id: MessageRefV,
-  chat: v.number(),
-  created_at: v.date(),
+  chat: ChatRefV,
+  created_at: DatetimeV,
   created_by: AccountRefV,
-  viewed: v.array(v.string()),
+  viewed: v.array(AccountRefV),
   type: v.enum(MessageType),
   content: v.any(),
   replied_to: nullable(MessageRefV),
@@ -43,23 +46,11 @@ export class Message extends V.class(v.object({
     fallbackSchema: Message,
   });
 
-  /**
-   * Fetch a message by id from backend. When `mock=true` this will include a
-   * header hint to the backend/mock layer so the endpoint can return mocked data.
-   */
-  static async get(id: MessageRef, mock: boolean = true): Promise<Message> {
-    const headers: Record<string, unknown> = {};
-    if (mock) headers['x-mock'] = 'ChatV1GetMessage';
-
-    const res = await this.api.requestHTTP({
+  static async get(id: MessageRef): Promise<Message> {
+    return this.api.requestHTTP({
       method: 'GET',
       endpoint: `/messages/${id}`,
-      headers,
-      // allow backend to return 200
-    });
-
-    const msg = res.body.parsed as unknown as Message;
-    return msg;
+    }).then(res => res.body.parsed);
   }
 }
 

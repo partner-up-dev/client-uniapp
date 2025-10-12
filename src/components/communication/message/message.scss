@@ -14,7 +14,6 @@
   }
 
   &__B {
-    gap: $pu-spacing-xs;
     max-width: 70%;
     min-width: 50%;
   }
@@ -27,6 +26,6 @@
 
   &__content {
     margin-top: $pu-spacing-xs;
-    width: max-content;
+    width: 100%;
   }
 }

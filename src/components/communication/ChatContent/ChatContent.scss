@@ -1,0 +1,43 @@
+@use "@/styles/main.scss" as *;
+
+.chat-content {
+  background-color: var(--chat-content-bg-color, #{$pu-color-surface});
+  overflow-y: scroll;
+
+  &--flex {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__loading,
+  &__error,
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+  }
+
+  &__loading {
+    .loading-text {
+      color: $pu-color-on-surface-variant;
+      font-size: 14px;
+    }
+  }
+
+  &__error {
+    .error-text {
+      color: $pu-color-error;
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+
+  &__empty {
+    .empty-text {
+      color: $pu-color-on-surface-variant;
+      font-size: 14px;
+    }
+  }
+}

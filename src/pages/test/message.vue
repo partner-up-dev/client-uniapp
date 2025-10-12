@@ -21,7 +21,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import Message from "@/components/communication/message/message.vue";
-import { Message as MessageModel, MessageType } from "@/business/chat/message";
+import {
+  Message as MessageModel,
+  MessageType,
+} from "@/business/communication/message";
 
 // tiny UUID v4 generator for mock data
 function uuidv4() {

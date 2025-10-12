@@ -1,6 +1,6 @@
 import type { PropType } from "vue";
 import { makeRequiredProp } from "@/utils/props";
-import { Message } from "@/business/chat/message";
+import { Message } from "@/business/communication/message";
 
 // ==================== 组件相关类型定义 ====================
 
