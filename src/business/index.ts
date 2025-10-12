@@ -105,7 +105,7 @@ export type ValibotClass<
 };
 
 
-export function nullable(schema: v.BaseSchema<any, any, any>) {
+export function nullable<T extends v.BaseSchema<any, any, any>>(schema: T) {
   return v.optional(v.nullable(schema), null);
 }
 
