@@ -4,6 +4,13 @@
 
 “搭一把”是一款社交驱动的生活电商服务平台。
 
+分为下列模块：
+
+- base: 基础
+- partner_request: 搭子请求
+- communication: 沟通
+- account: 账户
+
 ## 文件结构
 
 - `src/`: 源代码目录

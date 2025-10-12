@@ -4,9 +4,11 @@ applyTo: "**/components/**/*.md"
 
 本指南指导组件文档的编写、阅读。
 
-## 编写文档
+## 最佳实践
 
-文档的读者是 Coding Agent ，注意 Token Efficiency
+- 读者是 Coding Agent ，注意 Token Efficiency，
+  - 只写必要内容，避免冗余（如果 naming 可以 self-explain，则不需要添加诸如"是什么"的说明）
+  - 使用简洁、清晰的语言
 
 ## 文档模板
 
@@ -35,7 +37,7 @@ applyTo: "**/components/**/*.md"
 
 ### Props
 
-- 参数名:类型、默认值、是否必填、注释等
+- `参数名` (`type`、`defaultVal`、[required])：说明
 
 #### 参数名
 
