@@ -27,6 +27,9 @@ const rootClasses = computed(() => {
   if (props.rounded) classes.push("rounded");
   if (props.outlined) classes.push("outlined");
 
+  // theme
+  classes.push(kebabCase(props.theme));
+
   // size
   classes.push(kebabCase(props.size));
 

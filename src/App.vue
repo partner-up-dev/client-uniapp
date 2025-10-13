@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+import { Account } from "./business/account/base";
 onLaunch(() => {
   console.log("App Launch");
+  Account.login(false);
 });
 onShow(() => {
   console.log("App Show");

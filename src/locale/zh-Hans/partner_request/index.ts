@@ -33,7 +33,8 @@ export default {
     }
   },
   type: {
-    null: "未知的搭子请求",
+    null: "未知搭子",
+    undefined: "未知搭子",
     ride_hailing: "网约车搭子",
     travel: "旅游搭子",
     trip: "出行搭子",

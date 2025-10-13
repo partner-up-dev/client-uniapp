@@ -61,12 +61,16 @@ export enum PAGE_ID {
     // mainPackage
     HOME = "home",
     EXPLORE = "explore",
-    PR_DETAIL = "partner_request_detail"
+    NOTIFICATION = "notification",
+
+    PR_DETAIL = "partner_request_detail",
+    CHAT = "chat",
 }
 
 export enum TABBAR_PAGE_ID {
     HOME = "home",
-    EXPLORE = "explore"
+    EXPLORE = "explore",
+    NOTIFICATION = "notification"
 }
 
 

@@ -131,7 +131,7 @@
               <view class="section-subtitle">
                 {{ dt("sub_applications.submitted_at") }}
                 <text class="space-m-r-xs">
-                  {{ formatDate(undefined, myApplication?.created_at) }}
+                  {{ dayjs(myApplication?.created_at).format("MM月DD日 HH:mm") }}
                 </text>
               </view>
             </view>
@@ -223,8 +223,8 @@ import PRTimeline from "@/components/partner_request/PRTimeline/PRTimeline.vue";
 import { useTranslate } from "@/locale/use";
 import { getWindowInfo } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";
-import { formatDate } from "@/utils/time";
 import SubApplication from "@/components/partner_request/SubApplication/SubApplication.vue";
+import dayjs from "dayjs";
 
 const { dt, t } = useTranslate("partner_request.detail");
 

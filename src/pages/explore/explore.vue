@@ -118,7 +118,7 @@ import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PRCard from "@/components/partner_request/PRCard/PRCard.vue";
 import { PRType, PRStatus } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";
-import { AccountBaseProfile } from "@/business/account";
+import { AccountBaseProfile } from "@/business/account/base";
 import { onShow } from "@dcloudio/uni-app";
 import PRGeoElementFilter from "@/components/partner_request/PRGeoElementFilter/PRGeoElementFilter.vue";
 import PRTypeFilter from "@/components/partner_request/PRTypeFilter/PRTypeFilter.vue";

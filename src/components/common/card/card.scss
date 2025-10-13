@@ -1,0 +1,34 @@
+@use "@/styles/main.scss" as *;
+
+.card {
+  background-color: $pu-color-surface-container;
+  padding: $pu-spacing-sm $pu-spacing-med;
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  &--reverse {
+    flex-direction: column-reverse;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__title {
+      @include pu-font("body-large");
+      color: $pu-color-on-surface;
+    }
+  }
+
+  &__icon {
+    @include pu-icon("medium", true);
+    color: $pu-color-on-surface;
+  }
+
+  &__description {
+    @include pu-font("label-large");
+    color: $pu-color-on-surface;
+  }
+}

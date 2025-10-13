@@ -1,0 +1,77 @@
+@use "@/styles/main.scss" as *;
+
+// ChatEntry styles
+.chat-entry {
+  padding: $pu-spacing-sm $pu-spacing-med;
+  cursor: pointer;
+
+  .row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $pu-spacing-sm;
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+
+      .title {
+        @include pu-font("body-large");
+        color: $pu-color-on-surface;
+      }
+    }
+
+    .time {
+      flex-shrink: 0;
+      @include pu-font("label-small");
+      color: $pu-color-on-surface-variant;
+    }
+  }
+
+  .row2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: $pu-spacing-xs;
+      min-width: 0;
+
+      .sender {
+        display: flex;
+        align-items: center;
+        gap: $pu-spacing-xs;
+
+        .nickname {
+          @include pu-font("label-large");
+          color: $pu-color-on-surface;
+          white-space: nowrap;
+        }
+      }
+
+      .content {
+        @include pu-font("label-large");
+        color: $pu-color-on-surface-variant;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .unread {
+      background-color: $pu-color-surface-container;
+      border-radius: $pu-radius-full;
+      padding: $pu-spacing-xs $pu-spacing-sm;
+      margin-left: $pu-spacing-sm;
+
+      .count {
+        @include pu-font("label-small");
+        color: $pu-color-on-surface-variant;
+      }
+    }
+  }
+}

@@ -9,7 +9,8 @@ export default {
 import { BasicComponentOptions } from "@/utils/vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
 import { accountProps, accountEmits } from "./account";
-import { AccountBaseProfile, type AccountSimple } from "@/business/account";
+import { AccountBaseProfile } from "@/business/account/base";
+import type { AccountSimple } from "@/business/account";
 import { ref, onMounted } from "vue";
 
 const props = defineProps(accountProps);

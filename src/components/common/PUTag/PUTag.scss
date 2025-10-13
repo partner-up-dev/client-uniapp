@@ -25,7 +25,24 @@
     border: 1px solid $pu-color-outline-variant;
   }
 
+  // themes
+  &.surface-outlined {
+    background-color: $pu-color-surface-container;
+    border: 1px solid $pu-color-outline-variant;
+  }
+
+  &.surface {
+    background-color: $pu-color-surface-container;
+    border: none;
+  }
+
   // sizes: allow slight variations if needed later
+  &.x-small {
+    padding: $pu-spacing-xs $pu-spacing-sm;
+    .text {
+      @include pu-font-size("label-small");
+    }
+  }
   &.small {
     padding: $pu-spacing-xs $pu-spacing-sm;
     .text {

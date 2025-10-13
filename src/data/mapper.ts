@@ -3,12 +3,16 @@ export const PAGE_PATH: Record<PAGE_ID, string> = {
     // mainPackage
     [PAGE_ID.HOME]: '/pages/home/home',
     [PAGE_ID.EXPLORE]: '/pages/explore/explore',
+    [PAGE_ID.NOTIFICATION]: '/pages/notification/notification',
+
     [PAGE_ID.PR_DETAIL]: '/pages/partner_request/detail/detail',
+    [PAGE_ID.CHAT]: '/pages/chat/chat',
 }
 
 export const TABBAR_INDEX: Record<TABBAR_PAGE_ID, number> = {
     [PAGE_ID.HOME]: 0,
     [PAGE_ID.EXPLORE]: 1,
+    [PAGE_ID.NOTIFICATION]: 2,
 }
 
 

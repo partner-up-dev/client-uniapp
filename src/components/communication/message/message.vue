@@ -10,7 +10,7 @@ import { computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import AccountDisplay from "@/components/account/account/account.vue";
 import { messageProps, messageEmits } from "./message";
-import { AccountBaseProfile } from "@/business/account";
+import { AccountBaseProfile } from "@/business/account/base";
 import PlainMsgContent from "@/components/communication/plainMsgContent/plainMsgContent.vue";
 
 const props = defineProps(messageProps);

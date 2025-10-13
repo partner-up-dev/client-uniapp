@@ -7,6 +7,7 @@ import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".
 import * as v from 'valibot';
 import { DatetimeV } from "../base";
 
+
 export class PartnerRequest extends V.class(v.object({
   _id: PRRefV,
   created_at: DatetimeV,
@@ -62,5 +63,17 @@ export class PartnerRequest extends V.class(v.object({
     return {
       partners, loading, bindPRId
     }
+  }
+
+  static get(pr_id: PRRef): Promise<PartnerRequest> {
+    return this.api.requestHTTP({
+      method: 'GET',
+      endpoint: `/${pr_id}`,
+      operation_id: 'PartnerRequestV2Get',
+    }).then(res => res.body.parsed);
+  }
+
+  get typeText() {
+    return PartnerRequest.api.dt(`type.${this.type}`)
   }
 }

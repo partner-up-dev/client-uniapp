@@ -7,8 +7,8 @@ export const puTagProps = {
   text: makeStringProp<string>(""),
   rounded: makeBooleanProp(false),
   outlined: makeBooleanProp(true),
-  theme: makeStringProp<"SurfaceContainer">("SurfaceContainer"),
-  size: makeStringProp<"Small" | "Medium">("Medium"),
+  theme: makeStringProp<"Surface" | "SurfaceOutlined">("SurfaceOutlined"),
+  size: makeStringProp<"xSmall" | "Small" | "Medium">("Medium"),
 } as const;
 
 export type PUTagProps = ExtractPropTypes<typeof puTagProps>;

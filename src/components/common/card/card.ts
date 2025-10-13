@@ -1,24 +1,19 @@
 import type { PropType } from "vue";
+import { makeBooleanProp, makeStringProp } from "@/utils/props";
 
 // ==================== 组件 Props 定义 ====================
 export const cardProps = {
-  title: {
-    type: String as PropType<string>,
-    required: true,
-  },
-  description: {
-    type: String as PropType<string>,
-    required: true,
-  },
-  name: {
-    type: String as PropType<string>,
-    required: true,
-  },
+  title: makeStringProp(""),
+  description: makeStringProp(""),
+  icon: makeStringProp("i-mdi-chevron-right"),
+  type: makeStringProp<"default" | "expandable">("default"),
+  expand: makeBooleanProp(false),
+  reverse: makeBooleanProp(false),
 };
 
 // ==================== 组件 Emits 定义 ====================
 export const cardEmits = {
-  click: (name: string) => true,
+  "update:expand": (value: boolean) => true,
 };
 
 // ==================== 组件工具函数 ====================

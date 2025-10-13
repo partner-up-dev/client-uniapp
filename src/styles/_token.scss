@@ -140,19 +140,6 @@ $pu-shadow-24: map-get(ref.$ref-shadows, 24);
   }
 }
 
-/* Convenience font mixins used across the project (map to Figma tokens) */
-@mixin pu-font-headline-large {
-  @include pu-font("display-large");
-}
-
-@mixin pu-font-headline-small {
-  @include pu-font("title-large");
-}
-
-@mixin pu-font-title-medium {
-  @include pu-font("title-large");
-}
-
 /* Provide some size variables for compatibility */
 $pu-font-title-medium-size: map-get(map-get(ref.$ref-fonts, "title-large"), size);
 $pu-font-headline-small-size: map-get(

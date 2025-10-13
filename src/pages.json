@@ -13,15 +13,15 @@
       }
     },
     {
-      "path": "pages/partner_request/detail/detail",
+      "path": "pages/notification/notification",
       "style": {
-        "navigationBarTitleText": "搭子请求"
+        "navigationBarTitleText": "通知"
       }
     },
     {
-      "path": "pages/test/message",
+      "path": "pages/partner_request/detail/detail",
       "style": {
-        "navigationBarTitleText": "Message Test"
+        "navigationBarTitleText": "搭子请求"
       }
     }
   ],
@@ -43,6 +43,12 @@
         "iconPath": "static/icon/discover-selected.png",
         "selectedIconPath": "static/icon/discover-selected.png",
         "text": "探索"
+      },
+      {
+        "pagePath": "pages/notification/notification",
+        "iconPath": "/static/icon/notification-selected.png",
+        "selectedIconPath": "/static/icon/notification-notice.png",
+        "text": "通知"
       }
     ]
   },

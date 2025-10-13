@@ -11,7 +11,11 @@
         <Avatar :src="avatarSrc(accountId)" size="small" />
       </view>
 
-      <view v-if="props.joinable" class="joinable-indicator" :style="{ zIndex: 0 }">
+      <view
+        v-if="props.joinable"
+        class="joinable-indicator"
+        :style="{ zIndex: 0 }"
+      >
         <text class="text">+{{ props.leftJoinable }}</text>
       </view>
     </view>
@@ -30,7 +34,7 @@ import { reactive } from "vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
 import { partnersProps, partnersEmits } from "./partners";
 import { BasicComponentOptions } from "@/utils/vue";
-import { AccountBaseProfile } from "@/business/account";
+import { AccountBaseProfile } from "@/business/account/base";
 import type { AccountRef } from "@/business/account";
 
 const props = defineProps(partnersProps);

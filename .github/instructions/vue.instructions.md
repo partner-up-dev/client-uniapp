@@ -13,6 +13,7 @@ applyTo: "**/*.vue"
 Uniapp 内置组件：
 
 - `<scroll-view>`: https://uniapp.dcloud.net.cn/component/scroll-view.html
+  - 横向滚动时，需要设置 `white-space: nowrap` 避免换行，且内部元素需要设置 `display: inline-block`；
 - `<swiper>`: https://uniapp.dcloud.net.cn/component/swiper.html
 - `<map>`: https://uniapp.dcloud.net.cn/component/map.html
 - `<root-portal>`: 将内部元素挂载到 body 下，常用于弹出层

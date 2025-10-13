@@ -6,7 +6,7 @@ import log from "@/utils/log";
 import { un } from "@uni-helper/uni-network";
 import { errorReport } from "@/utils/vendor";
 import * as v from "valibot";
-import { Account } from "@/business/account";
+import { Account } from "@/business/account/base";
 
 // Base URL from env; instance clients will set this when constructed
 const BASE_URL: string = (import.meta.env.VITE_BACKEND_MAIN_URL || "") as string;
@@ -341,5 +341,9 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
           reject(err);
         });
     });
+  }
+
+  public dt(msg: string): string {
+    return this._dt(msg);
   }
 }

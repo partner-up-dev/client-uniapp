@@ -14,7 +14,7 @@ export default {
 <script setup lang="ts">
 import { useTranslate } from "@/locale/use";
 import { computed, ref } from "vue";
-import { AccountBaseProfile } from "@/business/account";
+import { AccountBaseProfile } from "@/business/account/base";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Card from "@/components/common/card/card.vue";
@@ -106,24 +106,27 @@ onShow(() => {
 
         <!-- 搭子类型卡片列表 -->
         <scroll-view
+          style="white-space: nowrap"
           class="uno-h-[140px] uno-w-full"
-          scroll-x="true"
-          show-scrollbar="false"
+          :scroll-x="true"
+          :show-scrollbar="false"
         >
-          <view class="uno-flex uno-gap-sm uno-h-full">
-            <Card
-              title="出行搭子"
-              description="网约车、顺风车、通勤"
-              :name="PRL1Type.Trip"
-              @click="onPartnerTypeCardClick"
-            />
-            <Card
-              title="旅游搭子"
-              description="路线规划、酒店机票门票预定"
-              :name="PRL1Type.Travel"
-              @click="onPartnerTypeCardClick"
-            />
-          </view>
+          <Card
+            style="display: inline-block"
+            class="uno-w-[240px] uno-h-full"
+            title="出行搭子"
+            description="网约车、顺风车、通勤"
+            :name="PRL1Type.Trip"
+            @click="onPartnerTypeCardClick"
+          />
+          <Card
+            style="display: inline-block"
+            class="uno-w-[240px] space-m-l-sm uno-h-full"
+            title="旅游搭子"
+            description="路线规划、酒店机票门票预定"
+            :name="PRL1Type.Travel"
+            @click="onPartnerTypeCardClick"
+          />
         </scroll-view>
       </view>
 

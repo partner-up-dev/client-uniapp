@@ -7,7 +7,6 @@ import { t } from "@/locale/use";
 import { isInEnum } from ".";
 
 
-
 export function getWindowInfo(): UniApp.GetWindowInfoResult {
     const window_info = uni.getWindowInfo();
     // #ifdef MP-ALIPAY
@@ -16,6 +15,18 @@ export function getWindowInfo(): UniApp.GetWindowInfoResult {
     }
     // #endif
     return window_info;
+}
+
+export function getElementRect(selector: string, instance: any): Promise<UniApp.NodeInfo> {
+    return new Promise((resolve, reject) => {
+        uni.createSelectorQuery().in(instance).select(selector).boundingClientRect((data) => {
+            if (data) {
+                resolve(data as UniApp.NodeInfo);
+            } else {
+                reject(new Error(`Element with selector '${selector}' not found`));
+            }
+        }).exec();
+    });
 }
 
 export function getWindowHeight(): number {
@@ -32,9 +43,6 @@ export function getSafeArea() {
     else {
         return data;
     }
-}
-export function getBottomSafeAreaInset(): number {
-    return getSafeArea().bottom;
 }
 
 /**

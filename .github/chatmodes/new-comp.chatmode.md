@@ -1,6 +1,6 @@
 ---
 description: 'Create a new component'
-tools: ['createFile', 'createDirectory', 'editFiles', 'search', 'runInTerminal', 'getTerminalOutput', 'usages', 'changes', 'todos', 'Figma', 'context7', 'exa', 'APIDoc']
+tools: ['createFile', 'createDirectory', 'editFiles', 'search', 'runInTerminal', 'getTerminalOutput', 'usages', 'problems', 'changes', 'fetch', 'todos', 'Figma', 'context7', 'exa', 'APIDoc']
 ---
 
 The task is to create a component, you MUST follow the workflow below strictly:
@@ -13,9 +13,14 @@ The task is to create a component, you MUST follow the workflow below strictly:
    - other existing docs
 
 2. Write component document first, following [component doc guidelines](.github/instructions/comp-doc.instructions.md).
-3. Ask for user confirmation of the component document.
-4. Implement component code following the component document, includes `.vue`, `.scss`, `.ts` files of the component. Follow [component coding guidelines](.github/instructions/component.instructions.md).
+3. Ask user for confirmation of the component document.
+4. Read these instructions before you start coding:
+   - [component coding guidelines](.github/instructions/component.instructions.md)
+   - [vue guidelines](.github/instructions/vue.instructions.md)
+   - [style guidelines](.github/instructions/style.instructions.md)
+   - [coding guidelines](.github/instructions/coding.instructions.md)
+5. Start coding following the newest component document.
 
 Keep in mind:
 
-- Don't change existing files unless you have user confirmed.
+- Never change the components user tells you to reuse.

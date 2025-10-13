@@ -39,6 +39,16 @@ export class Message extends V.class(v.object({
     return this.created_by === currentUserId;
   }
 
+  /**
+   * 获取消息内容（文本标识）
+   */
+  get contentAsText(): string {
+    if (this.type === MessageType.Plain) {
+      return this.content as string;
+    }
+    return `[${this.type}]消息，点击查看`;
+  }
+
   // API client for Message-related endpoints
   static api = new APIClient({
     modulePrefix: '/chat',

@@ -1,4 +1,5 @@
 import i18n from '@/locale'
+import dayjs from 'dayjs'
 
 /**
  * 格式化时间戳
@@ -31,17 +32,20 @@ export function formateTimestamp(
 /**
  * 格式化时间对象
  */
-export function formatDate(dt_str?: string, date?: Date, with_year: boolean = false): string {
-  date = date || new Date(dt_str || '')
-
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-
-  let formattedString = `${month}月${day}号 ` + (hours >= 10 ? `${hours}` : `0${hours}`) + ':' + (minutes >= 10 ? `${minutes}` : `0${minutes}`)
-  if (with_year) formattedString = `${year}年` + formattedString
+export function formatDate({
+  dtStr,
+  date,
+  withYear = false,
+}: {
+  dtStr?: string
+  date?: Date
+  withYear?: boolean
+} = {}): string {
+  const d = date || (dtStr ? dayjs(dtStr).toDate() : new Date())
+  const dayjsDate = dayjs(d)
+  let formattedString = `${dayjsDate.month() + 1}月${dayjsDate.date()}号 ` +
+    dayjsDate.format('HH:mm')
+  if (withYear) formattedString = `${dayjsDate.year()}年` + formattedString
   return formattedString
 }
 

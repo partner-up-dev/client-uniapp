@@ -6,11 +6,10 @@
 
 - 提供统一的卡片样式和交互
 - 支持自定义标题和描述
-- 支持点击事件传递类型信息
 
 ## Specification
 
-卡片包含标题、描述文字和右箭头图标，点击时触发事件。
+卡片包含标题、描述文字和右箭头图标。
 
 ## Implementation
 
@@ -18,18 +17,18 @@
 
 | 属性名     | 类型     | 默认值 | 必填 | 说明         |
 | ---------- | -------- | ------ | ---- | ------------ |
-| title      | `string` | -      | 是   | 卡片标题     |
-| description| `string` | -      | 是   | 卡片描述     |
-
-### Events
-
-| 事件名 | 参数          | 说明             |
-| ------ | ------------- | ---------------- |
-| click  | `(type: string)` | 点击卡片时触发 |
+| title      | `string` | ""     | 否   | 卡片标题     |
+| description| `string` | ""     | 否   | 卡片描述     |
+| type       | `string` | "default" | 否 | 卡片类型     |
+| expand     | `boolean`| false  | 否   | 展开状态     |
 
 ### Slots
 
-无
+| 插槽名     | 说明         |
+| ---------- | ------------ |
+| title      | 自定义标题内容，默认显示 `title` prop |
+| content    | 自定义内容，默认显示 `description` prop |
+| header-right| 自定义头部右侧内容，默认显示图标容器 |
 
 ### Methods
 
@@ -42,9 +41,20 @@
   <Card
     title="出行搭子"
     description="网约车、顺风车、通勤"
-    type="travel"
-    @click="onCardClick"
-  />
+    type="expandable"
+  >
+    <template #title>
+      <text>自定义标题</text>
+    </template>
+    <template #content>
+      <text>自定义内容</text>
+    </template>
+    <template #header-right>
+      <view class="custom-right-content">
+        <text>自定义右侧内容</text>
+      </view>
+    </template>
+  </Card>
 </template>
 ```
 

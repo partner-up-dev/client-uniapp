@@ -9,31 +9,65 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { useOptionalVModel } from "@/composables/props";
+
 const props = defineProps(cardProps);
 const emit = defineEmits(cardEmits);
 
-function onCardClick() {
-  emit("click", props.name!);
+const isExpandable = computed(() => props.type === "expandable");
+
+const expand = useOptionalVModel<boolean>({
+  props,
+  emit,
+  modelName: "expand",
+});
+
+const showContent = computed(() => !isExpandable.value || expand.value);
+
+const iconClass = computed(() => {
+  if (isExpandable.value) {
+    if (!props.reverse) {
+      return expand.value ? "i-mdi-chevron-up" : "i-mdi-chevron-down";
+    } else {
+      return expand.value ? "i-mdi-chevron-down" : "i-mdi-chevron-up";
+    }
+  } else {
+    return props.icon;
+  }
+});
+
+const rootClass = computed(() => {
+  return {
+    card: true,
+    "card--reverse": props.reverse,
+  };
+});
+
+function onToggleClick() {
+  expand.value = !expand.value;
 }
 </script>
 
 <template>
-  <view
-    class="uno-bg-surface-container uno-w-[275px] uno-h-full space-p-sm space-p-l-med space-p-r-med uno-box-border uno-flex uno-flex-col uno-gap-sm uno-flex-shrink-0"
-    @click="onCardClick"
-  >
-    <view class="uno-flex uno-items-center uno-justify-between uno-w-full">
-      <text class="font-body-large uno-text-surface-on uno-tracking-[0.08px]">
-        {{ title }}
-      </text>
-      <view class="uno-flex uno-items-center uno-justify-center">
-        <text
-          class="font-title-large uno-text-surface-on i-mdi-chevron-right"
-        ></text>
+  <view :class="rootClass">
+    <view class="card__header">
+      <view class="card__header-left">
+        <slot name="title">
+          <text class="card__title">{{ title }}</text>
+        </slot>
+      </view>
+      <view class="card__header-right">
+        <slot name="header-right"> </slot>
+        <view class="card__icon" v-if="iconClass">
+          <text :class="iconClass" @click.stop="onToggleClick"></text>
+        </view>
       </view>
     </view>
-    <text class="font-label-large uno-text-surface-on">
-      {{ description }}
+    <text v-show="showContent" class="card__content">
+      <slot name="content">
+        <text class="card__description">{{ description }}</text>
+      </slot>
     </text>
   </view>
 </template>

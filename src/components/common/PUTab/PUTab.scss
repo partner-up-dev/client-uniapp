@@ -1,0 +1,60 @@
+@use "@/styles/main.scss" as *;
+
+.pu-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: $pu-color-on-surface;
+}
+
+.pu-tab__text {
+  text-align: center;
+  color: $pu-color-on-surface;
+}
+
+// Dot base
+.pu-tab__dot {
+  position: absolute;
+  background-color: $pu-color-red;
+  border-radius: 50%;
+}
+
+// Large
+.large {
+  .pu-tab__text {
+    @include pu-font("headline-large");
+  }
+  .pu-tab__dot {
+    width: 12px;
+    height: 12px;
+    right: -3px;
+    top: 3px;
+  }
+}
+
+// Medium
+.medium {
+  .pu-tab__text {
+    @include pu-font("title-large");
+  }
+  .pu-tab__dot {
+    width: 10px;
+    height: 10px;
+    right: -2px;
+    top: 1px;
+  }
+}
+
+// Small
+.small {
+  .pu-tab__text {
+    @include pu-font("title-medium");
+  }
+  .pu-tab__dot {
+    width: 8px;
+    height: 8px;
+    right: -2px;
+    top: 0px;
+  }
+}
