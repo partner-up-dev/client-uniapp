@@ -37,9 +37,9 @@ export const puTextareaProps = {
   disableDefaultPadding: makeBooleanProp(false),
 
   // Visual
-  // 组件最小高度（容器），通过 CSS 变量实现
+  // 组件默认高度
   height: makeNumberProp(80),
-  // 聚焦时最小高度，未设置则使用 height
+  // 聚焦时最小高度，未设置则与 height 保持一致
   focusHeight: { type: Number as PropType<number | undefined>, default: undefined },
 };
 

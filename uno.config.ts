@@ -17,7 +17,11 @@ const safeListOfIcons = [
   'i-mdi-vector-polygon',
   // dynamically used in Partner component
   'i-mdi-chevron-down',
-  'i-mdi-chevron-up'
+  'i-mdi-chevron-up',
+  // chat page icons
+  'i-mdi-arrow-left',
+  'i-mdi-dots-vertical',
+  'i-mdi-send'
 ]
 
 export default {

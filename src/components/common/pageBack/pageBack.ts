@@ -5,6 +5,7 @@ import type { PropType } from 'vue';
 // Minimal back icon component.
 export const pageBackProps = {
   size: makeStringProp<'Small' | 'Medium' | 'Large'>('Large'),
+  icon: makeStringProp('i-mdi-arrow-top-left'),
 } as const;
 
 // ==================== 组件 Emits 定义 ====================

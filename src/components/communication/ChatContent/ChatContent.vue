@@ -24,6 +24,8 @@ import { Chat } from "@/business/communication/chat";
 import { Message } from "@/business/communication/message";
 import MessageComponent from "../message/message.vue";
 import { useScrollToBottom } from "@/composables/useScroll";
+import usePulldownRefresher, { getElementRect } from "@/utils/vendor";
+import { makeNumberPX } from "@/utils/style";
 
 const props = defineProps(chatContentProps);
 const emit = defineEmits(chatContentEmits);
@@ -31,6 +33,7 @@ const emit = defineEmits(chatContentEmits);
 // ==================== 响应式数据 ====================
 const messages = ref<Message[]>([]);
 const loading = ref(false);
+const scrollViewHeight = ref<number>();
 const chatContentRef = ref<HTMLElement | null>(null);
 
 // 使用 useScrollToBottom composable
@@ -46,6 +49,10 @@ const messageClass = computed(() => (index: number) => ({
   "chat-content__message-item": true,
   "space-m-t-sm": index !== 0,
   [`message-${index}`]: true,
+}));
+
+const scrollViewStyle = computed(() => ({
+  height: scrollViewHeight.value ? makeNumberPX(scrollViewHeight.value) : "auto",
 }));
 
 // ==================== 方法 ====================
@@ -108,6 +115,20 @@ defineExpose({
   getMessages,
   scrollToBottom: scrollToBottomMethod,
 });
+
+// 使用 usePulldownRefresher
+const {
+  is_refreshing,
+  onRefresherPulling,
+  onRefresherRestored,
+  onRefresherRefresh,
+} = usePulldownRefresher(getMessages);
+
+onMounted(() => {
+  getElementRect(".chat-content", getCurrentInstance()).then((rect) => {
+    scrollViewHeight.value = (rect.height || 0) - 32; // 16px padding top/bottom
+  });
+});
 </script>
 
 <template>
@@ -115,8 +136,17 @@ defineExpose({
     <!-- Scroll View 模式 -->
     <scroll-view
       v-if="props.mode === 'scroll-view'"
+      :style="scrollViewStyle"
       :scrollTop="scrollTop"
       ref="chatContentRef"
+      scrollWithAnimation
+      scrollAnchoring
+      enhanced
+      :show-scrollbar="false"
+      @refresherpulling="onRefresherPulling"
+      @refresherrestore="onRefresherRestored"
+      @refresherrefresh="onRefresherRefresh"
+      @scrolltoupper="getMessages"
     >
       <!-- 加载状态 -->
       <div v-if="loading" class="chat-content__loading">

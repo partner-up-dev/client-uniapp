@@ -18,7 +18,7 @@ function onClick() {
 
 <template>
   <view class="page-back" :class="props.size" @click="onClick">
-    <text class="icon i-mdi-arrow-top-left" />
+    <text class="icon" :class="props.icon" />
   </view>
 </template>
 

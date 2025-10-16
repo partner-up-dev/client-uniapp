@@ -6,7 +6,7 @@ export const PAGE_PATH: Record<PAGE_ID, string> = {
     [PAGE_ID.NOTIFICATION]: '/pages/notification/notification',
 
     [PAGE_ID.PR_DETAIL]: '/pages/partner_request/detail/detail',
-    [PAGE_ID.CHAT]: '/pages/chat/chat',
+    [PAGE_ID.CHAT]: '/pages/communication/chat',
 }
 
 export const TABBAR_INDEX: Record<TABBAR_PAGE_ID, number> = {

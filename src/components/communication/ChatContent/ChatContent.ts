@@ -1,5 +1,5 @@
 import type { PropType } from "vue";
-import { makeRequiredProp, makeStringProp } from "@/utils/props";
+import { makeNumberProp, makeRequiredProp, makeStringProp } from "@/utils/props";
 import { type ChatRef } from "@/business/communication";
 
 // ==================== 组件相关类型定义 ====================
@@ -18,6 +18,8 @@ export const chatContentProps = {
   chatId: makeRequiredProp(Number as PropType<ChatRef>),
   /** 渲染模式 */
   mode: makeStringProp<'scroll-view' | 'flex'>('scroll-view'),
+  // 高度
+  height: makeNumberProp<number | undefined>(undefined),
 };
 
 // ==================== 组件 Emits 定义 ====================

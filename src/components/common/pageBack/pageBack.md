@@ -9,7 +9,7 @@
 
 ## Specification
 
-- 结构：容器 + 图标（`i-mdi-arrow-left`）
+- 结构：容器 + 图标（`i-mdi-arrow-top-left`）
 - 尺寸：small=32px, medium=40px, large=48px；圆形背景
 - 交互：点击调用 `uni.navigateBack({ delta:1 })`
 
@@ -21,7 +21,8 @@
 
 | 名称 | 类型 | 默认值 | 必填 | 说明 |
 | ---- | ---- | ------ | ---- | ---- |
-| size | `'small' \| 'medium' \| 'large'` | `'medium'` | 否 | 控件尺寸 |
+| size | `'Small' \| 'Medium' \| 'Large'` | `'Large'` | 否 | 控件尺寸 |
+| icon | `string` | `'i-mdi-arrow-top-left'` | 否 | 图标样式类名 |
 
 ### Events
 

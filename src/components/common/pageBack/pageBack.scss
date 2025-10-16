@@ -16,7 +16,7 @@
     @include pu-icon("large");
   }
 
-  &icon {
+  .icon {
     @include pu-font-size("label-large");
   }
 }

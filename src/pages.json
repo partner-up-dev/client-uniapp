@@ -23,6 +23,12 @@
       "style": {
         "navigationBarTitleText": "搭子请求"
       }
+    },
+    {
+      "path": "pages/communication/chat",
+      "style": {
+        "navigationBarTitleText": "聊天"
+      }
     }
   ],
   "tabBar": {
