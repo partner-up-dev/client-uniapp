@@ -1,0 +1,56 @@
+@use "@/styles/main.scss" as *;
+
+.me-page {
+  --background-color: #{$pu-color-surface};
+
+  display: flex;
+  flex-direction: column;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-lg;
+    padding: 0 $pu-spacing-med;
+  }
+
+  &__welcome {
+    @include pu-font("headline-large");
+    color: $pu-color-on-surface;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+    padding: 0 $pu-spacing-sm;
+  }
+
+  // Operations buttons area
+  &__operations {
+    display: flex;
+    flex-direction: row;
+    gap: $pu-spacing-xs;
+    align-items: center;
+  }
+}
+
+.profile-metadata {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: $pu-radius-med;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+
+  .nickname {
+    @include pu-font("title-large");
+    color: $pu-color-on-surface;
+  }
+
+  .joined-at {
+    @include pu-font("label-small");
+    color: $pu-color-on-surface-variant;
+  }
+}

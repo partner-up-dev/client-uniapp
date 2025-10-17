@@ -11,7 +11,7 @@ import store from "@/store";
 import { APIClient } from "@/business/api";
 import dayjs from "dayjs";
 
-const { dt: domain_t } = useTranslate('base.route_map');
+const { dt } = useTranslate('base.route_map');
 
 export type LocationRef = string;
 
@@ -22,7 +22,6 @@ export class Location extends V.class(v.object({
   lng: v.number(),
   _id: v.optional(v.string()),
 })) {
-  static locationStore = useBaseLocationStore(store);
   private static api = new APIClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
@@ -51,7 +50,8 @@ export class Location extends V.class(v.object({
   }
 
   static async get(id: LocationRef): Promise<Location> {
-    const cachedLocation = this.locationStore.fetchById(id);
+    const locationStore = useBaseLocationStore(store);
+    const cachedLocation = locationStore.fetchById(id);
     if (cachedLocation) {
       return cachedLocation;
     }
@@ -62,9 +62,29 @@ export class Location extends V.class(v.object({
       endpoint: `/${id}`,
     }).then(({ body }) => {
       const location = body.parsed;
-      this.locationStore.upsert(location);
+      locationStore.upsert(location);
       return location;
     })
+  }
+
+  static use(id?: LocationRef) {
+    const _locationId = ref<LocationRef | undefined>(id);
+    const _location = ref<Location>();
+    const loading = ref(false);
+
+    const location = computed((): Location | undefined => {
+      if (_location.value === undefined && _locationId.value !== undefined) {
+        loading.value = true;
+        Location.get(_locationId.value).then(loc => {
+          _location.value = loc;
+        }).finally(() => {
+          loading.value = false;
+        });
+      }
+      return _location.value;
+    });
+
+    return { location, loading, _locationId };
   }
 
   public getCoordString(separator: string = ","): string {
@@ -183,14 +203,14 @@ export class RoutePlanning extends V.class(v.object({
                   });
                 });
               } else {
-                errorReport(domain_t('toast.fail_to_plan'));
+                errorReport(dt('toast.fail_to_plan'));
               }
               loading.value = false;
             },
             fail: (errors: any) => {
               loading.value = false;
               log.error(errors);
-              errorReport(domain_t('toast.fail_to_plan'));
+              errorReport(dt('toast.fail_to_plan'));
             }
           });
         }

@@ -21,7 +21,15 @@ const safeListOfIcons = [
   // chat page icons
   'i-mdi-arrow-left',
   'i-mdi-dots-vertical',
-  'i-mdi-send'
+  'i-mdi-send',
+  // cell component
+  'i-mdi-chevron-right',
+  // me page icons
+  'i-mdi-pencil-outline',
+  'i-mdi-logout',
+  'i-mdi-arrow-right',
+  'i-mdi-login',
+  'i-mdi-help-circle-outline'
 ]
 
 export default {

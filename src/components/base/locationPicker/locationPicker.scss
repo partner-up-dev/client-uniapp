@@ -1,0 +1,11 @@
+// Styles of Component:Base:LocationPicker
+
+@use "@/styles/main.scss" as *;
+
+.location-picker {
+  .value {
+    color: $pu-color-tertiary;
+
+    @include pu-font("label-large");
+  }
+}

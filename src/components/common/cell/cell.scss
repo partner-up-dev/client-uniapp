@@ -1,0 +1,117 @@
+// Styles of Component:Common:Cell
+
+@use "@/styles/main.scss" as *;
+
+.cell {
+  display: flex;
+
+  // Default type: horizontal layout
+  &.is-default {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: $pu-spacing-sm;
+    padding: $pu-spacing-med 0;
+
+    .cell__left {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cell__icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .cell__main {
+      display: flex;
+      flex-direction: column;
+      gap: $pu-spacing-xs;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cell__title {
+      color: $pu-color-on-surface;
+      @include pu-font("label-large");
+    }
+
+    .cell__subtitle {
+      color: $pu-color-on-surface-variant;
+      @include pu-font("label-small");
+    }
+
+    .cell__right {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+      flex-shrink: 0;
+    }
+
+    .cell__value {
+      color: $pu-color-tertiary;
+      @include pu-font("label-large");
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .cell__arrow {
+      color: $pu-color-on-surface-variant;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // Vertical type: original vertical layout
+  &.is-vertical {
+    flex-direction: column;
+    align-items: flex-end;
+
+    .cell__title {
+      color: $pu-color-on-surface;
+    }
+
+    .cell__value {
+      color: $pu-color-tertiary;
+      margin-left: $pu-spacing-med;
+      word-break: break-word;
+    }
+
+    /** 行内文本编辑器 */
+    .cell__input-value {
+      height: 1.4em;
+      text-align: right;
+    }
+
+    &.is-small {
+      gap: $pu-spacing-xs;
+
+      .cell__value {
+        @include pu-font("body-large");
+      }
+
+      .cell__title {
+        @include pu-font("body-large");
+      }
+    }
+
+    &.is-medium {
+      gap: $pu-spacing-sm;
+
+      .cell__value {
+        @include pu-font("title-large");
+      }
+
+      .cell__title {
+        @include pu-font("title-large");
+      }
+    }
+  }
+}

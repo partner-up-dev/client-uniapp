@@ -15,6 +15,7 @@
 - [ ] 硬编码文本放到国际化中
 - [ ] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
 - [ ] 抽离出 Section 组件
+- [ ] 将 vertical-cell 分离为 field 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
 
 ## PRTimeline

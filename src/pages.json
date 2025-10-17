@@ -19,6 +19,12 @@
       }
     },
     {
+      "path": "pages/me/me",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
       "path": "pages/partner_request/detail/detail",
       "style": {
         "navigationBarTitleText": "搭子请求"
@@ -55,6 +61,12 @@
         "iconPath": "/static/icon/notification-selected.png",
         "selectedIconPath": "/static/icon/notification-notice.png",
         "text": "通知"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "iconPath": "/static/icon/me-selected.png",
+        "selectedIconPath": "/static/icon/me-selected.png",
+        "text": "我的"
       }
     ]
   },

@@ -62,6 +62,7 @@ export enum PAGE_ID {
     HOME = "home",
     EXPLORE = "explore",
     NOTIFICATION = "notification",
+    ME = "me",
 
     PR_DETAIL = "partner_request_detail",
     CHAT = "chat",
@@ -70,7 +71,8 @@ export enum PAGE_ID {
 export enum TABBAR_PAGE_ID {
     HOME = "home",
     EXPLORE = "explore",
-    NOTIFICATION = "notification"
+    NOTIFICATION = "notification",
+    ME = "me"
 }
 
 

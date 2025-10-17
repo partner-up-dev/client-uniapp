@@ -9,6 +9,7 @@ export default {
 import { computed, onMounted, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { puImgProps, puImgEmits } from "./PUImg";
+import { kebabCase } from "@/utils";
 
 const props = defineProps(puImgProps);
 const emit = defineEmits(puImgEmits);
@@ -50,9 +51,11 @@ const rootStyle = computed(() => {
     // Do not apply inline width/height so theme tokens control the value
   } else {
     if (props.width)
-      style.width = typeof props.width === "number" ? `${props.width}px` : props.width;
+      style.width =
+        typeof props.width === "number" ? `${props.width}px` : props.width;
     if (props.height)
-      style.height = typeof props.height === "number" ? `${props.height}px` : props.height;
+      style.height =
+        typeof props.height === "number" ? `${props.height}px` : props.height;
   }
   return style;
 });
@@ -75,8 +78,11 @@ onMounted(() => {
       class="pu-img__image"
       :class="[
         props.customImage,
-        `pu-img__image--r-${props.radius}`,
-        { 'is-hidden': (props.showError && isError) || (props.showLoading && isLoading) },
+        `pu-img__image--r-${kebabCase(props.radius)}`,
+        {
+          'is-hidden':
+            (props.showError && isError) || (props.showLoading && isLoading),
+        },
       ]"
       :src="props.src"
       :mode="props.mode"
@@ -85,7 +91,10 @@ onMounted(() => {
       @error="onError"
     />
 
-    <view v-if="props.showLoading && isLoading && hasSrc" class="pu-img__placeholder is-loading">
+    <view
+      v-if="props.showLoading && isLoading && hasSrc"
+      class="pu-img__placeholder is-loading"
+    >
       <slot name="loading">
         <view class="pu-img__spinner" />
       </slot>

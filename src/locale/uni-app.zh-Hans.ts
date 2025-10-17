@@ -758,6 +758,22 @@ export default {
     },
     /**我的页面翻译 */
     me: {
+        title: "我的",
+        welcome: "欢迎您",
+        user: {
+            joined_at: "加入",
+            placeholder_nickname: "用户昵称"
+        },
+        my_partner_requests: {
+            title: "我的搭子请求",
+            subtitle: "我发布的，参与的，收藏的"
+        },
+        actions: {
+            login: "登录搭一把",
+            edit_profile: "编辑资料",
+            logout: "登出",
+            help: "客服"
+        },
         logout: {
             success: "登出成功"
         },
