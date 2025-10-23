@@ -6,7 +6,7 @@ export const CURRENT_VERSION = {
 }
 
 export const TENCENT_LBS = {
-    key: 'EHJBZ-QHHKW-4P3RX-Y2ABY-C5NYQ-JIB2A',
+    key: import.meta.env.VITE_TENCENT_LBS_KEY,
     referer: 'mp-weixin'
 }
 
