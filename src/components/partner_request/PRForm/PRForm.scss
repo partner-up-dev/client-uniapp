@@ -1,0 +1,34 @@
+@use "@/styles/main.scss" as *;
+
+.button-text {
+  font-size: $-sys-font-label-large-size;
+  font-weight: 700;
+}
+.form-item-value {
+  padding: 6px 0px;
+}
+.tips {
+  font-size: $-sys-font-label-medium-size;
+  color: $uni-text-color-grey;
+  margin-top: 4px;
+}
+
+.pr-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.operations {
+  display: flex;
+  justify-content: space-between;
+
+  .left-buttons,
+  .right-buttons {
+    display: flex;
+    gap: $pu-spacing-xs;
+  }
+}
+
+.form-container {
+  width: 98%;
+}

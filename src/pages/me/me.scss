@@ -32,9 +32,18 @@
     gap: $pu-spacing-xs;
     align-items: center;
   }
+
+  // Edit card
+  &__base-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
 }
 
 .profile-metadata {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -47,10 +56,22 @@
   .nickname {
     @include pu-font("title-large");
     color: $pu-color-on-surface;
+    height: 1.4em;
+  }
+
+  .nickname-editor {
+    color: $pu-color-tertiary;
   }
 
   .joined-at {
     @include pu-font("label-small");
     color: $pu-color-on-surface-variant;
   }
+}
+
+.edit-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+  padding: $pu-spacing-xs 0;
 }

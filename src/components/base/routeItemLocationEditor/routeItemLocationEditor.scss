@@ -1,0 +1,53 @@
+@use "@/styles/main.scss" as *;
+
+.route-item-location-editor {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-xs;
+  }
+
+  &__address-value {
+    @include pu-font("body-medium");
+    color: $pu-color-on-surface;
+
+    &--empty {
+      color: $pu-color-on-surface-variant;
+      opacity: 0.6;
+    }
+  }
+
+  &__error-message {
+    @include pu-font("body-small");
+    color: $pu-color-error;
+    padding: 0px $pu-spacing-lg;
+    min-height: 20px;
+  }
+
+  &__operations {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "choose-location choose-location"
+      "cancel confirm";
+    gap: $pu-spacing-xs;
+    padding: 0px $pu-spacing-lg;
+  }
+
+  &__choose-btn {
+    grid-area: choose-location;
+  }
+
+  &__cancel-btn {
+    grid-area: cancel;
+  }
+
+  &__confirm-btn {
+    grid-area: confirm;
+  }
+}

@@ -1,0 +1,49 @@
+// Styles of Component:Common:Field
+
+@use "@/styles/main.scss" as *;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $pu-spacing-med;
+
+  .field__title {
+    color: $pu-color-on-surface;
+  }
+
+  .field__value {
+    color: $pu-color-tertiary;
+    word-break: break-word;
+  }
+
+  /** 行内文本编辑器 */
+  .field__input-value {
+    height: 1.4em;
+    text-align: right;
+  }
+
+  &.is-small {
+    gap: $pu-spacing-xs;
+
+    .field__value {
+      @include pu-font("body-large");
+    }
+
+    .field__title {
+      @include pu-font("body-large");
+    }
+  }
+
+  &.is-medium {
+    gap: $pu-spacing-sm;
+
+    .field__value {
+      @include pu-font("title-large");
+    }
+
+    .field__title {
+      @include pu-font("title-large");
+    }
+  }
+}

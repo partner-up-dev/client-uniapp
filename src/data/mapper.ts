@@ -25,11 +25,11 @@ export const ride_hailing_mp_list = {
 }
 
 
-import { FileExtension, MIMETypes } from './enum';
+import { type FileExtension, type MIMETypes } from './enum';
 export const content_type_mapper: Record<FileExtension, MIMETypes> = {
-    [FileExtension.JPEG]: MIMETypes.JPEG,
-    [FileExtension.JPG]: MIMETypes.JPG,
-    [FileExtension.PNG]: MIMETypes.PNG,
-    [FileExtension.PDF]: MIMETypes.PDF,
-    [FileExtension.BINARY]: MIMETypes.BINARY,
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "png": "image/png",
+    "pdf": "application/pdf",
+    "binary": "application/octet-stream",
 };

@@ -77,23 +77,15 @@ export enum TABBAR_PAGE_ID {
 
 
 /**
- * @abstract 文件类型枚举
+ * @abstract 文件类型
  */
-export enum FileExtension {
-    PDF = "pdf",
-    PNG = "png",
-    JPG = "jpg",
-    JPEG = "jpeg",
-    BINARY = "binary"
-}
+export type FileExtension = "pdf" | "png" | "jpg" | "jpeg" | "binary";
 
 /**
  * @abstract MIMETypes
  */
-export enum MIMETypes {
-    PDF = "application/pdf",
-    PNG = "image/png",
-    JPG = "image/jpeg",
-    JPEG = "image/jpeg",
-    BINARY = "application/octet-stream"
-}
+export type MIMETypes =
+    | "application/pdf"
+    | "image/png"
+    | "image/jpeg"
+    | "application/octet-stream";

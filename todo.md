@@ -15,8 +15,17 @@
 - [ ] 硬编码文本放到国际化中
 - [ ] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
 - [ ] 抽离出 Section 组件
-- [ ] 将 vertical-cell 分离为 field 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
+- [ ] V.class 支持 extend
+
+## Me Page
+
+- [x] 将 vertical-cell 分离为 field 组件
+- [x] OSS use fp extension if key extension is missing
+- [x] Nickname 编辑
+- [x] Bio, gender, mbti, birthday 编辑
+- [ ] 大学生认证 <https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/student.html#%E4%BA%94%E3%80%81%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3>
+- [ ] 手机号编辑
 
 ## PRTimeline
 

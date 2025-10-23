@@ -26,6 +26,14 @@ export default {
                 input: "点击以输入"
             }
         },
+        /** @name 字段组件的翻译 */
+        field: {
+            placeholder: {
+                empty: "此值为空",
+                picker: "点击以选择",
+                input: "点击以输入"
+            }
+        },
         loading: "加载中",
         "load_more": {
             "more": "加载更多",
@@ -759,23 +767,43 @@ export default {
     /**我的页面翻译 */
     me: {
         title: "我的",
-        welcome: "欢迎您",
+        welcome: "欢迎来到搭一把",
         user: {
             joined_at: "加入",
-            placeholder_nickname: "用户昵称"
+            placeholder_nickname: "登录搭一把"
         },
         my_partner_requests: {
             title: "我的搭子请求",
-            subtitle: "我发布的，参与的，收藏的"
+            subtitle: "查看和管理你发起的搭子请求"
+        },
+        nickname: {
+            placeholder: '输入昵称'
         },
         actions: {
-            login: "登录搭一把",
+            login: "登录",
             edit_profile: "编辑资料",
-            logout: "登出",
-            help: "客服"
+            logout: "退出登录",
+            help: "帮助"
         },
         logout: {
             success: "登出成功"
+        },
+        edit_card: {
+            title: "个人信息编辑",
+            fields: {
+                bio: {
+                    title: "个人简介",
+                    placeholder: "介绍一下自己吧"
+                },
+                gender: {
+                    title: "性别",
+                    placeholder: "点击以选择"
+                },
+                mbti: {
+                    title: "MBTI",
+                    placeholder: "点击以选择"
+                }
+            }
         },
         my_lists: {
             partner_requests: {

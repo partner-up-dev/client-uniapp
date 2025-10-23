@@ -1,0 +1,170 @@
+@use "@/styles/main.scss" as *;
+
+// ==================== Route Editor ====================
+.route-editor {
+  display: flex;
+  width: 100%;
+
+  // ========== Normal Type (Vertical List) ==========
+  &--normal {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  // ========== Immersive Type (Card Layout) ==========
+  &--immersive {
+    flex-direction: column;
+    gap: $-sys-gap-vertical-3;
+  }
+
+  // ========== Operations ==========
+  &__operations {
+    display: flex;
+    flex-direction: column;
+    gap: $-sys-gap-vertical-1;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: 40px;
+
+    .route-editor--immersive & {
+      flex-direction: row;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: $-sys-margin-vertical-5;
+      gap: $-sys-gap-horizontal-1;
+    }
+  }
+
+  // ========== Content ==========
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $-sys-gap-vertical-2;
+    flex-grow: 1;
+    margin-left: $-sys-margin-horizontal-1;
+    padding: $-sys-padding-vertical-1 $-sys-padding-horizontal-1;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $-sys-gap-vertical-3;
+  }
+
+  // ========== Errors ==========
+  &__errors {
+    display: flex;
+    flex-direction: column;
+    gap: $-sys-gap-vertical-1;
+    margin-top: $-sys-margin-vertical-2;
+    padding: 0 $-sys-padding-horizontal-1;
+
+    .error-item {
+      @include pu-font-label-medium;
+      color: $-sys-color-error;
+    }
+  }
+}
+
+// ==================== Route Item ====================
+.route-item {
+  display: flex;
+  flex-direction: column;
+  gap: $-sys-gap-vertical-1;
+  width: 100%;
+
+  // ========== Datetime ==========
+  &__datetime {
+    display: flex;
+    align-items: center;
+    gap: $-sys-gap-horizontal-1;
+    @include pu-font-label-medium;
+    color: $-sys-color-on-surface;
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+
+  // ========== Main Content ==========
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: $-sys-gap-horizontal-1;
+    width: 100%;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: $-sys-gap-horizontal-1;
+    @include pu-font-title-large;
+
+    .route-item--departure &,
+    .route-item--waypoint &,
+    .route-item--arrival & {
+      width: 100%;
+    }
+  }
+
+  // ========== Location ==========
+  &__location {
+    flex-grow: 1;
+    overflow-x: scroll;
+    white-space: nowrap;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    padding: $-sys-padding-vertical-1 $-sys-padding-horizontal-2;
+    background-color: $-sys-color-surface-container;
+    color: $-sys-color-on-surface;
+    border-radius: $-sys-radius-small;
+    cursor: pointer;
+    @include pu-font-label-medium;
+
+    &:active {
+      background-color: $-sys-color-surface-container-high;
+    }
+
+    .route-item--departure &,
+    .route-item--waypoint &,
+    .route-item--arrival & {
+      @include pu-font-title-large;
+      color: $-sys-color-surface-tint;
+    }
+  }
+
+  // ========== Title (Immersive) ==========
+  &__title {
+    @include pu-font-headline-small;
+    color: $-sys-color-on-surface;
+  }
+
+  // ========== Text (Immersive) ==========
+  &__text {
+    flex-shrink: 0;
+    @include pu-font-title-large;
+    color: $-sys-color-on-surface;
+  }
+
+  // ========== Action Icon (Immersive) ==========
+  &__action {
+    flex-shrink: 0;
+    font-size: $-sys-font-title-large-size;
+    color: $-sys-color-tertiary;
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+
+  // ========== Type Variants (Immersive) ==========
+  &--departure,
+  &--waypoint,
+  &--arrival {
+    gap: $-sys-gap-vertical-2;
+  }
+}

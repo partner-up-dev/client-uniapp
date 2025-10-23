@@ -1,0 +1,124 @@
+@use "@/styles/main.scss" as *;
+
+.pu-img-cropper {
+  position: relative;
+  overflow: hidden;
+  background-color: $pu-color-neutral-container;
+
+  // ==================== 操作舞台 ====================
+  &__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    user-select: none;
+  }
+
+  // ==================== 图片 ====================
+  &__image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    max-width: none;
+    max-height: none;
+  }
+
+  // ==================== Canvas（隐藏） ====================
+  &__canvas {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // ==================== 遮罩层 ====================
+  &__mask {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+
+    // 方形遮罩
+    &--square {
+      border-radius: $pu-radius-sm;
+    }
+
+    // 圆形遮罩
+    &--round {
+      border-radius: $pu-radius-full;
+    }
+  }
+
+  // ==================== 网格线 ====================
+  &__grid {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  &__grid-line {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.35);
+
+    // 垂直线 1/3
+    &--v1 {
+      left: 33.3333%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+    }
+
+    // 垂直线 2/3
+    &--v2 {
+      left: 66.6666%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+    }
+
+    // 水平线 1/3
+    &--h1 {
+      top: 33.3333%;
+      left: 0;
+      right: 0;
+      height: 1px;
+    }
+
+    // 水平线 2/3
+    &--h2 {
+      top: 66.6666%;
+      left: 0;
+      right: 0;
+      height: 1px;
+    }
+  }
+
+  // ==================== 状态修饰符 ====================
+
+  // 圆形裁剪器
+  &--round {
+    .pu-img-cropper__grid {
+      border-radius: $pu-radius-full;
+      overflow: hidden;
+    }
+  }
+
+  // 禁用状态
+  &--disabled {
+    .pu-img-cropper__stage {
+      touch-action: auto;
+    }
+
+    .pu-img-cropper__image {
+      opacity: $pu-opacity-disabled;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { computed, type ComputedRef, ref, type Ref, watch } from "vue";
-import { nullable, V } from "..";
+import { instance, nullable, V } from "..";
 import * as v from 'valibot';
 import { decompressPolyline, QQMapSDK } from "@/utils/lbs/index.js";
 import { QQMapDirectionMode, type QQMapDirectionResult } from "@/utils/lbs/types";
@@ -224,23 +224,22 @@ export class RoutePlanning extends V.class(v.object({
   }
 }
 
-export class Route {
-  constructor(public items: RouteItem[]) { }
+export class Route extends V.class(v.array(instance(RouteItem))) {
 
   get startItem(): RouteItem {
-    return this.items[0];
+    return this[0];
   }
 
   get waypoints(): RouteItem[] {
-    return this.items.slice(1, this.items.length - 1);
+    return this.slice(1, this.length - 1);
   }
 
   get endItem(): RouteItem {
-    return this.items[this.items.length - 1];
+    return this[this.length - 1];
   }
 
   get length(): number {
-    return this.items.length;
+    return this.length;
   }
 
   static use(route: Route) {
@@ -262,7 +261,7 @@ export class Route {
     })
 
     watch(_route, (newRoute) => {
-      _locations.value = newRoute.items.map((ri) => {
+      _locations.value = newRoute.map((ri) => {
         const normalizedItem: RouteItem = RouteItem.parse(ri as unknown);
         const { location } = RouteItem.use(normalizedItem);
         return location;

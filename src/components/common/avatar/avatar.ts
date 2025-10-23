@@ -36,10 +36,11 @@ export const avatarProps = {
   /** 是否可编辑（点击可选择并裁剪图片） */
   editable: makeBooleanProp(false),
 
-  /** 上传函数：接收临时文件路径，返回上传后地址（由父级处理） */
-  upload: {
-    type: Function as PropType<(fp: string) => Promise<string>>,
-  },
+  /** OSS 上传文件的 bucket 名称 */
+  uploadBucket: makeStringProp<string>(''),
+
+  /** OSS 上传文件的 key 前缀路径 */
+  uploadKey: makeStringProp<string>(''),
 
   ...baseProps,
 };

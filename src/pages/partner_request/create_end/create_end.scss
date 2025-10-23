@@ -1,0 +1,124 @@
+// PartnerRequest:Page:Create-End's styles
+
+@use "@/styles/main.scss" as *;
+
+@include b(publishing-notice) {
+  width: 98%;
+  margin: 0 auto;
+}
+
+.af-pub__body::after {
+  content: "";
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 32px;
+
+  background: linear-gradient(to bottom, transparent, $pu-color-surface);
+}
+
+@include b(af-pub) {
+  position: relative;
+  overflow-y: auto;
+  transition: height 1.5s ease;
+
+  width: 87%;
+  margin: $pu-spacing-med auto 0 auto;
+
+  @include e(head) {
+    border-radius: $pu-radius-sm;
+    background-color: $pu-color-surface-container;
+    padding: 60px $pu-spacing-lg;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include e(icon) {
+      @include pu-font(headline-large);
+    }
+
+    @include e(title) {
+      @include pu-font(headline-small);
+    }
+  }
+
+  @include e(body) {
+    overflow-y: auto;
+
+    margin-top: $pu-spacing-med;
+
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+  }
+
+  @include e(card) {
+    border-radius: $pu-radius-sm;
+    padding: $pu-spacing-lg;
+    background-color: $pu-color-surface-container;
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-med;
+
+    .title {
+      @include pu-font(title-large);
+    }
+
+    .description {
+      @include pu-font(label-large);
+    }
+
+    :deep(.operation) {
+      margin: 0 0 0 auto !important;
+      height: 36px;
+    }
+  }
+
+  @include e(next) {
+    width: 73%;
+  }
+
+  @include e(share) {
+    width: 70%;
+    margin-left: auto;
+  }
+
+  @include e(stop) {
+    width: 73%;
+  }
+}
+
+@include b(editor-cont) {
+  overflow-y: auto;
+  transition: height 1.5s ease;
+}
+
+@include b(footer) {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+
+  background-color: $pu-color-surface-container;
+  color: $pu-color-on-surface;
+}
+
+@include b(operations) {
+  padding: $pu-spacing-med;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $pu-spacing-med;
+}
+
+.button {
+  margin: 0 !important;
+  height: 36px !important;
+  min-width: auto !important;
+  padding: 0px $pu-spacing-lg !important;
+}

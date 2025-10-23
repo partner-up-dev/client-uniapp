@@ -1,0 +1,39 @@
+@use "@/styles/main.scss" as *;
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: $pu-spacing-sm $pu-spacing-med;
+
+  &__container {
+    background-color: $pu-color-secondary;
+    color: $pu-color-secondary-on;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-sm;
+    max-width: 54%;
+    overflow-x: scroll;
+
+    &__title {
+      @include pu-font("body-large");
+      overflow-x: scroll;
+      white-space: nowrap;
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-sm;
+  }
+
+  &__icon-button {
+    @include pu-icon("small", true);
+    cursor: pointer;
+  }
+}

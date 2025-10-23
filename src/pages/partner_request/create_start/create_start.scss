@@ -1,0 +1,81 @@
+@use "@/styles/main.scss" as *;
+
+@include b(headline) {
+  margin-left: $pu-spacing-med;
+  margin-top: $pu-spacing-med;
+
+  @include e(fir) {
+    @include pu-font(headline-small);
+
+    @include edeep(icon) {
+      display: inline;
+      font-size: $pu-font-headline-small-size;
+    }
+  }
+
+  @include e(sec) {
+    margin-top: $pu-spacing-sm;
+    color: $pu-color-secondary;
+
+    @include pu-font(title-medium);
+  }
+}
+
+@include b(cont) {
+  margin-top: $pu-spacing-lg;
+  margin-left: $pu-spacing-med;
+  margin-right: $pu-spacing-med;
+
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-lg;
+}
+
+@include b(l1-type-picker) {
+  @include e(title) {
+    text-align: right;
+    @include pu-font(title-medium);
+  }
+
+  @include e(picker) {
+    margin-left: auto;
+    margin-top: $pu-spacing-med;
+
+    height: 32vh;
+    width: 76vw;
+    min-height: 112px;
+  }
+}
+
+@include b(con-from-draft) {
+  @include e(title) {
+    text-align: right;
+    @include pu-font(title-medium);
+  }
+
+  @include edeep(picker) {
+    margin-top: $pu-spacing-med;
+
+    height: 15vh;
+    max-height: 200px;
+    min-height: 82px;
+  }
+}
+
+@include b(con-from-cache) {
+  text-align: right;
+  $-font-color: $pu-color-secondary;
+
+  @include e(title) {
+    color: $-font-color;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    @include pu-font(title-medium);
+  }
+
+  @include edeep(icon) {
+    color: $-font-color !important;
+    font-size: $pu-font-title-medium-size;
+  }
+}

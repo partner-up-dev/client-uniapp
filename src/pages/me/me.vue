@@ -2,6 +2,10 @@
 import { TABBAR_PAGE_ID } from "@/data/enum";
 import { syncTabBarIndex } from "@/utils/tabbar";
 import { DEFAULT_ACCOUNT_WALLPAPER } from "@/data/const";
+import type {
+  InputOnInputEvent,
+  InputOnConfirmEvent,
+} from "@uni-helper/uni-app-types";
 
 const MY_PAGE_ID = TABBAR_PAGE_ID.ME;
 
@@ -18,11 +22,17 @@ import { AccountBaseProfile, Account } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
 import Cell from "@/components/common/cell/cell.vue";
+import Card from "@/components/common/card/card.vue";
+import Field from "@/components/common/field/field.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import dayjs from "dayjs";
+import { useChooseImage } from "@/business/oss/index";
+import { GENDER_OPTIONS, MBTI_OPTIONS } from "@/data/const";
+import type { FieldValueType } from "@/components/common/field/field";
 
 const { dt } = useTranslate("me");
 const { baseProfile } = AccountBaseProfile.use();
+const { chooseImageAndUpload } = useChooseImage();
 
 // 登录状态
 const isLoggedIn = computed(() => {
@@ -57,6 +67,20 @@ const simpleProfileStyle = computed(() => {
   };
 });
 
+// Formatters for field values
+const genderFormatter = (val: any) => {
+  const option = GENDER_OPTIONS.find((opt) => opt.value === val);
+  return option ? option.label : val;
+};
+
+const mbtiFormatter = (val: any) => {
+  const option = MBTI_OPTIONS.find((opt) => opt.value === val);
+  return option ? option.label : val;
+};
+
+// Add ref to track editing mode
+const isEditing = ref(false);
+
 // 方法
 function onHelpClick() {
   console.log("帮助");
@@ -70,8 +94,33 @@ function onLoginClick() {
 }
 
 function onEditProfileClick() {
-  console.log("编辑资料");
-  // TODO: 导航到编辑资料页面
+  // Toggle editing mode
+  isEditing.value = !isEditing.value;
+}
+
+function onWallpaperEditClick() {
+  chooseImageAndUpload("images", `wallpapers/${baseProfile.value?.id}`)
+    .then((url) => {
+      if (baseProfile.value) {
+        baseProfile.value.wallpaper = url;
+        baseProfile.value.put();
+      }
+    })
+    .catch((error) => {
+      console.error("壁纸上传失败:", error);
+    });
+}
+
+function onNicknameInput(event: InputOnInputEvent) {
+  if (!baseProfile.value) return;
+  baseProfile.value.nickname = event.detail.value;
+}
+
+function onNicknameConfirm(event: InputOnConfirmEvent) {
+  if (baseProfile.value) {
+    baseProfile.value.nickname = event.detail.value;
+    baseProfile.value.put();
+  }
 }
 
 function onLogoutClick() {
@@ -82,6 +131,27 @@ function onLogoutClick() {
 function onMyPartnerRequestsClick() {
   console.log("我的搭子请求");
   // TODO: 导航到我的搭子请求页面
+}
+
+function onBioConfirm(value: FieldValueType) {
+  if (baseProfile.value) {
+    baseProfile.value.bio = value as string;
+    baseProfile.value.put();
+  }
+}
+
+function onGenderConfirm(value: FieldValueType) {
+  if (baseProfile.value) {
+    baseProfile.value.gender = value as string;
+    baseProfile.value.put();
+  }
+}
+
+function onMbtiConfirm(value: FieldValueType) {
+  if (baseProfile.value) {
+    baseProfile.value.mbti = value as string;
+    baseProfile.value.put();
+  }
 }
 
 // 生命周期
@@ -98,9 +168,6 @@ onShow(() => {
 <template>
   <view class="page-bg"></view>
   <view class="me-page">
-    <!-- 状态栏占位 -->
-
-    <!-- 未登录状态 -->
     <view class="me-page__main">
       <SafeAreaInset position="top" />
 
@@ -108,34 +175,63 @@ onShow(() => {
         {{ dt("welcome") }}
       </text>
 
-      <!-- SimpleProfile 背景图片 -->
-      <view class="profile-metadata" :style="simpleProfileStyle">
-        <view class="flex flex-row justify-between items-center space-p-x-med">
-          <Avatar :src="userAvatar" size="xLarge" radius="none" />
+      <view
+        class="profile-metadata relative"
+        :style="simpleProfileStyle"
+        v-if="isLoggedIn"
+      >
+        <view class="absolute top-4 right-4">
+          <PUButton
+            v-if="isEditing"
+            prefix-icon="i-mdi-image-edit-outline"
+            theme="Surface"
+            type="OnlyIcon"
+            size="Small"
+            @click="onWallpaperEditClick"
+          />
+        </view>
 
-          <view class="flex flex-col items-end">
+        <view class="flex flex-row justify-between items-center space-p-x-med">
+          <Avatar
+            :src="userAvatar"
+            size="xLarge"
+            radius="none"
+            uploadBucket="image"
+            :uploadKey="`avatars/${baseProfile?.id}`"
+            :editable="isEditing"
+          />
+
+          <view class="flex flex-col items-end text-align-right">
             <text class="joined-at">
               {{ joinedDate }} {{ dt("user.joined_at") }}
             </text>
-            <text class="nickname">
+            <view class="nickname" v-if="!isEditing">
               {{ userNickname }}
-            </text>
+            </view>
+
+            <input
+              class="nickname nickname-editor"
+              v-else
+              :value="userNickname"
+              :maxlength="AccountBaseProfile.NICKNAME_MAX_LENGTH"
+              :placeholder="dt('nickname.placeholder')"
+              type="nickname"
+              @confirm="onNicknameConfirm"
+              @input="onNicknameInput"
+            />
           </view>
         </view>
       </view>
 
       <view class="me-page__content">
-        <!-- 我的搭子请求 -->
         <Cell
-          :type="'default'"
           :title="dt('my_partner_requests.title')"
           :subtitle="dt('my_partner_requests.subtitle')"
-          :show-arrow="true"
+          suffix-icon="i-mdi-chevron-right"
           size="medium"
           @click="onMyPartnerRequestsClick"
         />
 
-        <!-- 操作按钮区域 -->
         <view class="me-page__operations">
           <PUButton
             v-if="isLoggedIn"
@@ -144,6 +240,7 @@ onShow(() => {
             theme="Surface"
             type="WithText"
             size="Small"
+            :active="isEditing"
             @click="onEditProfileClick"
           />
           <PUButton
@@ -171,6 +268,38 @@ onShow(() => {
             :type="isLoggedIn ? 'WithText' : 'OnlyIcon'"
             size="Small"
             @click="onHelpClick"
+          />
+        </view>
+
+        <!-- 编辑个人信息卡片 -->
+        <view class="base-profile-form" v-if="isEditing">
+          <Field
+            :title="dt('edit_card.fields.bio.title')"
+            :value="baseProfile?.bio || undefined"
+            :value-placeholder="dt('edit_card.fields.bio.placeholder')"
+            editor-type="common_input"
+            size="medium"
+            @confirm="onBioConfirm"
+          />
+          <Field
+            :title="dt('edit_card.fields.gender.title')"
+            :value="baseProfile?.gender || undefined"
+            :value-formmater="genderFormatter"
+            :value-placeholder="dt('edit_card.fields.gender.placeholder')"
+            editor-type="common_picker"
+            :editor-data="GENDER_OPTIONS"
+            size="medium"
+            @confirm="onGenderConfirm"
+          />
+          <Field
+            :title="dt('edit_card.fields.mbti.title')"
+            :value="baseProfile?.mbti || undefined"
+            :value-formmater="mbtiFormatter"
+            :value-placeholder="dt('edit_card.fields.mbti.placeholder')"
+            editor-type="common_picker"
+            :editor-data="MBTI_OPTIONS"
+            size="medium"
+            @confirm="onMbtiConfirm"
           />
         </view>
       </view>

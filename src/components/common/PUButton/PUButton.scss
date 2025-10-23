@@ -5,8 +5,11 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  box-sizing: border-box;
   cursor: pointer;
   transition: all 0.2s ease;
+
+  border: 1px solid transparent;
 }
 
 .icon-wrapper {
@@ -165,9 +168,8 @@
     color: $pu-color-on-surface;
   }
 
-  // Active state: background becomes surface-container-low
   &.active {
-    border: 1px solid $pu-color-primary inset;
+    border: 1px solid $pu-color-primary;
   }
 
   // Toggled state: add primary colored border

@@ -46,6 +46,100 @@ export const V = {
         const data = JSON.parse(json) as unknown;
         return (this as unknown as { parse(d: unknown): T }).parse(data);
       }
+
+      static extend<TExtendSchema extends v.BaseSchema<any, any, any>>(
+        this: typeof ValibotClass,
+        extendSchema: TExtendSchema
+      ) {
+        // Get the parent schema
+        const parentSchema = (this as any).V as TSchema;
+
+        // Merge the schemas using Valibot's intersect
+        const mergedSchema = v.intersect([parentSchema, extendSchema]);
+
+        // Store parent class reference
+        const ParentClass = this;
+
+        // Create a new extended class
+        class ExtendedClass {
+          static V = mergedSchema as any;
+
+          constructor(value: any) {
+            const parsed = v.parse(mergedSchema, value);
+            // Create instance with proper prototype chain
+            const instance = Object.create(ExtendedClass.prototype);
+            Object.assign(instance, parsed);
+            return instance as any;
+          }
+
+          static schema() { return mergedSchema as any; }
+
+          static parse<T = InstanceType<typeof ExtendedClass>>(data: unknown): T {
+            const parsed = v.parse(mergedSchema, data);
+            const instance = Object.create(ExtendedClass.prototype) as T;
+            Object.assign(instance as object, parsed);
+            return instance;
+          }
+
+          static async parseAsync<T = InstanceType<typeof ExtendedClass>>(data: unknown): Promise<T> {
+            const parsed = await v.parseAsync(mergedSchema, data);
+            const instance = Object.create(ExtendedClass.prototype) as T;
+            Object.assign(instance as object, parsed);
+            return instance;
+          }
+
+          static safeParse<T = InstanceType<typeof ExtendedClass>>(data: unknown) {
+            const result = v.safeParse(mergedSchema, data);
+            if (result.success) {
+              const output = (result as any).output ?? (result as any).data;
+              const instance = Object.create(ExtendedClass.prototype) as T;
+              Object.assign(instance as object, output);
+              return { success: true as const, output: instance };
+            }
+            return result;
+          }
+
+          static parseJSON<T = InstanceType<typeof ExtendedClass>>(json: string): T {
+            const data = JSON.parse(json) as unknown;
+            return ExtendedClass.parse(data);
+          }
+        }
+
+        // Set up prototype chain to inherit instance methods from parent
+        Object.setPrototypeOf(ExtendedClass.prototype, ParentClass.prototype);
+
+        // Build an embedded schema for the extended class
+        const embeddedExtendedSchema = v.pipe(
+          mergedSchema,
+          v.transform((parsed: any) => {
+            const inst = Object.create(ExtendedClass.prototype);
+            Object.assign(inst, parsed);
+            return inst;
+          })
+        );
+
+        // Copy embedded schema properties onto ExtendedClass
+        Object.assign(ExtendedClass, embeddedExtendedSchema);
+
+        return ExtendedClass as unknown as v.BaseSchema<
+          v.InferInput<typeof mergedSchema>,
+          v.InferOutput<TSchema> & v.InferOutput<TExtendSchema>,
+          v.InferIssue<typeof mergedSchema>
+        > & {
+          new(value: v.InferInput<typeof mergedSchema>): v.InferOutput<TSchema> & v.InferOutput<TExtendSchema>;
+          V: typeof mergedSchema;
+          schema(): typeof mergedSchema;
+          parse<T = InstanceType<typeof ExtendedClass>>(data: unknown): T;
+          parseAsync<T = InstanceType<typeof ExtendedClass>>(data: unknown): Promise<T>;
+          safeParse<T = InstanceType<typeof ExtendedClass>>(data: unknown):
+            | { success: true; output: T }
+            | { success: false; issues: v.BaseIssue<unknown>[] };
+          parseJSON<T = InstanceType<typeof ExtendedClass>>(json: string): T;
+          extend<TExtendSchema2 extends v.BaseSchema<any, any, any>>(
+            extendSchema: TExtendSchema2
+          ): any;
+        };
+      }
     }
 
     // Build an embedded schema that transforms parsed output into a class instance.
@@ -79,6 +173,26 @@ export const V = {
         | { success: true; output: T }
         | { success: false; issues: v.BaseIssue<unknown>[] };
       parseJSON<T = InstanceType<typeof ValibotClass>>(json: string): T;
+      extend<TExtendSchema extends v.BaseSchema<any, any, any>>(
+        extendSchema: TExtendSchema
+      ): v.BaseSchema<
+        v.InferInput<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>,
+        Output & v.InferOutput<TExtendSchema>,
+        v.InferIssue<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>
+      > & {
+        new(value: v.InferInput<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>): Output & v.InferOutput<TExtendSchema>;
+        V: v.IntersectSchema<[TSchema, TExtendSchema], undefined>;
+        schema(): v.IntersectSchema<[TSchema, TExtendSchema], undefined>;
+        parse<T = any>(data: unknown): T;
+        parseAsync<T = any>(data: unknown): Promise<T>;
+        safeParse<T = any>(data: unknown):
+          | { success: true; output: T }
+          | { success: false; issues: v.BaseIssue<unknown>[] };
+        parseJSON<T = any>(json: string): T;
+        extend<TExtendSchema2 extends v.BaseSchema<any, any, any>>(
+          extendSchema: TExtendSchema2
+        ): any;
+      };
     };
   }
 };
@@ -102,6 +216,9 @@ export type ValibotClass<
     | { success: true; output: T }
     | { success: false; issues: v.BaseIssue<unknown>[] };
   parseJSON<T = InstanceType<any>>(json: string): T;
+  extend<TExtendSchema extends v.BaseSchema<any, any, any>>(
+    extendSchema: TExtendSchema
+  ): ValibotClass<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>;
 };
 
 
@@ -113,14 +230,23 @@ export function instance<T extends ValibotClass>(cls: T) {
   // Accept either an existing instance of the class or a raw value that
   // the class (which itself behaves like a Valibot schema) can parse.
   const schema = v.pipe(
+    v.any(),
     v.transform((i) => {
-      if (typeof i === 'object') {
+      if (typeof i === 'object' && i !== null) {
         return cls.parse(i);
       }
-      return i
+      return i;
     }),
     v.instance(cls as unknown as new (...args: any[]) => object),
   );
 
   return schema as unknown as v.BaseSchema<unknown, InstanceType<T>, v.BaseIssue<unknown>>;
+}
+
+/**
+ * Extracts minLength and maxLength constraints from a Valibot string schema.
+ * Returns { minLength?: number, maxLength?: number }
+ */
+export function limit_string(min?: number, max?: number) {
+  return v.pipe(v.string(), v.minLength(min ?? 0), v.maxLength(max ?? Infinity));
 }

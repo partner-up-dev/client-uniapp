@@ -15,21 +15,22 @@ const safeListOfIcons = [
   'i-mdi-map-marker-check',
   'i-mdi-directions',
   'i-mdi-vector-polygon',
-  // dynamically used in Partner component
   'i-mdi-chevron-down',
   'i-mdi-chevron-up',
-  // chat page icons
+  'i-mdi-chevron-right',
   'i-mdi-arrow-left',
+  'i-mdi-arrow-top-left',
   'i-mdi-dots-vertical',
   'i-mdi-send',
-  // cell component
-  'i-mdi-chevron-right',
-  // me page icons
   'i-mdi-pencil-outline',
   'i-mdi-logout',
   'i-mdi-arrow-right',
   'i-mdi-login',
-  'i-mdi-help-circle-outline'
+  'i-mdi-help-circle-outline',
+  // PUInput icons
+  'i-mdi-close-circle',
+  'i-mdi-eye',
+  'i-mdi-eye-off',
 ]
 
 export default {

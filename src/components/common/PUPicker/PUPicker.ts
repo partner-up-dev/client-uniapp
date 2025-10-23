@@ -132,44 +132,14 @@ export const puPickerProps = {
   /** 是否右对齐 */
   alignRight: makeBooleanProp(false),
 
-  /** 弹出层标题 */
-  title: makeStringProp(""),
-
-  /** 取消按钮文案 */
-  cancelButtonText: makeStringProp("取消"),
-
-  /** 确认按钮文案 */
-  confirmButtonText: makeStringProp("确认"),
-
-  /** 是否加载中 */
-  loading: makeBooleanProp(false),
-
-  /** 加载颜色 */
-  loadingColor: makeStringProp("#4D80F0"),
-
-  /** 点击遮罩层是否关闭 */
-  closeOnClickModal: makeBooleanProp(true),
-
-  /** 底部安全区域 */
-  safeAreaInsetBottom: makeBooleanProp(true),
-
-  /** 选项总高度 */
-  columnsHeight: makeNumberProp(217),
-
   /** 确定前校验函数 */
   beforeConfirm: Function as PropType<PickerBeforeConfirm>,
 
   /** 自定义展示文案的格式化函数 */
   displayFormat: Function as PropType<PickerDisplayFormat>,
 
-  /** 列变更回调 */
+  /** 列变更回调（仅多列选择器） */
   columnChange: Function as PropType<PickerColumnChange>,
-
-  /** 是否在手指松开时立即触发 change 事件 */
-  immediateChange: makeBooleanProp(false),
-
-  /** 自定义层级 */
-  zIndex: makeNumberProp(15),
 
   /** 自定义根节点样式类 */
   customClass: makeStringProp(""),
@@ -195,9 +165,6 @@ export const puPickerEmits = {
 
   /** 确认选择 */
   confirm: (event: PickerConfirmEvent) => true,
-
-  /** 打开选择器 */
-  open: () => true,
 
   /** 取消选择 */
   cancel: () => true,

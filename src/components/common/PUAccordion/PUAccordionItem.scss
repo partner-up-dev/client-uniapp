@@ -1,0 +1,71 @@
+@use "@/styles/main.scss" as *;
+
+.pu-accordion-item {
+  position: relative;
+  border-top: 1px solid $pu-color-outline-variant;
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $pu-spacing-med;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+
+    &.is-expanded {
+      border-bottom: 1px solid $pu-color-outline-variant;
+    }
+
+    &.is-custom {
+      display: block;
+    }
+
+    &-first {
+      border-top: none;
+    }
+  }
+
+  &__title {
+    color: $pu-color-on-surface;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  &__arrow {
+    display: block;
+    font-size: 20px;
+    color: $pu-color-on-surface-variant;
+    transition: transform 0.3s;
+
+    &.is-retract {
+      transform: rotate(-180deg);
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    overflow: hidden;
+    will-change: height;
+  }
+
+  &__body {
+    color: $pu-color-on-surface;
+    font-size: 14px;
+    padding: $pu-spacing-med;
+    line-height: 1.43;
+  }
+
+  &.is-disabled {
+    .pu-accordion-item__title {
+      color: $pu-color-on-surface;
+      opacity: $pu-opacity-disabled;
+    }
+
+    .pu-accordion-item__arrow {
+      color: $pu-color-on-surface-variant;
+      opacity: $pu-opacity-disabled;
+    }
+  }
+}

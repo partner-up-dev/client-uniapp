@@ -14,6 +14,7 @@ import ChatContent from "@/components/communication/ChatContent/ChatContent.vue"
 import safeAreaInset from "@/components/common/safeAreaInset.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
 import pageBack from "@/components/common/pageBack/pageBack.vue";
+import NavBar from "@/components/common/navBar/navBar.vue";
 import type { ChatPageParams } from "./chat";
 import { MAX_MESSAGE_LENGTH, MIN_MESSAGE_LENGTH } from "./chat";
 import { getElementRect } from "@/utils/vendor";
@@ -136,32 +137,11 @@ function onMoreButtonClick() {
 <template>
   <view class="page-bg"></view>
   <view class="chat-page">
-    <view class="chat-page__header-container">
-      <safeAreaInset position="top" />
-
-      <!-- Header -->
-      <view class="chat-page__header">
-        <view class="header__left">
-          <!-- 返回按钮 -->
-          <pageBack size="Small" icon="i-mdi-arrow-left" />
-          <!-- 聊天标题 -->
-          <text class="title">{{ chatTitle }}</text>
-        </view>
-
-        <view class="header__right">
-          <!-- TODO reuse PUButton -->
-          <!-- 刷新按钮 -->
-          <view class="icon-button" @click="onRefreshButtonClick">
-            <text class="i-mdi-refresh icon"></text>
-          </view>
-          <!-- 更多按钮 -->
-          <view class="icon-button" @click="onMoreButtonClick">
-            <text class="i-mdi-dots-vertical icon"></text>
-          </view>
-          <safeAreaInset position="wxmp-menu" />
-        </view>
-      </view>
-    </view>
+    <NavBar
+      :title="chatTitle"
+      @refresh="onRefreshButtonClick"
+      @more="onMoreButtonClick"
+    />
 
     <!-- 聊天内容区域 -->
     <!-- TODO fixed height -->

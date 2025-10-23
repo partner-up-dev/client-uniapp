@@ -163,20 +163,20 @@ const mockPartnerRequests = ref<PartnerRequest[]>([
 // Mock partners data
 const mockPartners = ref<AccountBaseProfile[]>([
   AccountBaseProfile.parse({
-    _id: "550e8400-e29b-41d4-a716-446655440000",
+    id: "550e8400-e29b-41d4-a716-446655440000",
     nickname: "小明",
     avatar: "/static/icon/avatar1.png",
     gender: "male",
   }),
   AccountBaseProfile.parse({
-    _id: "550e8400-e29b-41d4-a716-446655440001",
+    id: "550e8400-e29b-41d4-a716-446655440001",
     nickname: "小红",
     avatar: "/static/icon/avatar2.png",
     gender: "female",
     mbti: null,
   }),
   AccountBaseProfile.parse({
-    _id: "550e8400-e29b-41d4-a716-446655440002",
+    id: "550e8400-e29b-41d4-a716-446655440002",
     nickname: "小刚",
     avatar: "/static/icon/avatar3.png",
     gender: "male",

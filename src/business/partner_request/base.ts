@@ -2,7 +2,7 @@ import { Partner } from "./partner";
 import { APIClient } from "../api";
 import { useTranslate } from "@/locale/use";
 import { computed, ref, watch } from "vue";
-import { instance, V } from "../index";
+import { instance, V, nullable, limit_string } from "../index";
 import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".";
 import * as v from 'valibot';
 import { DatetimeV } from "../base";
@@ -14,11 +14,14 @@ export class PartnerRequest extends V.class(v.object({
   created_by: v.string(),
   type: v.enum(PRType),
   status: v.enum(PRStatus),
-  title: v.nullable(v.string()),
-  introduction: v.nullable(v.string()),
-  chat: v.nullable(v.number()),
+  title: nullable(limit_string(3, 12)),
+  introduction: nullable(limit_string(3, 60)),
+  chat: nullable(v.number()),
   contract: v.number(),
 })) {
+
+  static INTRODUCTION_MAXLENGTH = 60;
+  static TITLE_MAXLENGTH = 16;
 
   static api = new APIClient({
     modulePrefix: '/partner_request',
@@ -76,4 +79,12 @@ export class PartnerRequest extends V.class(v.object({
   get typeText() {
     return PartnerRequest.api.dt(`type.${this.type}`)
   }
+}
+
+
+export class PartnerRequestForm extends V.class(v.object({
+  title: nullable(limit_string(3, 12)),
+  introduction: nullable(limit_string(3, 60)),
+})) {
+
 }

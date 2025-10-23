@@ -1,0 +1,40 @@
+@use "@/styles/main.scss" as *;
+
+// remember to use design tokens
+// component styles here, see .github/instructions/style.instructions.md for details
+
+.title {
+  color: $uni-text-color;
+  font-size: $-sys-font-label-large-size;
+}
+
+.current-value {
+  color: $uni-text-color;
+  font-size: $-sys-font-body-large-size;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.picker-popup__content {
+  padding: 6px 0px 50px 0px;
+
+  .operation {
+    padding: 0px 8px;
+  }
+}
+
+.text-button {
+  font-size: $-sys-font-label-large-size;
+  padding: 4px 4px;
+}
+
+.text-button__sub {
+  @extend .text-button;
+  color: $uni-text-color-grey;
+}
+
+.text-button__primary {
+  @extend .text-button;
+  color: $-sys-color-secondary;
+}

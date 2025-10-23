@@ -1,6 +1,52 @@
 import explore from "./en-US/explore";
 
 export default {
+  common: {
+    /** @name Card component translations */
+    card: {
+      select: {
+        select: "Selected",
+        deselect: "Deselected"
+      }
+    },
+    /** @name Cell component translations */
+    cell: {
+      placeholder: {
+        empty: "This value is empty",
+        picker: "Click to select",
+        input: "Click to input"
+      }
+    },
+    /** @name Field component translations */
+    field: {
+      placeholder: {
+        empty: "This value is empty",
+        picker: "Click to select",
+        input: "Click to input"
+      }
+    },
+    loading: "Loading",
+    "load_more": {
+      "more": "Load more",
+      "loading": "Loading",
+      "no_more": "No more"
+    },
+    "picker": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "not_selected": "Not selected"
+    },
+    action_sheet: {
+      cancel: "Cancel"
+    },
+    editor: {
+      confirm: "Confirm",
+      cancel: "Cancel",
+      submit: "Submit",
+      create: "Create",
+      save: "Save"
+    }
+  },
   explore: {
     ...explore
   }

@@ -22,6 +22,8 @@ export class AccountBaseProfile extends V.class(v.object({
   mbti: nullable(v.string()),
 })) {
 
+  static NICKNAME_MAX_LENGTH = 12;
+
   static use(accountId?: string) {
 
     const loading = ref(false);
@@ -58,6 +60,14 @@ export class AccountBaseProfile extends V.class(v.object({
       endpoint: `/profile/base/${accountId}`,
       schema: AccountBaseProfile,
     }).then(({ body }) => body.parsed as AccountBaseProfile);
+  }
+
+  public put(): Promise<void> {
+    return Account.api.requestHTTP({
+      method: "PUT",
+      endpoint: `/profile/base/${this.id}`,
+      data: this
+    }).then(() => void 0);
   }
 
 }

@@ -174,5 +174,30 @@ export default {
     route_item_datetime: {
         no_bring_ahead: "不可提前",
         no_put_off: "不可推迟",
+    },
+    /**
+     * @name 路线节点地点编辑器组件的翻译
+     */
+    route_item_location_editor: {
+        field: {
+            friendly_address: {
+                title: "地点名称",
+                subtitle: "例如：学校、公司、家",
+                placeholder: "请输入地点名称"
+            },
+            address: {
+                title: "详细地址",
+                placeholder: "点击选择地址"
+            }
+        },
+        button: {
+            choose_location: "选择地点",
+            cancel: "取消",
+            confirm: "确认"
+        },
+        toast: {
+            save_success: "保存成功",
+            save_failed: "保存失败"
+        }
     }
 }

@@ -10,39 +10,40 @@ import { ref } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { kebabCase } from "@/utils";
 import { avatarProps, avatarEmits } from "./avatar";
+import { uploadObj, useChooseImage } from "@/business/oss";
 import PUImg from "@/components/common/PUImg/PUImg.vue";
 import Badge from "@/components/common/badge/badge.vue";
+import PUImgCropper from "@/components/common/PUImgCropper/PUImgCropper.vue";
 
 const props = defineProps(avatarProps);
 defineEmits(avatarEmits);
 
+const { chooseImageAndUpload } = useChooseImage();
 const showCropper = ref(false);
 const cropperImgSrc = ref("");
 const imgT = ref(0);
 
 function onCropperConfirm({ tempFilePath }: { tempFilePath: string }) {
-  if (props.upload) {
-    props
-      .upload(tempFilePath)
-      ?.then(() => {
-        imgT.value += 1;
-      })
-      .finally(() => {
-        showCropper.value = false;
-      });
+  const bucket = props.uploadBucket;
+  const key = props.uploadKey;
+
+  if (!bucket || !key) {
+    console.warn("Avatar: uploadBucket and uploadKey are required for editing");
+    return;
   }
+
+  uploadObj(bucket, key, tempFilePath)
+    .then(() => {
+      imgT.value += 1;
+    })
+    .finally(() => {
+      showCropper.value = false;
+    });
 }
 
 function onImgClick() {
   if (!props.editable) return;
-  uni.chooseImage({
-    count: 1,
-    success(res) {
-      const fp = res.tempFilePaths[0];
-      cropperImgSrc.value = fp;
-      showCropper.value = true;
-    },
-  });
+  chooseImageAndUpload(props.uploadBucket, props.uploadKey);
 }
 </script>
 
@@ -79,12 +80,5 @@ function onImgClick() {
       <view class="scrim" v-if="props.editable" />
     </Badge>
   </view>
-
-  <wd-img-cropper
-    v-if="props.editable"
-    v-model="showCropper"
-    :img-src="cropperImgSrc"
-    @confirm="onCropperConfirm"
-  />
 </template>
 <style lang="scss" scoped src="./avatar.scss"></style>

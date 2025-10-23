@@ -10,7 +10,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from "vue";
+import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import {
   puPickerProps,
@@ -29,14 +29,8 @@ const emit = defineEmits(puPickerEmits);
 
 // ==================== 状态管理 ====================
 
-/** 弹出层显示状态 */
-const popupShow = ref(false);
-
 /** 展示的文本值 */
 const showValue = ref("");
-
-/** 内部选中值 */
-const innerValue = ref<PickerValue>(props.modelValue);
 
 /** 格式化后的列数据 */
 const formattedColumns = ref<PickerColumnItem[][]>([]);
@@ -44,19 +38,7 @@ const formattedColumns = ref<PickerColumnItem[][]>([]);
 /** 选中项索引 */
 const selectedIndex = ref<number[]>([]);
 
-/** 内部加载状态 */
-const innerLoading = ref(false);
-
-/** 是否正在滚动 */
-const isPicking = ref(false);
-
-/** 用户是否已点击确认 */
-const hasConfirmed = ref(false);
-
 // ==================== 计算属性 ====================
-
-/** 是否显示加载状态 */
-const isLoading = computed(() => props.loading || innerLoading.value);
 
 /** 是否显示清空按钮 */
 const showClear = computed(
@@ -93,74 +75,61 @@ const rootClass = computed(() => {
   return classes.join(" ");
 });
 
+/** picker mode */
+const pickerMode = computed(() => {
+  return formattedColumns.value.length > 1 ? "multiSelector" : "selector";
+});
+
+/** picker range */
+const pickerRange = computed(() => {
+  if (pickerMode.value === "multiSelector") {
+    return formattedColumns.value.map((column) =>
+      column.map((item) => item[props.labelKey])
+    );
+  }
+  return formattedColumns.value[0]?.map((item) => item[props.labelKey]) || [];
+});
+
 // ==================== 方法 ====================
 
 /**
- * 打开选择器
+ * picker change 事件 - 确认选择
  */
-function open() {
-  if (props.disabled || props.readonly) return;
+function onPickerChange(event: any) {
+  const detail = event.detail;
+  let newIndex: number[];
 
-  emit("open");
-  popupShow.value = true;
-  innerValue.value = props.modelValue;
-  updateSelectedIndex(innerValue.value);
-}
-
-/**
- * 关闭选择器
- */
-function close() {
-  popupShow.value = false;
-}
-
-/**
- * 取消选择
- */
-function onCancel() {
-  popupShow.value = false;
-  emit("cancel");
-}
-
-/**
- * 确认选择
- */
-function onConfirm() {
-  if (isLoading.value) return;
-
-  // 如果正在滚动，等待滚动结束
-  if (isPicking.value) {
-    hasConfirmed.value = true;
-    return;
-  }
-
-  const { beforeConfirm } = props;
-  if (beforeConfirm && typeof beforeConfirm === "function") {
-    beforeConfirm(innerValue.value, (isPass: boolean) => {
-      if (isPass) handleConfirm();
-    });
+  if (pickerMode.value === "multiSelector") {
+    newIndex = detail.value;
   } else {
-    handleConfirm();
-  }
-}
-
-/**
- * 处理确认逻辑
- */
-function handleConfirm() {
-  if (isLoading.value || props.disabled) {
-    popupShow.value = false;
-    return;
+    newIndex = [detail.value];
   }
 
-  const items = getSelectedItems(selectedIndex.value, formattedColumns.value);
+  selectedIndex.value = newIndex;
+
   const values = getSelectedValues(
     selectedIndex.value,
     formattedColumns.value,
     props.valueKey
   );
 
-  popupShow.value = false;
+  const { beforeConfirm } = props;
+  if (beforeConfirm && typeof beforeConfirm === "function") {
+    beforeConfirm(values, (isPass: boolean) => {
+      if (isPass) handleConfirm(values);
+    });
+  } else {
+    handleConfirm(values);
+  }
+}
+
+/**
+ * 处理确认逻辑
+ */
+function handleConfirm(values: PickerValue) {
+  if (props.disabled) return;
+
+  const items = getSelectedItems(selectedIndex.value, formattedColumns.value);
 
   emit("update:modelValue", values);
   updateShowValue(items);
@@ -168,39 +137,20 @@ function handleConfirm() {
     value: values,
     selectedItems: items.length === 1 ? items[0] : items,
   });
-}
-
-/**
- * 清空选择
- */
-function handleClear() {
-  const clearValue: PickerValue = Array.isArray(innerValue.value) ? [] : "";
-  emit("update:modelValue", clearValue);
-  emit("clear");
-  showValue.value = "";
-}
-
-/**
- * 列变化事件
- */
-function onPickerChange(event: { detail: { value: number[] } }) {
-  selectedIndex.value = event.detail.value;
-
-  const values = getSelectedValues(
-    selectedIndex.value,
-    formattedColumns.value,
-    props.valueKey
-  );
-  innerValue.value = values;
-
   emit("change", { value: values });
+}
 
-  // 触发列变更回调
+/**
+ * 列变化事件（多列选择器）
+ */
+function onPickerColumnChange(event: any) {
+  const columnIndex = event.detail.column;
+  const value = event.detail.value;
+
+  selectedIndex.value[columnIndex] = value;
+
   if (props.columnChange && typeof props.columnChange === "function") {
     const items = getSelectedItems(selectedIndex.value, formattedColumns.value);
-    // 简化版本：假设最后变化的列是最后一个
-    const columnIndex = selectedIndex.value.length - 1;
-
     props.columnChange({
       selectedIndex: selectedIndex.value,
       selectedItems: items,
@@ -217,22 +167,20 @@ function onPickerChange(event: { detail: { value: number[] } }) {
 }
 
 /**
- * 开始滚动
+ * 清空选择
  */
-function onPickStart() {
-  isPicking.value = true;
+function handleClear() {
+  const clearValue: PickerValue = Array.isArray(props.modelValue) ? [] : "";
+  emit("update:modelValue", clearValue);
+  emit("clear");
+  showValue.value = "";
 }
 
 /**
- * 滚动结束
+ * picker cancel 事件
  */
-function onPickEnd() {
-  isPicking.value = false;
-
-  if (hasConfirmed.value) {
-    hasConfirmed.value = false;
-    onConfirm();
-  }
+function onPickerCancel() {
+  emit("cancel");
 }
 
 /**
@@ -281,19 +229,11 @@ function handleValueUpdate(value: PickerValue) {
   }
 }
 
-/**
- * 设置加载状态
- */
-function setLoading(loading: boolean) {
-  innerLoading.value = loading;
-}
-
 // ==================== 监听器 ====================
 
 watch(
   () => props.modelValue,
   (newValue) => {
-    innerValue.value = newValue;
     handleValueUpdate(newValue);
   },
   { deep: true, immediate: true }
@@ -309,7 +249,6 @@ watch(
     );
 
     if (newValue.length === 0) {
-      innerValue.value = Array.isArray(props.modelValue) ? [] : "";
       showValue.value = "";
     } else {
       handleValueUpdate(props.modelValue);
@@ -321,118 +260,64 @@ watch(
 // ==================== 暴露方法 ====================
 
 defineExpose({
-  open,
-  close,
-  setLoading,
+  // Native picker doesn't need manual open/close
 });
 </script>
 
 <template>
   <view :class="rootClass" :style="customStyle">
-    <!-- 默认触发器：使用 Cell 样式 -->
-    <view v-if="!$slots.default" :class="cellClass" @click="open">
-      <view class="pu-picker__cell-content">
-        <view v-if="label" class="pu-picker__label" :class="customLabelClass">
-          <text
-            v-if="required && markerSide === 'before'"
-            class="pu-picker__required"
-            >*</text
-          >
-          {{ label }}
-          <text
-            v-if="required && markerSide === 'after'"
-            class="pu-picker__required"
-            >*</text
-          >
-        </view>
-        <view
-          class="pu-picker__value"
-          :class="[customValueClass, alignRight ? 'is-align-right' : '']"
-        >
-          {{ showValue || placeholder }}
-        </view>
-        <view v-if="showArrow" class="pu-picker__arrow">
-          <text class="i-mdi-chevron-right icon"></text>
-        </view>
-        <view
-          v-else-if="showClear"
-          class="pu-picker__clear"
-          @click.stop="handleClear"
-        >
-          <text class="i-mdi-close-circle icon"></text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 自定义触发器 -->
-    <view v-else @click="open">
-      <slot></slot>
-    </view>
-
-    <!-- 弹出层 -->
-    <view v-if="popupShow" class="pu-picker__popup" :style="{ zIndex }">
-      <view class="pu-picker__mask" @click="closeOnClickModal && onCancel"></view>
-      <view
-        class="pu-picker__container"
-        :style="{
-          paddingBottom: safeAreaInsetBottom
-            ? 'env(safe-area-inset-bottom)'
-            : '0',
-        }"
-      >
-        <!-- 工具栏 -->
-        <view class="pu-picker__toolbar" @touchmove.stop.prevent>
-          <view
-            class="pu-picker__action pu-picker__action--cancel"
-            @click="onCancel"
-          >
-            {{ cancelButtonText }}
-          </view>
-          <view v-if="title" class="pu-picker__title">{{ title }}</view>
-          <view
-            :class="['pu-picker__action', { 'is-loading': isLoading }]"
-            @click="onConfirm"
-          >
-            {{ confirmButtonText }}
-          </view>
-        </view>
-
-        <!-- 选择器视图 -->
-        <picker-view
-          v-if="formattedColumns.length > 0"
-          class="pu-picker__view"
-          :value="selectedIndex"
-          :indicator-style="`height: 44px;`"
-          :style="{ height: columnsHeight + 'px' }"
-          @change="onPickerChange"
-          @pickstart="onPickStart"
-          @pickend="onPickEnd"
-          :immediate-change="immediateChange"
-        >
-          <picker-view-column
-            v-for="(column, colIndex) in formattedColumns"
-            :key="colIndex"
-          >
-            <view
-              v-for="(item, itemIndex) in column"
-              :key="itemIndex"
-              class="pu-picker__item"
-              :class="{ 'is-disabled': item.disabled }"
+    <!-- 使用原生 picker 组件 -->
+    <picker
+      :mode="pickerMode"
+      :range="pickerRange"
+      :value="
+        pickerMode === 'multiSelector' ? selectedIndex : selectedIndex[0] || 0
+      "
+      :disabled="disabled || readonly"
+      @change="onPickerChange"
+      @cancel="onPickerCancel"
+      @columnchange="onPickerColumnChange"
+    >
+      <!-- 默认触发器：使用 Cell 样式 -->
+      <view v-if="!$slots.default" :class="cellClass">
+        <view class="pu-picker__cell-content">
+          <view v-if="label" class="pu-picker__label" :class="customLabelClass">
+            <text
+              v-if="required && markerSide === 'before'"
+              class="pu-picker__required"
+              >*</text
             >
-              {{ item[labelKey] }}
-            </view>
-          </picker-view-column>
-        </picker-view>
-
-        <!-- 加载状态 -->
-        <view v-if="isLoading" class="pu-picker__loading">
+            {{ label }}
+            <text
+              v-if="required && markerSide === 'after'"
+              class="pu-picker__required"
+              >*</text
+            >
+          </view>
           <view
-            class="pu-picker__loading-icon"
-            :style="{ borderTopColor: loadingColor }"
-          ></view>
+            class="pu-picker__value"
+            :class="[customValueClass, alignRight ? 'is-align-right' : '']"
+          >
+            {{ showValue || placeholder }}
+          </view>
+          <view v-if="showArrow" class="pu-picker__arrow">
+            <text class="i-mdi-chevron-right icon"></text>
+          </view>
+          <view
+            v-else-if="showClear"
+            class="pu-picker__clear"
+            @click.stop="handleClear"
+          >
+            <text class="i-mdi-close-circle icon"></text>
+          </view>
         </view>
       </view>
-    </view>
+
+      <!-- 自定义触发器 -->
+      <view v-else>
+        <slot></slot>
+      </view>
+    </picker>
   </view>
 </template>
 

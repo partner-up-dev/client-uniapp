@@ -1,13 +1,13 @@
 # PUPicker 选择器组件
 
-选择器组件，支持单列和多列选择，可用于日期、城市、年龄等场景的选择。
+选择器组件，基于 uni-app 原生 picker 组件封装，支持单列和多列选择，可用于日期、城市、年龄等场景的选择。
 
 ## 功能特性
 
+- 基于 uni-app 原生 picker 组件
 - 支持单列和多列选择
 - 支持自定义展示格式
 - 支持级联选择（通过 columnChange 回调）
-- 支持加载状态
 - 支持清空功能
 - 支持禁用和只读状态
 - 支持自定义触发器
@@ -170,6 +170,25 @@ const handleColumnChange: PickerColumnChange = ({ selectedItems, columnIndex, re
 </script>
 ```
 
+```vue
+<template>
+  <PUPicker
+    v-model="value"
+    label="选择数量"
+    :columns="quantities"
+    :before-confirm="handleBeforeConfirm"
+    placeholder="请选择数量"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import PUPicker from "@/components/common/PUPicker/PUPicker.vue";
+import type { PickerBeforeConfirm } from "@/components/common/PUPicker/PUPicker";
+
+const value = ref("");
+const quantities = Array.from({ length: 10 }, (_, i) => i + 1);
+
 ### 确认前校验
 
 ```vue
@@ -237,58 +256,6 @@ const items = ["选项1", "选项2", "选项3"];
 </style>
 ```
 
-### 加载状态
-
-```vue
-<template>
-  <PUPicker
-    ref="pickerRef"
-    v-model="value"
-    label="选择城市"
-    :columns="cities"
-    :column-change="handleColumnChange"
-    placeholder="请选择城市"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import PUPicker from "@/components/common/PUPicker/PUPicker.vue";
-import type { PickerColumnChange } from "@/components/common/PUPicker/PUPicker";
-
-const pickerRef = ref();
-const value = ref([]);
-const cities = ref([
-  [{ value: "1", label: "北京" }],
-  [],
-]);
-
-const handleColumnChange: PickerColumnChange = async ({ selectedItems, resolve }) => {
-  pickerRef.value?.setLoading(true);
-
-  try {
-    // 模拟异步加载数据
-    const districts = await fetchDistricts(selectedItems[0].value);
-    resolve([cities.value[0], districts]);
-  } finally {
-    pickerRef.value?.setLoading(false);
-  }
-};
-
-async function fetchDistricts(cityId: string) {
-  // 模拟 API 调用
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { value: "101", label: "朝阳区" },
-        { value: "102", label: "海淀区" },
-      ]);
-    }, 1000);
-  });
-}
-</script>
-```
-
 ## Props
 
 | 参数 | 说明 | 类型 | 默认值 |
@@ -307,19 +274,9 @@ async function fetchDistricts(cityId: string) {
 | size | 尺寸 | `"small" \| "medium" \| "large"` | `"medium"` |
 | labelWidth | 左侧标题宽度 | `string` | `"33%"` |
 | alignRight | 是否右对齐 | `boolean` | `false` |
-| title | 弹出层标题 | `string` | `""` |
-| cancelButtonText | 取消按钮文案 | `string` | `"取消"` |
-| confirmButtonText | 确认按钮文案 | `string` | `"确认"` |
-| loading | 是否加载中 | `boolean` | `false` |
-| loadingColor | 加载颜色 | `string` | `"#4D80F0"` |
-| closeOnClickModal | 点击遮罩层是否关闭 | `boolean` | `true` |
-| safeAreaInsetBottom | 是否留出底部安全区域 | `boolean` | `true` |
-| columnsHeight | 选项总高度（px） | `number` | `217` |
 | beforeConfirm | 确定前校验函数 | `PickerBeforeConfirm` | - |
 | displayFormat | 自定义展示文案的格式化函数 | `PickerDisplayFormat` | - |
-| columnChange | 列变更回调 | `PickerColumnChange` | - |
-| immediateChange | 是否在手指松开时立即触发 change 事件 | `boolean` | `false` |
-| zIndex | 自定义层级 | `number` | `15` |
+| columnChange | 列变更回调（仅多列选择器） | `PickerColumnChange` | - |
 | customClass | 自定义根节点样式类 | `string` | `""` |
 | customStyle | 自定义根节点样式 | `string` | `""` |
 | customLabelClass | 自定义 label 样式类 | `string` | `""` |
@@ -332,7 +289,6 @@ async function fetchDistricts(cityId: string) {
 | --- | --- | --- |
 | update:modelValue | 选中值变化时触发 | `value: PickerValue` |
 | confirm | 点击确认按钮时触发 | `event: PickerConfirmEvent` |
-| open | 打开选择器时触发 | - |
 | cancel | 点击取消按钮时触发 | - |
 | clear | 点击清空按钮时触发 | - |
 | change | 选中项变化时触发 | `event: { value: PickerValue }` |
@@ -342,14 +298,6 @@ async function fetchDistricts(cityId: string) {
 | 名称 | 说明 |
 | --- | --- |
 | default | 自定义触发器内容 |
-
-## 暴露方法
-
-| 方法名 | 说明 | 参数 |
-| --- | --- | --- |
-| open | 打开选择器 | - |
-| close | 关闭选择器 | - |
-| setLoading | 设置加载状态 | `loading: boolean` |
 
 ## 类型定义
 
@@ -401,9 +349,9 @@ interface PickerConfirmEvent {
 
 ## 注意事项
 
-1. **数据格式**：`columns` 支持字符串/数字数组或对象数组，如果为二维数组则为多列选择器
-2. **值绑定**：单列选择器的 `modelValue` 为 `string | number`，多列为数组
-3. **级联选择**：使用 `columnChange` 回调实现级联选择，需在回调中调用 `resolve` 更新列数据
-4. **加载状态**：异步加载数据时，使用 `setLoading` 方法显示加载状态
+1. **原生组件**：本组件基于 uni-app 原生 `picker` 组件，弹出层样式和行为由系统控制
+2. **数据格式**：`columns` 支持字符串/数字数组或对象数组，如果为二维数组则为多列选择器
+3. **值绑定**：单列选择器的 `modelValue` 为 `string | number`，多列为数组
+4. **级联选择**：使用 `columnChange` 回调实现级联选择，需在回调中调用 `resolve` 更新列数据
 5. **自定义展示**：使用 `displayFormat` 自定义选中值的展示格式
 6. **确认校验**：使用 `beforeConfirm` 在确认前进行校验，调用 `resolve(false)` 可阻止确认
