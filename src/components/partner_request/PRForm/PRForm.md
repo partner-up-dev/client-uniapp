@@ -41,7 +41,7 @@
 
 ### Methods
 
-无公开方法。
+- `validate(): Promise<void>`: 验证表单数据，确保标题或简介符合长度要求
 
 ### Watches
 
