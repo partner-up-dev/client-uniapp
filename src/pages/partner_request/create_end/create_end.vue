@@ -7,7 +7,7 @@ import { useTranslate } from "@/locale/use";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import {
   usePartnerRequest,
-  // usePartnerRequestStore,
+  usePartnerRequestStore,
 } from "@/store/partner_request";
 import { errorReport, getSafeArea } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
@@ -22,6 +22,8 @@ import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
+import PUNoticeBar from "@/components/common/PUNoticeBar/PUNoticeBar.vue";
+import PUButton from "@/components/common/PUButton/PUButton.vue";
 
 const { dt: domain_t } = useTranslate("partner_request.create_end");
 const { partner_request_id, isWaitingForPartners } = usePartnerRequest();
@@ -325,11 +327,11 @@ onShow(() => {
 
   <NavBar ref="navBarRef" mode="small" :title="domain_t(`title.${props.type}`)" />
 
-  <wd-notice-bar
+  <PUNoticeBar
     class="publishing-notice"
     v-if="publishing"
     :text="publishing_notice"
-    prefix="tips"
+    prefix="lightbulb"
     background-color="#f6d77d"
     color="#372a04"
     direction="vertical"
@@ -358,9 +360,13 @@ onShow(() => {
         <view class="description">{{
           domain_t("after_publish.share.description")
         }}</view>
-        <wd-button class="operation" type="primary" icon="share" @click="onShare">
-          {{ domain_t("after_publish.share.operation") }}
-        </wd-button>
+        <PUButton
+          class="operation"
+          theme="Primary"
+          prefix-icon="i-mdi-share"
+          :text="domain_t('after_publish.share.operation')"
+          @click="onShare"
+        />
       </view>
       <view class="af-pub__stop af-pub__card">
         <view class="title">{{ domain_t("after_publish.stop.title") }}</view>
@@ -378,8 +384,7 @@ onShow(() => {
   >
     <PRForm
       ref="partnerRequestEditorRef"
-      :modelValue="form_data"
-      :type="props.type"
+      :base-form="form_data"
     />
   </view>
 
@@ -387,57 +392,48 @@ onShow(() => {
     <view class="operations">
       <!-- Not Published -->
 
-      <wd-button
+      <PUButton
         class="operations__save button"
         v-if="!isPublished"
-        type="info"
-        plain
-        icon="save"
+        theme="SurfaceOutlined"
+        prefix-icon="i-mdi-content-save"
+        :text="domain_t('operations.save')"
         :loading="publishing || saving"
-        loading-color="#1a1c16"
         @click="onSave"
-      >
-        {{ domain_t("operations.save") }}
-      </wd-button>
+      />
 
-      <wd-button
+      <PUButton
         class="operations__publish button"
         v-if="!isPublished"
-        type="primary"
-        icon="check"
+        theme="Primary"
+        prefix-icon="i-mdi-check"
+        :text="domain_t('operations.publish')"
         :loading="publishing || saving"
-        loading-color="#96d945"
         @click="onPublish"
-      >
-        {{ domain_t("operations.publish") }}
-      </wd-button>
+      />
 
       <!-- Published -->
 
-      <wd-button
+      <PUButton
         class="operations__view button"
         v-if="isPublished"
-        type="info"
-        plain
-        icon="view"
+        theme="SurfaceOutlined"
+        prefix-icon="i-mdi-eye"
+        :text="domain_t('operations.view')"
         @click="onView"
-      >
-        {{ domain_t("operations.view") }}
-      </wd-button>
+      />
 
-      <wd-button
+      <PUButton
         class="operations__discover button"
         v-if="isPublished"
-        type="success"
-        icon="discover"
-        classPrefix="partnerup-iconfont"
+        theme="Primary"
+        prefix-icon="i-mdi-compass"
+        :text="domain_t('operations.discover')"
         @click="onDiscover"
-      >
-        {{ domain_t("operations.discover") }}
-      </wd-button>
+      />
     </view>
 
-    <SafeAreaBottomInset />
+    <SafeAreaInset position="bottom" />
   </view>
 </template>
 
