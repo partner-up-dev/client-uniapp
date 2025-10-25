@@ -4,7 +4,7 @@ import { onLoad, onShow } from "@dcloudio/uni-app";
 import * as v from "valibot";
 import NavBar from "@/components/common/navBar/navBar.vue";
 import { useTranslate } from "@/locale/use";
-import PartnerRequestEditor from "../../components/partnerRequestEditor/partnerRequestEditor.vue";
+import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import {
   usePartnerRequest,
   // usePartnerRequestStore,
@@ -56,9 +56,7 @@ const props = ref<v.InferOutput<typeof propsSchema>>({
   immersive: false,
 });
 const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
-const partnerRequestEditorRef = ref<InstanceType<
-  typeof PartnerRequestEditor
-> | null>(null);
+const partnerRequestEditorRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
 const form_data = ref<PartnerRequestEditableContentUnion<PRType>>(
@@ -323,7 +321,7 @@ onShow(() => {
 </script>
 
 <template>
-  <view class="bg"></view>
+  <view class="page-bg"></view>
 
   <NavBar ref="navBarRef" mode="small" :title="domain_t(`title.${props.type}`)" />
 
@@ -378,7 +376,7 @@ onShow(() => {
     :style="{ height: `${editorHeight}px` }"
     v-if="!isPublished"
   >
-    <PartnerRequestEditor
+    <PRForm
       ref="partnerRequestEditorRef"
       :modelValue="form_data"
       :type="props.type"

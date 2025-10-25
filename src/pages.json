@@ -37,6 +37,12 @@
       }
     },
     {
+      "path": "pages/partner_request/create_end/create_end",
+      "style": {
+        "navigationBarTitleText": "创建搭子请求 - 收尾"
+      }
+    },
+    {
       "path": "pages/partner_request/create_trip/create_trip",
       "style": {
         "navigationBarTitleText": "创建出行搭子请求"
