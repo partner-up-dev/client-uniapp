@@ -82,14 +82,7 @@ function onPublish(retry: number = 0) {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        // TODO: Implement edit API
-        PartnerRequest.api
-          .requestHTTP({
-            method: "PUT",
-            endpoint: `/${props.value.id}`,
-            data: form_data.value,
-            operation_id: "PartnerRequestV2Edit",
-          })
+        PartnerRequest.update(props.value.id, form_data.value)
           .then(() => {
             uni.requestSubscribeMessage({
               tmplIds: [
@@ -99,13 +92,7 @@ function onPublish(retry: number = 0) {
               complete() {
                 if (props.value.id) {
                   publishing.value = true;
-                  // TODO: Implement publish API
-                  PartnerRequest.api
-                    .requestHTTP({
-                      method: "POST",
-                      endpoint: `/${props.value.id}/publish`,
-                      operation_id: "PartnerRequestV2Publish",
-                    })
+                  PartnerRequest.publish(props.value.id)
                     .finally(() => {
                       publishing.value = false;
                     });
@@ -142,16 +129,8 @@ function create(): Promise<void> {
       errorReport(domain_t("save.invalid_form_type"));
       reject();
     } else {
-      // TODO: Implement create API
-      PartnerRequest.api
-        .requestHTTP({
-          method: "POST",
-          endpoint: "/",
-          data: { ...form_data.value, type: props.value.type },
-          operation_id: "PartnerRequestV2Create",
-        })
-        .then(({ body }) => {
-          const pr = body.parsed;
+      PartnerRequest.create(form_data.value, props.value.type)
+        .then((pr) => {
           props.value.id = pr._id;
           resolve();
         })
@@ -177,13 +156,7 @@ function onSave() {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        PartnerRequest.api
-          .requestHTTP({
-            method: "PUT",
-            endpoint: `/${props.value.id}`,
-            data: form_data.value,
-            operation_id: "PartnerRequestV2Edit",
-          })
+        PartnerRequest.update(props.value.id, form_data.value)
           .finally(() => {
             saving.value = false;
           });
