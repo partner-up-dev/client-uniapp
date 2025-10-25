@@ -53,15 +53,31 @@ const handleIntroductionInput = (value: string) => {
 // validation
 const validate = (): Promise<void> => {
   return new Promise((resolve, reject) => {
-    // Basic validation: check if title and introduction meet minimum requirements
-    if (form.title && form.title.length >= 3 && form.title.length <= maxlength.title) {
-      resolve();
-    } else if (form.introduction && form.introduction.length >= 3 && form.introduction.length <= maxlength.introduction) {
-      resolve();
-    } else if (!form.title && !form.introduction) {
-      reject(new Error("请填写标题或简介"));
+    const errors: string[] = [];
+    
+    // Validate title if provided
+    if (form.title !== null && form.title !== "") {
+      if (form.title.length < 3 || form.title.length > 12) {
+        errors.push("标题长度必须在 3-12 个字符之间");
+      }
+    }
+    
+    // Validate introduction if provided
+    if (form.introduction !== null && form.introduction !== "") {
+      if (form.introduction.length < 3 || form.introduction.length > maxlength.introduction) {
+        errors.push("简介长度必须在 3-60 个字符之间");
+      }
+    }
+    
+    // At least one field must be provided
+    if ((form.title === null || form.title === "") && (form.introduction === null || form.introduction === "")) {
+      errors.push("请填写标题或简介");
+    }
+    
+    if (errors.length > 0) {
+      reject(new Error(errors.join("; ")));
     } else {
-      reject(new Error("标题或简介长度不符合要求"));
+      resolve();
     }
   });
 };

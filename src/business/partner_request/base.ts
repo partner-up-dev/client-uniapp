@@ -21,7 +21,7 @@ export class PartnerRequest extends V.class(v.object({
 })) {
 
   static INTRODUCTION_MAXLENGTH = 60;
-  static TITLE_MAXLENGTH = 16;
+  static TITLE_MAXLENGTH = 12;
 
   static api = new APIClient({
     modulePrefix: '/partner_request',
