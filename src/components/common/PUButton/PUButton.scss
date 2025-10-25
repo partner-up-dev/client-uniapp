@@ -160,6 +160,15 @@
   }
 }
 
+.tertiary {
+  background-color: $pu-color-tertiary;
+  color: $pu-color-tertiary-on;
+
+  .text {
+    color: $pu-color-tertiary-on;
+  }
+}
+
 .surface {
   background-color: $pu-color-surface-container;
   color: $pu-color-on-surface;

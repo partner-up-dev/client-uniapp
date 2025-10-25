@@ -1,19 +1,18 @@
 @use "@/styles/main.scss" as *;
 
-@include b(headline) {
+.headline {
   margin-left: $pu-spacing-med;
   margin-top: $pu-spacing-med;
 
-  @include e(fir) {
-    @include pu-font(headline-small);
+  &__fir {
+    @include pu-font(headline-large);
 
-    @include edeep(icon) {
+    .icon {
       display: inline;
-      font-size: $pu-font-headline-small-size;
     }
   }
 
-  @include e(sec) {
+  &__sec {
     margin-top: $pu-spacing-sm;
     color: $pu-color-secondary;
 
@@ -21,7 +20,7 @@
   }
 }
 
-@include b(cont) {
+.cont {
   margin-top: $pu-spacing-lg;
   margin-left: $pu-spacing-med;
   margin-right: $pu-spacing-med;
@@ -31,13 +30,13 @@
   gap: $pu-spacing-lg;
 }
 
-@include b(l1-type-picker) {
-  @include e(title) {
+.l1-type-picker {
+  &__title {
     text-align: right;
     @include pu-font(title-medium);
   }
 
-  @include e(picker) {
+  &__picker {
     margin-left: auto;
     margin-top: $pu-spacing-med;
 
@@ -47,13 +46,13 @@
   }
 }
 
-@include b(con-from-draft) {
-  @include e(title) {
+.con-from-draft {
+  &__title {
     text-align: right;
     @include pu-font(title-medium);
   }
 
-  @include edeep(picker) {
+  .picker {
     margin-top: $pu-spacing-med;
 
     height: 15vh;
@@ -62,11 +61,11 @@
   }
 }
 
-@include b(con-from-cache) {
+.con-from-cache {
   text-align: right;
   $-font-color: $pu-color-secondary;
 
-  @include e(title) {
+  &__title {
     color: $-font-color;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -74,7 +73,7 @@
     @include pu-font(title-medium);
   }
 
-  @include edeep(icon) {
+  .icon {
     color: $-font-color !important;
     font-size: $pu-font-title-medium-size;
   }

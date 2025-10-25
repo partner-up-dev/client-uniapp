@@ -1,0 +1,51 @@
+@use "@/styles/main.scss" as *;
+
+.pr-type-picker {
+  &__scroll {
+    height: 100%;
+    width: 100%;
+  }
+
+  // 横向卡片模式
+  &.horizontal-card {
+    height: 140px;
+
+    .pr-type-picker__scroll {
+      white-space: nowrap;
+    }
+
+    .pr-type-picker__item {
+      width: 240px;
+      height: 100%;
+      display: inline-flex;
+      margin-right: $pu-spacing-sm;
+      transition: transform 0.2s ease-in-out;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  // 纵向卡片模式
+  &.vertical-card {
+    height: 100%;
+
+    .pr-type-picker__item {
+      margin-bottom: $pu-spacing-lg;
+      transition: transform 0.2s ease-in-out;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

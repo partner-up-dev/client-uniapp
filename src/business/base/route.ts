@@ -10,6 +10,7 @@ import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
 import { APIClient } from "@/business/api";
 import dayjs from "dayjs";
+import { DatetimeV } from ".";
 
 const { dt } = useTranslate('base.route_map');
 
@@ -95,7 +96,7 @@ export class Location extends V.class(v.object({
 export class POI extends V.class(v.object({})) { }
 
 export class RouteItemDatetime extends V.class(v.object({
-  datetime: nullable(v.date()),
+  datetime: nullable(DatetimeV),
   time: nullable(v.string()),
   bring_ahead: nullable(v.number()),
   put_off: nullable(v.number()),
@@ -119,8 +120,8 @@ export class RouteItemDatetime extends V.class(v.object({
 }
 
 export class RouteItem extends V.class(v.object({
-  datetime: v.instance(RouteItemDatetime),
-  location: v.string(),
+  datetime: v.optional(v.instance(RouteItemDatetime), () => new RouteItemDatetime({})),
+  location: v.optional(v.string(), undefined),
 })) {
 
   static use(routeItem: RouteItem | { datetime: RouteItemDatetime; location: LocationRef }) {
@@ -224,22 +225,30 @@ export class RoutePlanning extends V.class(v.object({
   }
 }
 
-export class Route extends V.class(v.array(instance(RouteItem))) {
+export class Route extends V.class(v.object({
+  items: v.pipe(v.optional(
+    v.array(instance(RouteItem)), () => [new RouteItem({}), new RouteItem({})]
+  ), v.maxLength(4))
+})
+) {
 
+  get length(): number {
+    return this.items.length;
+  }
   get startItem(): RouteItem {
-    return this[0];
+    return this.items[0];
   }
 
   get waypoints(): RouteItem[] {
-    return this.slice(1, this.length - 1);
+    return this.items.slice(1, this.length - 1);
   }
 
   get endItem(): RouteItem {
-    return this[this.length - 1];
+    return this.items[this.length - 1];
   }
 
-  get length(): number {
-    return this.length;
+  public addWaypoint() {
+    this.items.splice(this.length - 1, 0, new RouteItem({}));
   }
 
   static use(route: Route) {
@@ -261,7 +270,7 @@ export class Route extends V.class(v.array(instance(RouteItem))) {
     })
 
     watch(_route, (newRoute) => {
-      _locations.value = newRoute.map((ri) => {
+      _locations.value = newRoute.items.map((ri) => {
         const normalizedItem: RouteItem = RouteItem.parse(ri as unknown);
         const { location } = RouteItem.use(normalizedItem);
         return location;

@@ -76,8 +76,68 @@ export class PartnerRequest extends V.class(v.object({
     }).then(res => res.body.parsed);
   }
 
+  static usePR(prId?: PRRef, partnerRequest?: PartnerRequest) {
+    const _pr = ref<PartnerRequest | undefined>(partnerRequest);
+    const _prId = ref<PRRef | undefined>(prId);
+    const loading = ref(false);
+
+    const pr = computed((): PartnerRequest | undefined => {
+      if (!_pr.value && _prId.value && !loading.value) {
+        loading.value = true;
+        this.get(_prId.value).then((pr) => {
+          _pr.value = pr;
+          loading.value = false;
+        });
+      }
+      return _pr.value;
+    })
+
+    const bindPR = (to_watch: any) => {
+      watch(to_watch, (newPr) => {
+        _pr.value = newPr;
+      })
+    }
+    const bindPRId = (to_watch: any) => {
+      watch(to_watch, (newId) => {
+        _prId.value = newId;
+      })
+    }
+
+    return {
+      pr, loading, bindPR, bindPRId
+    }
+  }
+
   get typeText() {
     return PartnerRequest.api.dt(`type.${this.type}`)
+  }
+
+  static useDraftPRs() {
+    const _draftPRs = ref<PRRef[]>([]);
+    const loading = ref(false);
+
+    const draftPRs = computed((): PRRef[] => {
+      if (_draftPRs.value.length === 0 && !loading.value) {
+        refresh();
+      }
+      return _draftPRs.value;
+    })
+
+    const refresh = () => {
+      loading.value = true;
+      return this.api.requestHTTP({
+        method: 'GET',
+        endpoint: '/list/draft',
+        schema: v.array(PRRefV),
+      }).then(({ body }) => {
+        _draftPRs.value = body.parsed;
+        loading.value = false;
+      })
+    }
+
+    return {
+      draftPRs, loading, refresh
+    }
   }
 }
 

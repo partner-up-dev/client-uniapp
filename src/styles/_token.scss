@@ -142,10 +142,6 @@ $pu-shadow-24: map-get(ref.$ref-shadows, 24);
 
 /* Provide some size variables for compatibility */
 $pu-font-title-medium-size: map-get(map-get(ref.$ref-fonts, "title-large"), size);
-$pu-font-headline-small-size: map-get(
-  map-get(ref.$ref-fonts, "label-large"),
-  size
-);
 
 @mixin pu-font-size($key) {
   $font: map-get(ref.$ref-fonts, $key);

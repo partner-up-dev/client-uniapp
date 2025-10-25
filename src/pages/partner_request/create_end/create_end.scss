@@ -2,7 +2,7 @@
 
 @use "@/styles/main.scss" as *;
 
-@include b(publishing-notice) {
+.publishing-notice {
   width: 98%;
   margin: 0 auto;
 }
@@ -20,7 +20,7 @@
   background: linear-gradient(to bottom, transparent, $pu-color-surface);
 }
 
-@include b(af-pub) {
+.af-pub {
   position: relative;
   overflow-y: auto;
   transition: height 1.5s ease;
@@ -28,7 +28,7 @@
   width: 87%;
   margin: $pu-spacing-med auto 0 auto;
 
-  @include e(head) {
+  &__head {
     border-radius: $pu-radius-sm;
     background-color: $pu-color-surface-container;
     padding: 60px $pu-spacing-lg;
@@ -37,16 +37,16 @@
     justify-content: center;
     align-items: center;
 
-    @include e(icon) {
+    &__icon {
       @include pu-font(headline-large);
     }
 
-    @include e(title) {
-      @include pu-font(headline-small);
+    &__title {
+      @include pu-font(headline-large);
     }
   }
 
-  @include e(body) {
+  &__body {
     overflow-y: auto;
 
     margin-top: $pu-spacing-med;
@@ -56,7 +56,7 @@
     gap: $pu-spacing-med;
   }
 
-  @include e(card) {
+  &__card {
     border-radius: $pu-radius-sm;
     padding: $pu-spacing-lg;
     background-color: $pu-color-surface-container;
@@ -78,26 +78,26 @@
     }
   }
 
-  @include e(next) {
+  &__next {
     width: 73%;
   }
 
-  @include e(share) {
+  &__share {
     width: 70%;
     margin-left: auto;
   }
 
-  @include e(stop) {
+  &__stop {
     width: 73%;
   }
 }
 
-@include b(editor-cont) {
+.editor-cont {
   overflow-y: auto;
   transition: height 1.5s ease;
 }
 
-@include b(footer) {
+.footer {
   position: absolute;
   bottom: 0px;
   right: 0px;
@@ -107,7 +107,7 @@
   color: $pu-color-on-surface;
 }
 
-@include b(operations) {
+.operations {
   padding: $pu-spacing-med;
 
   display: flex;

@@ -1,5 +1,3 @@
-// Styles of CreateTripPartnerRequestPage
-
 @use "@/styles/main.scss" as *;
 
 .dep-datetime-editor {
@@ -9,27 +7,32 @@
 .title {
   margin-bottom: $pu-spacing-lg;
 
-  @include pu-font(headline-small);
+  @include pu-font(headline-large);
 }
 
-@include b(tp) {
-  @include e(title) {
+.tp {
+  &__title {
     @extend .title;
   }
 
-  @include e(picker) {
+  &__picker {
     height: 110px;
     width: 100%;
   }
 }
 
-@include b(trpn) {
-  @include e(title) {
+.trpn {
+  &__title {
     @extend .title;
   }
 
-  @include e(picker) {
+  &__picker {
     height: 110px;
     width: 100%;
   }
 }
+
+// .dep-datetime-editor {
+//   height: 100%;
+//   overflow-y: scroll;
+// }

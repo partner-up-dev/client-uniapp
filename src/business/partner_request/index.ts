@@ -65,6 +65,20 @@ export const PRType2L1Type: Record<PRType, PRL1Type> = {
     [PRType.Travel]: PRL1Type.Travel,
 }
 
+/**
+ * 搭子请求一级与二级类型对应关系
+ */
+export const PRL1Type2PRType: Record<PRL1Type, PRType[]> = {
+    [PRL1Type.Undefined]: [],
+    [PRL1Type.Trip]: [
+        PRType.RideHailing,
+        PRType.Commute,
+        PRType.Hitchhiking,
+        PRType.Moped,
+    ],
+    [PRL1Type.Travel]: [PRType.Travel],
+}
+
 export type PRRef = number;
 export const PRRefProp = Object as PropType<PRRef>
 export const PRRefV = v.number();

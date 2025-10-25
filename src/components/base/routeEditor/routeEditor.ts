@@ -1,6 +1,6 @@
 import type { PropType } from "vue";
 import { makeStringProp, makeBooleanProp, makeNumberProp } from "@/utils/props";
-import type { Route, RouteItem } from "@/business/base/route";
+import { Route } from "@/business/base/route";
 
 // ==================== 组件相关类型定义 ====================
 
@@ -32,6 +32,7 @@ export const routeEditorProps = {
   modelValue: {
     type: Object as PropType<Route>,
     required: true,
+    default: () => new Route({ items: [] }),
   },
   /**
    * 编辑器类型
@@ -97,24 +98,6 @@ export function isRouteItemRemovable(index: number, total: number): boolean {
   if (index === 0 || index === total - 1) return false;
   // 至少保留起点和终点
   return total > 2;
-}
-
-/**
- * 创建默认路线项
- */
-export function createDefaultRouteItem(): RouteItem {
-  const RouteItem = require("@/business/base/route").RouteItem;
-  const RouteItemDatetime = require("@/business/base/route").RouteItemDatetime;
-
-  return RouteItem.parse({
-    datetime: RouteItemDatetime.parse({
-      datetime: null,
-      time: null,
-      bring_ahead: null,
-      put_off: null,
-    }),
-    location: "",
-  });
 }
 
 /**

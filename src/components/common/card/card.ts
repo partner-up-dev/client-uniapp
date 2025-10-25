@@ -14,6 +14,7 @@ export const cardProps = {
 // ==================== 组件 Emits 定义 ====================
 export const cardEmits = {
   "update:expand": (value: boolean) => true,
+  "click": () => true,
 };
 
 // ==================== 组件工具函数 ====================

@@ -1,5 +1,5 @@
 import type { PropType } from "vue";
-import { PRType, PRStatus } from "@/business/partner_request";
+import { PRType, PRStatus, type PRRef } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";
 import { type AccountRef } from "@/business/account";
 import { useTranslate } from "@/locale/use";
@@ -8,14 +8,19 @@ const { dt } = useTranslate('partner_request');
 
 // ==================== 组件 Props 定义 ====================
 export const prCardProps = {
-  /** 搭子请求数据 */
+  /** 搭子请求数据（与 prId 二选一）*/
   partnerRequest: {
     type: Object as PropType<PartnerRequest>,
-    required: true,
+    required: false,
+  },
+  /** 搭子请求 ID（与 partnerRequest 二选一）*/
+  prId: {
+    type: Number as PropType<PRRef>,
+    required: false,
   },
   /** 卡片类型 */
   type: {
-    type: String as PropType<"Explore" | "Join">,
+    type: String as PropType<"Explore" | "Join" | "Draft">,
     default: "Explore",
   }
 };

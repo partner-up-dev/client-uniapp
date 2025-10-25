@@ -16,7 +16,9 @@
 - [ ] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
 - [ ] 抽离出 Section 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
-- [ ] V.class 支持 extend
+- [x] V.class 支持 extend
+- [ ] PUImmersiveForm (prop:`operations`)
+- [ ] Checkbox (复用 PUScrollView) (multi?)
 
 ## Me Page
 

@@ -1,35 +1,26 @@
 <script lang="ts">
-/**
- * @name 创建出行搭子请求页面
- * @doc https://git.hadream.ltd/anana/application/uniapp/-/wikis/PartnerRequest/Pages/Create/Trip
- */
-import { BasicComponentOptions } from "@/utils/vue";
 export default {
   name: "CreateTripPartnerRequest",
-  options: BasicComponentOptions,
 };
 </script>
 <script setup lang="ts">
 import { PRL1Type, PRType } from "@/business/partner_request";
-import PartnerRequestImmersiveCreate from "../../components/partnerRequestImmersiveCreate/partnerRequestImmersiveCreate.vue";
-import { nextTick, ref } from "vue";
-import ImmersiveRouteEditor from "@/components/base/immersiveRouteEditor/immersiveRouteEditor.vue";
+import { nextTick, ref, watch } from "vue";
+import PRImmersiveForm from "@/components/partner_request/PRImmersiveForm/PRImmersiveForm.vue";
+import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
+import RouteItemDatetimeEditor from "@/components/base/routeItemDatetimeEditor/routeItemDatetimeEditor.vue";
 import {
-  type Route,
-  Transportation,
-  TripPurpose,
-} from "@/types/partner_request/trip";
-import { route_default } from "@/types/partner_request/trip/edit";
+  TripPreference,
+  type Transportation,
+} from "@/business/partner_request/trip";
+import { Route, RouteItem } from "@/business/base/route";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { EVENT } from "@/data/enum";
-import RouteItemDatetimeEditor from "@/components/partner_request/trip/edit/routeItemDatetimeEditor.vue";
 import { useTranslate } from "@/locale/use";
-import TripPurposePicker from "@/components/base/tripPurposePicker/tripPurposePicker.vue";
-import {
-  ride_hailing_preference_default,
-  type RideHailingPreference,
-} from "@/types/partner_request/ride_hailing";
-import TransportationPicker from "@/components/base/transportationPicker/transportationPicker.vue";
+import TripPurposePicker from "@/components/partner_request/trip/tripPurposePicker/tripPurposePicker.vue";
+import { RideHailingPreference } from "@/business/partner_request/ride_hailing";
+import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
+import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 import * as v from "valibot";
 
 const { dt: domain_t } = useTranslate("partner_request.create_trip");
@@ -46,24 +37,19 @@ type ImmersiveCreateStep = "route" | "tripPurpose" | "transportation";
 
 // data
 const l2_type = ref<PRType | undefined>(undefined);
-/**
- * @name （出行）搭子请求表单
- * @todo
- * - 内容没有被正确地传递到创建收尾页面
- * - 通勤目的则删除路线中的出发时间信�?
- */
+
 const form = ref<{
   route: Route;
+  trip_preference: TripPreference;
   ride_hailing_preference: RideHailingPreference;
   transportation: Transportation;
 }>({
-  route: route_default(true),
-  ride_hailing_preference: ride_hailing_preference_default(),
-  transportation: Transportation.RideHailing,
+  route: new Route({ items: [new RouteItem({}), new RouteItem({})] }),
+  trip_preference: new TripPreference({}),
+  ride_hailing_preference: new RideHailingPreference({}),
+  transportation: "ride_hailing",
 });
-const immersiveCreateRef = ref<null | InstanceType<
-  typeof PartnerRequestImmersiveCreate
->>(null);
+const immersiveCreateRef = ref<null | InstanceType<typeof PRImmersiveForm>>(null);
 
 // data for route
 const depDatetimeEditorRef = ref<null | InstanceType<
@@ -89,30 +75,20 @@ function onImmersiveCreateNext(
     }
   }
 }
-/**
- * @name 处理“出行目的”完�?
- * @description
- * 选择了“通勤”，则为通勤搭子，其它为网约车搭�?
- */
 function onTripPurposeComplete(go_next: boolean = true) {
-  const purpose = form.value.ride_hailing_preference.purpose;
-  if (purpose === TripPurpose.Commute) {
+  const purpose = form.value.trip_preference.purpose;
+  if (purpose === "commute") {
     l2_type.value = PRType.Commute;
   } else {
     l2_type.value = PRType.RideHailing;
   }
 
   if (go_next) {
-    nextTick(() => {
+    setTimeout(() => {
       immersiveCreateRef.value?.nextStep();
-    });
+    }, 500);
   }
 }
-/**
- * @name 处理“出行方式”完�?
- * @description
- * 如果并未判定为通勤搭子：电�?-> 电驴搭子；私家车 -> 便车搭子
- */
 function onTransportationComplete(go_next: boolean = true) {
   if (l2_type.value !== PRType.Commute) {
     const transportation = form.value.transportation;
@@ -126,9 +102,9 @@ function onTransportationComplete(go_next: boolean = true) {
   }
 
   if (go_next) {
-    nextTick(() => {
+    setTimeout(() => {
       immersiveCreateRef.value?.nextStep();
-    });
+    }, 500);
   }
 }
 
@@ -141,10 +117,20 @@ onLoad((query?: { l1_type?: string }) => {
 onShow(() => {
   uni.$emit(EVENT.ROUTE_EDITOR_PAGE_SHOWED);
 });
+
+// watch for drawer close to save
+watch(dep_datetime_editor_popup, (newVal, oldVal) => {
+  if (oldVal && !newVal) {
+    depDatetimeEditorRef.value?.save();
+  }
+});
 </script>
 
 <template>
-  <PartnerRequestImmersiveCreate
+  <page-meta
+    :page-style="`overflow:${dep_datetime_editor_popup ? 'hidden' : 'visible'};`"
+  ></page-meta>
+  <PRImmersiveForm
     ref="immersiveCreateRef"
     :l1-type="props.l1_type || PRL1Type.Trip"
     :l2-type="l2_type"
@@ -154,8 +140,9 @@ onShow(() => {
     @next="onImmersiveCreateNext"
   >
     <template v-slot:route>
-      <ImmersiveRouteEditor
+      <RouteEditor
         ref="routeEditorRef"
+        type="immersive"
         :model-value="form.route"
         :use-dep-datetime-editor="false"
         @edit_dep_time="dep_datetime_editor_popup = true"
@@ -169,7 +156,7 @@ onShow(() => {
       <TripPurposePicker
         class="tp__picker"
         blend-to-background="right"
-        v-model="form.ride_hailing_preference.purpose"
+        v-model="form.trip_preference.purpose"
         @complete="onTripPurposeComplete"
       />
     </template>
@@ -179,44 +166,27 @@ onShow(() => {
       </view>
       <TransportationPicker
         class="trpn__picker"
-        blend-to-background="right"
         v-model="form.transportation"
         @complete="onTransportationComplete"
       />
     </template>
-  </PartnerRequestImmersiveCreate>
+  </PRImmersiveForm>
 
-  <wd-popup
-    custom-class="popup"
-    v-model="dep_datetime_editor_popup"
-    close-on-click-modal
-    safe-area-inset-bottom
-    position="bottom"
-    @close="
-      depDatetimeEditorRef?.save();
-      dep_datetime_editor_popup = false;
-    "
+  <PUDrawer
+    v-model:visible="dep_datetime_editor_popup"
+    height="60vh"
+    :full-custom="true"
   >
-    <RouteItemDatetimeEditor
-      class="dep-datetime-editor"
-      ref="depDatetimeEditorRef"
-      :modelValue="form.route[0].datetime"
-      @confirm="dep_datetime_editor_popup = false"
-      @cancel="dep_datetime_editor_popup = false"
-    />
-  </wd-popup>
+    <template #full>
+      <RouteItemDatetimeEditor
+        class="dep-datetime-editor"
+        ref="depDatetimeEditorRef"
+        :modelValue="form.route.startItem.datetime"
+        @confirm="dep_datetime_editor_popup = false"
+        @cancel="dep_datetime_editor_popup = false"
+      />
+    </template>
+  </PUDrawer>
 </template>
 
 <style lang="scss" scoped src="./create_trip.scss"></style>
-
-<style lang="scss">
-@use "@/styles/main.scss" as *;
-
-:deep(.popup) {
-  background: $pu-color-surface !important;
-
-  overflow-x: hidden;
-
-  @include pu-radius-top-medium;
-}
-</style>

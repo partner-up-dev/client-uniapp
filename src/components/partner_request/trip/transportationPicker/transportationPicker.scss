@@ -1,0 +1,40 @@
+@use "@/styles/main.scss" as *;
+
+.transportation-picker {
+  &__item {
+    display: inline-flex;
+    margin-right: $pu-spacing-med;
+  }
+}
+
+.transportation-card {
+  min-width: 88px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  padding: $pu-spacing-med $pu-spacing-sm;
+  background-color: $pu-color-surface-container;
+  border-radius: $pu-radius-xs;
+  box-sizing: border-box;
+
+  border: 1px solid transparent;
+
+  transition: border 0.3s ease;
+
+  &__icon {
+    @include pu-icon("large", true);
+    color: $pu-color-on-surface;
+  }
+
+  &__text {
+    color: $pu-color-on-surface;
+
+    @include pu-font("label-large");
+  }
+
+  // 选中状态
+  &.is-selected {
+    border: 1px solid $pu-color-primary;
+  }
+}

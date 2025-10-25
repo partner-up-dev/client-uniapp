@@ -12,7 +12,7 @@
   }
 
   &__address-value {
-    @include pu-font("body-medium");
+    @include pu-font("label-large");
     color: $pu-color-on-surface;
 
     &--empty {
@@ -22,7 +22,7 @@
   }
 
   &__error-message {
-    @include pu-font("body-small");
+    @include pu-font("label-large");
     color: $pu-color-error;
     padding: 0px $pu-spacing-lg;
     min-height: 20px;

@@ -30,5 +30,6 @@
   &__description {
     @include pu-font("label-large");
     color: $pu-color-on-surface;
+    white-space: normal;
   }
 }

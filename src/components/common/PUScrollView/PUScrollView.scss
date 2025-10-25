@@ -1,0 +1,122 @@
+@use "@/styles/main.scss" as *;
+
+.pu-scroll-view {
+  position: relative;
+
+  &--horizontal {
+    white-space: nowrap;
+  }
+
+  // 背景色变量，可以被父组件覆盖
+  $-background: var(--background, #{$pu-color-surface});
+
+  // 纵向滚动 - 底部渐变
+  &.fade-end:not(.pu-scroll-view--horizontal) {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(to bottom, transparent, $-background);
+      pointer-events: none;
+    }
+  }
+
+  // 纵向滚动 - 顶部渐变
+  &.fade-start:not(.pu-scroll-view--horizontal) {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(to top, transparent, $-background);
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  // 纵向滚动 - 两端渐变
+  &.fade-both:not(.pu-scroll-view--horizontal) {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(to top, transparent, $-background);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(to bottom, transparent, $-background);
+      pointer-events: none;
+    }
+  }
+
+  // 横向滚动 - 右侧渐变
+  &.fade-end.pu-scroll-view--horizontal {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(to right, transparent, $-background);
+      pointer-events: none;
+    }
+  }
+
+  // 横向滚动 - 左侧渐变
+  &.fade-start.pu-scroll-view--horizontal {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(to left, transparent, $-background);
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  // 横向滚动 - 两端渐变
+  &.fade-both.pu-scroll-view--horizontal {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(to left, transparent, $-background);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(to right, transparent, $-background);
+      pointer-events: none;
+    }
+  }
+}

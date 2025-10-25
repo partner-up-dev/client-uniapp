@@ -2,22 +2,29 @@ import { APIClient } from '../api';
 import { useTranslate } from '@/locale/use';
 import { instance } from '..';
 import * as v from 'valibot';
+import { V } from '..';
 import { type PRRef } from '.';
 import { nullable } from '..';
 import { PartnerRequest } from './base';
 import { Route } from '../base/route';
+import { TripPreference } from './trip';
 
-// Type definitions
 export type RideHailingOrderRef = number;
 export const RideHailingOrderRefV = v.number();
+
+export class RideHailingPreference extends V.class(v.object({
+  ride_types: v.optional(v.array(v.string()), () => [])
+})) {
+
+}
 
 /**
  * 网约车搭子请求
  */
 export class RideHailingPR extends PartnerRequest.extend(v.object({
   route: instance(Route),
-  trip_preference: v.any(),
-  ride_hailing_preference: v.any(),
+  trip_preference: instance(TripPreference),
+  ride_hailing_preference: instance(RideHailingPreference),
   ride_hailing_order: nullable(v.number()),
 })) {
 

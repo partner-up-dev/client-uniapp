@@ -50,6 +50,7 @@ interface Props {
   theme?:
     | "Primary"
     | "PrimaryContainer"
+    | "Tertiary"
     | "Surface"
     | "SurfaceOutlined"
     | "Plain";

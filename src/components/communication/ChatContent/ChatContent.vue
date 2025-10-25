@@ -24,7 +24,7 @@ import { Chat } from "@/business/communication/chat";
 import { Message } from "@/business/communication/message";
 import MessageComponent from "../message/message.vue";
 import { useScrollToBottom } from "@/composables/useScroll";
-import usePulldownRefresher, { getElementRect } from "@/utils/vendor";
+import { usePulldownRefresher, getElementRect } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";
 
 const props = defineProps(chatContentProps);

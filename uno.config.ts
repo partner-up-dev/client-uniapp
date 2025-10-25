@@ -31,6 +31,17 @@ const safeListOfIcons = [
   'i-mdi-close-circle',
   'i-mdi-eye',
   'i-mdi-eye-off',
+  // TransportationPicker icons
+  'i-mdi-car',
+  'i-mdi-taxi',
+  'i-mdi-moped',
+  // TripPurposePicker icons
+  'i-mdi-airplane-landing',
+  'i-mdi-airplane-takeoff',
+  'i-mdi-train',
+  'i-mdi-train-variant',
+  'i-mdi-car',
+  'i-mdi-briefcase',
 ]
 
 export default {

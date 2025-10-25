@@ -50,7 +50,7 @@ function onToggleClick() {
 </script>
 
 <template>
-  <view :class="rootClass">
+  <view :class="rootClass" @click="emit('click')">
     <view class="card__header">
       <view class="card__header-left">
         <slot name="title">
@@ -64,11 +64,11 @@ function onToggleClick() {
         </view>
       </view>
     </view>
-    <text v-show="showContent" class="card__content">
+    <view v-show="showContent" class="card__content">
       <slot name="content">
         <text class="card__description">{{ description }}</text>
       </slot>
-    </text>
+    </view>
   </view>
 </template>
 

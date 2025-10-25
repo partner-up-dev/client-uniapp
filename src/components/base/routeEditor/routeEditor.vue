@@ -14,11 +14,10 @@ import {
   routeEditorEmits,
   getRouteItemType,
   isRouteItemRemovable,
-  createDefaultRouteItem,
   validateRoute,
   type RouteItemType,
 } from "./routeEditor";
-import type { Route, RouteItem, Location } from "@/business/base/route";
+import type { RouteItem } from "@/business/base/route";
 import { getTencentLBSPluginCredentialString } from "@/utils";
 import { errorReport } from "@/utils/vendor";
 import { EVENT } from "@/data/enum";
@@ -27,7 +26,7 @@ import RouteItemLocationEditor from "@/components/base/routeItemLocationEditor/r
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 
-const { t } = useTranslate("base.route_editor");
+const { dt: t } = useTranslate("base.route_editor");
 const props = defineProps(routeEditorProps);
 const emit = defineEmits(routeEditorEmits);
 
@@ -35,7 +34,6 @@ const emit = defineEmits(routeEditorEmits);
 const chooseLocationPlugin = requirePlugin("chooseLocation");
 
 // ==================== Data ====================
-const route = ref<Route>(props.modelValue!);
 const datetimeEditorVisible = ref(false);
 const locationEditorVisible = ref(false);
 const editingItemIndex = ref<number>(-1);
@@ -45,24 +43,26 @@ const validationErrors = ref<string[]>([]);
 const isNormalType = computed(() => props.type === "normal");
 const isImmersiveType = computed(() => props.type === "immersive");
 
-const departureItem = computed(() => route.value.items[0]);
+const departureItem = computed(() => props.modelValue.items[0]);
 const arrivalItem = computed(
-  () => route.value.items[route.value.items.length - 1]
+  () => props.modelValue.items[props.modelValue.items.length - 1]
 );
 const waypointItems = computed(() =>
-  route.value.items.slice(1, route.value.items.length - 1)
+  props.modelValue.items.slice(1, props.modelValue.items.length - 1)
 );
 
-const canAddWaypoint = computed(() => route.value.items.length < props.max);
+const canAddWaypoint = computed(() => props.modelValue.items.length < props.max);
 
 // ==================== Methods ====================
 function onValueChange() {
-  emit("update:modelValue", route.value);
+  emit("update:modelValue", props.modelValue);
   emit("change");
 
   // 检查是否所有必要数据已填写（仅 immersive 模式）
   if (isImmersiveType.value) {
-    const allLocationsFilled = route.value.items.every((item) => item.location);
+    const allLocationsFilled = props.modelValue.items.every(
+      (item) => item.location
+    );
     if (allLocationsFilled) {
       setTimeout(() => {
         emit("complete");
@@ -81,22 +81,18 @@ function addWaypoint() {
   }
 
   // 插入到终点之前
-  route.value.items.splice(
-    route.value.items.length - 1,
-    0,
-    createDefaultRouteItem()
-  );
+  props.modelValue.addWaypoint();
   onValueChange();
 }
 
 function removeWaypoint(index: number) {
   // index 是 waypointItems 的索引，需要转换为 route.items 的索引
   const actualIndex = index + 1;
-  if (!isRouteItemRemovable(actualIndex, route.value.items.length)) {
+  if (!isRouteItemRemovable(actualIndex, props.modelValue.items.length)) {
     return;
   }
 
-  route.value.items.splice(actualIndex, 1);
+  props.modelValue.items.splice(actualIndex, 1);
   onValueChange();
 }
 
@@ -126,7 +122,7 @@ function openLocationEditor(index: number) {
 
   uni.$once(EVENT.ROUTE_EDITOR_PAGE_SHOWED, onLocationSelected);
 
-  const currentItem = route.value.items[index];
+  const currentItem = props.modelValue.items[index];
   let locationParam = "";
 
   // 如果已有地点，传入当前位置
@@ -172,7 +168,7 @@ function onLocationSelected() {
   // 保存到后端并更新 route item
   newLocation.put();
   if (newLocation._id) {
-    route.value.items[editingItemIndex.value].location = newLocation._id;
+    props.modelValue.items[editingItemIndex.value].location = newLocation._id;
     onValueChange();
   }
 
@@ -232,7 +228,7 @@ function navigateToRoutePlanPage() {
 }
 
 function validate(): Promise<{ valid: boolean; errors: string[] }> {
-  const result = validateRoute(route.value, props.ruleMode);
+  const result = validateRoute(props.modelValue.items, props.ruleMode);
   validationErrors.value = result.errors;
   return Promise.resolve(result);
 }
@@ -247,10 +243,10 @@ function getLocationAddress(item: RouteItem, itemType: RouteItemType): string {
 
 // ==================== Watchers ====================
 watch(
-  () => props.modelValue,
+  () => props.modelValue.items,
   (newValue) => {
     if (newValue) {
-      route.value = newValue;
+      props.modelValue.items = newValue;
     }
   }
 );
@@ -258,12 +254,12 @@ watch(
 watch(
   () => props.disableDatetime,
   (disabled) => {
-    route.value.items.forEach((item) => {
+    props.modelValue.items.forEach((item) => {
       if (disabled) {
         item.datetime.datetime = null;
       } else if (
         !item.datetime.datetime &&
-        route.value.items.indexOf(item) === 0
+        props.modelValue.items.indexOf(item) === 0
       ) {
         // 如果是出发点且允许编辑时间但未设置，设为当前时间
         item.datetime.datetime = new Date();
@@ -280,7 +276,7 @@ defineExpose({
 </script>
 
 <template>
-  <!-- Normal Type: Vertical List Layout -->
+  <!-- Normal -->
   <view v-if="isNormalType" class="route-editor route-editor--normal">
     <view class="route-editor__operations">
       <PUButton
@@ -354,20 +350,20 @@ defineExpose({
     </view>
   </view>
 
-  <!-- Immersive Type: Card Layout -->
+  <!-- Immersive -->
   <view v-else-if="isImmersiveType" class="route-editor route-editor--immersive">
-    <view class="route-editor__main">
+    <view class="form">
       <!-- Departure -->
       <view class="route-item route-item--departure">
-        <text class="route-item__title">{{
-          t("immersive.departure_title")
-        }}</text>
+        <view class="route-item__title">{{
+          t("immersive.departure.title")
+        }}</view>
         <view class="route-item__content">
           <text class="route-item__location" @click="openLocationEditor(0)">
             {{ getLocationAddress(departureItem, "departure") }}
           </text>
           <text class="route-item__text">{{
-            t("immersive.departure_text")
+            t("immersive.departure.text")
           }}</text>
           <text
             v-if="!disableDatetime"
@@ -383,7 +379,7 @@ defineExpose({
         :key="`waypoint-${index}`"
         class="route-item route-item--waypoint"
       >
-        <text class="route-item__title">{{ t("immersive.waypoint_title") }}</text>
+        <text class="route-item__title">{{ t("immersive.waypoint.title") }}</text>
         <view class="route-item__content">
           <text
             class="route-item__location"
@@ -400,11 +396,11 @@ defineExpose({
 
       <!-- Arrival -->
       <view class="route-item route-item--arrival">
-        <text class="route-item__title">{{ t("immersive.arrival_title") }}</text>
+        <text class="route-item__title">{{ t("immersive.arrival.title") }}</text>
         <view class="route-item__content">
           <text
             class="route-item__location"
-            @click="openLocationEditor(route.items.length - 1)"
+            @click="openLocationEditor(modelValue.items.length - 1)"
           >
             {{ getLocationAddress(arrivalItem, "arrival") }}
           </text>
@@ -412,30 +408,26 @@ defineExpose({
       </view>
     </view>
 
-    <view class="route-editor__operations">
-      <PUButton
-        text="导航"
-        type="WithText"
-        theme="Surface"
-        @click="navigateToRoutePlan"
-      />
-      <PUButton
-        text="添加途经点"
-        type="WithText"
-        theme="PrimaryContainer"
-        @click="addWaypoint"
-      />
+    <view class="operations">
+      <PUButton text="导航" theme="Surface" @click="navigateToRoutePlan" />
+      <PUButton text="添加途经点" theme="Tertiary" @click="addWaypoint" />
     </view>
   </view>
 
   <!-- Datetime Editor Drawer -->
-  <PUDrawer v-model:visible="datetimeEditorVisible" title="编辑时间">
-    <RouteItemDatetimeEditor
-      v-if="editingItemIndex >= 0 && editingItemIndex < route.items.length"
-      :modelValue="route.items[editingItemIndex].datetime"
-      @confirm="onDatetimeEditorConfirm"
-      @cancel="datetimeEditorVisible = false"
-    />
+  <PUDrawer
+    v-model:visible="datetimeEditorVisible"
+    title="编辑时间"
+    :full-custom="true"
+  >
+    <template #full>
+      <RouteItemDatetimeEditor
+        v-if="editingItemIndex >= 0 && editingItemIndex < modelValue.items.length"
+        :modelValue="modelValue.items[editingItemIndex].datetime"
+        @confirm="onDatetimeEditorConfirm"
+        @cancel="datetimeEditorVisible = false"
+      />
+    </template>
   </PUDrawer>
 </template>
 

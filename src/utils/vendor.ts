@@ -138,7 +138,7 @@ export function successUniToast(text: string) {
 
 import { ref } from "vue";
 
-export default function usePulldownRefresher(
+export function usePulldownRefresher(
     refresh: () => Promise<void>
 ) {
     const is_refreshing = ref(false);

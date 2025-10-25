@@ -22,10 +22,13 @@
 
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-med;
 
-  padding: $pu-spacing-med $pu-spacing-med 0 $pu-spacing-med;
-  box-sizing: border-box;
+  .default {
+    gap: $pu-spacing-med;
+
+    padding: $pu-spacing-med $pu-spacing-med 0 $pu-spacing-med;
+    box-sizing: border-box;
+  }
 
   .drawer-header {
     display: flex;

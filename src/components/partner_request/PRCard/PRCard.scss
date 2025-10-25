@@ -20,6 +20,41 @@
   flex-direction: column;
   gap: $pu-spacing-sm;
 
+  .type-and-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $pu-spacing-sm;
+
+    .pr-type {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .type-text {
+        @include pu-font-size("label-medium");
+        color: $ref-color-neutral-100;
+        font-weight: normal;
+        line-height: 16px;
+        white-space: nowrap;
+      }
+    }
+
+    .creation-time {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .time-text {
+        @include pu-font-size("label-medium");
+        color: $pu-color-on-surface-variant;
+        font-weight: normal;
+        line-height: 16px;
+        white-space: nowrap;
+      }
+    }
+  }
+
   .partners-and-type {
     display: flex;
     align-items: center;

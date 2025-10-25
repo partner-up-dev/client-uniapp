@@ -17,8 +17,8 @@ import { computed, ref } from "vue";
 import { AccountBaseProfile } from "@/business/account/base";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
-import Card from "@/components/common/card/card.vue";
 import Snackbar from "@/components/common/snackbar/snackbar.vue";
+import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
 
 const { dt } = useTranslate("home");
 const { baseProfile } = AccountBaseProfile.use();
@@ -55,9 +55,10 @@ function onExploreClick() {
   navigate({ page_id: PAGE_ID.EXPLORE });
 }
 
-function onPartnerTypeCardClick(type: string) {
-  // TODO: 导航到相应类型的搭子请求创建页面
-  console.log("选择搭子类型:", type);
+function onPartnerTypeSelect(type: PRL1Type) {
+  navigate({
+    path: `/pages/partner_request/create_${type}/create_${type}`,
+  });
 }
 
 // 生命周期
@@ -105,29 +106,11 @@ onShow(() => {
         />
 
         <!-- 搭子类型卡片列表 -->
-        <scroll-view
-          style="white-space: nowrap"
-          class="uno-h-[140px] uno-w-full"
-          :scroll-x="true"
-          :show-scrollbar="false"
-        >
-          <Card
-            style="display: inline-block"
-            class="uno-w-[240px] uno-h-full"
-            title="出行搭子"
-            description="网约车、顺风车、通勤"
-            :name="PRL1Type.Trip"
-            @click="onPartnerTypeCardClick"
-          />
-          <Card
-            style="display: inline-block"
-            class="uno-w-[240px] space-m-l-sm uno-h-full"
-            title="旅游搭子"
-            description="路线规划、酒店机票门票预定"
-            :name="PRL1Type.Travel"
-            @click="onPartnerTypeCardClick"
-          />
-        </scroll-view>
+        <PRTypePicker
+          mode="horizontal-card"
+          option-mode="l1"
+          @select="onPartnerTypeSelect"
+        />
       </view>
 
       <!-- 发现搭子区域 -->

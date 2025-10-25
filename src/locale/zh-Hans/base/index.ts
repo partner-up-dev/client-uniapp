@@ -91,44 +91,46 @@ export default {
             datetime_after_now: "出发不能早于现在",
             datetime_orderly: "时间顺序错误",
             departure_datetime_required: "请选择出发时间"
-        }
-    },
-    /**
-     * @name 沉浸式路线编辑器组件的翻译
-     */
-    immersive_route_editor: {
-        departure: {
-            title: "从",
-            location: {
-                placeholder: "点击选择出发地"
+        },
+        placeholder: {
+            departure: "点击选择出发地",
+            arrival: "点击选择目的地",
+            waypoint: "点击选择途经点"
+        },
+        immersive: {
+            departure: {
+                title: "从",
+                location: {
+                    placeholder: "点击选择出发地"
+                },
+                text: "出发"
             },
-            text: "出发"
-        },
-        waypoint: {
-            title: "经过",
-            location: {
-                placeholder: "点击选择途径点"
+            waypoint: {
+                title: "经过",
+                location: {
+                    placeholder: "点击选择途径点"
+                },
             },
-        },
-        arrival: {
-            title: "到",
-            location: {
-                placeholder: "点击选择目的地"
+            arrival: {
+                title: "到",
+                location: {
+                    placeholder: "点击选择目的地"
+                },
             },
-        },
-        operations: {
-            navigate: "导航",
-            add_waypoint: "添加途径点",
-        },
-        select_location: {
-            get_location_failed: "无法申请地点"
-        },
-        navigate: {
-            waypoint_not_supported: "暂不支持规划途径点",
-            location_not_selected: "路线信息不完整"
-        },
-        add_waypoint: {
-            limit_reached: "最多4个"
+            operations: {
+                navigate: "导航",
+                add_waypoint: "添加途径点",
+            },
+            select_location: {
+                get_location_failed: "无法申请地点"
+            },
+            navigate: {
+                waypoint_not_supported: "暂不支持规划途径点",
+                location_not_selected: "路线信息不完整"
+            },
+            add_waypoint: {
+                limit_reached: "最多4个"
+            }
         }
     },
     /**

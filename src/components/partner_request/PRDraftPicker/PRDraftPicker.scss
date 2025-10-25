@@ -1,0 +1,17 @@
+// Component:PartnerRequest:DraftPicker's styles
+
+@use "@/styles/main.scss" as *;
+
+.draft-list {
+  position: relative;
+  height: 100%;
+}
+
+.draft-item {
+  padding: $-sys-padding-1;
+  margin: $-sys-padding-1;
+
+  background-color: $-sys-color-surface-container;
+
+  @include pu-radius-small;
+}

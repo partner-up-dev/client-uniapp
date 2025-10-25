@@ -261,7 +261,7 @@ const applyBtnText = computed(() => {
 });
 
 // TODO: Replace with real route data when API is ready
-const mockRoute = new Route([
+const mockRoute = new Route({items: [
   {
     datetime: new RouteItemDatetime({
       datetime: new Date("2024-09-24 23:15:00"),
@@ -280,7 +280,7 @@ const mockRoute = new Route([
     }),
     location: "1c18c2e3b8dc6f0ffb83b68810bbb29d",
   },
-]);
+]});
 // Handlers
 const onForkClick = () => {};
 const onBookmarkClick = () => {};

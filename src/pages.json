@@ -25,15 +25,21 @@
       }
     },
     {
+      "path": "pages/communication/chat",
+      "style": {
+        "navigationBarTitleText": "聊天"
+      }
+    },
+    {
       "path": "pages/partner_request/detail/detail",
       "style": {
         "navigationBarTitleText": "搭子请求"
       }
     },
     {
-      "path": "pages/communication/chat",
+      "path": "pages/partner_request/create_trip/create_trip",
       "style": {
-        "navigationBarTitleText": "聊天"
+        "navigationBarTitleText": "创建出行搭子请求"
       }
     }
   ],

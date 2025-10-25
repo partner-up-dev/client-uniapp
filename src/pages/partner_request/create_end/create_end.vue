@@ -7,7 +7,7 @@ import { useTranslate } from "@/locale/use";
 import PartnerRequestEditor from "../../components/partnerRequestEditor/partnerRequestEditor.vue";
 import {
   usePartnerRequest,
-  usePartnerRequestStore,
+  // usePartnerRequestStore,
 } from "@/store/partner_request";
 import { errorReport, getSafeArea } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
@@ -443,6 +443,4 @@ onShow(() => {
   </view>
 </template>
 
-<style lang="scss" scoped>
-@use "./end.scss";
-</style>
+<style lang="scss" scoped src="./create_end.scss"></style>
