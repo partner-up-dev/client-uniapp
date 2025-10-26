@@ -1,0 +1,12 @@
+@use "@/styles/main.scss" as *;
+
+.pu-form-item__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pu-form-item__required {
+  color: $pu-color-error;
+  font-weight: 500;
+}
