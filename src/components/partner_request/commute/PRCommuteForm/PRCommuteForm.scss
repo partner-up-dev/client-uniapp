@@ -1,0 +1,12 @@
+// Styles of component:partner_request:commute:commuteDatetimeForm
+
+@use "@/styles/main.scss" as *;
+
+.commute-datetime-form {
+  &__error {
+    color: $pu-color-error;
+    padding: $pu-spacing-xs;
+    margin-left: auto;
+    @include pu-font("label-medium");
+  }
+}

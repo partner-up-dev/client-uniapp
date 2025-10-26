@@ -2,11 +2,12 @@
 import { computed, ref } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import * as v from "valibot";
+import ScaffoldLayout from "@/components/common/layout/scaffoldLayout.vue";
 import NavBar from "@/components/common/navBar/navBar.vue";
 import { useTranslate } from "@/locale/use";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import { usePartnerRequestStore } from "@/store/partner_request";
-import { errorReport, getSafeArea } from "@/utils/vendor";
+import { errorReport } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
 import { PRType, PRStatus } from "@/business/partner_request";
 import {
@@ -63,17 +64,15 @@ const publishing_notice = ref<string[]>([
 
 // Use PartnerRequest business layer composable
 const prId = ref<number | undefined>(undefined);
-const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(
-  prId.value
-);
+const { pr: partnerRequest, loading: prLoading } = PartnerRequest.use(prId.value);
 
 // methods
 /**
- * @name 处理“发布”
+ * @name 处理"发布"
  * @description
- * 如果id不存在，则需要创建后再发�?
+ * 如果id不存在，则需要创建后再发布
  *
- * 为了防止修改没有被及时保存，发布前会先保�?
+ * 为了防止修改没有被及时保存，发布前会先保存
  */
 function onPublish(retry: number = 0) {
   partnerRequestEditorRef.value
@@ -104,7 +103,7 @@ function onPublish(retry: number = 0) {
           });
       } else {
         if (retry >= 1) {
-          // 防止死循�?
+          // 防止死循环
           return;
         }
         create()
@@ -118,6 +117,7 @@ function onPublish(retry: number = 0) {
     })
     .catch(() => {});
 }
+
 function create(): Promise<void> {
   return new Promise((resolve, reject) => {
     saving.value = true;
@@ -140,11 +140,11 @@ function create(): Promise<void> {
     }
   });
 }
+
 /**
- * @name 处理“存稿”
+ * @name 处理"存稿"
  * @description
  * 如果id存在，则调用编辑接口；如果不存在，则调用创建接口
- *
  */
 function onSave() {
   saving.value = true;
@@ -172,6 +172,7 @@ function onView() {
     url: `${PAGE_PATH[PAGE_ID.PR_DETAIL]}?id=${props.value.id}`,
   });
 }
+
 function onDiscover() {
   // TODO，携带类型筛选器
   uni.navigateTo({
@@ -183,7 +184,7 @@ function onDiscover() {
 /**
  * @name 是否已经发布搭子请求
  * @description
- * 有id且对应搭子请求的状态为寻找搭子�?
+ * 有id且对应搭子请求的状态为寻找搭子中
  */
 const isPublished = computed((): boolean => {
   if (props.value.id && partnerRequest.value) {
@@ -192,39 +193,6 @@ const isPublished = computed((): boolean => {
   }
   return false;
   // return true;  // TEMP
-});
-/**
- * @name 编辑器高度
- * @description
- * 发布前为屏幕高度-导航栏高�?底部高度
- * 发布后为0
- */
-const editorHeight = computed((): number => {
-  if (isPublished.value) {
-    return 0;
-  }
-  return (
-    uni.getSystemInfoSync().windowHeight -
-    (navBarRef?.value?.totalHeight || 76) -
-    (36 + 16 + getSafeArea().bottom)
-  );
-});
-/**
- * @name 发布后引导Body高度
- * @description
- * 发布前为0，发布后为屏幕高�?导航栏高�?底部高度-AfPubHead高度-空隙
- */
-const afPubBodyHeight = computed((): number => {
-  if (!isPublished.value) {
-    return 0;
-  }
-  return (
-    uni.getSystemInfoSync().windowHeight -
-    (navBarRef?.value?.totalHeight || 76) -
-    (36 + 16 + getSafeArea().bottom) -
-    160 -
-    (24 + 24 + 80)
-  );
 });
 
 // lifecycle
@@ -295,118 +263,125 @@ onShow(() => {
 <template>
   <view class="page-bg"></view>
 
-  <NavBar
-    ref="navBarRef"
-    mode="small"
-    theme="surface"
-    :title="domain_t(`title.${props.type}`)"
-  />
+  <ScaffoldLayout>
+    <!-- Header Slot -->
+    <template #header>
+      <NavBar
+        ref="navBarRef"
+        mode="small"
+        theme="surface"
+        :title="domain_t(`title.${props.type}`)"
+      />
 
-  <PUNoticeBar
-    class="publishing-notice"
-    v-if="publishing"
-    :text="publishing_notice"
-    prefix="lightbulb"
-    background-color="#f6d77d"
-    color="#372a04"
-    direction="vertical"
-    :scrollable="false"
-  />
+      <PUNoticeBar
+        class="publishing-notice"
+        v-if="publishing"
+        :text="publishing_notice"
+        prefix="lightbulb"
+        background-color="#f6d77d"
+        color="#372a04"
+        direction="vertical"
+        :scrollable="false"
+      />
+    </template>
 
-  <view class="af-pub" v-if="isPublished">
-    <view class="af-pub__head">
-      <view class="flex gap-4 items-center">
-        <text class="af-pub__head__icon">🎉</text>
-        <text class="af-pub__head__title">{{
-          domain_t("after_publish.head.title")
-        }}</text>
+    <!-- Content Slot -->
+    <view class="content-wrapper">
+      <!-- After Published View -->
+      <view class="af-pub" v-if="isPublished">
+        <view class="af-pub__head">
+          <view class="flex gap-4 items-center">
+            <text class="af-pub__head__icon">🎉</text>
+            <text class="af-pub__head__title">{{
+              domain_t("after_publish.head.title")
+            }}</text>
+          </view>
+        </view>
+
+        <view class="af-pub__body">
+          <view class="af-pub__next af-pub__card">
+            <view class="title">{{ domain_t("after_publish.next.title") }}</view>
+            <view class="description">{{
+              domain_t("after_publish.next.description")
+            }}</view>
+          </view>
+          <view class="af-pub__share af-pub__card">
+            <view class="title">{{ domain_t("after_publish.share.title") }}</view>
+            <view class="description">{{
+              domain_t("after_publish.share.description")
+            }}</view>
+            <PUButton
+              class="operation"
+              theme="Primary"
+              prefix-icon="i-mdi-share"
+              :text="domain_t('after_publish.share.operation')"
+              @click="onShare"
+            />
+          </view>
+          <view class="af-pub__stop af-pub__card">
+            <view class="title">{{ domain_t("after_publish.stop.title") }}</view>
+            <view class="description">{{
+              domain_t("after_publish.stop.description")
+            }}</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Editor View -->
+      <view class="editor-cont" v-if="!isPublished">
+        <PRForm ref="partnerRequestEditorRef" v-model="form" :type="props.type" />
       </view>
     </view>
 
-    <view class="af-pub__body" :style="{ height: `${afPubBodyHeight}px` }">
-      <view class="af-pub__next af-pub__card">
-        <view class="title">{{ domain_t("after_publish.next.title") }}</view>
-        <view class="description">{{
-          domain_t("after_publish.next.description")
-        }}</view>
+    <!-- Footer Slot -->
+    <template #footer>
+      <view class="footer">
+        <view class="operations">
+          <!-- Not Published -->
+          <PUButton
+            class="operations__save button"
+            v-if="!isPublished"
+            theme="SurfaceOutlined"
+            prefix-icon="i-mdi-content-save"
+            :text="domain_t('operations.save')"
+            :loading="publishing || saving"
+            @click="onSave"
+          />
+
+          <PUButton
+            class="operations__publish button"
+            v-if="!isPublished"
+            theme="Primary"
+            prefix-icon="i-mdi-check"
+            :text="domain_t('operations.publish')"
+            :loading="publishing || saving"
+            @click="onPublish"
+          />
+
+          <!-- Published -->
+          <PUButton
+            class="operations__view button"
+            v-if="isPublished"
+            theme="SurfaceOutlined"
+            prefix-icon="i-mdi-eye"
+            :text="domain_t('operations.view')"
+            @click="onView"
+          />
+
+          <PUButton
+            class="operations__discover button"
+            v-if="isPublished"
+            theme="Primary"
+            prefix-icon="i-mdi-compass"
+            :text="domain_t('operations.discover')"
+            @click="onDiscover"
+          />
+        </view>
+
+        <SafeAreaInset position="bottom" />
       </view>
-      <view class="af-pub__share af-pub__card">
-        <view class="title">{{ domain_t("after_publish.share.title") }}</view>
-        <view class="description">{{
-          domain_t("after_publish.share.description")
-        }}</view>
-        <PUButton
-          class="operation"
-          theme="Primary"
-          prefix-icon="i-mdi-share"
-          :text="domain_t('after_publish.share.operation')"
-          @click="onShare"
-        />
-      </view>
-      <view class="af-pub__stop af-pub__card">
-        <view class="title">{{ domain_t("after_publish.stop.title") }}</view>
-        <view class="description">{{
-          domain_t("after_publish.stop.description")
-        }}</view>
-      </view>
-    </view>
-  </view>
-
-  <view
-    class="editor-cont"
-    :style="{ height: `${editorHeight}px` }"
-    v-if="!isPublished"
-  >
-    <PRForm ref="partnerRequestEditorRef" v-model="form" :type="props.type" />
-  </view>
-
-  <view class="footer">
-    <view class="operations">
-      <!-- Not Published -->
-
-      <PUButton
-        class="operations__save button"
-        v-if="!isPublished"
-        theme="SurfaceOutlined"
-        prefix-icon="i-mdi-content-save"
-        :text="domain_t('operations.save')"
-        :loading="publishing || saving"
-        @click="onSave"
-      />
-
-      <PUButton
-        class="operations__publish button"
-        v-if="!isPublished"
-        theme="Primary"
-        prefix-icon="i-mdi-check"
-        :text="domain_t('operations.publish')"
-        :loading="publishing || saving"
-        @click="onPublish"
-      />
-
-      <!-- Published -->
-
-      <PUButton
-        class="operations__view button"
-        v-if="isPublished"
-        theme="SurfaceOutlined"
-        prefix-icon="i-mdi-eye"
-        :text="domain_t('operations.view')"
-        @click="onView"
-      />
-
-      <PUButton
-        class="operations__discover button"
-        v-if="isPublished"
-        theme="Primary"
-        prefix-icon="i-mdi-compass"
-        :text="domain_t('operations.discover')"
-        @click="onDiscover"
-      />
-    </view>
-
-    <SafeAreaInset position="bottom" />
-  </view>
+    </template>
+  </ScaffoldLayout>
 </template>
 
 <style lang="scss" scoped src="./create_end.scss"></style>

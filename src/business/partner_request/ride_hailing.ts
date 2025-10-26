@@ -5,7 +5,7 @@ import * as v from 'valibot';
 import { V } from '..';
 import { type PRRef } from '.';
 import { nullable } from '..';
-import { PartnerRequest } from './base';
+import { PartnerRequest, PartnerRequestForm } from './base';
 import { Route } from '../base/route';
 import { TripPreference } from './trip';
 
@@ -34,13 +34,16 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
     fallbackSchema: RideHailingPR,
   });
 
-  static get(pr_id: PRRef): Promise<RideHailingPR> {
-    return this.api.requestHTTP({
-      method: 'GET',
-      endpoint: `/${pr_id}`,
-      operation_id: 'RideHailingPartnerRequestGet',
-    }).then(res => res.body.parsed);
+  get typeText() {
+    return RideHailingPR.api.dt(`type.${this.type}`);
   }
+}
+
+export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
+  route: instance(Route),
+  trip_preference: instance(TripPreference),
+  ride_hailing_preference: instance(RideHailingPreference),
+})) {
 
   public create(): Promise<RideHailingPR> {
     return RideHailingPR.api.requestHTTP({
@@ -51,7 +54,7 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
     }).then(res => res.body.parsed);
   }
 
-  public edit(): Promise<RideHailingPR> {
+  public update(): Promise<RideHailingPR> {
     return RideHailingPR.api.requestHTTP({
       method: 'PUT',
       endpoint: `/${this._id}`,
@@ -60,7 +63,4 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
     }).then(res => res.body.parsed);
   }
 
-  get typeText() {
-    return RideHailingPR.api.dt(`type.${this.type}`);
-  }
 }

@@ -5,11 +5,16 @@
   margin: 0 auto;
 }
 
-.af-pub {
-  position: relative;
+.content-wrapper {
+  height: 100%;
   overflow-y: auto;
-  transition: height 1.5s ease;
+  display: flex;
+  flex-direction: column;
+}
 
+.af-pub {
+  flex: 1;
+  overflow-y: auto;
   width: 87%;
   margin: $pu-spacing-med auto 0 auto;
 
@@ -32,24 +37,21 @@
   }
 
   &__body {
+    flex: 1;
     overflow-y: auto;
-
     margin-top: $pu-spacing-med;
-
     display: flex;
     flex-direction: column;
     gap: $pu-spacing-med;
+    padding-bottom: $pu-spacing-lg;
 
     &::after {
       content: "";
-
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-
       height: 32px;
-
       background: linear-gradient(to bottom, transparent, $pu-color-surface);
     }
   }
@@ -91,23 +93,17 @@
 }
 
 .editor-cont {
+  flex: 1;
   overflow-y: auto;
-  transition: height 1.5s ease;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-
   background-color: $pu-color-surface-container;
   color: $pu-color-on-surface;
 }
 
 .operations {
   padding: $pu-spacing-med;
-
   display: flex;
   justify-content: flex-end;
   align-items: center;

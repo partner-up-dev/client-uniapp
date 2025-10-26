@@ -8,8 +8,10 @@ import PUInput from "@/components/common/PUInput/PUInput.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
+import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
 import { PartnerRequest } from "@/business/partner_request/base";
 import { PartnerRequestForm } from "@/business/partner_request/form";
+import type { CommutePRForm } from "@/business/partner_request/commute";
 
 // composables
 import { reactive, ref, watch, computed } from "vue";
@@ -40,6 +42,9 @@ const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
 const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(
   null
 );
+const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
+  null
+);
 
 // 字段长度限制
 const maxlength = {
@@ -54,6 +59,7 @@ const shouldShowRoute = computed(() =>
 const shouldShowTripPreference = computed(() =>
   [PRType.RideHailing].includes(props.type)
 );
+const shouldShowCommuteDatetime = computed(() => props.type === PRType.Commute);
 
 // functions
 const validate = (): Promise<void> => {
@@ -94,6 +100,18 @@ const validate = (): Promise<void> => {
         const tripPrefValidation = await tripPreferenceFormRef.value.validate();
         if (!tripPrefValidation.valid) {
           throw new Error(tripPrefValidation.errors.join("; "));
+        }
+      }
+
+      // Validate commute datetime if needed
+      if (shouldShowCommuteDatetime.value && commuteDatetimeFormRef.value) {
+        const commuteDatetimeValidation =
+          await commuteDatetimeFormRef.value.validate();
+        if (!commuteDatetimeValidation.valid) {
+          throw new Error(
+            commuteDatetimeValidation.message ||
+              "Commute datetime validation failed"
+          );
         }
       }
 
@@ -186,6 +204,11 @@ watch(
             :modelValue="props.modelValue.trip_preference"
           />
         </PUAccordionItem>
+        <PRCommuteForm
+          v-if="shouldShowCommuteDatetime"
+          ref="commuteDatetimeFormRef"
+          :form="(props.modelValue as unknown as CommutePRForm)"
+        />
       </PUAccordion>
     </PUForm>
   </view>

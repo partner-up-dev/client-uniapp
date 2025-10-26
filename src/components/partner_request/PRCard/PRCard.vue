@@ -110,7 +110,7 @@ if (!props.partnerRequest && !props.prId) {
 }
 
 // 使用 usePR composable 处理数据加载
-const { pr, bindPR, bindPRId } = PartnerRequest.usePR(
+const { pr, bindPR, bindPRId } = PartnerRequest.use(
   props.prId,
   props.partnerRequest
 );

@@ -173,6 +173,9 @@ export default {
     trip_preference: {
       title: "出行偏好"
     },
+    commute_datetime: {
+      title: "通勤时间"
+    },
     partners_editor: {
       title: "搭子角色"
     }

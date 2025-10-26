@@ -13,14 +13,6 @@ export type TripPurpose =
   | "railway_pickup";
 
 /**
- * 交通方式
- */
-export type Transportation =
-  | "self_drive_automobile"
-  | "moped"
-  | "ride_hailing";
-
-/**
  * 出行偏好
  */
 export class TripPreference extends V.class(v.object({

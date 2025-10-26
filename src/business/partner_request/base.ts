@@ -79,7 +79,7 @@ export class PartnerRequest extends V.class(v.object({
     }).then(res => res.body.parsed);
   }
 
-  static usePR(prId?: PRRef, partnerRequest?: PartnerRequest) {
+  static use(prId?: PRRef, partnerRequest?: PartnerRequest) {
     const _pr = ref<PartnerRequest | undefined>(partnerRequest);
     const _prId = ref<PRRef | undefined>(prId);
     const loading = ref(false);
@@ -143,6 +143,7 @@ export class PartnerRequest extends V.class(v.object({
     }
   }
 
+  // FIXME move to type-specific PRForm class
   static create(data: PartnerRequestForm, type: PRType): Promise<PartnerRequest> {
     return this.api.requestHTTP({
       method: 'POST',
@@ -152,6 +153,7 @@ export class PartnerRequest extends V.class(v.object({
     }).then(({ body }) => body.parsed);
   }
 
+  // FIXME move to type-specific PRForm class
   static update(pr_id: PRRef, data: PartnerRequestForm): Promise<void> {
     return this.api.requestHTTP({
       method: 'PUT',
