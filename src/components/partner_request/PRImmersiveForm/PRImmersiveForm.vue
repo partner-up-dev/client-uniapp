@@ -18,6 +18,7 @@ import { getSafeArea } from "@/utils/vendor";
 import { prImmersiveFormProps, prImmersiveFormEmits } from "./PRImmersiveForm";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
+import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 import type { PRType } from "@/business/partner_request";
 
 const { dt } = useTranslate("partner_request.immersive_create");
@@ -185,27 +186,19 @@ defineExpose({
     </swiper-item>
   </swiper>
 
-  <wd-popup
-    custom-class="l2type-picker-popup"
-    :modelValue="showL2TypePicker"
-    close-on-click-modal
-    position="bottom"
-    safe-area-inset-bottom
-    @close="showL2TypePicker = false"
+  <PUDrawer
+    v-model:visible="showL2TypePicker"
+    :title="dt('l2type_picker.title')"
+    height="360px"
   >
-    <view class="l2type-picker">
-      <view class="title">
-        {{ dt("l2type_picker.title") }}
-      </view>
-      <PRTypePicker
-        style="height: 260px"
-        option-mode="l2"
-        :l1-type="props.l1Type"
-        blend-to-background="bottom"
-        @select="onL2TypeSelect"
-      />
-    </view>
-  </wd-popup>
+    <PRTypePicker
+      style="height: 260px"
+      option-mode="l2"
+      :l1-type="props.l1Type"
+      blend-to-background="bottom"
+      @select="onL2TypeSelect"
+    />
+  </PUDrawer>
 </template>
 
 <style lang="scss" scoped src="./PRImmersiveForm.scss"></style>

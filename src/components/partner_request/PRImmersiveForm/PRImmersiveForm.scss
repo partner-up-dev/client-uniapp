@@ -80,13 +80,3 @@
     @include pu-icon("small");
   }
 }
-
-.l2type-picker {
-  padding: $pu-spacing-med;
-
-  .title {
-    margin-bottom: $pu-spacing-med;
-
-    @include pu-font("title-large");
-  }
-}
