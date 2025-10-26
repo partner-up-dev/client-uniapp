@@ -163,11 +163,11 @@ watch(
     </PUAccordion>
 
     <!-- Route Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowRoute && route" v-model="collapse.route">
+    <PUAccordion v-if="shouldShowRoute && props.route" v-model="collapse.route">
       <PUAccordionItem name="route" :title="dt('editor.route.title')">
         <RouteEditor
           ref="routeEditorRef"
-          v-model="route"
+          v-model="props.route"
           type="normal"
           @change="handleRouteChange"
         />
@@ -175,11 +175,11 @@ watch(
     </PUAccordion>
 
     <!-- Trip Preference Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowTripPreference && tripPreference" v-model="collapse.tripPreference">
+    <PUAccordion v-if="shouldShowTripPreference && props.tripPreference" v-model="collapse.tripPreference">
       <PUAccordionItem name="tripPreference" :title="dt('editor.trip_preference.title')">
         <TripPreferenceForm
           ref="tripPreferenceFormRef"
-          v-model="tripPreference"
+          v-model="props.tripPreference"
           @change="handleTripPreferenceChange"
         />
       </PUAccordionItem>
