@@ -5,13 +5,12 @@
 .cell {
   display: flex;
 
-  // Default type: horizontal layout
-  &.is-default {
+  // Horizontal type: horizontal layout
+  &.is-horizontal {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: $pu-spacing-sm;
-    padding: $pu-spacing-med 0;
 
     .cell__left {
       display: flex;
@@ -66,6 +65,55 @@
       font-size: 24px;
       display: flex;
       align-items: center;
+    }
+  }
+
+  // Vertical type: vertical layout
+  &.is-vertical {
+    flex-direction: column;
+    gap: $pu-spacing-sm;
+    padding: $pu-spacing-sm;
+
+    .cell__header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $pu-spacing-sm;
+    }
+
+    .cell__header-left {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cell__icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .cell__title {
+      color: $pu-color-on-surface;
+      @include pu-font("label-large");
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cell__content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cell__value {
+      color: $pu-color-on-surface-variant;
+      @include pu-font("label-large");
+      word-break: break-word;
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <view :class="rootClass" @click="handleClick">
+  <view :style="rootStyle" :class="rootClass" @click="handleClick">
     <!-- Label -->
     <view v-if="label || $slots.label" :class="labelClass" :style="labelStyle">
       <text
@@ -184,12 +184,17 @@ const displayErrorMessage = computed(() => {
   return props.errorMessage || "";
 });
 
+const rootStyle = computed(() => {
+  const base: Record<string, string> = {};
+  base["--pu-input-height"] = `${props.height}px`;
+  return base;
+});
+
 const rootClass = computed(() => {
   return [
     "pu-input",
     props.label || slots.label ? "is-cell" : "",
     props.center ? "is-center" : "",
-    props.size ? `is-${props.size}` : "",
     props.error ? "is-error" : "",
     props.disabled ? "is-disabled" : "",
     inputValue.value && String(inputValue.value).length > 0 ? "is-not-empty" : "",

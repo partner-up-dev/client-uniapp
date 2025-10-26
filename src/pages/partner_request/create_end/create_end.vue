@@ -9,7 +9,10 @@ import { usePartnerRequestStore } from "@/store/partner_request";
 import { errorReport, getSafeArea } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
 import { PRType, PRStatus } from "@/business/partner_request";
-import { PartnerRequest, PartnerRequestForm } from "@/business/partner_request/base";
+import {
+  PartnerRequest,
+  PartnerRequestForm,
+} from "@/business/partner_request/base";
 import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
@@ -65,7 +68,9 @@ const publishing_notice = ref<string[]>([
 
 // Use PartnerRequest business layer composable
 const partner_request_id = ref<number | undefined>(undefined);
-const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(partner_request_id.value);
+const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(
+  partner_request_id.value
+);
 
 // methods
 /**
@@ -90,10 +95,9 @@ function onPublish(retry: number = 0) {
               complete() {
                 if (props.value.id) {
                   publishing.value = true;
-                  PartnerRequest.publish(props.value.id)
-                    .finally(() => {
-                      publishing.value = false;
-                    });
+                  PartnerRequest.publish(props.value.id).finally(() => {
+                    publishing.value = false;
+                  });
                 } else {
                   errorReport(domain_t("publish.invalid_id"));
                 }
@@ -154,10 +158,9 @@ function onSave() {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        PartnerRequest.update(props.value.id, form_data.value)
-          .finally(() => {
-            saving.value = false;
-          });
+        PartnerRequest.update(props.value.id, form_data.value).finally(() => {
+          saving.value = false;
+        });
       } else {
         create();
       }
@@ -297,7 +300,12 @@ onShow(() => {
 <template>
   <view class="page-bg"></view>
 
-  <NavBar ref="navBarRef" mode="small" :title="domain_t(`title.${props.type}`)" />
+  <NavBar
+    ref="navBarRef"
+    mode="small"
+    theme="surface"
+    :title="domain_t(`title.${props.type}`)"
+  />
 
   <PUNoticeBar
     class="publishing-notice"
@@ -354,10 +362,7 @@ onShow(() => {
     :style="{ height: `${editorHeight}px` }"
     v-if="!isPublished"
   >
-    <PRForm
-      ref="partnerRequestEditorRef"
-      :base-form="form_data"
-    />
+    <PRForm ref="partnerRequestEditorRef" :base-form="form_data" />
   </view>
 
   <view class="footer">

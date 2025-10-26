@@ -41,6 +41,8 @@ export const puTextareaProps = {
   height: makeNumberProp(80),
   // 聚焦时最小高度，未设置则与 height 保持一致
   focusHeight: { type: Number as PropType<number | undefined>, default: undefined },
+  // 主题
+  theme: makeStringProp<"surface-container" | "surface">("surface-container"),
 };
 
 // ==================== 组件 Emits 定义 ====================

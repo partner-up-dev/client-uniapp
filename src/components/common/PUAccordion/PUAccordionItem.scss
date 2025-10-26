@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $pu-spacing-med;
+    padding: $pu-spacing-sm $pu-spacing-med;
     overflow: hidden;
     user-select: none;
     cursor: pointer;
@@ -34,8 +34,7 @@
   }
 
   &__arrow {
-    display: block;
-    font-size: 20px;
+    @include pu-icon("medium", true);
     color: $pu-color-on-surface-variant;
     transition: transform 0.3s;
 
@@ -52,9 +51,6 @@
 
   &__body {
     color: $pu-color-on-surface;
-    font-size: 14px;
-    padding: $pu-spacing-med;
-    line-height: 1.43;
   }
 
   &.is-disabled {

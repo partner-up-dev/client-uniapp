@@ -3,10 +3,10 @@
 import type { Size } from "@/utils/style";
 import { makeStringProp } from "@/utils/props";
 
-export type CellType = 'default';
+export type CellType = 'horizontal' | 'vertical';
 
 export const CellProps = {
-    type: makeStringProp<CellType>("default"),
+    type: makeStringProp<CellType>("horizontal"),
     title: makeStringProp<string>(''),
     subtitle: makeStringProp<string | undefined>(undefined),
     suffixIcon: makeStringProp<string | undefined>(undefined),

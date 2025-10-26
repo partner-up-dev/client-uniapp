@@ -25,7 +25,7 @@ function onMoreClick() {
 </script>
 
 <template>
-  <view class="nav-bar__container">
+  <view class="nav-bar__container" :class="`nav-bar__container--${theme}`">
     <safeAreaInset position="top" />
 
     <!-- Header -->

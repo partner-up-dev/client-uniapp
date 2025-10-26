@@ -17,6 +17,26 @@
     border: 1px solid $pu-color-primary;
   }
 
+  // theme: surface-container (default)
+  &.theme-surface-container {
+    background-color: $pu-color-surface-container;
+    border: 1px solid transparent;
+
+    &.is-focused {
+      border: 1px solid $pu-color-primary;
+    }
+  }
+
+  // theme: surface
+  &.theme-surface {
+    background-color: $pu-color-surface;
+    border: 1px solid transparent;
+
+    &.is-focused {
+      border-bottom: 1px solid $pu-color-outline;
+    }
+  }
+
   .label {
     color: $pu-color-on-surface-variant;
     @include pu-font-size("label-large");
@@ -35,8 +55,8 @@
     background-color: transparent;
     box-sizing: border-box;
     height: var(--pu-textarea-min-height);
-    transition: height 0.2s;
     width: 100%;
+    transition: height 0.2s;
 
     &.focused {
       height: var(--pu-textarea-min-height-focus);
@@ -44,10 +64,10 @@
   }
 
   .count {
-    display: absolute;
-    align-self: flex-end;
+    position: absolute;
     bottom: $pu-spacing-xs;
     right: $pu-spacing-sm;
     color: $pu-color-on-surface-variant;
+    @include pu-font("label-medium");
   }
 }

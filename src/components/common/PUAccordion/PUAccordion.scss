@@ -1,46 +1,40 @@
 @use "@/styles/main.scss" as *;
 
 .pu-accordion {
-  background: $pu-color-surface-container-lowest;
-
   &.is-viewmore {
     padding: $pu-spacing-med;
   }
 
   &__content {
-    font-size: 14px;
+    @include pu-font("label-large");
     color: $pu-color-on-surface;
 
     &.is-retract {
+      @include pu-font("label-large");
       display: -webkit-box;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      font-size: 14px;
     }
   }
 
   &__more {
     display: inline-block;
-    font-size: 14px;
-    margin-top: 8px;
+    margin-top: $pu-spacing-sm;
     color: $pu-color-primary;
     user-select: none;
     cursor: pointer;
+    @include pu-font("label-large");
   }
 
   &__more-txt {
     display: inline-block;
     vertical-align: middle;
-    margin-right: 4px;
+    margin-right: $pu-spacing-xs;
   }
 
   &__arrow {
-    display: inline-block;
-    vertical-align: middle;
+    @include pu-icon("medium");
     transition: transform 0.1s;
-    font-size: 18px;
-    height: 18px;
-    line-height: 18px;
 
     &.is-retract {
       transform: rotate(-180deg);

@@ -54,26 +54,32 @@ const handleIntroductionInput = (value: string) => {
 const validate = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const errors: string[] = [];
-    
+
     // Validate title if provided
     if (form.title !== null && form.title !== "") {
       if (form.title.length < 3 || form.title.length > 12) {
         errors.push("标题长度必须在 3-12 个字符之间");
       }
     }
-    
+
     // Validate introduction if provided
     if (form.introduction !== null && form.introduction !== "") {
-      if (form.introduction.length < 3 || form.introduction.length > maxlength.introduction) {
+      if (
+        form.introduction.length < 3 ||
+        form.introduction.length > maxlength.introduction
+      ) {
         errors.push("简介长度必须在 3-60 个字符之间");
       }
     }
-    
+
     // At least one field must be provided
-    if ((form.title === null || form.title === "") && (form.introduction === null || form.introduction === "")) {
+    if (
+      (form.title === null || form.title === "") &&
+      (form.introduction === null || form.introduction === "")
+    ) {
       errors.push("请填写标题或简介");
     }
-    
+
     if (errors.length > 0) {
       reject(new Error(errors.join("; ")));
     } else {
@@ -102,7 +108,7 @@ watch(
   <view class="pr-editor">
     <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
       <PUAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
-        <Cell :title="commonEditorDt('title.title')">
+        <Cell :title="commonEditorDt('title.title')" type="vertical">
           <template #value>
             <PUInput
               id="title-editor"
@@ -115,7 +121,7 @@ watch(
             />
           </template>
         </Cell>
-        <Cell :title="commonEditorDt('introduction.title')">
+        <Cell :title="commonEditorDt('introduction.title')" type="vertical">
           <template #value>
             <PUTextarea
               id="introduction-editor"
@@ -123,6 +129,7 @@ watch(
               :placeholder="commonEditorDt('introduction.placeholder')"
               :show-confirm-bar="false"
               :maxlength="maxlength.introduction"
+              theme="surface"
               show-count
               auto-height
               @update:modelValue="handleIntroductionInput"

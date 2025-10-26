@@ -2,12 +2,13 @@
 
 ## Rationale
 
-> 水平布局的单元格组件，用于列表项的标准化展示。提供统一的列表项样式和交互功能，支持编辑器功能。
+> 单元格组件，用于列表项的标准化展示。提供统一的列表项样式和交互功能，支持编辑器功能。
 
 ## Goals
 
-> 提供一个标准化的水平单元格组件，支持：
+> 提供一个标准化的单元格组件，支持：
 >
+> - 水平和垂直两种布局类型
 > - 左侧图标/头像
 > - 标题、副标题和值文本
 > - 多种编辑器类型（选择器、位置选择器、输入框等）
@@ -21,7 +22,8 @@
 >
 > **布局类型：**
 >
-> - `default`：水平布局，左侧显示图标+标题+副标题，右侧显示值+箭头
+> - `horizontal`（默认）：水平布局，左侧显示图标+标题+副标题，右侧显示值+箭头
+> - `vertical`：垂直布局，第一行显示图标+标题+右侧图标，第二行显示值
 
 ## Implementation
 
@@ -31,33 +33,27 @@
 
 | 属性名 | 类型 | 默认值 | 必填 | 说明 |
 |--------|------|--------|------|------|
-| type | `'default'` | `'default'` | 否 | 单元格布局类型：`default` 为水平布局 |
+| type | `'horizontal' \| 'vertical'` | `'horizontal'` | 否 | 单元格布局类型 |
 | title | `string` | `''` | 否 | 单元格标题 |
-| subtitle | `string` | `''` | 否 | 单元格副标题 |
+| subtitle | `string` | `''` | 否 | 单元格副标题（仅 horizontal 类型支持） |
 | value | `string \| number \| undefined` | `undefined` | 否 | 单元格值 |
-| valueFormmater | `(val: any) => string` | - | 否 | 值格式化函数 |
-| valuePlaceholder | `string` | `''` | 否 | 值的占位符 |
-| editorType | `CellEditorType` | `CommonPicker` | 否 | 编辑器类型 |
-| editorData | `any` | - | 否 | 编辑器数据 |
-| editable | `boolean` | `false` | 否 | 是否可编辑 |
+| prefixIcon | `string \| undefined` | `undefined` | 否 | 前缀图标类名 |
+| suffixIcon | `string \| undefined` | `undefined` | 否 | 后缀图标类名 |
 | size | `'small' \| 'medium'` | `'small'` | 否 | 单元格尺寸 |
-| showArrow | `boolean` | `false` | 否 | 是否显示右侧箭头 |
 
 ### Events
 
 | 事件名 | 参数 | 说明 |
 |--------|------|------|
-| confirm | `(value: CellValueType)` | 编辑确认事件 |
-| cancel | `()` | 编辑取消事件 |
-| editing | `()` | 进入编辑状态事件 |
+| click | `()` | 单元格点击事件 |
 
 ### Slots
 
 | 插槽名 | 说明 | 参数 |
 |--------|------|------|
-| icon | 自定义左侧图标区域 | - |
 | title | 自定义标题内容 | - |
-| subtitle | 自定义副标题内容 | - |
+| subtitle | 自定义副标题内容（仅 horizontal 类型） | - |
+| value | 自定义值内容 | - |
 
 ### Methods
 
