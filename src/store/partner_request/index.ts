@@ -1,7 +1,7 @@
 // desc: PartnerRequest Module's Store
 
 // types
-import { PartnerRequestType } from "@/types/partner_request";
+import { PRType } from "@/business/partner_request";
 import type { PartnerRequestEditableContentUnion } from "@/data/form";
 
 // store
@@ -11,7 +11,7 @@ import { deepcopy } from "@/utils";
 
 export interface PartnerRequestState {
     draft?: {
-        type: PartnerRequestType;
+        type: PRType;
         content: PartnerRequestEditableContentUnion;
     };
 }
@@ -47,7 +47,7 @@ export const usePartnerRequestStore = defineStore('partner_request', {
         /**
          * @name 本地存稿的搭子请求类型
          */
-        draftType(state: PartnerRequestState): PartnerRequestType | null {
+        draftType(state: PartnerRequestState): PRType | null {
             if (state.draft) {
                 return state.draft.type;
             }
@@ -56,7 +56,7 @@ export const usePartnerRequestStore = defineStore('partner_request', {
     },
 
     actions: {
-        async saveDraft(type: PartnerRequestType, content: PartnerRequestEditableContentUnion) {
+        async saveDraft(type: PRType, content: PartnerRequestEditableContentUnion) {
             this.draft = {
                 type,
                 content
@@ -68,31 +68,3 @@ export const usePartnerRequestStore = defineStore('partner_request', {
     },
 
 });
-
-import { ref, computed } from "vue";
-import { PartnerRequestStatus } from "@/types/partner_request";
-import { PartnerRequest } from "@/business/partner_request/base";
-import type { PRRef } from "@/business/partner_request";
-
-/**
- * @name 搭子请求Vue Composable
- */
-export function usePartnerRequest(id?: PRRef) {
-    const partner_request_id = ref(id);
-
-    const { pr, loading: prLoading } = PartnerRequest.usePR(id);
-    
-    /**
-     * @name 是否正在寻找搭子
-     */
-    const isWaitingForPartners = computed((): boolean => {
-        return pr.value?.status === PartnerRequestStatus.WaitingForPartners;
-    });
-
-    return {
-        partner_request_id,
-        loading: prLoading,
-        partnerRequest: pr,
-        isWaitingForPartners
-    }
-}
