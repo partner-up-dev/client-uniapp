@@ -167,6 +167,12 @@ export default {
     common_editor: {
       title: "基本信息"
     },
+    route: {
+      title: "路线信息"
+    },
+    trip_preference: {
+      title: "出行偏好"
+    },
     partners_editor: {
       title: "搭子角色"
     }

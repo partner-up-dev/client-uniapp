@@ -5,10 +5,13 @@ import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
-import { PartnerRequest } from "@/business/partner_request/base";
+import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
+import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
+import { PartnerRequest, PartnerRequestForm } from "@/business/partner_request/base";
+import { PRType } from "@/business/partner_request";
 
 // composables
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, computed } from "vue";
 
 // props
 import { prFormProps, prFormEmits } from "./PRForm";
@@ -26,18 +29,31 @@ const form = reactive({
   introduction: props.baseForm.introduction || "",
 });
 
-const collapse = reactive<{ metadata: string[] }>({
+const collapse = reactive<{ metadata: string[]; route?: string[]; tripPreference?: string[] }>({
   metadata: ["metadata"],
+  route: props.type === PRType.RideHailing || props.type === PRType.Commute ? ["route"] : undefined,
+  tripPreference: props.type === PRType.RideHailing || props.type === PRType.Commute ? ["tripPreference"] : undefined,
 });
 
 // refs
 const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
+const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
+const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(null);
 
 // 字段长度限制
 const maxlength = {
   title: PartnerRequest.TITLE_MAXLENGTH,
   introduction: PartnerRequest.INTRODUCTION_MAXLENGTH,
 };
+
+// computed
+const shouldShowRoute = computed(() => 
+  props.type === PRType.RideHailing || props.type === PRType.Commute
+);
+
+const shouldShowTripPreference = computed(() => 
+  props.type === PRType.RideHailing || props.type === PRType.Commute
+);
 
 // functions
 const handleTitleInput = (value: string | number) => {
@@ -50,34 +66,48 @@ const handleIntroductionInput = (value: string) => {
   emit("confirm", 0); // TODO: implement proper save logic
 };
 
+const handleRouteChange = () => {
+  if (props.route) {
+    emit("update:route", props.route);
+  }
+};
+
+const handleTripPreferenceChange = () => {
+  if (props.tripPreference) {
+    emit("update:tripPreference", props.tripPreference);
+  }
+};
+
 // validation
 const validate = (): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const errors: string[] = [];
-    
-    // Validate title if provided
-    if (form.title !== null && form.title !== "") {
-      if (form.title.length < 3 || form.title.length > 12) {
-        errors.push("标题长度必须在 3-12 个字符之间");
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Validate base form using PartnerRequestForm's validate method
+      const baseFormInstance = PartnerRequestForm.parse({
+        title: form.title || null,
+        introduction: form.introduction || null,
+      });
+      await baseFormInstance.validate();
+      
+      // Validate route if needed
+      if (shouldShowRoute.value && routeEditorRef.value) {
+        const routeValidation = await routeEditorRef.value.validate();
+        if (!routeValidation.valid) {
+          throw new Error(routeValidation.errors.join("; "));
+        }
       }
-    }
-    
-    // Validate introduction if provided
-    if (form.introduction !== null && form.introduction !== "") {
-      if (form.introduction.length < 3 || form.introduction.length > maxlength.introduction) {
-        errors.push("简介长度必须在 3-60 个字符之间");
+      
+      // Validate trip preference if needed
+      if (shouldShowTripPreference.value && tripPreferenceFormRef.value) {
+        const tripPrefValidation = await tripPreferenceFormRef.value.validate();
+        if (!tripPrefValidation.valid) {
+          throw new Error(tripPrefValidation.errors.join("; "));
+        }
       }
-    }
-    
-    // At least one field must be provided
-    if ((form.title === null || form.title === "") && (form.introduction === null || form.introduction === "")) {
-      errors.push("请填写标题或简介");
-    }
-    
-    if (errors.length > 0) {
-      reject(new Error(errors.join("; ")));
-    } else {
+      
       resolve();
+    } catch (error) {
+      reject(error);
     }
   });
 };
@@ -129,6 +159,29 @@ watch(
             />
           </template>
         </Cell>
+      </PUAccordionItem>
+    </PUAccordion>
+
+    <!-- Route Editor for ride_hailing and commute types -->
+    <PUAccordion v-if="shouldShowRoute && route" v-model="collapse.route">
+      <PUAccordionItem name="route" :title="dt('editor.route.title')">
+        <RouteEditor
+          ref="routeEditorRef"
+          v-model="route"
+          type="normal"
+          @change="handleRouteChange"
+        />
+      </PUAccordionItem>
+    </PUAccordion>
+
+    <!-- Trip Preference Editor for ride_hailing and commute types -->
+    <PUAccordion v-if="shouldShowTripPreference && tripPreference" v-model="collapse.tripPreference">
+      <PUAccordionItem name="tripPreference" :title="dt('editor.trip_preference.title')">
+        <TripPreferenceForm
+          ref="tripPreferenceFormRef"
+          v-model="tripPreference"
+          @change="handleTripPreferenceChange"
+        />
       </PUAccordionItem>
     </PUAccordion>
   </view>
