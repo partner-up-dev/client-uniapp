@@ -7,13 +7,42 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { CellProps, CellEmits } from "./cell";
+import { inject, computed } from "vue";
+import type { FormErrorState } from "@/components/common/PUForm/PUForm";
 
 const props = defineProps(CellProps);
 const emit = defineEmits(CellEmits);
+
+// Inject form context if inside PUForm
+const formErrors = inject<{ value: FormErrorState } | undefined>(
+  "puFormErrors",
+  undefined
+);
+const formCellPadding = inject<{ value: string } | undefined>(
+  "puFormCellPadding",
+  undefined
+);
+
+// Compute error message for this cell
+const errorMessage = computed(() => {
+  if (!props.formProp || !formErrors?.value?.errors) {
+    return undefined;
+  }
+  return formErrors.value.errors[props.formProp];
+});
+
+// Compute cell padding
+const cellPadding = computed(() => {
+  return formCellPadding?.value || undefined;
+});
 </script>
 
 <template>
-  <view :class="['cell', `is-${size}`, `is-${type}`]" @click="emit('click')">
+  <view
+    :class="['cell', `is-${size}`, `is-${type}`, { 'has-error': !!errorMessage }]"
+    :style="{ padding: cellPadding }"
+    @click="emit('click')"
+  >
     <!-- Horizontal type: horizontal layout -->
     <template v-if="type === 'horizontal'">
       <view class="cell__left">
@@ -70,6 +99,11 @@ const emit = defineEmits(CellEmits);
         </view>
       </view>
     </template>
+
+    <!-- Error message display -->
+    <view v-if="errorMessage" class="cell__error-message">
+      {{ errorMessage }}
+    </view>
   </view>
 </template>
 

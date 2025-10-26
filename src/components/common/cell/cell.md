@@ -40,6 +40,7 @@
 | prefixIcon | `string \| undefined` | `undefined` | 否 | 前缀图标类名 |
 | suffixIcon | `string \| undefined` | `undefined` | 否 | 后缀图标类名 |
 | size | `'small' \| 'medium'` | `'small'` | 否 | 单元格尺寸 |
+| formProp | `string \| undefined` | `undefined` | 否 | 表单字段属性名，用于关联 PUForm 验证错误 |
 
 ### Events
 
@@ -68,3 +69,4 @@
 - 支持无障碍性标准
 - 提供点击反馈效果
 - 兼容性：支持所有Uniapp目标平台
+- 可在 PUForm 中使用，设置 `formProp` 属性后会自动显示验证错误信息，详见 [PUForm 文档](../PUForm/PUForm.md)

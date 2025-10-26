@@ -66,13 +66,18 @@
       display: flex;
       align-items: center;
     }
+
+    // Adjust layout when there's an error
+    &.has-error {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   // Vertical type: vertical layout
   &.is-vertical {
     flex-direction: column;
     gap: $pu-spacing-sm;
-    padding: $pu-spacing-sm;
 
     .cell__header {
       display: flex;
@@ -114,6 +119,21 @@
       color: $pu-color-on-surface-variant;
       @include pu-font("label-large");
       word-break: break-word;
+    }
+  }
+
+  // Error message styles
+  .cell__error-message {
+    color: $pu-color-error;
+    @include pu-font("label-medium");
+    margin-top: $pu-spacing-xs;
+    line-height: 1.4;
+  }
+
+  // Error state
+  &.has-error {
+    .cell__title {
+      color: $pu-color-error;
     }
   }
 }

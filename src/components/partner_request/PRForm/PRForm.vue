@@ -2,6 +2,7 @@
 import { useTranslate } from "@/locale/use";
 import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
 import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
+import PUForm from "@/components/common/PUForm/PUForm.vue";
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
@@ -41,6 +42,7 @@ const collapse = reactive<{
 });
 
 // refs
+const puFormRef = ref<InstanceType<typeof PUForm> | null>(null);
 const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
 const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
 const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(
@@ -65,8 +67,27 @@ const shouldShowTripPreference = computed(() =>
 const validate = (): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
-      // Validate base form using PartnerRequestForm's validate method
-      await props.modelValue.validate();
+      // Prepare form data for validation
+      const formData = {
+        title: form.title || null,
+        introduction: form.introduction || null,
+        route: props.modelValue.route,
+        trip_preference: props.modelValue.trip_preference,
+      };
+
+      // Validate base form using PUForm
+      if (!puFormRef.value) {
+        throw new Error("Form reference not found");
+      }
+
+      const validationResult = await puFormRef.value.validate(formData);
+
+      if (!validationResult.success) {
+        const errorMessages = Object.values(validationResult.errors || {}).join(
+          "; "
+        );
+        throw new Error(errorMessages || "Validation failed");
+      }
 
       // Validate route if needed
       if (shouldShowRoute.value && routeEditorRef.value) {
@@ -109,63 +130,76 @@ watch(
 
 <template>
   <view class="pr-editor">
-    <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
-      <PUAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
-        <Cell :title="commonEditorDt('title.title')" type="vertical">
-          <template #value>
-            <PUInput
-              id="title-editor"
-              v-model="form.title"
-              :placeholder="commonEditorDt('title.placeholder')"
-              :maxlength="maxlength.title"
-              show-word-limit
-              no-border
-            />
-          </template>
-        </Cell>
-        <Cell :title="commonEditorDt('introduction.title')" type="vertical">
-          <template #value>
-            <PUTextarea
-              id="introduction-editor"
-              v-model="form.introduction"
-              :placeholder="commonEditorDt('introduction.placeholder')"
-              :show-confirm-bar="false"
-              :maxlength="maxlength.introduction"
-              theme="surface"
-              show-count
-              auto-height
-            />
-          </template>
-        </Cell>
-      </PUAccordionItem>
-    </PUAccordion>
+    <PUForm ref="puFormRef" :schema="PartnerRequestForm">
+      <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
+        <PUAccordionItem
+          name="metadata"
+          :title="dt('editor.common_editor.title')"
+        >
+          <Cell
+            :title="commonEditorDt('title.title')"
+            type="vertical"
+            formProp="title"
+          >
+            <template #value>
+              <PUInput
+                id="title-editor"
+                v-model="form.title"
+                :placeholder="commonEditorDt('title.placeholder')"
+                :maxlength="maxlength.title"
+                show-word-limit
+                no-border
+              />
+            </template>
+          </Cell>
+          <Cell
+            :title="commonEditorDt('introduction.title')"
+            type="vertical"
+            formProp="introduction"
+          >
+            <template #value>
+              <PUTextarea
+                id="introduction-editor"
+                v-model="form.introduction"
+                :placeholder="commonEditorDt('introduction.placeholder')"
+                :show-confirm-bar="false"
+                :maxlength="maxlength.introduction"
+                theme="surface"
+                show-count
+                auto-height
+              />
+            </template>
+          </Cell>
+        </PUAccordionItem>
+      </PUAccordion>
 
-    <!-- Route Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowRoute" v-model="collapse.route">
-      <PUAccordionItem name="route" :title="dt('editor.route.title')">
-        <RouteEditor
-          ref="routeEditorRef"
-          :modelValue="props.modelValue.route"
-          type="normal"
-        />
-      </PUAccordionItem>
-    </PUAccordion>
+      <!-- Route Editor for ride_hailing and commute types -->
+      <PUAccordion v-if="shouldShowRoute" v-model="collapse.route">
+        <PUAccordionItem name="route" :title="dt('editor.route.title')">
+          <RouteEditor
+            ref="routeEditorRef"
+            :modelValue="props.modelValue.route"
+            type="normal"
+          />
+        </PUAccordionItem>
+      </PUAccordion>
 
-    <!-- Trip Preference Editor for ride_hailing and commute types -->
-    <PUAccordion
-      v-if="shouldShowTripPreference"
-      v-model="collapse.tripPreference"
-    >
-      <PUAccordionItem
-        name="tripPreference"
-        :title="dt('editor.trip_preference.title')"
+      <!-- Trip Preference Editor for ride_hailing and commute types -->
+      <PUAccordion
+        v-if="shouldShowTripPreference"
+        v-model="collapse.tripPreference"
       >
-        <TripPreferenceForm
-          ref="tripPreferenceFormRef"
-          :modelValue="props.modelValue.trip_preference"
-        />
-      </PUAccordionItem>
-    </PUAccordion>
+        <PUAccordionItem
+          name="tripPreference"
+          :title="dt('editor.trip_preference.title')"
+        >
+          <TripPreferenceForm
+            ref="tripPreferenceFormRef"
+            :modelValue="props.modelValue.trip_preference"
+          />
+        </PUAccordionItem>
+      </PUAccordion>
+    </PUForm>
   </view>
 </template>
 
