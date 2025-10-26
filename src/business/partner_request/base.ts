@@ -21,7 +21,7 @@ export class PartnerRequest extends V.class(v.object({
 })) {
 
   static INTRODUCTION_MAXLENGTH = 60;
-  static TITLE_MAXLENGTH = 16;
+  static TITLE_MAXLENGTH = 12;
 
   static api = new APIClient({
     modulePrefix: '/partner_request',
@@ -138,6 +138,32 @@ export class PartnerRequest extends V.class(v.object({
     return {
       draftPRs, loading, refresh
     }
+  }
+
+  static create(data: PartnerRequestForm, type: PRType): Promise<PartnerRequest> {
+    return this.api.requestHTTP({
+      method: 'POST',
+      endpoint: '/',
+      data: { ...data, type },
+      operation_id: 'PartnerRequestV2Create',
+    }).then(({ body }) => body.parsed);
+  }
+
+  static update(pr_id: PRRef, data: PartnerRequestForm): Promise<void> {
+    return this.api.requestHTTP({
+      method: 'PUT',
+      endpoint: `/${pr_id}`,
+      data,
+      operation_id: 'PartnerRequestV2Edit',
+    }).then(() => undefined);
+  }
+
+  static publish(pr_id: PRRef): Promise<void> {
+    return this.api.requestHTTP({
+      method: 'POST',
+      endpoint: `/${pr_id}/publish`,
+      operation_id: 'PartnerRequestV2Publish',
+    }).then(() => undefined);
   }
 }
 

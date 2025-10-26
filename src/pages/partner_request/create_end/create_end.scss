@@ -1,23 +1,8 @@
-// PartnerRequest:Page:Create-End's styles
-
 @use "@/styles/main.scss" as *;
 
 .publishing-notice {
   width: 98%;
   margin: 0 auto;
-}
-
-.af-pub__body::after {
-  content: "";
-
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  height: 32px;
-
-  background: linear-gradient(to bottom, transparent, $pu-color-surface);
 }
 
 .af-pub {
@@ -54,6 +39,19 @@
     display: flex;
     flex-direction: column;
     gap: $pu-spacing-med;
+
+    &::after {
+      content: "";
+
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      height: 32px;
+
+      background: linear-gradient(to bottom, transparent, $pu-color-surface);
+    }
   }
 
   &__card {
@@ -72,8 +70,8 @@
       @include pu-font(label-large);
     }
 
-    :deep(.operation) {
-      margin: 0 0 0 auto !important;
+    .operation {
+      margin: 0 0 0 auto;
       height: 36px;
     }
   }
@@ -99,9 +97,9 @@
 
 .footer {
   position: absolute;
-  bottom: 0px;
-  right: 0px;
-  left: 0px;
+  bottom: 0;
+  right: 0;
+  left: 0;
 
   background-color: $pu-color-surface-container;
   color: $pu-color-on-surface;
@@ -117,8 +115,8 @@
 }
 
 .button {
-  margin: 0 !important;
-  height: 36px !important;
-  min-width: auto !important;
-  padding: 0px $pu-spacing-lg !important;
+  margin: 0;
+  height: 36px;
+  min-width: auto;
+  padding: 0 $pu-spacing-lg;
 }

@@ -18,6 +18,7 @@ const props = defineProps(prFormProps);
 const emit = defineEmits(prFormEmits);
 
 const { dt } = useTranslate("partner_request");
+const { dt: commonEditorDt } = useTranslate("partner_request.common_editor");
 
 // reactive data
 const form = reactive({
@@ -49,6 +50,43 @@ const handleIntroductionInput = (value: string) => {
   emit("confirm", 0); // TODO: implement proper save logic
 };
 
+// validation
+const validate = (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const errors: string[] = [];
+    
+    // Validate title if provided
+    if (form.title !== null && form.title !== "") {
+      if (form.title.length < 3 || form.title.length > 12) {
+        errors.push("标题长度必须在 3-12 个字符之间");
+      }
+    }
+    
+    // Validate introduction if provided
+    if (form.introduction !== null && form.introduction !== "") {
+      if (form.introduction.length < 3 || form.introduction.length > maxlength.introduction) {
+        errors.push("简介长度必须在 3-60 个字符之间");
+      }
+    }
+    
+    // At least one field must be provided
+    if ((form.title === null || form.title === "") && (form.introduction === null || form.introduction === "")) {
+      errors.push("请填写标题或简介");
+    }
+    
+    if (errors.length > 0) {
+      reject(new Error(errors.join("; ")));
+    } else {
+      resolve();
+    }
+  });
+};
+
+// expose
+defineExpose({
+  validate,
+});
+
 // watchers
 watch(
   () => props.baseForm,
@@ -63,13 +101,13 @@ watch(
 <template>
   <view class="pr-editor">
     <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
-      <PUAccordionItem name="metadata" :title="dt('form.metadata')">
-        <Cell :title="dt('form.title')">
+      <PUAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
+        <Cell :title="commonEditorDt('title.title')">
           <template #value>
             <PUInput
               id="title-editor"
               v-model="form.title"
-              :placeholder="dt('form.placeholder.title')"
+              :placeholder="commonEditorDt('title.placeholder')"
               :maxlength="maxlength.title"
               show-word-limit
               no-border
@@ -77,12 +115,12 @@ watch(
             />
           </template>
         </Cell>
-        <Cell :title="dt('form.introduction')">
+        <Cell :title="commonEditorDt('introduction.title')">
           <template #value>
             <PUTextarea
               id="introduction-editor"
               v-model="form.introduction"
-              :placeholder="dt('form.placeholder.introduction')"
+              :placeholder="commonEditorDt('introduction.placeholder')"
               :show-confirm-bar="false"
               :maxlength="maxlength.introduction"
               show-count

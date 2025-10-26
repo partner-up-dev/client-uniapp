@@ -5,26 +5,19 @@ import * as v from "valibot";
 import NavBar from "@/components/common/navBar/navBar.vue";
 import { useTranslate } from "@/locale/use";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
-import {
-  usePartnerRequest,
-  // usePartnerRequestStore,
-} from "@/store/partner_request";
+import { usePartnerRequestStore } from "@/store/partner_request";
 import { errorReport, getSafeArea } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
-import {
-  get_partner_request_editor_form,
-  get_partner_request_editor_form_from_partner_request,
-  type PartnerRequestEditableContentUnion,
-} from "@/data/form";
-import { PRType } from "@/business/partner_request";
-import { PartnerRequest } from "@/business/partner_request/base";
+import { PRType, PRStatus } from "@/business/partner_request";
+import { PartnerRequest, PartnerRequestForm } from "@/business/partner_request/base";
 import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
+import PUNoticeBar from "@/components/common/PUNoticeBar/PUNoticeBar.vue";
+import PUButton from "@/components/common/PUButton/PUButton.vue";
 
 const { dt: domain_t } = useTranslate("partner_request.create_end");
-const { partner_request_id, isWaitingForPartners } = usePartnerRequest();
 
 // Define props schema with valibot
 const propsSchema = v.object({
@@ -59,13 +52,20 @@ const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
 const partnerRequestEditorRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
-const form_data = ref<PartnerRequestEditableContentUnion<PRType>>(
-  get_partner_request_editor_form(props.value.type)
+const form_data = ref<PartnerRequestForm>(
+  PartnerRequestForm.parse({
+    title: null,
+    introduction: null,
+  })
 );
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
 ]);
+
+// Use PartnerRequest business layer composable
+const partner_request_id = ref<number | undefined>(undefined);
+const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(partner_request_id.value);
 
 // methods
 /**
@@ -80,14 +80,7 @@ function onPublish(retry: number = 0) {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        // TODO: Implement edit API
-        PartnerRequest.api
-          .requestHTTP({
-            method: "PUT",
-            endpoint: `/${props.value.id}`,
-            data: form_data.value,
-            operation_id: "PartnerRequestV2Edit",
-          })
+        PartnerRequest.update(props.value.id, form_data.value)
           .then(() => {
             uni.requestSubscribeMessage({
               tmplIds: [
@@ -97,13 +90,7 @@ function onPublish(retry: number = 0) {
               complete() {
                 if (props.value.id) {
                   publishing.value = true;
-                  // TODO: Implement publish API
-                  PartnerRequest.api
-                    .requestHTTP({
-                      method: "POST",
-                      endpoint: `/${props.value.id}/publish`,
-                      operation_id: "PartnerRequestV2Publish",
-                    })
+                  PartnerRequest.publish(props.value.id)
                     .finally(() => {
                       publishing.value = false;
                     });
@@ -140,16 +127,8 @@ function create(): Promise<void> {
       errorReport(domain_t("save.invalid_form_type"));
       reject();
     } else {
-      // TODO: Implement create API
-      PartnerRequest.api
-        .requestHTTP({
-          method: "POST",
-          endpoint: "/",
-          data: { ...form_data.value, type: props.value.type },
-          operation_id: "PartnerRequestV2Create",
-        })
-        .then(({ body }) => {
-          const pr = body.parsed;
+      PartnerRequest.create(form_data.value, props.value.type)
+        .then((pr) => {
           props.value.id = pr._id;
           resolve();
         })
@@ -175,13 +154,7 @@ function onSave() {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        PartnerRequest.api
-          .requestHTTP({
-            method: "PUT",
-            endpoint: `/${props.value.id}`,
-            data: form_data.value,
-            operation_id: "PartnerRequestV2Edit",
-          })
+        PartnerRequest.update(props.value.id, form_data.value)
           .finally(() => {
             saving.value = false;
           });
@@ -215,9 +188,9 @@ function onDiscover() {
  * 有id且对应搭子请求的状态为寻找搭子�?
  */
 const isPublished = computed((): boolean => {
-  if (props.value.id) {
+  if (props.value.id && partnerRequest.value) {
     partner_request_id.value = props.value.id;
-    return isWaitingForPartners.value;
+    return partnerRequest.value.status === PRStatus.Joinable;
   }
   return false;
   // return true;  // TEMP
@@ -276,13 +249,10 @@ onLoad(
       const cache = usePartnerRequestStore().draftContent;
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
-        form_data.value = get_partner_request_editor_form(type);
-        // replace fields that cache defined to form_data
-        Object.entries(cache).forEach(([key, value]) => {
-          if (key in form_data.value && value !== undefined) {
-            // @ts-ignore
-            form_data.value[key] = value;
-          }
+        // Initialize empty form and merge with cache
+        form_data.value = PartnerRequestForm.parse({
+          title: cache.title || null,
+          introduction: cache.introduction || null,
         });
         props.value.type = type;
       } else {
@@ -293,7 +263,7 @@ onLoad(
       const cache = usePartnerRequestStore().draftContent;
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
-        form_data.value = cache;
+        form_data.value = PartnerRequestForm.parse(cache);
         props.value.type = type;
       } else {
         errorReport(domain_t("on_load.load_form_from_cache.failed"));
@@ -301,16 +271,20 @@ onLoad(
     } else if (props.value.id) {
       // load from draft
       PartnerRequest.get(props.value.id).then((pr) => {
-        // update form_data
-        form_data.value = get_partner_request_editor_form_from_partner_request(
-          pr as any
-        );
+        // Convert PartnerRequest to PartnerRequestForm
+        form_data.value = PartnerRequestForm.parse({
+          title: pr.title,
+          introduction: pr.introduction,
+        });
         // update type
         props.value.type = pr.type;
       });
     } else if (props.value.type) {
       // load from type(empty form)
-      form_data.value = get_partner_request_editor_form(props.value.type);
+      form_data.value = PartnerRequestForm.parse({
+        title: null,
+        introduction: null,
+      });
     }
   }
 );
@@ -325,11 +299,11 @@ onShow(() => {
 
   <NavBar ref="navBarRef" mode="small" :title="domain_t(`title.${props.type}`)" />
 
-  <wd-notice-bar
+  <PUNoticeBar
     class="publishing-notice"
     v-if="publishing"
     :text="publishing_notice"
-    prefix="tips"
+    prefix="lightbulb"
     background-color="#f6d77d"
     color="#372a04"
     direction="vertical"
@@ -358,9 +332,13 @@ onShow(() => {
         <view class="description">{{
           domain_t("after_publish.share.description")
         }}</view>
-        <wd-button class="operation" type="primary" icon="share" @click="onShare">
-          {{ domain_t("after_publish.share.operation") }}
-        </wd-button>
+        <PUButton
+          class="operation"
+          theme="Primary"
+          prefix-icon="i-mdi-share"
+          :text="domain_t('after_publish.share.operation')"
+          @click="onShare"
+        />
       </view>
       <view class="af-pub__stop af-pub__card">
         <view class="title">{{ domain_t("after_publish.stop.title") }}</view>
@@ -378,8 +356,7 @@ onShow(() => {
   >
     <PRForm
       ref="partnerRequestEditorRef"
-      :modelValue="form_data"
-      :type="props.type"
+      :base-form="form_data"
     />
   </view>
 
@@ -387,57 +364,48 @@ onShow(() => {
     <view class="operations">
       <!-- Not Published -->
 
-      <wd-button
+      <PUButton
         class="operations__save button"
         v-if="!isPublished"
-        type="info"
-        plain
-        icon="save"
+        theme="SurfaceOutlined"
+        prefix-icon="i-mdi-content-save"
+        :text="domain_t('operations.save')"
         :loading="publishing || saving"
-        loading-color="#1a1c16"
         @click="onSave"
-      >
-        {{ domain_t("operations.save") }}
-      </wd-button>
+      />
 
-      <wd-button
+      <PUButton
         class="operations__publish button"
         v-if="!isPublished"
-        type="primary"
-        icon="check"
+        theme="Primary"
+        prefix-icon="i-mdi-check"
+        :text="domain_t('operations.publish')"
         :loading="publishing || saving"
-        loading-color="#96d945"
         @click="onPublish"
-      >
-        {{ domain_t("operations.publish") }}
-      </wd-button>
+      />
 
       <!-- Published -->
 
-      <wd-button
+      <PUButton
         class="operations__view button"
         v-if="isPublished"
-        type="info"
-        plain
-        icon="view"
+        theme="SurfaceOutlined"
+        prefix-icon="i-mdi-eye"
+        :text="domain_t('operations.view')"
         @click="onView"
-      >
-        {{ domain_t("operations.view") }}
-      </wd-button>
+      />
 
-      <wd-button
+      <PUButton
         class="operations__discover button"
         v-if="isPublished"
-        type="success"
-        icon="discover"
-        classPrefix="partnerup-iconfont"
+        theme="Primary"
+        prefix-icon="i-mdi-compass"
+        :text="domain_t('operations.discover')"
         @click="onDiscover"
-      >
-        {{ domain_t("operations.discover") }}
-      </wd-button>
+      />
     </view>
 
-    <SafeAreaBottomInset />
+    <SafeAreaInset position="bottom" />
   </view>
 </template>
 

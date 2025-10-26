@@ -42,6 +42,14 @@ const safeListOfIcons = [
   'i-mdi-train-variant',
   'i-mdi-car',
   'i-mdi-briefcase',
+  // PUNoticeBar icons
+  'i-mdi-lightbulb',
+  'i-mdi-close',
+  // create_end page icons
+  'i-mdi-share',
+  'i-mdi-content-save',
+  'i-mdi-check',
+  'i-mdi-compass',
 ]
 
 export default {
