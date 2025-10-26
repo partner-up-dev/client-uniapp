@@ -295,7 +295,12 @@ onShow(() => {
 <template>
   <view class="page-bg"></view>
 
-  <NavBar ref="navBarRef" mode="small" :title="domain_t(`title.${props.type}`)" />
+  <NavBar
+    ref="navBarRef"
+    mode="small"
+    theme="surface"
+    :title="domain_t(`title.${props.type}`)"
+  />
 
   <PUNoticeBar
     class="publishing-notice"

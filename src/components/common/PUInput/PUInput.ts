@@ -6,6 +6,7 @@ import {
   makeNumericProp,
   makeStringProp,
 } from "@/utils/props";
+import { type Size } from "@/utils/style";
 
 // ==================== 组件相关类型定义 ====================
 
@@ -21,8 +22,6 @@ export type InputType =
   | "tel";
 
 export type InputConfirmType = "send" | "search" | "next" | "go" | "done";
-
-export type InputSize = "large";
 
 export interface FormItemRule {
   required?: boolean;
@@ -77,7 +76,7 @@ export const puInputProps = {
   clearTrigger: makeStringProp<InputClearTrigger>("focus"),
 
   // 样式
-  size: makeStringProp<InputSize | "">(""),
+  height: makeNumberProp(28),
   center: makeBooleanProp(false),
   alignRight: makeBooleanProp(false),
   noBorder: makeBooleanProp(false),

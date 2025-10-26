@@ -111,7 +111,7 @@ watch(
   <view class="pr-editor">
     <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
       <PUAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
-        <Cell :title="commonEditorDt('title.title')">
+        <Cell :title="commonEditorDt('title.title')" type="vertical">
           <template #value>
             <PUInput
               id="title-editor"
@@ -123,7 +123,7 @@ watch(
             />
           </template>
         </Cell>
-        <Cell :title="commonEditorDt('introduction.title')">
+        <Cell :title="commonEditorDt('introduction.title')" type="vertical">
           <template #value>
             <PUTextarea
               id="introduction-editor"
@@ -131,6 +131,7 @@ watch(
               :placeholder="commonEditorDt('introduction.placeholder')"
               :show-confirm-bar="false"
               :maxlength="maxlength.introduction"
+              theme="surface"
               show-count
               auto-height
             />

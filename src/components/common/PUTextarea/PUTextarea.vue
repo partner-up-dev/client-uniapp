@@ -5,6 +5,7 @@
       'is-disabled': disabled,
       'is-readonly': readonly,
       'is-focused': isFocused,
+      [`theme-${theme}`]: true,
     }"
     :style="rootStyle"
   >
@@ -38,7 +39,7 @@
 
       <!-- 计数器 -->
       <view v-if="showCount && normalizedMaxlength > -1" class="count">
-        <text class="font-label-large">{{ countText }}</text>
+        <text>{{ countText }}</text>
       </view>
     </view>
   </view>

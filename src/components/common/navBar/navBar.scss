@@ -8,8 +8,15 @@
   padding: $pu-spacing-sm $pu-spacing-med;
 
   &__container {
-    background-color: $pu-color-secondary;
-    color: $pu-color-secondary-on;
+    &--secondary {
+      background-color: $pu-color-secondary;
+      color: $pu-color-secondary-on;
+    }
+
+    &--surface {
+      background-color: $pu-color-surface;
+      color: $pu-color-on-surface;
+    }
   }
 
   &__left {

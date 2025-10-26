@@ -4,7 +4,6 @@
   position: relative;
   -webkit-tap-highlight-color: transparent;
   text-align: left;
-  background: $pu-color-surface-container-lowest;
 
   &::after {
     position: absolute;
@@ -34,12 +33,6 @@
   &.is-center {
     .pu-input__label {
       align-items: center;
-    }
-  }
-
-  &.is-large {
-    .pu-input__inner {
-      @include pu-font("title-medium");
     }
   }
 
@@ -105,8 +98,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  min-height: $pu-size-large;
   box-sizing: border-box;
+  padding: $pu-spacing-xs $pu-spacing-sm;
 }
 
 .pu-input__prefix,
@@ -152,10 +145,11 @@
   outline: none;
   background: transparent;
   color: $pu-color-on-surface;
-  @include pu-font("body-large");
-  line-height: 1.5;
   padding: 0;
-  min-height: $pu-size-medium;
+  height: var(--pu-input-height);
+  width: 100%;
+  box-sizing: border-box;
+  @include pu-font("label-large");
 
   &::placeholder {
     color: $pu-color-on-surface-variant;
@@ -163,10 +157,6 @@
 
   &--prefix {
     padding-left: 0;
-  }
-
-  &--count {
-    padding-right: 0;
   }
 
   &.is-align-right {

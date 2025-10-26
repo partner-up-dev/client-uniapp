@@ -1,9 +1,5 @@
 @use "@/styles/main.scss" as *;
 
-.button-text {
-  @include pu-font-size("label-large");
-  font-weight: 700;
-}
 .form-item-value {
   padding: $pu-spacing-sm 0px;
 }
