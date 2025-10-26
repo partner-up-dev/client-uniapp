@@ -1,4 +1,4 @@
-name: Setup Anana Uniapp Development Environment
+name: Setup Partner Up Uniapp Development Environment
 
 on:
   workflow_dispatch:
@@ -6,49 +6,46 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: "20"
+
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
-          version: 8
-          
+          version: 9
+
       - name: Cache pnpm store
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
-            
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        
-      - name: Build TailwindCSS
-        run: pnpm run tailwind:build
-        
-      - name: Run type check
-        run: pnpm run type-check
-        
-      - name: Install Uniapp CLI (if needed)
-        run: |
-          if ! command -v uni &> /dev/null; then
-            npm install -g @dcloudio/cli
-          fi
-          
+
+      - name: Run tests
+        run: pnpm run test:mp-weixin
+
       - name: Verify setup
         run: |
           echo "Node.js version: $(node --version)"
           echo "pnpm version: $(pnpm --version)"
           echo "Dependencies installed successfully"
-          echo "TailwindCSS built successfully"
-          echo "TypeScript types checked successfully"
+          echo "Tests passed successfully"
           echo "Environment is ready for development"
+          echo ""
+          echo "Available commands:"
+          echo "  pnpm test:mp-weixin    - Run tests for WeChat platform"
+          echo "  pnpm test:h5           - Run tests for H5 platform"
+          echo "  pnpm type-check        - Run TypeScript type checking"
+          echo "  pnpm build:mp-weixin   - Build for WeChat Mini Program production"
+          echo "  pnpm build:mp-alipay   - Build for Alipay Mini Program production"
