@@ -21,7 +21,6 @@ const onCellClick = () => {
 <template>
   <Cell
     :type="type"
-    :title="label"
     :prefix-icon="prefixIcon"
     :suffix-icon="suffixIcon"
     :size="size"

@@ -35,7 +35,7 @@
 
 - `prop` (`string | undefined`)：表单字段属性名，用于关联 PUForm 验证错误
 - `label` (`string`、默认 `""`)：标签文本
-- `type` (`"vertical" | "horizontal"`、默认 `"vertical"`)：布局类型
+- `type` (`"vertical" | "horizontal"`、默认 `"vertical"`)：布局类型（注意：与 Cell 组件的默认值 `"horizontal"` 不同，因为表单项通常使用垂直布局）
 - `required` (`boolean`、默认 `false`)：是否必填（显示红色星号）
 - `prefixIcon` (`string | undefined`)：前缀图标
 - `suffixIcon` (`string | undefined`)：后缀图标
