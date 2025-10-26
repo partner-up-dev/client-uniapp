@@ -5,7 +5,59 @@
 
   &--normal {
     flex-direction: row;
-    align-items: stretch;
+    align-items: flex-start;
+    gap: $pu-spacing-sm;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: $pu-spacing-sm;
+      flex-shrink: 0;
+      flex-grow: 1;
+      align-self: stretch;
+      justify-content: center;
+    }
+
+    .route-item-wrapper {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-sm;
+      padding-right: $pu-spacing-sm;
+      box-sizing: border-box;
+    }
+
+    .route-item {
+      background: $pu-color-surface-container;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $pu-spacing-xs $pu-spacing-sm;
+      flex-shrink: 0;
+      flex-grow: 1;
+      min-width: 0;
+
+      &__location {
+        @include pu-font("label-large");
+        color: $pu-color-on-surface;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
+    }
+
+    .operations {
+      display: flex;
+      flex-direction: column;
+      gap: $pu-spacing-sm;
+      justify-content: center;
+      align-items: center;
+      align-self: stretch;
+      flex-shrink: 0;
+      padding: 0 $pu-spacing-xs;
+    }
   }
 
   &--immersive {
@@ -68,34 +120,12 @@
     }
   }
 
-  // ========== Operations ==========
-  &__operations {
-    display: flex;
-    flex-direction: column;
-    gap: $pu-spacing-xs;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    width: 40px;
-  }
-
-  // ========== Content ==========
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: $pu-spacing-sm;
-    flex-grow: 1;
-    margin-left: $pu-spacing-xs;
-    padding: $pu-spacing-xs $pu-spacing-xs;
-  }
-
   // ========== Errors ==========
   &__errors {
     display: flex;
     flex-direction: column;
     gap: $pu-spacing-xs;
-    margin-top: $pu-spacing-sm;
-    padding: 0 $pu-spacing-xs;
+    padding: $pu-spacing-xs $pu-spacing-sm;
 
     .error-item {
       @include pu-font("label-medium");
@@ -103,105 +133,3 @@
     }
   }
 }
-
-// // ==================== Route Item ====================
-// .route-item {
-//   display: flex;
-//   flex-direction: column;
-//   gap: $pu-spacing-xs;
-//   width: 100%;
-
-//   // ========== Datetime ==========
-//   &__datetime {
-//     display: flex;
-//     align-items: center;
-//     gap: $pu-spacing-xs;
-//     @include pu-font("label-medium");
-//     color: $pu-color-on-surface;
-//     cursor: pointer;
-
-//     &:active {
-//       opacity: 0.7;
-//     }
-//   }
-
-//   // ========== Main Content ==========
-//   &__main {
-//     display: flex;
-//     align-items: center;
-//     gap: $pu-spacing-xs;
-//     width: 100%;
-//   }
-
-//   &__content {
-//     display: flex;
-//     align-items: center;
-//     gap: $pu-spacing-xs;
-//     @include pu-font("title-large");
-
-//     .route-item--departure &,
-//     .route-item--waypoint &,
-//     .route-item--arrival & {
-//       width: 100%;
-//     }
-//   }
-
-//   // ========== Location ==========
-//   &__location {
-//     flex-grow: 1;
-//     overflow-x: scroll;
-//     white-space: nowrap;
-//     min-height: 32px;
-//     display: flex;
-//     align-items: center;
-//     padding: $pu-spacing-xs $pu-spacing-sm;
-//     background-color: $pu-color-surface-container;
-//     color: $pu-color-on-surface;
-//     border-radius: $pu-radius-sm;
-//     cursor: pointer;
-//     @include pu-font("label-medium");
-
-//     &:active {
-//       background-color: $pu-color-surface-container-highest;
-//     }
-
-//     .route-item--departure &,
-//     .route-item--waypoint &,
-//     .route-item--arrival & {
-//       @include pu-font("title-large");
-//       color: $pu-color-primary;
-//     }
-//   }
-
-//   // ========== Title (Immersive) ==========
-//   &__title {
-//     @include pu-font("headline-large");
-//     color: $pu_color_on_surface;
-//   }
-
-//   // ========== Text (Immersive) ==========
-//   &__text {
-//     flex-shrink: 0;
-//     @include pu-font("title-large");
-//     color: $pu_color_on_surface;
-//   }
-
-//   // ========== Action Icon (Immersive) ==========
-//   &__action {
-//     flex-shrink: 0;
-//     font-size: $pu-font-title-medium-size;
-//     color: $pu_color_tertiary;
-//     cursor: pointer;
-
-//     &:active {
-//       opacity: 0.7;
-//     }
-//   }
-
-//   // ========== Type Variants (Immersive) ==========
-//   &--departure,
-//   &--waypoint,
-//   &--arrival {
-//     gap: $pu-spacing-sm;
-//   }
-// }

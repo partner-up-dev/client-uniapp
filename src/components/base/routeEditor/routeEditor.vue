@@ -237,7 +237,7 @@ function navigateToRoutePlanPage() {
 }
 
 function validate(): Promise<{ valid: boolean; errors: string[] }> {
-  const result = validateRoute(route.value.items, props.ruleMode);
+  const result = validateRoute(route.value, props.ruleMode);
   validationErrors.value = result.errors;
   return Promise.resolve(result);
 }
@@ -287,64 +287,52 @@ defineExpose({
 <template>
   <!-- Normal -->
   <view v-if="isNormalType" class="route-editor route-editor--normal">
-    <view class="route-editor__operations">
+    <view class="operations">
       <PUButton
         type="OnlyIcon"
-        size="Medium"
+        theme="Plain"
+        size="Small"
         prefixIcon="i-mdi-map"
         @click="navigateToRoutePlan"
       />
       <PUButton
         type="OnlyIcon"
-        size="Medium"
+        theme="Plain"
+        size="Small"
         prefixIcon="i-mdi-plus"
         @click="addWaypoint"
       />
     </view>
 
-    <view class="route-editor__content">
+    <view class="content">
       <view
         v-for="(item, index) in route.items"
         :key="`route-item-${index}`"
-        class="route-item"
+        class="route-item-wrapper"
       >
-        <view
-          v-if="!disableDatetime"
-          class="route-item__datetime"
-          @click="openDatetimeEditor(index)"
-        >
-          <text>{{ item.datetime.timeRange.start || "--:--" }}</text>
-          <text v-if="item.datetime.bring_ahead || item.datetime.put_off">
-            ±{{ item.datetime.bring_ahead || item.datetime.put_off }}min
-          </text>
-        </view>
-
-        <view class="route-item__main">
-          <view class="route-item__location" @click="openLocationEditor(index)">
-            <text>{{
-              getLocationAddress(
-                item,
-                getRouteItemType(index, route.items.length)
-              )
-            }}</text>
-          </view>
+        <view class="route-item" @click="openLocationEditor(index)">
+          <text class="route-item__location">{{
+            getLocationAddress(item, getRouteItemType(index, route.items.length))
+          }}</text>
 
           <PUButton
             v-if="!disableDatetime"
             type="OnlyIcon"
-            size="Small"
+            theme="Plain"
             prefixIcon="i-mdi-clock"
-            @click="openDatetimeEditor(index)"
-          />
-
-          <PUButton
-            v-if="isRouteItemRemovable(index, route.items.length)"
-            type="OnlyIcon"
-            size="Small"
-            prefixIcon="i-mdi-close"
-            @click="removeWaypoint(index - 1)"
+            size="xSmall"
+            @click.stop="openDatetimeEditor(index)"
           />
         </view>
+
+        <PUButton
+          v-if="isRouteItemRemovable(index, route.items.length)"
+          type="OnlyIcon"
+          theme="Plain"
+          size="xSmall"
+          prefixIcon="i-mdi-minus-circle"
+          @click="removeWaypoint(index - 1)"
+        />
       </view>
     </view>
 
@@ -409,7 +397,7 @@ defineExpose({
         <view class="route-item__content">
           <text
             class="route-item__location"
-            @click="openLocationEditor(modelValue.items.length - 1)"
+            @click="openLocationEditor(route.items.length - 1)"
           >
             {{ getLocationAddress(arrivalItem, "arrival") }}
           </text>
@@ -431,8 +419,8 @@ defineExpose({
   >
     <template #full>
       <RouteItemDatetimeEditor
-        v-if="editingItemIndex >= 0 && editingItemIndex < modelValue.items.length"
-        :modelValue="modelValue.items[editingItemIndex].datetime"
+        v-if="editingItemIndex >= 0 && editingItemIndex < route.items.length"
+        :modelValue="route.items[editingItemIndex].datetime"
         @confirm="onDatetimeEditorConfirm"
         @cancel="datetimeEditorVisible = false"
       />
