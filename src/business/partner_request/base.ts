@@ -7,6 +7,9 @@ import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".
 import * as v from 'valibot';
 import { DatetimeV } from "../base";
 
+// Export PartnerRequestForm from form.ts
+export { PartnerRequestForm } from "./form";
+
 
 export class PartnerRequest extends V.class(v.object({
   _id: PRRefV,
@@ -164,47 +167,5 @@ export class PartnerRequest extends V.class(v.object({
       endpoint: `/${pr_id}/publish`,
       operation_id: 'PartnerRequestV2Publish',
     }).then(() => undefined);
-  }
-}
-
-
-export class PartnerRequestForm extends V.class(v.object({
-  title: nullable(limit_string(3, 12)),
-  introduction: nullable(limit_string(3, 60)),
-})) {
-
-  /**
-   * 验证表单数据
-   * @returns Promise that resolves if valid, rejects with error message if invalid
-   */
-  validate(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const errors: string[] = [];
-      
-      // Validate title if provided
-      if (this.title !== null && this.title !== "") {
-        if (this.title.length < 3 || this.title.length > 12) {
-          errors.push("标题长度必须在 3-12 个字符之间");
-        }
-      }
-      
-      // Validate introduction if provided
-      if (this.introduction !== null && this.introduction !== "") {
-        if (this.introduction.length < 3 || this.introduction.length > 60) {
-          errors.push("简介长度必须在 3-60 个字符之间");
-        }
-      }
-      
-      // At least one field must be provided
-      if ((this.title === null || this.title === "") && (this.introduction === null || this.introduction === "")) {
-        errors.push("请填写标题或简介");
-      }
-      
-      if (errors.length > 0) {
-        reject(new Error(errors.join("; ")));
-      } else {
-        resolve();
-      }
-    });
   }
 }

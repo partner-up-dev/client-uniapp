@@ -9,7 +9,8 @@ import { TripPreference } from "@/business/partner_request/trip";
 export const tripPreferenceFormProps = {
   modelValue: {
     type: Object as PropType<TripPreference>,
-    required: true,
+    required: false,
+    default: undefined,
   },
 };
 

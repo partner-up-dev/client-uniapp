@@ -9,6 +9,8 @@ export default {
 import { BasicComponentOptions } from "@/utils/vue";
 import { useTranslate } from "@/locale/use";
 import { ref, computed, watch } from "vue";
+import { useOptionalVModel } from "@/composables/props";
+import { TripPreference } from "@/business/partner_request/trip";
 import { tripPreferenceFormProps, tripPreferenceFormEmits } from "./tripPreferenceForm";
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
@@ -18,25 +20,33 @@ const emit = defineEmits(tripPreferenceFormEmits);
 
 const { dt } = useTranslate("partner_request.trip.preference_editor");
 
+// Use useOptionalVModel to handle undefined modelValue
+const tripPreference = useOptionalVModel({
+  props,
+  emit,
+  modelName: "modelValue",
+  defaultValue: new TripPreference({}),
+});
+
 // 行李数量（个）
 const luggageNumber = ref<number | undefined>(
-  props.modelValue.luggage ? props.modelValue.luggage / 20 : undefined
+  tripPreference.value.luggage ? tripPreference.value.luggage / 20 : undefined
 );
 
 // 航班号
-const flightNumber = ref<string>(props.modelValue.flight || "");
+const flightNumber = ref<string>(tripPreference.value.flight || "");
 
 // 列车号
-const railwayNumber = ref<string>(props.modelValue.railway || "");
+const railwayNumber = ref<string>(tripPreference.value.railway || "");
 
 // 出行目的
 const purposeText = computed(() => {
-  if (!props.modelValue.purpose) {
+  if (!tripPreference.value.purpose) {
     return dt("purpose.placeholder");
   }
   // Use base trip purpose translations
   const { t } = useTranslate("base.trip_purpose_picker");
-  return t(`purpose_text.${props.modelValue.purpose}`);
+  return t(`purpose_text.${tripPreference.value.purpose}`);
 });
 
 // Methods
@@ -50,38 +60,35 @@ function handleLuggageInput(value: string | number) {
   const num = typeof value === "string" ? parseFloat(value) : value;
   luggageNumber.value = isNaN(num) ? undefined : num;
   
-  // Convert luggage count to volume (20L per piece)
-  const updatedValue = new props.modelValue.constructor({
-    ...props.modelValue,
+  // Convert luggage count to volume (20L per piece) and update
+  tripPreference.value = TripPreference.parse({
+    ...tripPreference.value,
     luggage: luggageNumber.value ? luggageNumber.value * 20 : null,
   });
-  emit("update:modelValue", updatedValue);
   emit("change");
 }
 
 function handleFlightInput(value: string) {
   flightNumber.value = value;
-  const updatedValue = new props.modelValue.constructor({
-    ...props.modelValue,
+  tripPreference.value = TripPreference.parse({
+    ...tripPreference.value,
     flight: value || null,
   });
-  emit("update:modelValue", updatedValue);
   emit("change");
 }
 
 function handleRailwayInput(value: string) {
   railwayNumber.value = value;
-  const updatedValue = new props.modelValue.constructor({
-    ...props.modelValue,
+  tripPreference.value = TripPreference.parse({
+    ...tripPreference.value,
     railway: value || null,
   });
-  emit("update:modelValue", updatedValue);
   emit("change");
 }
 
 // Watch for external changes
 watch(
-  () => props.modelValue,
+  () => tripPreference.value,
   (newValue) => {
     luggageNumber.value = newValue.luggage ? newValue.luggage / 20 : undefined;
     flightNumber.value = newValue.flight || "";
@@ -134,7 +141,7 @@ defineExpose({
     </Cell>
 
     <Cell
-      v-if="modelValue.purpose === 'airport_dropoff' || modelValue.purpose === 'airport_pickup'"
+      v-if="tripPreference.purpose === 'airport_dropoff' || tripPreference.purpose === 'airport_pickup'"
       :title="dt('flight.placeholder')"
     >
       <template #value>
@@ -148,7 +155,7 @@ defineExpose({
     </Cell>
 
     <Cell
-      v-if="modelValue.purpose === 'railway_dropoff' || modelValue.purpose === 'railway_pickup'"
+      v-if="tripPreference.purpose === 'railway_dropoff' || tripPreference.purpose === 'railway_pickup'"
       :title="dt('train.placeholder')"
     >
       <template #value>

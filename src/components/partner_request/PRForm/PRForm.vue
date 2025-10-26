@@ -7,8 +7,8 @@ import PUInput from "@/components/common/PUInput/PUInput.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
-import { PartnerRequest, PartnerRequestForm } from "@/business/partner_request/base";
-import { PRType } from "@/business/partner_request";
+import { PartnerRequest } from "@/business/partner_request/base";
+import { PartnerRequestForm } from "@/business/partner_request/form";
 
 // composables
 import { reactive, ref, watch, computed } from "vue";
@@ -31,8 +31,8 @@ const form = reactive({
 
 const collapse = reactive<{ metadata: string[]; route?: string[]; tripPreference?: string[] }>({
   metadata: ["metadata"],
-  route: props.type === PRType.RideHailing || props.type === PRType.Commute ? ["route"] : undefined,
-  tripPreference: props.type === PRType.RideHailing || props.type === PRType.Commute ? ["tripPreference"] : undefined,
+  route: props.baseForm.route ? ["route"] : undefined,
+  tripPreference: props.baseForm.trip_preference ? ["tripPreference"] : undefined,
 });
 
 // refs
@@ -47,35 +47,42 @@ const maxlength = {
 };
 
 // computed
-const shouldShowRoute = computed(() => 
-  props.type === PRType.RideHailing || props.type === PRType.Commute
-);
-
-const shouldShowTripPreference = computed(() => 
-  props.type === PRType.RideHailing || props.type === PRType.Commute
-);
+const shouldShowRoute = computed(() => props.baseForm.route !== undefined);
+const shouldShowTripPreference = computed(() => props.baseForm.trip_preference !== undefined);
 
 // functions
 const handleTitleInput = (value: string | number) => {
   form.title = String(value);
-  emit("confirm", 0); // TODO: implement proper save logic
+  const updatedForm = PartnerRequestForm.parse({
+    ...props.baseForm,
+    title: form.title || null,
+  });
+  emit("update:baseForm", updatedForm);
 };
 
 const handleIntroductionInput = (value: string) => {
   form.introduction = value;
-  emit("confirm", 0); // TODO: implement proper save logic
+  const updatedForm = PartnerRequestForm.parse({
+    ...props.baseForm,
+    introduction: form.introduction || null,
+  });
+  emit("update:baseForm", updatedForm);
 };
 
-const handleRouteChange = () => {
-  if (props.route) {
-    emit("update:route", props.route);
-  }
+const handleRouteChange = (value: any) => {
+  const updatedForm = PartnerRequestForm.parse({
+    ...props.baseForm,
+    route: value,
+  });
+  emit("update:baseForm", updatedForm);
 };
 
-const handleTripPreferenceChange = () => {
-  if (props.tripPreference) {
-    emit("update:tripPreference", props.tripPreference);
-  }
+const handleTripPreferenceChange = (value: any) => {
+  const updatedForm = PartnerRequestForm.parse({
+    ...props.baseForm,
+    trip_preference: value,
+  });
+  emit("update:baseForm", updatedForm);
 };
 
 // validation
@@ -83,11 +90,7 @@ const validate = (): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
       // Validate base form using PartnerRequestForm's validate method
-      const baseFormInstance = PartnerRequestForm.parse({
-        title: form.title || null,
-        introduction: form.introduction || null,
-      });
-      await baseFormInstance.validate();
+      await props.baseForm.validate();
       
       // Validate route if needed
       if (shouldShowRoute.value && routeEditorRef.value) {
@@ -163,24 +166,24 @@ watch(
     </PUAccordion>
 
     <!-- Route Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowRoute && props.route" v-model="collapse.route">
+    <PUAccordion v-if="shouldShowRoute && props.baseForm.route" v-model="collapse.route">
       <PUAccordionItem name="route" :title="dt('editor.route.title')">
         <RouteEditor
           ref="routeEditorRef"
-          v-model="props.route"
+          :modelValue="props.baseForm.route"
           type="normal"
-          @change="handleRouteChange"
+          @update:modelValue="handleRouteChange"
         />
       </PUAccordionItem>
     </PUAccordion>
 
     <!-- Trip Preference Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowTripPreference && props.tripPreference" v-model="collapse.tripPreference">
+    <PUAccordion v-if="shouldShowTripPreference && props.baseForm.trip_preference" v-model="collapse.tripPreference">
       <PUAccordionItem name="tripPreference" :title="dt('editor.trip_preference.title')">
         <TripPreferenceForm
           ref="tripPreferenceFormRef"
-          v-model="props.tripPreference"
-          @change="handleTripPreferenceChange"
+          :modelValue="props.baseForm.trip_preference"
+          @update:modelValue="handleTripPreferenceChange"
         />
       </PUAccordionItem>
     </PUAccordion>
