@@ -9,7 +9,10 @@ import { usePartnerRequestStore } from "@/store/partner_request";
 import { errorReport, getSafeArea } from "@/utils/vendor";
 import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
 import { PRType, PRStatus } from "@/business/partner_request";
-import { PartnerRequest, PartnerRequestForm } from "@/business/partner_request/base";
+import {
+  PartnerRequest,
+  PartnerRequestForm,
+} from "@/business/partner_request/base";
 import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
@@ -33,7 +36,7 @@ const propsSchema = v.object({
       v.transform((value) => parseInt(value))
     )
   ),
-  type: v.optional(v.picklist(Object.values(PRType))),
+  type: v.optional(v.enum(PRType)),
   immersive: v.optional(
     v.pipe(
       v.string(),
@@ -52,20 +55,17 @@ const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
 const partnerRequestEditorRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
-const form_data = ref<PartnerRequestForm>(
-  PartnerRequestForm.parse({
-    title: null,
-    introduction: null,
-  })
-);
+const form = ref<PartnerRequestForm>(PartnerRequestForm.parse({}));
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
 ]);
 
 // Use PartnerRequest business layer composable
-const partner_request_id = ref<number | undefined>(undefined);
-const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(partner_request_id.value);
+const prId = ref<number | undefined>(undefined);
+const { pr: partnerRequest, loading: prLoading } = PartnerRequest.usePR(
+  prId.value
+);
 
 // methods
 /**
@@ -80,7 +80,7 @@ function onPublish(retry: number = 0) {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        PartnerRequest.update(props.value.id, form_data.value)
+        PartnerRequest.update(props.value.id, form.value)
           .then(() => {
             uni.requestSubscribeMessage({
               tmplIds: [
@@ -90,10 +90,9 @@ function onPublish(retry: number = 0) {
               complete() {
                 if (props.value.id) {
                   publishing.value = true;
-                  PartnerRequest.publish(props.value.id)
-                    .finally(() => {
-                      publishing.value = false;
-                    });
+                  PartnerRequest.publish(props.value.id).finally(() => {
+                    publishing.value = false;
+                  });
                 } else {
                   errorReport(domain_t("publish.invalid_id"));
                 }
@@ -127,7 +126,7 @@ function create(): Promise<void> {
       errorReport(domain_t("save.invalid_form_type"));
       reject();
     } else {
-      PartnerRequest.create(form_data.value, props.value.type)
+      PartnerRequest.create(form.value, props.value.type)
         .then((pr) => {
           props.value.id = pr._id;
           resolve();
@@ -154,10 +153,9 @@ function onSave() {
     ?.validate()
     .then(() => {
       if (props.value.id) {
-        PartnerRequest.update(props.value.id, form_data.value)
-          .finally(() => {
-            saving.value = false;
-          });
+        PartnerRequest.update(props.value.id, form.value).finally(() => {
+          saving.value = false;
+        });
       } else {
         create();
       }
@@ -189,7 +187,7 @@ function onDiscover() {
  */
 const isPublished = computed((): boolean => {
   if (props.value.id && partnerRequest.value) {
-    partner_request_id.value = props.value.id;
+    prId.value = props.value.id;
     return partnerRequest.value.status === PRStatus.Joinable;
   }
   return false;
@@ -250,7 +248,7 @@ onLoad(
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
         // Initialize empty form and merge with cache
-        form_data.value = PartnerRequestForm.parse({
+        form.value = PartnerRequestForm.parse({
           title: cache.title || null,
           introduction: cache.introduction || null,
         });
@@ -263,7 +261,7 @@ onLoad(
       const cache = usePartnerRequestStore().draftContent;
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
-        form_data.value = PartnerRequestForm.parse(cache);
+        form.value = PartnerRequestForm.parse(cache);
         props.value.type = type;
       } else {
         errorReport(domain_t("on_load.load_form_from_cache.failed"));
@@ -272,7 +270,7 @@ onLoad(
       // load from draft
       PartnerRequest.get(props.value.id).then((pr) => {
         // Convert PartnerRequest to PartnerRequestForm
-        form_data.value = PartnerRequestForm.parse({
+        form.value = PartnerRequestForm.parse({
           title: pr.title,
           introduction: pr.introduction,
         });
@@ -281,7 +279,7 @@ onLoad(
       });
     } else if (props.value.type) {
       // load from type(empty form)
-      form_data.value = PartnerRequestForm.parse({
+      form.value = PartnerRequestForm.parse({
         title: null,
         introduction: null,
       });
@@ -354,10 +352,7 @@ onShow(() => {
     :style="{ height: `${editorHeight}px` }"
     v-if="!isPublished"
   >
-    <PRForm
-      ref="partnerRequestEditorRef"
-      :base-form="form_data"
-    />
+    <PRForm ref="partnerRequestEditorRef" v-model="form" :type="props.type" />
   </view>
 
   <view class="footer">

@@ -30,7 +30,7 @@ describe("PRForm Component", () => {
   it("validates base form using PartnerRequestForm validation", async () => {
     const wrapper = mount(PRForm, {
       props: {
-        baseForm: PartnerRequestForm.parse({
+        modelValue: PartnerRequestForm.parse({
           title: "ab", // Too short
           introduction: null,
         }),
@@ -136,7 +136,7 @@ describe("PRForm Component", () => {
       introduction: "New Introduction",
     });
 
-    await wrapper.setProps({ baseForm: newBaseForm });
+    await wrapper.setProps({ modelValue: newBaseForm });
 
     const component = wrapper.vm as any;
     expect(component.form.title).toBe("New Title");

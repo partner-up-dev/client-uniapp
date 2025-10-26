@@ -15,6 +15,7 @@ import { reactive, ref, watch, computed } from "vue";
 
 // props
 import { prFormProps, prFormEmits } from "./PRForm";
+import { PRType } from "@/business/partner_request";
 const props = defineProps(prFormProps);
 
 // emits
@@ -25,20 +26,26 @@ const { dt: commonEditorDt } = useTranslate("partner_request.common_editor");
 
 // reactive data
 const form = reactive({
-  title: props.baseForm.title || "",
-  introduction: props.baseForm.introduction || "",
+  title: props.modelValue.title || "",
+  introduction: props.modelValue.introduction || "",
 });
 
-const collapse = reactive<{ metadata: string[]; route?: string[]; tripPreference?: string[] }>({
+const collapse = reactive<{
+  metadata: string[];
+  route?: string[];
+  tripPreference?: string[];
+}>({
   metadata: ["metadata"],
-  route: props.baseForm.route ? ["route"] : undefined,
-  tripPreference: props.baseForm.trip_preference ? ["tripPreference"] : undefined,
+  route: ["route"],
+  tripPreference: ["tripPreference"],
 });
 
 // refs
 const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
 const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
-const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(null);
+const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(
+  null
+);
 
 // 字段长度限制
 const maxlength = {
@@ -47,51 +54,20 @@ const maxlength = {
 };
 
 // computed
-const shouldShowRoute = computed(() => props.baseForm.route !== undefined);
-const shouldShowTripPreference = computed(() => props.baseForm.trip_preference !== undefined);
+const shouldShowRoute = computed(() =>
+  [PRType.Commute, PRType.RideHailing].includes(props.type)
+);
+const shouldShowTripPreference = computed(() =>
+  [PRType.RideHailing].includes(props.type)
+);
 
 // functions
-const handleTitleInput = (value: string | number) => {
-  form.title = String(value);
-  const updatedForm = PartnerRequestForm.parse({
-    ...props.baseForm,
-    title: form.title || null,
-  });
-  emit("update:baseForm", updatedForm);
-};
-
-const handleIntroductionInput = (value: string) => {
-  form.introduction = value;
-  const updatedForm = PartnerRequestForm.parse({
-    ...props.baseForm,
-    introduction: form.introduction || null,
-  });
-  emit("update:baseForm", updatedForm);
-};
-
-const handleRouteChange = (value: any) => {
-  const updatedForm = PartnerRequestForm.parse({
-    ...props.baseForm,
-    route: value,
-  });
-  emit("update:baseForm", updatedForm);
-};
-
-const handleTripPreferenceChange = (value: any) => {
-  const updatedForm = PartnerRequestForm.parse({
-    ...props.baseForm,
-    trip_preference: value,
-  });
-  emit("update:baseForm", updatedForm);
-};
-
-// validation
 const validate = (): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
       // Validate base form using PartnerRequestForm's validate method
-      await props.baseForm.validate();
-      
+      await props.modelValue.validate();
+
       // Validate route if needed
       if (shouldShowRoute.value && routeEditorRef.value) {
         const routeValidation = await routeEditorRef.value.validate();
@@ -99,7 +75,7 @@ const validate = (): Promise<void> => {
           throw new Error(routeValidation.errors.join("; "));
         }
       }
-      
+
       // Validate trip preference if needed
       if (shouldShowTripPreference.value && tripPreferenceFormRef.value) {
         const tripPrefValidation = await tripPreferenceFormRef.value.validate();
@@ -107,7 +83,7 @@ const validate = (): Promise<void> => {
           throw new Error(tripPrefValidation.errors.join("; "));
         }
       }
-      
+
       resolve();
     } catch (error) {
       reject(error);
@@ -122,7 +98,7 @@ defineExpose({
 
 // watchers
 watch(
-  () => props.baseForm,
+  () => props.modelValue,
   (newForm) => {
     form.title = newForm.title || "";
     form.introduction = newForm.introduction || "";
@@ -144,7 +120,6 @@ watch(
               :maxlength="maxlength.title"
               show-word-limit
               no-border
-              @update:modelValue="handleTitleInput"
             />
           </template>
         </Cell>
@@ -158,7 +133,6 @@ watch(
               :maxlength="maxlength.introduction"
               show-count
               auto-height
-              @update:modelValue="handleIntroductionInput"
             />
           </template>
         </Cell>
@@ -166,24 +140,28 @@ watch(
     </PUAccordion>
 
     <!-- Route Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowRoute && props.baseForm.route" v-model="collapse.route">
+    <PUAccordion v-if="shouldShowRoute" v-model="collapse.route">
       <PUAccordionItem name="route" :title="dt('editor.route.title')">
         <RouteEditor
           ref="routeEditorRef"
-          :modelValue="props.baseForm.route"
+          :modelValue="props.modelValue.route"
           type="normal"
-          @update:modelValue="handleRouteChange"
         />
       </PUAccordionItem>
     </PUAccordion>
 
     <!-- Trip Preference Editor for ride_hailing and commute types -->
-    <PUAccordion v-if="shouldShowTripPreference && props.baseForm.trip_preference" v-model="collapse.tripPreference">
-      <PUAccordionItem name="tripPreference" :title="dt('editor.trip_preference.title')">
+    <PUAccordion
+      v-if="shouldShowTripPreference"
+      v-model="collapse.tripPreference"
+    >
+      <PUAccordionItem
+        name="tripPreference"
+        :title="dt('editor.trip_preference.title')"
+      >
         <TripPreferenceForm
           ref="tripPreferenceFormRef"
-          :modelValue="props.baseForm.trip_preference"
-          @update:modelValue="handleTripPreferenceChange"
+          :modelValue="props.modelValue.trip_preference"
         />
       </PUAccordionItem>
     </PUAccordion>
