@@ -1,42 +1,36 @@
 @use "@/styles/main.scss" as *;
 
-.chat-page {
+// ==================== Content ====================
+.chat-page__content {
+  background-color: $pu-color-surface;
+  padding: $pu-spacing-med;
+}
+
+// ==================== Footer ====================
+.chat-page__footer-container {
+  background-color: $pu-color-surface-container;
+  color: $pu-color-on-surface;
+}
+
+.chat-page__footer {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  align-items: center;
+  gap: $pu-spacing-sm;
+  flex-shrink: 0;
+  padding: $pu-spacing-sm $pu-spacing-med;
 
-  // ==================== Content ====================
-  &__content {
+  .field {
     flex: 1;
-    background-color: $pu-color-surface;
-    padding: $pu-spacing-med;
   }
 
-  // ==================== Footer ====================
-  &__footer-container {
-    background-color: $pu-color-surface-container;
-    color: $pu-color-on-surface;
-  }
-  &__footer {
-    display: flex;
-    align-items: center;
-    gap: $pu-spacing-sm;
+  .send-button {
+    @include pu-icon("small", true);
     flex-shrink: 0;
-    padding: $pu-spacing-sm $pu-spacing-med;
+    cursor: pointer;
 
-    .field {
-      flex: 1;
-    }
-
-    .send-button {
-      @include pu-icon("small", true);
-      flex-shrink: 0;
-      cursor: pointer;
-
-      &--disabled {
-        opacity: $pu-opacity-disabled;
-        cursor: not-allowed;
-      }
+    &--disabled {
+      opacity: $pu-opacity-disabled;
+      cursor: not-allowed;
     }
   }
 }
