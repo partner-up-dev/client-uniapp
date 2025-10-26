@@ -11,7 +11,10 @@ import { useTranslate } from "@/locale/use";
 import { ref, computed, watch } from "vue";
 import { useOptionalVModel } from "@/composables/props";
 import { TripPreference } from "@/business/partner_request/trip";
-import { tripPreferenceFormProps, tripPreferenceFormEmits } from "./tripPreferenceForm";
+import {
+  tripPreferenceFormProps,
+  tripPreferenceFormEmits,
+} from "./tripPreferenceForm";
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
 
@@ -56,36 +59,6 @@ function handlePurposeClick() {
   console.log("Open trip purpose picker");
 }
 
-function handleLuggageInput(value: string | number) {
-  const num = typeof value === "string" ? parseFloat(value) : value;
-  luggageNumber.value = isNaN(num) ? undefined : num;
-  
-  // Convert luggage count to volume (20L per piece) and update
-  tripPreference.value = TripPreference.parse({
-    ...tripPreference.value,
-    luggage: luggageNumber.value ? luggageNumber.value * 20 : null,
-  });
-  emit("change");
-}
-
-function handleFlightInput(value: string) {
-  flightNumber.value = value;
-  tripPreference.value = TripPreference.parse({
-    ...tripPreference.value,
-    flight: value || null,
-  });
-  emit("change");
-}
-
-function handleRailwayInput(value: string) {
-  railwayNumber.value = value;
-  tripPreference.value = TripPreference.parse({
-    ...tripPreference.value,
-    railway: value || null,
-  });
-  emit("change");
-}
-
 // Watch for external changes
 watch(
   () => tripPreference.value,
@@ -99,16 +72,19 @@ watch(
 // Validation
 function validate(): Promise<{ valid: boolean; errors: string[] }> {
   const errors: string[] = [];
-  
+
   // Validate luggage number is integer if provided
-  if (luggageNumber.value !== undefined && !Number.isInteger(luggageNumber.value)) {
+  if (
+    luggageNumber.value !== undefined &&
+    !Number.isInteger(luggageNumber.value)
+  ) {
     errors.push("行李数量必须是整数");
   }
-  
+
   if (luggageNumber.value !== undefined && luggageNumber.value < 0) {
     errors.push("行李数量不能为负数");
   }
-  
+
   return Promise.resolve({
     valid: errors.length === 0,
     errors,
@@ -122,7 +98,12 @@ defineExpose({
 
 <template>
   <view class="trip-preference-form">
-    <Cell :title="dt('purpose.title')" :value="purposeText" is-link @click="handlePurposeClick" />
+    <Cell
+      :title="dt('purpose.title')"
+      :value="purposeText"
+      is-link
+      @click="handlePurposeClick"
+    />
 
     <Cell :title="dt('luggage.prefix')">
       <template #value>
@@ -133,7 +114,6 @@ defineExpose({
             type="number"
             inputmode="numeric"
             no-border
-            @update:modelValue="handleLuggageInput"
           />
           <text class="luggage-unit">{{ dt("luggage.unit") }}</text>
         </view>
@@ -141,7 +121,10 @@ defineExpose({
     </Cell>
 
     <Cell
-      v-if="tripPreference.purpose === 'airport_dropoff' || tripPreference.purpose === 'airport_pickup'"
+      v-if="
+        tripPreference.purpose === 'airport_dropoff' ||
+        tripPreference.purpose === 'airport_pickup'
+      "
       :title="dt('flight.placeholder')"
     >
       <template #value>
@@ -149,13 +132,15 @@ defineExpose({
           v-model="flightNumber"
           :placeholder="dt('flight.placeholder')"
           no-border
-          @update:modelValue="handleFlightInput"
         />
       </template>
     </Cell>
 
     <Cell
-      v-if="tripPreference.purpose === 'railway_dropoff' || tripPreference.purpose === 'railway_pickup'"
+      v-if="
+        tripPreference.purpose === 'railway_dropoff' ||
+        tripPreference.purpose === 'railway_pickup'
+      "
       :title="dt('train.placeholder')"
     >
       <template #value>
@@ -163,7 +148,6 @@ defineExpose({
           v-model="railwayNumber"
           :placeholder="dt('train.placeholder')"
           no-border
-          @update:modelValue="handleRailwayInput"
         />
       </template>
     </Cell>

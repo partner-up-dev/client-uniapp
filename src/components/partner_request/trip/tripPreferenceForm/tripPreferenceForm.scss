@@ -12,6 +12,6 @@
 }
 
 .luggage-unit {
-  @include pu-font-size("body-medium");
+  @include pu-font-size("label-large");
   color: $pu-color-on-surface;
 }

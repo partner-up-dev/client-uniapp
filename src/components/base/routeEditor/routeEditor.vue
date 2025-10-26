@@ -37,7 +37,7 @@ const route = useOptionalVModel({
   props,
   emit,
   modelName: "modelValue",
-  defaultValue: new Route({ items: [] }),
+  defaultValue: new Route({}),
 });
 
 // @ts-ignore - WeChat plugin
@@ -71,9 +71,7 @@ function onValueChange() {
 
   // 检查是否所有必要数据已填写（仅 immersive 模式）
   if (isImmersiveType.value) {
-    const allLocationsFilled = route.value.items.every(
-      (item) => item.location
-    );
+    const allLocationsFilled = route.value.items.every((item) => item.location);
     if (allLocationsFilled) {
       setTimeout(() => {
         emit("complete");
