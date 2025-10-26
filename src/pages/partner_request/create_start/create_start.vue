@@ -6,7 +6,7 @@ export default {
 <script setup lang="ts">
 import NavBar from "@/components/common/navBar/navBar.vue";
 import { useTranslate } from "@/locale/use";
-// import { usePartnerRequestStore } from "@/store/partner_request";
+import { usePartnerRequestStore } from "@/store/partner_request";
 import type { PRL1Type, PRRef } from "@/business/partner_request";
 import { computed, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";

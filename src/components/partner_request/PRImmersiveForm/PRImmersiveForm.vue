@@ -16,7 +16,7 @@ import { ref } from "vue";
 import { useTranslate } from "@/locale/use";
 import { getSafeArea } from "@/utils/vendor";
 import { prImmersiveFormProps, prImmersiveFormEmits } from "./PRImmersiveForm";
-// import { usePartnerRequestStore } from "@/store/partner_request";
+import { usePartnerRequestStore } from "@/store/partner_request";
 import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
 import type { PRType } from "@/business/partner_request";
 
