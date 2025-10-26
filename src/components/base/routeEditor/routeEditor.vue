@@ -310,10 +310,15 @@ defineExpose({
         :key="`route-item-${index}`"
         class="route-item-wrapper"
       >
-        <view class="route-item" @click="openLocationEditor(index)">
-          <text class="route-item__location">{{
-            getLocationAddress(item, getRouteItemType(index, route.items.length))
-          }}</text>
+        <view class="route-item">
+          <text class="route-item__location" @click="openLocationEditor(index)">
+            {{
+              getLocationAddress(
+                item,
+                getRouteItemType(index, route.items.length)
+              )
+            }}
+          </text>
 
           <PUButton
             v-if="!disableDatetime"
@@ -335,16 +340,16 @@ defineExpose({
         />
       </view>
     </view>
+  </view>
 
-    <view v-if="validationErrors.length > 0" class="route-editor__errors">
-      <text
-        v-for="(error, index) in validationErrors"
-        :key="index"
-        class="error-item"
-      >
-        {{ error }}
-      </text>
-    </view>
+  <view v-if="validationErrors.length > 0" class="route-editor__errors">
+    <text
+      v-for="(error, index) in validationErrors"
+      :key="index"
+      class="error-item"
+    >
+      {{ error }}
+    </text>
   </view>
 
   <!-- Immersive -->
@@ -416,6 +421,7 @@ defineExpose({
     v-model:visible="datetimeEditorVisible"
     title="编辑时间"
     :full-custom="true"
+    height="50vh"
   >
     <template #full>
       <RouteItemDatetimeEditor

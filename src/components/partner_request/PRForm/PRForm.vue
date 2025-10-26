@@ -31,15 +31,7 @@ const form = reactive({
   introduction: props.modelValue.introduction || "",
 });
 
-const collapse = reactive<{
-  metadata: string[];
-  route?: string[];
-  tripPreference?: string[];
-}>({
-  metadata: ["metadata"],
-  route: ["route"],
-  tripPreference: ["tripPreference"],
-});
+const collapse = ref<string[]>(["route", "tripPreference"]);
 
 // refs
 const puFormRef = ref<InstanceType<typeof PUForm> | null>(null);
@@ -131,7 +123,7 @@ watch(
 <template>
   <view class="pr-editor">
     <PUForm ref="puFormRef" :schema="PartnerRequestForm">
-      <PUAccordion v-model="collapse.metadata" ref="metadataCollapseRef">
+      <PUAccordion v-model="collapse" ref="metadataCollapseRef">
         <PUAccordionItem
           name="metadata"
           :title="dt('editor.common_editor.title')"
@@ -171,25 +163,21 @@ watch(
             </template>
           </Cell>
         </PUAccordionItem>
-      </PUAccordion>
-
-      <!-- Route Editor for ride_hailing and commute types -->
-      <PUAccordion v-if="shouldShowRoute" v-model="collapse.route">
-        <PUAccordionItem name="route" :title="dt('editor.route.title')">
-          <RouteEditor
-            ref="routeEditorRef"
-            :modelValue="props.modelValue.route"
-            type="normal"
-          />
-        </PUAccordionItem>
-      </PUAccordion>
-
-      <!-- Trip Preference Editor for ride_hailing and commute types -->
-      <PUAccordion
-        v-if="shouldShowTripPreference"
-        v-model="collapse.tripPreference"
-      >
         <PUAccordionItem
+          v-if="shouldShowRoute"
+          name="route"
+          :title="dt('editor.route.title')"
+        >
+          <view class="space-p-y-med">
+            <RouteEditor
+              ref="routeEditorRef"
+              :modelValue="props.modelValue.route"
+              type="normal"
+            />
+          </view>
+        </PUAccordionItem>
+        <PUAccordionItem
+          v-if="shouldShowTripPreference"
           name="tripPreference"
           :title="dt('editor.trip_preference.title')"
         >
