@@ -1,16 +1,16 @@
 @use "@/styles/main.scss" as *;
 
 .button-text {
-  font-size: $-sys-font-label-large-size;
+  @include pu-font-size("label-large");
   font-weight: 700;
 }
 .form-item-value {
-  padding: 6px 0px;
+  padding: $pu-spacing-sm 0px;
 }
 .tips {
-  font-size: $-sys-font-label-medium-size;
-  color: $uni-text-color-grey;
-  margin-top: 4px;
+  @include pu-font-size("label-medium");
+  color: $pu-color-on-surface-variant;
+  margin-top: $pu-spacing-xs;
 }
 
 .pr-editor {
