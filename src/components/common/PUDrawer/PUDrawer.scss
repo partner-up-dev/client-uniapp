@@ -24,7 +24,10 @@
   flex-direction: column;
 
   .default {
+    display: flex;
+    flex-direction: column;
     gap: $pu-spacing-med;
+    flex-grow: 1;
 
     padding: $pu-spacing-med $pu-spacing-med 0 $pu-spacing-med;
     box-sizing: border-box;

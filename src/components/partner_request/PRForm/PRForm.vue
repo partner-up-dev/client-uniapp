@@ -166,7 +166,7 @@ watch(
                 :maxlength="maxlength.introduction"
                 theme="surface"
                 show-count
-                auto-height
+                :height="60"
               />
             </template>
           </Cell>

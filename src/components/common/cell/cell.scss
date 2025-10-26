@@ -54,7 +54,6 @@
     }
 
     .cell__value {
-      color: $pu-color-tertiary;
       @include pu-font("label-large");
       text-align: right;
       word-break: break-word;

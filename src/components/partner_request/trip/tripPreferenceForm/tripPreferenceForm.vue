@@ -11,17 +11,21 @@ import { useTranslate } from "@/locale/use";
 import { ref, computed, watch } from "vue";
 import { useOptionalVModel } from "@/composables/props";
 import { TripPreference } from "@/business/partner_request/trip";
+import type { TripPurpose } from "@/business/partner_request/trip";
 import {
   tripPreferenceFormProps,
   tripPreferenceFormEmits,
 } from "./tripPreferenceForm";
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
+import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import TripPurposePicker from "@/components/partner_request/trip/tripPurposePicker/tripPurposePicker.vue";
 
 const props = defineProps(tripPreferenceFormProps);
 const emit = defineEmits(tripPreferenceFormEmits);
 
 const { dt } = useTranslate("partner_request.trip.preference_editor");
+const { dt: tripPurposeDt } = useTranslate("base.trip_purpose_picker");
 
 // Use useOptionalVModel to handle undefined modelValue
 const tripPreference = useOptionalVModel({
@@ -47,16 +51,21 @@ const purposeText = computed(() => {
   if (!tripPreference.value.purpose) {
     return dt("purpose.placeholder");
   }
-  // Use base trip purpose translations
-  const { t } = useTranslate("base.trip_purpose_picker");
-  return t(`purpose_text.${tripPreference.value.purpose}`);
+  return tripPurposeDt(`purpose_text.${tripPreference.value.purpose}`);
 });
+
+// Drawer visibility
+const showPurposeDrawer = ref(false);
 
 // Methods
 function handlePurposeClick() {
-  // TODO: Open trip purpose picker
-  // For now, this is a placeholder
-  console.log("Open trip purpose picker");
+  showPurposeDrawer.value = true;
+}
+
+function handlePurposeSelect(purpose: TripPurpose) {
+  tripPreference.value.purpose = purpose;
+  showPurposeDrawer.value = false;
+  emit("change");
 }
 
 // Watch for external changes
@@ -151,6 +160,19 @@ defineExpose({
         />
       </template>
     </Cell>
+
+    <!-- Purpose Picker Drawer -->
+    <PUDrawer
+      v-model:visible="showPurposeDrawer"
+      :title="dt('purpose.title')"
+      height="30vh"
+    >
+      <TripPurposePicker
+        style="height: 110px"
+        :model-value="tripPreference.purpose"
+        @select="handlePurposeSelect"
+      />
+    </PUDrawer>
   </view>
 </template>
 
