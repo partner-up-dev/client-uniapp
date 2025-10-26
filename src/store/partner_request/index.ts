@@ -2,7 +2,7 @@
 
 // types
 import { PRType } from "@/business/partner_request";
-import type { PartnerRequestEditableContentUnion } from "@/data/form";
+import type { PartnerRequestForm } from "@/business/partner_request/base";
 
 // store
 import { defineStore } from "pinia";
@@ -12,7 +12,7 @@ import { deepcopy } from "@/utils";
 export interface PartnerRequestState {
     draft?: {
         type: PRType;
-        content: PartnerRequestEditableContentUnion;
+        content: PartnerRequestForm;
     };
 }
 
@@ -31,7 +31,7 @@ export const usePartnerRequestStore = defineStore('partner_request', {
          * 搭子请求编辑器的自动存稿
          * 
          */
-        draftContent(state: PartnerRequestState): PartnerRequestEditableContentUnion | null {
+        draftContent(state: PartnerRequestState): PartnerRequestForm | null {
             if (state.draft) {
                 try {
                     return deepcopy(state.draft.content);
@@ -56,7 +56,7 @@ export const usePartnerRequestStore = defineStore('partner_request', {
     },
 
     actions: {
-        async saveDraft(type: PRType, content: PartnerRequestEditableContentUnion) {
+        async saveDraft(type: PRType, content: PartnerRequestForm) {
             this.draft = {
                 type,
                 content
