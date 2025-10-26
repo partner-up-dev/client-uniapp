@@ -1,0 +1,17 @@
+@use "@/styles/main.scss" as *;
+
+.trip-preference-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.luggage-input {
+  display: flex;
+  align-items: center;
+  gap: $pu-spacing-xs;
+}
+
+.luggage-unit {
+  @include pu-font-size("label-large");
+  color: $pu-color-on-surface;
+}

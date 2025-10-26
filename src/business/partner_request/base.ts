@@ -7,6 +7,9 @@ import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".
 import * as v from 'valibot';
 import { DatetimeV } from "../base";
 
+// Export PartnerRequestForm from form.ts
+export { PartnerRequestForm } from "./form";
+
 
 export class PartnerRequest extends V.class(v.object({
   _id: PRRefV,
@@ -165,12 +168,4 @@ export class PartnerRequest extends V.class(v.object({
       operation_id: 'PartnerRequestV2Publish',
     }).then(() => undefined);
   }
-}
-
-
-export class PartnerRequestForm extends V.class(v.object({
-  title: nullable(limit_string(3, 12)),
-  introduction: nullable(limit_string(3, 60)),
-})) {
-
 }

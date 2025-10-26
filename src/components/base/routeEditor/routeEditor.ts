@@ -31,8 +31,8 @@ export const routeEditorProps = {
    */
   modelValue: {
     type: Object as PropType<Route>,
-    required: true,
-    default: () => new Route({ items: [] }),
+    required: false,
+    default: undefined,
   },
   /**
    * 编辑器类型

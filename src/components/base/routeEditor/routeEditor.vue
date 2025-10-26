@@ -9,6 +9,8 @@ export default {
 import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useTranslate } from "@/locale/use";
+import { useOptionalVModel } from "@/composables/props";
+import { Route } from "@/business/base/route";
 import {
   routeEditorProps,
   routeEditorEmits,
@@ -30,6 +32,14 @@ const { dt: t } = useTranslate("base.route_editor");
 const props = defineProps(routeEditorProps);
 const emit = defineEmits(routeEditorEmits);
 
+// Use useOptionalVModel to handle undefined modelValue
+const route = useOptionalVModel({
+  props,
+  emit,
+  modelName: "modelValue",
+  defaultValue: new Route({}),
+});
+
 // @ts-ignore - WeChat plugin
 const chooseLocationPlugin = requirePlugin("chooseLocation");
 
@@ -43,26 +53,25 @@ const validationErrors = ref<string[]>([]);
 const isNormalType = computed(() => props.type === "normal");
 const isImmersiveType = computed(() => props.type === "immersive");
 
-const departureItem = computed(() => props.modelValue.items[0]);
+const departureItem = computed(() => route.value.items[0]);
 const arrivalItem = computed(
-  () => props.modelValue.items[props.modelValue.items.length - 1]
+  () => route.value.items[route.value.items.length - 1]
 );
 const waypointItems = computed(() =>
-  props.modelValue.items.slice(1, props.modelValue.items.length - 1)
+  route.value.items.slice(1, route.value.items.length - 1)
 );
 
-const canAddWaypoint = computed(() => props.modelValue.items.length < props.max);
+const canAddWaypoint = computed(() => route.value.items.length < props.max);
 
 // ==================== Methods ====================
 function onValueChange() {
-  emit("update:modelValue", props.modelValue);
+  // Trigger the setter to emit "update:modelValue"
+  route.value = Route.parse(route.value);
   emit("change");
 
   // 检查是否所有必要数据已填写（仅 immersive 模式）
   if (isImmersiveType.value) {
-    const allLocationsFilled = props.modelValue.items.every(
-      (item) => item.location
-    );
+    const allLocationsFilled = route.value.items.every((item) => item.location);
     if (allLocationsFilled) {
       setTimeout(() => {
         emit("complete");
@@ -81,18 +90,18 @@ function addWaypoint() {
   }
 
   // 插入到终点之前
-  props.modelValue.addWaypoint();
+  route.value.addWaypoint();
   onValueChange();
 }
 
 function removeWaypoint(index: number) {
   // index 是 waypointItems 的索引，需要转换为 route.items 的索引
   const actualIndex = index + 1;
-  if (!isRouteItemRemovable(actualIndex, props.modelValue.items.length)) {
+  if (!isRouteItemRemovable(actualIndex, route.value.items.length)) {
     return;
   }
 
-  props.modelValue.items.splice(actualIndex, 1);
+  route.value.items.splice(actualIndex, 1);
   onValueChange();
 }
 
@@ -122,7 +131,7 @@ function openLocationEditor(index: number) {
 
   uni.$once(EVENT.ROUTE_EDITOR_PAGE_SHOWED, onLocationSelected);
 
-  const currentItem = props.modelValue.items[index];
+  const currentItem = route.value.items[index];
   let locationParam = "";
 
   // 如果已有地点，传入当前位置
@@ -168,7 +177,7 @@ function onLocationSelected() {
   // 保存到后端并更新 route item
   newLocation.put();
   if (newLocation._id) {
-    props.modelValue.items[editingItemIndex.value].location = newLocation._id;
+    route.value.items[editingItemIndex.value].location = newLocation._id;
     onValueChange();
   }
 
@@ -228,7 +237,7 @@ function navigateToRoutePlanPage() {
 }
 
 function validate(): Promise<{ valid: boolean; errors: string[] }> {
-  const result = validateRoute(props.modelValue.items, props.ruleMode);
+  const result = validateRoute(route.value.items, props.ruleMode);
   validationErrors.value = result.errors;
   return Promise.resolve(result);
 }
@@ -243,10 +252,10 @@ function getLocationAddress(item: RouteItem, itemType: RouteItemType): string {
 
 // ==================== Watchers ====================
 watch(
-  () => props.modelValue.items,
+  () => route.value.items,
   (newValue) => {
     if (newValue) {
-      props.modelValue.items = newValue;
+      route.value.items = newValue;
     }
   }
 );
@@ -254,12 +263,12 @@ watch(
 watch(
   () => props.disableDatetime,
   (disabled) => {
-    props.modelValue.items.forEach((item) => {
+    route.value.items.forEach((item) => {
       if (disabled) {
         item.datetime.datetime = null;
       } else if (
         !item.datetime.datetime &&
-        props.modelValue.items.indexOf(item) === 0
+        route.value.items.indexOf(item) === 0
       ) {
         // 如果是出发点且允许编辑时间但未设置，设为当前时间
         item.datetime.datetime = new Date();

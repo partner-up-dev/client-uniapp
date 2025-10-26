@@ -24,6 +24,9 @@ export default defineConfig({
       '@vite-plugins': resolve(__dirname, './vite-plugins')
     }
   },
+  define: {
+    'import.meta.env.VITE_TENCENT_LBS_KEY': JSON.stringify('mock-tencent-lbs-key'),
+  },
   test: {
     environment: 'jsdom',
     globals: true,
