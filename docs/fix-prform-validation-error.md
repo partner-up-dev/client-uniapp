@@ -46,8 +46,46 @@ return this._subclassValidate().then((subclassValidateResult) => {
     errors[errorKey].push(...subclassValidateResult.errors[errorKey]);
   }
   
-  // Then process sub-component validations
-  // ...
+  // Collect all validate promises from child components
+  const subValidatePromises = [];
+  
+  for (const key in this) {
+    const value = (this as any)[key];
+    if (value && typeof value === 'object' && typeof value.validate === 'function') {
+      subValidatePromises.push(
+        value.validate().then((subResult) => {
+          // Prefix sub-component errors with the property key
+          const prefixedErrors = {};
+          for (const errorKey in subResult.errors) {
+            prefixedErrors[`${key}.${errorKey}`] = subResult.errors[errorKey];
+          }
+          return { success: subResult.success, errors: prefixedErrors };
+        })
+      );
+    }
+  }
+  
+  // Wait for all sub-validations and merge their errors
+  return Promise.all(subValidatePromises).then((subResults) => {
+    let allSuccess = Object.keys(errors).length === 0;
+    
+    for (const subResult of subResults) {
+      if (!subResult.success) {
+        allSuccess = false;
+      }
+      for (const errorKey in subResult.errors) {
+        if (!errors[errorKey]) {
+          errors[errorKey] = [];
+        }
+        errors[errorKey].push(...subResult.errors[errorKey]);
+      }
+    }
+    
+    return {
+      success: allSuccess,
+      errors,
+    };
+  });
 });
 ```
 
@@ -130,14 +168,27 @@ Additionally, updated all form assignments in `onLoad` to use the appropriate fo
 // Before
 form.value = PartnerRequestForm.parse({...});
 
-// After
-const FormClass = type === PRType.Commute 
-  ? CommutePRForm 
-  : type === PRType.RideHailing 
-    ? RideHailingPRForm 
-    : PartnerRequestForm;
-form.value = FormClass.parse({...}) as any;
+// After - Helper function to get form class by type
+function getFormClassByType(type: PRType) {
+  switch (type) {
+    case PRType.Commute:
+      return CommutePRForm;
+    case PRType.RideHailing:
+      return RideHailingPRForm;
+    default:
+      return PartnerRequestForm;
+  }
+}
+
+const FormClass = getFormClassByType(type);
+form.value = FormClass.parse({...}) as any;  // Type assertion needed due to dynamic form types
 ```
+
+**Note on type assertion**: The `as any` is necessary here because:
+- `form` must accommodate multiple form types (PartnerRequestForm, CommutePRForm, RideHailingPRForm)
+- The specific type depends on runtime value of `props.value.type`
+- TypeScript cannot infer the correct union type from the dynamic switch
+- This is a safe use of type assertion as the form type matches the PR type
 
 ## Changes Made
 

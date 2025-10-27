@@ -69,6 +69,18 @@ const publishing_notice = ref<string[]>([
 const prId = ref<number | undefined>(undefined);
 const { pr: partnerRequest, loading: prLoading } = PartnerRequest.use(prId.value);
 
+// Helper function to get form class by PR type
+function getFormClassByType(type: PRType) {
+  switch (type) {
+    case PRType.Commute:
+      return CommutePRForm;
+    case PRType.RideHailing:
+      return RideHailingPRForm;
+    default:
+      return PartnerRequestForm;
+  }
+}
+
 // methods
 /**
  * @name 处理"发布"
@@ -219,11 +231,7 @@ onLoad(
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
         // Initialize empty form and merge with cache
-        const FormClass = type === PRType.Commute 
-          ? CommutePRForm 
-          : type === PRType.RideHailing 
-            ? RideHailingPRForm 
-            : PartnerRequestForm;
+        const FormClass = getFormClassByType(type);
         form.value = FormClass.parse({
           title: cache.title || null,
           introduction: cache.introduction || null,
@@ -237,11 +245,7 @@ onLoad(
       const cache = usePartnerRequestStore().draftContent;
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
-        const FormClass = type === PRType.Commute 
-          ? CommutePRForm 
-          : type === PRType.RideHailing 
-            ? RideHailingPRForm 
-            : PartnerRequestForm;
+        const FormClass = getFormClassByType(type);
         form.value = FormClass.parse(cache) as any;
         props.value.type = type;
       } else {
@@ -251,11 +255,7 @@ onLoad(
       // load from draft
       PartnerRequest.get(props.value.id).then((pr) => {
         // Convert PartnerRequest to appropriate form type
-        const FormClass = pr.type === PRType.Commute 
-          ? CommutePRForm 
-          : pr.type === PRType.RideHailing 
-            ? RideHailingPRForm 
-            : PartnerRequestForm;
+        const FormClass = getFormClassByType(pr.type);
         form.value = FormClass.parse({
           title: pr.title,
           introduction: pr.introduction,
