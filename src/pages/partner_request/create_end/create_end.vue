@@ -14,12 +14,15 @@ import {
   PartnerRequest,
   PartnerRequestForm,
 } from "@/business/partner_request/base";
+import { CommutePRForm } from "@/business/partner_request/commute";
+import { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
 import PUNoticeBar from "@/components/common/PUNoticeBar/PUNoticeBar.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { createFormByType } from "@/components/partner_request/PRForm/PRForm";
 
 const { dt: domain_t } = useTranslate("partner_request.create_end");
 
@@ -56,7 +59,7 @@ const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
 const PRFormRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
-const form = ref({});
+const form = ref(createFormByType(PRType.Undefined));
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
@@ -216,10 +219,15 @@ onLoad(
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
         // Initialize empty form and merge with cache
-        form.value = PartnerRequestForm.parse({
+        const FormClass = type === PRType.Commute 
+          ? CommutePRForm 
+          : type === PRType.RideHailing 
+            ? RideHailingPRForm 
+            : PartnerRequestForm;
+        form.value = FormClass.parse({
           title: cache.title || null,
           introduction: cache.introduction || null,
-        });
+        }) as any;
         props.value.type = type;
       } else {
         errorReport(domain_t("on_load.load_form_from_cache.failed"));
@@ -229,7 +237,12 @@ onLoad(
       const cache = usePartnerRequestStore().draftContent;
       const type = usePartnerRequestStore().draftType;
       if (cache && type) {
-        form.value = PartnerRequestForm.parse(cache);
+        const FormClass = type === PRType.Commute 
+          ? CommutePRForm 
+          : type === PRType.RideHailing 
+            ? RideHailingPRForm 
+            : PartnerRequestForm;
+        form.value = FormClass.parse(cache) as any;
         props.value.type = type;
       } else {
         errorReport(domain_t("on_load.load_form_from_cache.failed"));
@@ -237,20 +250,22 @@ onLoad(
     } else if (props.value.id) {
       // load from draft
       PartnerRequest.get(props.value.id).then((pr) => {
-        // Convert PartnerRequest to PartnerRequestForm
-        form.value = PartnerRequestForm.parse({
+        // Convert PartnerRequest to appropriate form type
+        const FormClass = pr.type === PRType.Commute 
+          ? CommutePRForm 
+          : pr.type === PRType.RideHailing 
+            ? RideHailingPRForm 
+            : PartnerRequestForm;
+        form.value = FormClass.parse({
           title: pr.title,
           introduction: pr.introduction,
-        });
+        }) as any;
         // update type
         props.value.type = pr.type;
       });
     } else if (props.value.type) {
       // load from type(empty form)
-      form.value = PartnerRequestForm.parse({
-        title: null,
-        introduction: null,
-      });
+      form.value = createFormByType(props.value.type) as any;
     }
   }
 );

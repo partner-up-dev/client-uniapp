@@ -227,60 +227,63 @@ export const V = {
         }
 
         return this._subclassValidate().then((subclassValidateResult) => {
-          if (!subclassValidateResult.success) {
-            // Collect all _sub_validate promises from child components
-            const subValidatePromises: Promise<{ success: boolean; errors: Record<string, string[]> }>[] = [];
-
-            // Iterate through all properties to find components with _sub_validate method
-            for (const key in this) {
-              const value = (this as any)[key];
-              if (value && typeof value === 'object' && typeof value.validate === 'function') {
-                subValidatePromises.push(
-                  value.validate().then((subResult: { success: boolean; errors: Record<string, string[]> }) => {
-                    // Prefix sub-component errors with the property key
-                    const prefixedErrors: Record<string, string[]> = {};
-                    for (const errorKey in subResult.errors) {
-                      prefixedErrors[`${key}.${errorKey}`] = subResult.errors[errorKey];
-                    }
-                    return { success: subResult.success, errors: prefixedErrors };
-                  })
-                );
-              }
+          // Merge subclass validation errors with schema validation errors
+          for (const errorKey in subclassValidateResult.errors) {
+            if (!errors[errorKey]) {
+              errors[errorKey] = [];
             }
+            errors[errorKey].push(...subclassValidateResult.errors[errorKey]);
+          }
 
-            // If no sub-validations, return immediately
-            if (subValidatePromises.length === 0) {
-              return Promise.resolve({
-                success: Object.keys(errors).length === 0,
-                errors,
-              });
-            }
+          // Collect all validate promises from child components
+          const subValidatePromises: Promise<{ success: boolean; errors: Record<string, string[]> }>[] = [];
 
-            // Wait for all sub-validations to complete
-            return Promise.all(subValidatePromises).then((subResults) => {
-              let allSuccess = Object.keys(errors).length === 0;
-              // Merge sub-validation errors
-              for (const subResult of subResults) {
-                if (!subResult.success) {
-                  allSuccess = false;
-                }
-                for (const errorKey in subResult.errors) {
-                  if (!errors[errorKey]) {
-                    errors[errorKey] = [];
+          // Iterate through all properties to find components with validate method
+          for (const key in this) {
+            const value = (this as any)[key];
+            if (value && typeof value === 'object' && typeof value.validate === 'function') {
+              subValidatePromises.push(
+                value.validate().then((subResult: { success: boolean; errors: Record<string, string[]> }) => {
+                  // Prefix sub-component errors with the property key
+                  const prefixedErrors: Record<string, string[]> = {};
+                  for (const errorKey in subResult.errors) {
+                    prefixedErrors[`${key}.${errorKey}`] = subResult.errors[errorKey];
                   }
-                  errors[errorKey].push(...subResult.errors[errorKey]);
-                }
-              }
+                  return { success: subResult.success, errors: prefixedErrors };
+                })
+              );
+            }
+          }
 
-              return {
-                success: allSuccess,
-                errors,
-              };
+          // If no sub-validations, return immediately
+          if (subValidatePromises.length === 0) {
+            return Promise.resolve({
+              success: Object.keys(errors).length === 0,
+              errors,
             });
           }
-          else {
-            return subclassValidateResult;
-          }
+
+          // Wait for all sub-validations to complete
+          return Promise.all(subValidatePromises).then((subResults) => {
+            let allSuccess = Object.keys(errors).length === 0;
+            // Merge sub-validation errors
+            for (const subResult of subResults) {
+              if (!subResult.success) {
+                allSuccess = false;
+              }
+              for (const errorKey in subResult.errors) {
+                if (!errors[errorKey]) {
+                  errors[errorKey] = [];
+                }
+                errors[errorKey].push(...subResult.errors[errorKey]);
+              }
+            }
+
+            return {
+              success: allSuccess,
+              errors,
+            };
+          });
         });
       }
 

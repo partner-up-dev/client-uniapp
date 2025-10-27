@@ -65,47 +65,42 @@ function validateFormData<T = any>(): Promise<FormValidationResult<T>> {
 
   const schema = props.schema;
 
-  if (!schema || typeof schema.validate !== "function") {
+  if (!schema) {
     return Promise.resolve({
       success: false,
       errors: { _form: "Invalid schema configuration" },
     });
   }
 
-  return schema.validate().then((result) => {
-    if (result.success) {
+  // Check if schema is a ValibotFormClass instance with validate method
+  if (typeof schema.validate === "function") {
+    return schema.validate().then((result: { success: boolean; errors: Record<string, string[]> }) => {
+      if (result.success) {
+        return {
+          success: true,
+          validatedForm: schema as T,
+        };
+      }
+
+      // Convert errors from Record<string, string[]> to Record<string, string>
+      const errors: Record<string, string> = {};
+      for (const key in result.errors) {
+        errors[key] = result.errors[key].join(", ");
+      }
+
+      formErrors.value = errors;
+
       return {
-        success: true,
-        validatedForm: result.output as T,
+        success: false,
+        errors,
       };
-    }
+    });
+  }
 
-    // Parse valibot issues into field errors
-    const errors: Record<string, string> = {};
-
-    if (result.issues && Array.isArray(result.issues)) {
-      result.issues.forEach((issue: v.BaseIssue<unknown>) => {
-        if (issue.path) {
-          const pathKey = issue.path
-            .map((p) => p.key)
-            .filter((k) => k !== undefined)
-            .join(".");
-
-          if (pathKey) {
-            errors[pathKey] = issue.message;
-          }
-        } else {
-          errors._form = issue.message;
-        }
-      });
-    }
-
-    formErrors.value = errors;
-
-    return {
-      success: false,
-      errors,
-    };
+  // Fallback: schema doesn't have validate method
+  return Promise.resolve({
+    success: false,
+    errors: { _form: "Schema instance does not have a validate method" },
   });
 }
 
