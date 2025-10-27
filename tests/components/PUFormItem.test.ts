@@ -1,147 +1,109 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import PUFormItem from "@/components/common/PUFormItem/PUFormItem.vue";
-import Cell from "@/components/common/cell/cell.vue";
+import { computed, ref } from "vue";
 
 describe("PUFormItem Component", () => {
-  it("renders label correctly", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "用户名",
-      },
-    });
-
-    expect(wrapper.text()).toContain("用户名");
-  });
-
-  it("shows required indicator when required is true", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "邮箱",
-        required: true,
-      },
-    });
-
-    expect(wrapper.find(".pu-form-item__required").exists()).toBe(true);
-    expect(wrapper.find(".pu-form-item__required").text()).toBe("*");
-  });
-
-  it("hides required indicator when required is false", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "邮箱",
-        required: false,
-      },
-    });
-
-    expect(wrapper.find(".pu-form-item__required").exists()).toBe(false);
-  });
-
   it("renders default slot content", () => {
     const wrapper = mount(PUFormItem, {
       props: {
-        label: "测试",
+        prop: "username",
+      },
+      slots: {
+        default: '<input type="text" value="test input" />',
+      },
+    });
+
+    expect(wrapper.find("input").exists()).toBe(true);
+    expect(wrapper.find("input").element.value).toBe("test input");
+  });
+
+  it("shows error message when form errors are provided", () => {
+    const wrapper = mount(PUFormItem, {
+      props: {
+        prop: "username",
+      },
+      global: {
+        provide: {
+          puFormErrors: computed(() => ({
+            errors: {
+              username: "用户名至少3个字符",
+            },
+          })),
+        },
+      },
+    });
+
+    expect(wrapper.find(".pu-form-item__error").exists()).toBe(true);
+    expect(wrapper.find(".pu-form-item__error").text()).toBe("用户名至少3个字符");
+  });
+
+  it("hides error message when there are no errors", () => {
+    const wrapper = mount(PUFormItem, {
+      props: {
+        prop: "username",
+      },
+      global: {
+        provide: {
+          puFormErrors: computed(() => ({
+            errors: {},
+          })),
+        },
+      },
+    });
+
+    expect(wrapper.find(".pu-form-item__error").exists()).toBe(false);
+  });
+
+  it("hides error message when prop is not set", () => {
+    const wrapper = mount(PUFormItem, {
+      global: {
+        provide: {
+          puFormErrors: computed(() => ({
+            errors: {
+              username: "用户名至少3个字符",
+            },
+          })),
+        },
+      },
+    });
+
+    expect(wrapper.find(".pu-form-item__error").exists()).toBe(false);
+  });
+
+  it("shows error for specific field only", () => {
+    const wrapper = mount(PUFormItem, {
+      props: {
+        prop: "email",
+      },
+      global: {
+        provide: {
+          puFormErrors: computed(() => ({
+            errors: {
+              username: "用户名至少3个字符",
+              email: "请输入有效的邮箱地址",
+            },
+          })),
+        },
+      },
+    });
+
+    expect(wrapper.find(".pu-form-item__error").exists()).toBe(true);
+    expect(wrapper.find(".pu-form-item__error").text()).toBe("请输入有效的邮箱地址");
+    expect(wrapper.find(".pu-form-item__error").text()).not.toContain("用户名");
+  });
+
+  it("renders without errors when not inside PUForm", () => {
+    const wrapper = mount(PUFormItem, {
+      props: {
+        prop: "username",
       },
       slots: {
         default: '<input type="text" />',
       },
     });
 
+    expect(wrapper.find(".pu-form-item__error").exists()).toBe(false);
     expect(wrapper.find("input").exists()).toBe(true);
-  });
-
-  it("passes prop to Cell component", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "用户名",
-        prop: "username",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("formProp")).toBe("username");
-  });
-
-  it("passes type to Cell component", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "用户名",
-        type: "horizontal",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("type")).toBe("horizontal");
-  });
-
-  it("passes size to Cell component", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "用户名",
-        size: "medium",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("size")).toBe("medium");
-  });
-
-  it("passes prefixIcon to Cell component", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "电话",
-        prefixIcon: "i-mdi-phone",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("prefixIcon")).toBe("i-mdi-phone");
-  });
-
-  it("passes suffixIcon to Cell component", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "设置",
-        suffixIcon: "i-mdi-chevron-right",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("suffixIcon")).toBe("i-mdi-chevron-right");
-  });
-
-  it("emits click event when Cell is clicked", async () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "测试",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    await cell.trigger("click");
-
-    expect(wrapper.emitted("click")).toBeTruthy();
-  });
-
-  it("uses vertical type by default", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "测试",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("type")).toBe("vertical");
-  });
-
-  it("uses small size by default", () => {
-    const wrapper = mount(PUFormItem, {
-      props: {
-        label: "测试",
-      },
-    });
-
-    const cell = wrapper.findComponent(Cell);
-    expect(cell.props("size")).toBe("small");
   });
 });

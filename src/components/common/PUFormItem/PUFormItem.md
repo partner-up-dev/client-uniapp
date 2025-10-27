@@ -2,52 +2,40 @@
 
 ## Rationale
 
-提供一个语义化的表单项组件，简化表单开发，提供更友好的 API。
+提供一个轻量级的表单项容器，用于显示验证错误信息，不包含布局功能。
 
 ## Goals
 
 提供一个表单项组件，支持：
-- 标签显示
-- 必填标识（红色星号）
-- 水平和垂直布局
-- 表单验证错误显示
+- 显示表单验证错误信息
 - 与 PUForm 集成
+- 不提供布局功能（如水平/垂直布局、间距）
+- 不提供标签和必填标识功能
 
 ## Key Concepts
 
-- 基于 Cell 组件实现
 - 通过 PUForm 的 provide/inject 机制获取验证错误
-- 提供更简洁的表单项 API
+- 仅作为错误信息显示容器，布局由用户自行控制
 
 ## Specification
 
-组件是 Cell 组件的语义化封装，专门用于表单场景。提供 `label`、`required`、`prop` 等表单特定的属性，简化表单开发。
-
-支持两种布局：
-- `vertical`（默认）：垂直布局，标签在上，内容在下
-- `horizontal`：水平布局，标签在左，内容在右
+组件是一个简单的容器，用于包裹表单控件并显示验证错误。不提供任何布局功能，用户需要自行处理标签、布局和样式。
 
 ## Implementation
 
-基于 Vue 3 Composition API 实现，内部使用 Cell 组件。
+基于 Vue 3 Composition API 实现，使用 inject 获取 PUForm 提供的错误状态。
 
 ### Props
 
 - `prop` (`string | undefined`)：表单字段属性名，用于关联 PUForm 验证错误
-- `label` (`string`、默认 `""`)：标签文本
-- `type` (`"vertical" | "horizontal"`、默认 `"vertical"`)：布局类型（注意：与 Cell 组件的默认值 `"horizontal"` 不同，因为表单项通常使用垂直布局）
-- `required` (`boolean`、默认 `false`)：是否必填（显示红色星号）
-- `prefixIcon` (`string | undefined`)：前缀图标
-- `suffixIcon` (`string | undefined`)：后缀图标
-- `size` (`Size`、默认 `"small"`)：尺寸
 
 ### Events
 
-- `click()`: 表单项点击时触发
+无
 
 ### Slots
 
-- `default`: 表单项内容（通常是输入控件）
+- `default`: 表单项内容（通常是输入控件和标签）
 
 ### Methods
 
@@ -64,35 +52,52 @@
 ```vue
 <template>
   <PUForm ref="formRef" :schema="MySchema">
-    <PUFormItem label="用户名" prop="username" required>
-      <PUInput v-model="formData.username" placeholder="请输入用户名" />
-    </PUFormItem>
+    <view class="form-row">
+      <text class="label">用户名 *</text>
+      <PUFormItem prop="username">
+        <PUInput v-model="formData.username" placeholder="请输入用户名" />
+      </PUFormItem>
+    </view>
     
-    <PUFormItem label="邮箱" prop="email">
-      <PUInput v-model="formData.email" placeholder="请输入邮箱" />
-    </PUFormItem>
+    <view class="form-row">
+      <text class="label">邮箱</text>
+      <PUFormItem prop="email">
+        <PUInput v-model="formData.email" placeholder="请输入邮箱" />
+      </PUFormItem>
+    </view>
   </PUForm>
 </template>
+
+<style>
+.form-row {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+</style>
 ```
 
-### 水平布局
+### 与 Cell 组合使用
 
 ```vue
-<PUFormItem label="性别" prop="gender" type="horizontal">
-  <PUPicker v-model="formData.gender" :options="genderOptions" />
-</PUFormItem>
-```
-
-### 带图标
-
-```vue
-<PUFormItem label="电话" prop="phone" prefix-icon="i-mdi-phone">
-  <PUInput v-model="formData.phone" type="tel" />
-</PUFormItem>
+<PUForm ref="formRef" :schema="MySchema">
+  <Cell title="用户名" type="vertical">
+    <template #value>
+      <PUFormItem prop="username">
+        <PUInput v-model="formData.username" placeholder="请输入用户名" />
+      </PUFormItem>
+    </template>
+  </Cell>
+</PUForm>
 ```
 
 ## 其它
 
 - 必须在 PUForm 组件内部使用以获得完整功能
 - `prop` 属性应与 PUForm 的 schema 字段对应
-- 验证错误会自动显示在表单项下方
+- 验证错误会自动显示在内容下方
+- 布局、标签、必填标识等需要用户自行实现

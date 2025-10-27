@@ -8,35 +8,34 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { puFormItemProps, puFormItemEmits } from "./PUFormItem";
-import Cell from "@/components/common/cell/cell.vue";
+import { inject, computed } from "vue";
+import type { FormErrorState } from "@/components/common/PUForm/PUForm";
 
 const props = defineProps(puFormItemProps);
 const emit = defineEmits(puFormItemEmits);
 
-const onCellClick = () => {
-  emit("click");
-};
+// Inject form context if inside PUForm
+const formErrors = inject<{ value: FormErrorState } | undefined>(
+  "puFormErrors",
+  undefined
+);
+
+// Compute error message for this field
+const errorMessage = computed(() => {
+  if (!props.prop || !formErrors?.value?.errors) {
+    return undefined;
+  }
+  return formErrors.value.errors[props.prop];
+});
 </script>
 
 <template>
-  <Cell
-    :type="type"
-    :prefix-icon="prefixIcon"
-    :suffix-icon="suffixIcon"
-    :size="size"
-    :form-prop="prop"
-    @click="onCellClick"
-  >
-    <template #title>
-      <view class="pu-form-item__label">
-        <text v-if="required" class="pu-form-item__required">*</text>
-        <text>{{ label }}</text>
-      </view>
-    </template>
-    <template #value>
-      <slot></slot>
-    </template>
-  </Cell>
+  <view class="pu-form-item">
+    <slot></slot>
+    <view v-if="errorMessage" class="pu-form-item__error">
+      {{ errorMessage }}
+    </view>
+  </view>
 </template>
 
 <style lang="scss" scoped src="./PUFormItem.scss"></style>
