@@ -1,0 +1,13 @@
+@use "@/styles/main.scss" as *;
+
+.pu-form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.pu-form-item__error {
+  color: $pu-color-error;
+  @include pu-font("label-medium");
+  margin-top: $pu-spacing-xs;
+  line-height: 1.4;
+}
