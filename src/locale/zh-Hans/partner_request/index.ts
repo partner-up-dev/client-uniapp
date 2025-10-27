@@ -5,6 +5,7 @@
 import type { named } from "@/locale/types";
 import trip from "./trip";
 import commute from "./commute";
+import ride_hailing from "./ride_hailing";
 
 export default {
   trip: {
@@ -13,6 +14,7 @@ export default {
   commute: {
     ...commute,
   },
+  ride_hailing,
   geo_filter: {
     reset: "复位",
     filtering_title: "地理筛选",

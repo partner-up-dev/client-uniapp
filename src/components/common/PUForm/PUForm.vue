@@ -60,58 +60,58 @@ async function validate<T = any>(): Promise<FormValidationResult<T>> {
 /**
  * Validate form data against schema
  */
-function validateFormData<T = any>(formData: any): FormValidationResult<T> {
+function validateFormData<T = any>(): Promise<FormValidationResult<T>> {
   formErrors.value = {};
 
   const schema = props.schema;
 
-  if (!schema || typeof schema.safeParse !== "function") {
-    return {
+  if (!schema || typeof schema.validate !== "function") {
+    return Promise.resolve({
       success: false,
       errors: { _form: "Invalid schema configuration" },
-    };
-  }
-
-  const result = schema.safeParse(formData);
-
-  if (result.success) {
-    return {
-      success: true,
-      validatedForm: result.output as T,
-    };
-  }
-
-  // Parse valibot issues into field errors
-  const errors: Record<string, string> = {};
-
-  if (result.issues && Array.isArray(result.issues)) {
-    result.issues.forEach((issue: v.BaseIssue<unknown>) => {
-      if (issue.path) {
-        const pathKey = issue.path
-          .map((p) => p.key)
-          .filter((k) => k !== undefined)
-          .join(".");
-
-        if (pathKey) {
-          errors[pathKey] = issue.message;
-        }
-      } else {
-        errors._form = issue.message;
-      }
     });
   }
 
-  formErrors.value = errors;
+  return schema.validate().then((result) => {
+    if (result.success) {
+      return {
+        success: true,
+        validatedForm: result.output as T,
+      };
+    }
 
-  return {
-    success: false,
-    errors,
-  };
+    // Parse valibot issues into field errors
+    const errors: Record<string, string> = {};
+
+    if (result.issues && Array.isArray(result.issues)) {
+      result.issues.forEach((issue: v.BaseIssue<unknown>) => {
+        if (issue.path) {
+          const pathKey = issue.path
+            .map((p) => p.key)
+            .filter((k) => k !== undefined)
+            .join(".");
+
+          if (pathKey) {
+            errors[pathKey] = issue.message;
+          }
+        } else {
+          errors._form = issue.message;
+        }
+      });
+    }
+
+    formErrors.value = errors;
+
+    return {
+      success: false,
+      errors,
+    };
+  });
 }
 
 // Expose validate method
 defineExpose({
-  validate: (formData: any) => validateFormData(formData),
+  validate: () => validateFormData(),
 });
 </script>
 

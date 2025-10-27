@@ -15,25 +15,20 @@ import { DatetimeV } from ".";
 const { dt } = useTranslate('base.route_map');
 
 export type LocationRef = string;
+export const LocationRefV = v.string();
 
 export class Location extends V.class(v.object({
   address: v.array(v.string()),
   friendly_address: v.string(),
   lat: v.number(),
   lng: v.number(),
-  _id: v.optional(v.string()),
+  _id: LocationRefV,
 })) {
   private static api = new APIClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
   });
-
-  address!: string[];
-  friendly_address!: string;
-  lat!: number;
-  lng!: number;
-  _id?: LocationRef;
 
   protected put() {
     Location.api.requestHTTP({
@@ -93,6 +88,14 @@ export class Location extends V.class(v.object({
   }
 }
 
+export class LocationForm extends V.formClass(v.object({
+  address: v.array(v.string()),
+  friendly_address: v.string(),
+  lat: v.number(),
+  lng: v.number(),
+  _id: v.optional(LocationRefV, undefined),
+})) { }
+
 export class POI extends V.class(v.object({})) { }
 
 export class RouteItemDatetime extends V.class(v.object({
@@ -119,9 +122,11 @@ export class RouteItemDatetime extends V.class(v.object({
   }
 }
 
+export class RouteItemDatetimeForm extends V.formClass(RouteItemDatetime.V) { }
+
 export class RouteItem extends V.class(v.object({
-  datetime: v.optional(v.instance(RouteItemDatetime), () => new RouteItemDatetime({})),
-  location: v.optional(v.string(), undefined),
+  datetime: instance(RouteItemDatetime),
+  location: LocationRefV,
 })) {
 
   static use(routeItem: RouteItem | { datetime: RouteItemDatetime; location: LocationRef }) {
@@ -146,6 +151,18 @@ export class RouteItem extends V.class(v.object({
 
     return {
       loading, location
+    }
+  }
+}
+
+export class RouteItemForm extends V.formClass(v.object({
+  datetime: v.optional(instance(RouteItemDatetimeForm), () => new RouteItemDatetimeForm({})),
+  location: v.optional(LocationRefV, undefined),
+})) {
+  protected async _subclassValidate() {
+    const errors: Record<string, string[]> = {};
+    if (!this.location) {
+      errors['location'] = ['地点不能为空'];
     }
   }
 }
@@ -226,9 +243,7 @@ export class RoutePlanning extends V.class(v.object({
 }
 
 export class Route extends V.class(v.object({
-  items: v.pipe(v.optional(
-    v.array(instance(RouteItem)), () => [new RouteItem({}), new RouteItem({})]
-  ), v.maxLength(4))
+  items: v.array(instance(RouteItem))
 })
 ) {
 
@@ -284,3 +299,9 @@ export class Route extends V.class(v.object({
   }
 
 }
+
+export class RouteForm extends V.formClass(v.object({
+  items: v.pipe(v.optional(
+    v.array(instance(RouteItemForm)), () => [new RouteItemForm({}), new RouteItemForm({})]
+  ), v.maxLength(4))
+})) { }

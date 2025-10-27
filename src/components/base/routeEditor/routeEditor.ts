@@ -1,6 +1,6 @@
 import type { PropType } from "vue";
 import { makeStringProp, makeBooleanProp, makeNumberProp } from "@/utils/props";
-import { Route } from "@/business/base/route";
+import { Route, RouteForm } from "@/business/base/route";
 
 // ==================== 组件相关类型定义 ====================
 
@@ -26,11 +26,8 @@ export type RouteEditorRuleMode = "basic" | "strict";
 // ==================== 组件 Props 定义 ====================
 
 export const routeEditorProps = {
-  /**
-   * 路线数据
-   */
   modelValue: {
-    type: Object as PropType<Route>,
+    type: Object as PropType<RouteForm>,
     required: false,
     default: undefined,
   },
@@ -64,7 +61,7 @@ export const routeEditorEmits = {
   /**
    * v-model 更新事件
    */
-  "update:modelValue": (value: Route) => true,
+  "update:modelValue": (value: RouteForm) => true,
   /**
    * 路线数据变更事件
    */

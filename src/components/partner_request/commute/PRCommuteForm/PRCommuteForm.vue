@@ -22,6 +22,7 @@ import Cell from "@/components/common/cell/cell.vue";
 import PUCheckbox from "@/components/common/PUCheckbox/PUCheckbox.vue";
 import PUCheckboxGroup from "@/components/common/PUCheckboxGroup/PUCheckboxGroup.vue";
 import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import PUFormItem from "@/components/common/PUFormItem/PUFormItem.vue";
 import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 
@@ -51,37 +52,6 @@ function handleOffAtChange(event: any) {
   onFormChange("off_at");
 }
 
-function validate(): Promise<{ valid: boolean; message?: string }> {
-  return new Promise(async (resolve) => {
-    // Validate route if available
-    if (routeEditorRef.value) {
-      const routeValidation = await routeEditorRef.value.validate();
-      if (!routeValidation.valid) {
-        errorMessage.value = routeValidation.errors.join("; ");
-        resolve({ valid: false, message: errorMessage.value });
-        return;
-      }
-    }
-
-    // Validate workdays
-    if (!props.form.workdays || props.form.workdays.length === 0) {
-      errorMessage.value = domain_t("rules.workdays_required");
-      resolve({ valid: false, message: errorMessage.value });
-      return;
-    }
-
-    // Validate either on_at or off_at is filled
-    if (!props.form.on_at && !props.form.off_at) {
-      errorMessage.value = domain_t("rules.either_or_on_off_at");
-      resolve({ valid: false, message: errorMessage.value });
-      return;
-    }
-
-    errorMessage.value = "";
-    resolve({ valid: true });
-  });
-}
-
 const weekdayOptions: Weekday[] = [
   "monday",
   "tuesday",
@@ -91,10 +61,6 @@ const weekdayOptions: Weekday[] = [
   "saturday",
   "sunday",
 ];
-
-defineExpose<CommuteDatetimeFormExpose>({
-  validate,
-});
 </script>
 
 <template>
@@ -102,12 +68,14 @@ defineExpose<CommuteDatetimeFormExpose>({
     <PUAccordion v-model="activeNames">
       <PUAccordionItem name="route" :title="domain_t('collapse_title.route')">
         <view class="space-p-y-med">
-          <RouteEditor
-            ref="routeEditorRef"
-            :modelValue="props.form.route"
-            type="normal"
-            :disableDatetime="true"
-          />
+          <PUFormItem prop="route">
+            <RouteEditor
+              ref="routeEditorRef"
+              :modelValue="props.form.route"
+              type="normal"
+              :disableDatetime="true"
+            />
+          </PUFormItem>
         </view>
       </PUAccordionItem>
 

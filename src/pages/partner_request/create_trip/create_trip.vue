@@ -13,7 +13,7 @@ import {
   TripPreference,
   type Transportation,
 } from "@/business/partner_request/trip";
-import { Route, RouteItem } from "@/business/base/route";
+import { Route, RouteForm, RouteItem } from "@/business/base/route";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { EVENT } from "@/data/enum";
 import { useTranslate } from "@/locale/use";
@@ -39,12 +39,12 @@ type ImmersiveCreateStep = "route" | "tripPurpose" | "transportation";
 const l2_type = ref<PRType | undefined>(undefined);
 
 const form = ref<{
-  route: Route;
+  route: RouteForm;
   trip_preference: TripPreference;
   ride_hailing_preference: RideHailingPreference;
   transportation: Transportation;
 }>({
-  route: new Route({ items: [new RouteItem({}), new RouteItem({})] }),
+  route: new RouteForm({}),
   trip_preference: new TripPreference({}),
   ride_hailing_preference: new RideHailingPreference({}),
   transportation: "ride_hailing",

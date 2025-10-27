@@ -6,7 +6,7 @@ import { V } from '..';
 import { type PRRef } from '.';
 import { nullable } from '..';
 import { PartnerRequest, PartnerRequestForm } from './base';
-import { Route } from '../base/route';
+import { Route, RouteForm } from '../base/route';
 import { TripPreference } from './trip';
 import { WeekdayV, TransportationV } from '../base';
 
@@ -35,8 +35,8 @@ export class CommutePR extends PartnerRequest.extend(v.object({
 }
 
 export class CommutePRForm extends PartnerRequestForm.extend(v.object({
-  route: instance(Route),
-  trip_preference: instance(TripPreference),
+  route: v.optional(instance(RouteForm), () => new RouteForm({})),
+  trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
   on_at: nullable(v.string()),
   off_at: nullable(v.string()),
   workdays: v.optional(v.array(WeekdayV), () => []),

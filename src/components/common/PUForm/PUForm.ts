@@ -1,6 +1,6 @@
 import type { PropType } from "vue";
 import { makeStringProp } from "@/utils/props";
-import type { ValibotClass } from "@/business";
+import type { ValibotFormClass } from "@/business";
 import type * as v from "valibot";
 
 // ==================== 组件相关类型定义 ====================
@@ -27,7 +27,7 @@ export const puFormProps = {
    * Valibot schema class instance for form validation
    */
   schema: {
-    type: Object as PropType<ValibotClass>,
+    type: Object as PropType<ValibotFormClass>,
     required: true,
   },
   /**

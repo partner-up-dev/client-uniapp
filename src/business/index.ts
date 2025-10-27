@@ -194,6 +194,148 @@ export const V = {
         ): any;
       };
     };
+  },
+
+  formClass<TSchema extends v.BaseSchema<any, any, any>>(schema: TSchema) {
+    type Input = v.InferInput<TSchema>;
+    type Output = v.InferOutput<TSchema>;
+
+    // First create the base class using V.class
+    const BaseClass = V.class(schema);
+
+    class ValibotFormClass extends (BaseClass as any) {
+      /**
+       * Validate the current instance data against the schema
+       * and call _sub_validate on child components for complex validation
+       * @returns Promise with validation result containing success status and errors
+       */
+      public validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> {
+        const errors: Record<string, string[]> = {};
+
+        // First, validate against the schema
+        const result = v.safeParse(schema, this);
+
+        if (!result.success) {
+          // Convert Valibot issues to error format
+          for (const issue of result.issues) {
+            const path = issue.path?.map((p: any) => p.key).join('.') || '_root';
+            if (!errors[path]) {
+              errors[path] = [];
+            }
+            errors[path].push(issue.message);
+          }
+        }
+
+        return this._subclassValidate().then((subclassValidateResult) => {
+          if (!subclassValidateResult.success) {
+            // Collect all _sub_validate promises from child components
+            const subValidatePromises: Promise<{ success: boolean; errors: Record<string, string[]> }>[] = [];
+
+            // Iterate through all properties to find components with _sub_validate method
+            for (const key in this) {
+              const value = (this as any)[key];
+              if (value && typeof value === 'object' && typeof value.validate === 'function') {
+                subValidatePromises.push(
+                  value.validate().then((subResult: { success: boolean; errors: Record<string, string[]> }) => {
+                    // Prefix sub-component errors with the property key
+                    const prefixedErrors: Record<string, string[]> = {};
+                    for (const errorKey in subResult.errors) {
+                      prefixedErrors[`${key}.${errorKey}`] = subResult.errors[errorKey];
+                    }
+                    return { success: subResult.success, errors: prefixedErrors };
+                  })
+                );
+              }
+            }
+
+            // If no sub-validations, return immediately
+            if (subValidatePromises.length === 0) {
+              return Promise.resolve({
+                success: Object.keys(errors).length === 0,
+                errors,
+              });
+            }
+
+            // Wait for all sub-validations to complete
+            return Promise.all(subValidatePromises).then((subResults) => {
+              let allSuccess = Object.keys(errors).length === 0;
+              // Merge sub-validation errors
+              for (const subResult of subResults) {
+                if (!subResult.success) {
+                  allSuccess = false;
+                }
+                for (const errorKey in subResult.errors) {
+                  if (!errors[errorKey]) {
+                    errors[errorKey] = [];
+                  }
+                  errors[errorKey].push(...subResult.errors[errorKey]);
+                }
+              }
+
+              return {
+                success: allSuccess,
+                errors,
+              };
+            });
+          }
+          else {
+            return subclassValidateResult;
+          }
+        });
+      }
+
+      protected _subclassValidate(): Promise<{ success: boolean; errors: Record<string, string[]> }> {
+        return Promise.resolve({ success: true, errors: {} });
+      }
+    }
+
+    // Copy the embedded schema properties
+    const embeddedSchema = v.pipe(
+      schema,
+      v.transform((parsed: Output) => {
+        const inst = Object.create(ValibotFormClass.prototype) as Output;
+        Object.assign(inst as object, parsed);
+        return inst as unknown;
+      })
+    );
+
+    Object.assign(ValibotFormClass, embeddedSchema);
+
+    return ValibotFormClass as unknown as v.BaseSchema<
+      v.InferInput<TSchema>,
+      Output & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> },
+      v.InferIssue<TSchema>
+    > & {
+      new(value: Input): Output & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> };
+      V: TSchema;
+      schema(): TSchema;
+      parse<T = InstanceType<typeof ValibotFormClass>>(data: unknown): T;
+      parseAsync<T = InstanceType<typeof ValibotFormClass>>(data: unknown): Promise<T>;
+      safeParse<T = InstanceType<typeof ValibotFormClass>>(data: unknown):
+        | { success: true; output: T }
+        | { success: false; issues: v.BaseIssue<unknown>[] };
+      parseJSON<T = InstanceType<typeof ValibotFormClass>>(json: string): T;
+      extend<TExtendSchema extends v.BaseSchema<any, any, any>>(
+        extendSchema: TExtendSchema
+      ): v.BaseSchema<
+        v.InferInput<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>,
+        Output & v.InferOutput<TExtendSchema> & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> },
+        v.InferIssue<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>
+      > & {
+        new(value: v.InferInput<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>): Output & v.InferOutput<TExtendSchema> & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> };
+        V: v.IntersectSchema<[TSchema, TExtendSchema], undefined>;
+        schema(): v.IntersectSchema<[TSchema, TExtendSchema], undefined>;
+        parse<T = any>(data: unknown): T;
+        parseAsync<T = any>(data: unknown): Promise<T>;
+        safeParse<T = any>(data: unknown):
+          | { success: true; output: T }
+          | { success: false; issues: v.BaseIssue<unknown>[] };
+        parseJSON<T = any>(json: string): T;
+        extend<TExtendSchema2 extends v.BaseSchema<any, any, any>>(
+          extendSchema: TExtendSchema2
+        ): any;
+      };
+    };
   }
 };
 
@@ -221,6 +363,29 @@ export type ValibotClass<
   ): ValibotClass<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>;
 };
 
+// Public type alias for the constructor type returned by V.formClass
+// This extends ValibotClass with the validate method for form validation
+export type ValibotFormClass<
+  TSchema extends v.BaseSchema<any, any, any> = v.BaseSchema<any, any, any>
+> = v.BaseSchema<
+  v.InferInput<TSchema>,
+  v.InferOutput<TSchema> & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> },
+  v.InferIssue<TSchema>
+> & {
+  new(value: v.InferInput<TSchema>): v.InferOutput<TSchema> & { validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> };
+  V: TSchema;
+  schema(): TSchema;
+  parse<T = InstanceType<any>>(data: unknown): T;
+  parseAsync<T = InstanceType<any>>(data: unknown): Promise<T>;
+  safeParse<T = InstanceType<any>>(data: unknown):
+    | { success: true; output: T }
+    | { success: false; issues: v.BaseIssue<unknown>[] };
+  parseJSON<T = InstanceType<any>>(json: string): T;
+  extend<TExtendSchema extends v.BaseSchema<any, any, any>>(
+    extendSchema: TExtendSchema
+  ): ValibotFormClass<v.IntersectSchema<[TSchema, TExtendSchema], undefined>>;
+};
+
 
 export function nullable<T extends v.BaseSchema<any, any, any>>(schema: T) {
   return v.optional(v.nullable(schema), null);
@@ -245,8 +410,22 @@ export function instance<T extends ValibotClass>(cls: T) {
 
 /**
  * Extracts minLength and maxLength constraints from a Valibot string schema.
- * Returns { minLength?: number, maxLength?: number }
  */
-export function limit_string(min?: number, max?: number) {
-  return v.pipe(v.string(), v.minLength(min ?? 0), v.maxLength(max ?? Infinity));
+export function limit_string(min?: number, max?: number, emptyIsValid = true) {
+  const actions: v.BaseValidation<string, string, v.BaseIssue<unknown>>[] = [];
+
+  if (min !== undefined && min > 0) {
+    if (emptyIsValid) {
+      // Allow empty strings to pass, only validate length if string is not empty
+      actions.push(v.check((value) => value.length === 0 || value.length >= min, `String must be empty or at least ${min} characters long`));
+    } else {
+      actions.push(v.minLength(min));
+    }
+  }
+
+  if (max !== undefined) {
+    actions.push(v.maxLength(max));
+  }
+
+  return v.pipe(v.string(), ...actions);
 }

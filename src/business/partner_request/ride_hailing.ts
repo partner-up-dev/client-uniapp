@@ -6,7 +6,7 @@ import { V } from '..';
 import { type PRRef } from '.';
 import { nullable } from '..';
 import { PartnerRequest, PartnerRequestForm } from './base';
-import { Route } from '../base/route';
+import { Route, RouteForm } from '../base/route';
 import { TripPreference } from './trip';
 
 export type RideHailingOrderRef = number;
@@ -40,9 +40,9 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
 }
 
 export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
-  route: instance(Route),
-  trip_preference: instance(TripPreference),
-  ride_hailing_preference: instance(RideHailingPreference),
+  route: v.optional(instance(RouteForm), () => new RouteForm({})),
+  trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
+  ride_hailing_preference: v.optional(instance(RideHailingPreference), () => new RideHailingPreference({})),
 })) {
 
   public create(): Promise<RideHailingPR> {

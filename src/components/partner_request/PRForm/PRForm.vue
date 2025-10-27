@@ -1,43 +1,54 @@
-<script setup lang="ts">
+<script lang="ts">
+export default {
+  name: "PRForm",
+};
+</script>
+
+<script setup lang="ts" generic="T extends PRType">
 import { useTranslate } from "@/locale/use";
 import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
 import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
 import PUForm from "@/components/common/PUForm/PUForm.vue";
-import Cell from "@/components/common/cell/cell.vue";
-import PUInput from "@/components/common/PUInput/PUInput.vue";
-import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
+import PRMetadataForm from "@/components/partner_request/PRMetadataForm/PRMetadataForm.vue";
 import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
 import PRRideHailingForm from "@/components/partner_request/ride_hailing/PRRideHailingForm/PRRideHailingForm.vue";
-import { PartnerRequest } from "@/business/partner_request/base";
-import { PartnerRequestForm } from "@/business/partner_request/form";
+import type { PartnerRequestForm } from "@/business/partner_request/form";
 import type { CommutePRForm } from "@/business/partner_request/commute";
 import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 
 // composables
-import { reactive, ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 
 // props
-import { prFormProps, prFormEmits } from "./PRForm";
+import { createFormByType, type GetFormTypeByPRType } from "./PRForm";
 import { PRType } from "@/business/partner_request";
-const props = defineProps(prFormProps);
+
+interface PRFormProps<T extends PRType> {
+  modelValue: GetFormTypeByPRType<T>;
+  type: T;
+  showSaveToDraft?: boolean;
+  showConfirm?: boolean;
+}
+
+const props = withDefaults(defineProps<PRFormProps<T>>(), {
+  showSaveToDraft: true,
+  showConfirm: true,
+});
 
 // emits
-const emit = defineEmits(prFormEmits);
+const emit = defineEmits({
+  confirm: (partnerRequestId: number) => true,
+  "update:modelValue": (value: GetFormTypeByPRType<T>) => true,
+});
 
 const { dt } = useTranslate("partner_request");
-const { dt: commonEditorDt } = useTranslate("partner_request.common_editor");
-
-// reactive data
-const form = reactive({
-  title: props.modelValue.title || "",
-  introduction: props.modelValue.introduction || "",
-});
 
 const collapse = ref<string[]>(["route", "tripPreference"]);
 
 // refs
 const puFormRef = ref<InstanceType<typeof PUForm> | null>(null);
 const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
+const metadataFormRef = ref<InstanceType<typeof PRMetadataForm> | null>(null);
 const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
   null
 );
@@ -45,139 +56,40 @@ const rideHailingFormRef = ref<InstanceType<typeof PRRideHailingForm> | null>(
   null
 );
 
-// 字段长度限制
-const maxlength = {
-  title: PartnerRequest.TITLE_MAXLENGTH,
-  introduction: PartnerRequest.INTRODUCTION_MAXLENGTH,
-};
-
-// computed
-const shouldShowCommuteDatetime = computed(() => props.type === PRType.Commute);
-const shouldShowRideHailing = computed(() => props.type === PRType.RideHailing);
-
-// functions
-const validate = (): Promise<void> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Prepare form data for validation
-      const formData = {
-        title: form.title || null,
-        introduction: form.introduction || null,
-        route: props.modelValue.route,
-        trip_preference: props.modelValue.trip_preference,
-      };
-
-      // Validate base form using PUForm
-      if (!puFormRef.value) {
-        throw new Error("Form reference not found");
-      }
-
-      const validationResult = await puFormRef.value.validate(formData);
-
-      if (!validationResult.success) {
-        const errorMessages = Object.values(validationResult.errors || {}).join(
-          "; "
-        );
-        throw new Error(errorMessages || "Validation failed");
-      }
-
-      // Validate commute datetime if needed
-      if (shouldShowCommuteDatetime.value && commuteDatetimeFormRef.value) {
-        const commuteDatetimeValidation =
-          await commuteDatetimeFormRef.value.validate();
-        if (!commuteDatetimeValidation.valid) {
-          throw new Error(
-            commuteDatetimeValidation.message ||
-              "Commute datetime validation failed"
-          );
-        }
-      }
-
-      // Validate ride hailing form if needed
-      if (shouldShowRideHailing.value && rideHailingFormRef.value) {
-        const rideHailingValidation = await rideHailingFormRef.value.validate();
-        if (!rideHailingValidation.valid) {
-          throw new Error(
-            rideHailingValidation.message || "Ride hailing validation failed"
-          );
-        }
-      }
-
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
+// watches
+watch(
+  () => props.type,
+  (newType) => {
+    emit("update:modelValue", createFormByType(newType));
+  },
+  { immediate: true }
+);
 
 // expose
 defineExpose({
-  validate,
+  validate: () => puFormRef.value?.validate(),
 });
-
-// watchers
-watch(
-  () => props.modelValue,
-  (newForm) => {
-    form.title = newForm.title || "";
-    form.introduction = newForm.introduction || "";
-  },
-  { deep: true }
-);
 </script>
 
 <template>
   <view class="pr-editor">
-    <PUForm ref="puFormRef" :schema="PartnerRequestForm">
+    <PUForm ref="puFormRef" :schema="modelValue">
       <PUAccordion v-model="collapse" ref="metadataCollapseRef">
         <PUAccordionItem
           name="metadata"
           :title="dt('editor.common_editor.title')"
         >
-          <Cell
-            :title="commonEditorDt('title.title')"
-            type="vertical"
-            formProp="title"
-          >
-            <template #value>
-              <PUInput
-                id="title-editor"
-                v-model="form.title"
-                :placeholder="commonEditorDt('title.placeholder')"
-                :maxlength="maxlength.title"
-                show-word-limit
-                no-border
-              />
-            </template>
-          </Cell>
-          <Cell
-            :title="commonEditorDt('introduction.title')"
-            type="vertical"
-            formProp="introduction"
-          >
-            <template #value>
-              <PUTextarea
-                id="introduction-editor"
-                v-model="form.introduction"
-                :placeholder="commonEditorDt('introduction.placeholder')"
-                :show-confirm-bar="false"
-                :maxlength="maxlength.introduction"
-                theme="surface"
-                show-count
-                :height="60"
-              />
-            </template>
-          </Cell>
+          <PRMetadataForm ref="metadataFormRef" :form="modelValue" />
         </PUAccordionItem>
         <PRRideHailingForm
-          v-if="shouldShowRideHailing"
+          v-if="props.type === PRType.RideHailing"
           ref="rideHailingFormRef"
-          :form="(props.modelValue as unknown as RideHailingPRForm)"
+          :form="(props.modelValue as RideHailingPRForm)"
         />
         <PRCommuteForm
-          v-if="shouldShowCommuteDatetime"
+          v-if="props.type === PRType.Commute"
           ref="commuteDatetimeFormRef"
-          :form="(props.modelValue as unknown as CommutePRForm)"
+          :form="(props.modelValue as CommutePRForm)"
         />
       </PUAccordion>
     </PUForm>

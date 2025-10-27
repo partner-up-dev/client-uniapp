@@ -16,6 +16,7 @@ import {
 import { ref } from "vue";
 import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
 import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
+import PUFormItem from "@/components/common/PUFormItem/PUFormItem.vue";
 import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 
@@ -36,37 +37,6 @@ const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null
 function onFormChange(key: string) {
   emit("change", key);
 }
-
-function validate(): Promise<{ valid: boolean; message?: string }> {
-  return new Promise(async (resolve) => {
-    // Validate route if available
-    if (routeEditorRef.value) {
-      const routeValidation = await routeEditorRef.value.validate();
-      if (!routeValidation.valid) {
-        errorMessage.value = routeValidation.errors.join("; ");
-        resolve({ valid: false, message: errorMessage.value });
-        return;
-      }
-    }
-
-    // Validate trip preference if available
-    if (tripPreferenceFormRef.value) {
-      const tripPrefValidation = await tripPreferenceFormRef.value.validate();
-      if (!tripPrefValidation.valid) {
-        errorMessage.value = tripPrefValidation.errors.join("; ");
-        resolve({ valid: false, message: errorMessage.value });
-        return;
-      }
-    }
-
-    errorMessage.value = "";
-    resolve({ valid: true });
-  });
-}
-
-defineExpose<RideHailingFormExpose>({
-  validate,
-});
 </script>
 
 <template>
@@ -74,11 +44,13 @@ defineExpose<RideHailingFormExpose>({
     <PUAccordion v-model="activeNames">
       <PUAccordionItem name="route" :title="domain_t('route.title')">
         <view class="space-p-y-med">
-          <RouteEditor
-            ref="routeEditorRef"
-            :modelValue="props.form.route"
-            type="normal"
-          />
+          <PUFormItem prop="route">
+            <RouteEditor
+              ref="routeEditorRef"
+              :modelValue="props.form.route"
+              type="normal"
+            />
+          </PUFormItem>
         </view>
       </PUAccordionItem>
 

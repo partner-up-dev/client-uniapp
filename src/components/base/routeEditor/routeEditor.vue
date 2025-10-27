@@ -10,7 +10,7 @@ import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useTranslate } from "@/locale/use";
 import { useOptionalVModel } from "@/composables/props";
-import { Route } from "@/business/base/route";
+import { Route, RouteForm } from "@/business/base/route";
 import {
   routeEditorProps,
   routeEditorEmits,
@@ -37,7 +37,7 @@ const route = useOptionalVModel({
   props,
   emit,
   modelName: "modelValue",
-  defaultValue: new Route({}),
+  defaultValue: new RouteForm({}),
 });
 
 // @ts-ignore - WeChat plugin
@@ -66,7 +66,7 @@ const canAddWaypoint = computed(() => route.value.items.length < props.max);
 // ==================== Methods ====================
 function onValueChange() {
   // Trigger the setter to emit "update:modelValue"
-  route.value = Route.parse(route.value);
+  route.value = RouteForm.parse(route.value);
   emit("change");
 
   // 检查是否所有必要数据已填写（仅 immersive 模式）
@@ -236,12 +236,6 @@ function navigateToRoutePlanPage() {
     });
 }
 
-function validate(): Promise<{ valid: boolean; errors: string[] }> {
-  const result = validateRoute(route.value, props.ruleMode);
-  validationErrors.value = result.errors;
-  return Promise.resolve(result);
-}
-
 function getLocationAddress(item: RouteItem, itemType: RouteItemType): string {
   // 这里需要从 location store 获取，暂时返回占位符
   if (!item.location) {
@@ -277,11 +271,6 @@ watch(
   },
   { immediate: true }
 );
-
-// ==================== Expose ====================
-defineExpose({
-  validate,
-});
 </script>
 
 <template>
@@ -340,16 +329,6 @@ defineExpose({
         />
       </view>
     </view>
-  </view>
-
-  <view v-if="validationErrors.length > 0" class="route-editor__errors">
-    <text
-      v-for="(error, index) in validationErrors"
-      :key="index"
-      class="error-item"
-    >
-      {{ error }}
-    </text>
   </view>
 
   <!-- Immersive -->

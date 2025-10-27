@@ -2,7 +2,7 @@
 
 import { useTranslate } from "@/locale/use";
 import type { Weekday } from "@/business/base";
-import type { CommutePRForm } from "@/business/partner_request/commute";
+import { CommutePRForm } from "@/business/partner_request/commute";
 import type { PropType } from "vue";
 
 export const { dt: domain_t, t } = useTranslate('partner_request.commute.specific_content_editor');
@@ -11,19 +11,7 @@ export const { dt: domain_t, t } = useTranslate('partner_request.commute.specifi
 export const commuteDatetimeFormProps = {
   form: {
     type: Object as PropType<CommutePRForm>,
-    default: () => ({
-      route: undefined,
-      on_at: null,
-      off_at: null,
-      workdays: [
-        'monday' as Weekday,
-        'tuesday' as Weekday,
-        'wednesday' as Weekday,
-        'thursday' as Weekday,
-        'friday' as Weekday
-      ],
-      transportation: undefined
-    })
+    default: () => new CommutePRForm({}),
   }
 };
 

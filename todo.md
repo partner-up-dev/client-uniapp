@@ -21,7 +21,8 @@
 ## PR Create
 
 - [ ] Use type specific form
-- [ ] Add form-item component
+- [x] Add form-item component
+- [ ] validate 不等同于 parse。parse还有很多除数据正确性以外的复杂规则，包括跨字段的。
 
 ## Me Page
 

@@ -68,7 +68,7 @@ export class PartnerApplication extends V.class(v.object({
 }
 
 
-export class PartnerApplicationForm extends V.class(v.object({
+export class PartnerApplicationForm extends V.formClass(v.object({
   partner_request: PRRefV,
   sub_applications: SubApplicationsV,
 })) {

@@ -53,10 +53,10 @@ const props = ref<v.InferOutput<typeof propsSchema>>({
   immersive: false,
 });
 const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
-const partnerRequestEditorRef = ref<InstanceType<typeof PRForm> | null>(null);
+const PRFormRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
-const form = ref<PartnerRequestForm>(PartnerRequestForm.parse({}));
+const form = ref({});
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
@@ -75,7 +75,7 @@ const { pr: partnerRequest, loading: prLoading } = PartnerRequest.use(prId.value
  * 为了防止修改没有被及时保存，发布前会先保存
  */
 function onPublish(retry: number = 0) {
-  partnerRequestEditorRef.value
+  PRFormRef.value
     ?.validate()
     .then(() => {
       if (props.value.id) {
@@ -149,20 +149,20 @@ function create(): Promise<void> {
 function onSave() {
   saving.value = true;
 
-  partnerRequestEditorRef.value
-    ?.validate()
-    .then(() => {
+  PRFormRef.value?.validate().then((result) => {
+    if (result.success) {
       if (props.value.id) {
+        // FIXME
         PartnerRequest.update(props.value.id, form.value).finally(() => {
           saving.value = false;
         });
       } else {
         create();
       }
-    })
-    .catch(() => {
+    } else {
       saving.value = false;
-    });
+    }
+  });
 }
 
 function onShare() {}
@@ -329,7 +329,7 @@ onShow(() => {
 
       <!-- Editor View -->
       <view class="editor-cont" v-if="!isPublished">
-        <PRForm ref="partnerRequestEditorRef" v-model="form" :type="props.type" />
+        <PRForm ref="PRFormRef" v-model="form" :type="props.type" />
       </view>
     </view>
 
