@@ -6,12 +6,12 @@ import PUForm from "@/components/common/PUForm/PUForm.vue";
 import Cell from "@/components/common/cell/cell.vue";
 import PUInput from "@/components/common/PUInput/PUInput.vue";
 import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
-import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
-import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
 import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
+import PRRideHailingForm from "@/components/partner_request/ride_hailing/PRRideHailingForm/PRRideHailingForm.vue";
 import { PartnerRequest } from "@/business/partner_request/base";
 import { PartnerRequestForm } from "@/business/partner_request/form";
 import type { CommutePRForm } from "@/business/partner_request/commute";
+import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 
 // composables
 import { reactive, ref, watch, computed } from "vue";
@@ -38,11 +38,10 @@ const collapse = ref<string[]>(["route", "tripPreference"]);
 // refs
 const puFormRef = ref<InstanceType<typeof PUForm> | null>(null);
 const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
-const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
-const tripPreferenceFormRef = ref<InstanceType<typeof TripPreferenceForm> | null>(
+const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
   null
 );
-const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
+const rideHailingFormRef = ref<InstanceType<typeof PRRideHailingForm> | null>(
   null
 );
 
@@ -53,13 +52,8 @@ const maxlength = {
 };
 
 // computed
-const shouldShowRoute = computed(() =>
-  [PRType.Commute, PRType.RideHailing].includes(props.type)
-);
-const shouldShowTripPreference = computed(() =>
-  [PRType.RideHailing].includes(props.type)
-);
 const shouldShowCommuteDatetime = computed(() => props.type === PRType.Commute);
+const shouldShowRideHailing = computed(() => props.type === PRType.RideHailing);
 
 // functions
 const validate = (): Promise<void> => {
@@ -87,22 +81,6 @@ const validate = (): Promise<void> => {
         throw new Error(errorMessages || "Validation failed");
       }
 
-      // Validate route if needed
-      if (shouldShowRoute.value && routeEditorRef.value) {
-        const routeValidation = await routeEditorRef.value.validate();
-        if (!routeValidation.valid) {
-          throw new Error(routeValidation.errors.join("; "));
-        }
-      }
-
-      // Validate trip preference if needed
-      if (shouldShowTripPreference.value && tripPreferenceFormRef.value) {
-        const tripPrefValidation = await tripPreferenceFormRef.value.validate();
-        if (!tripPrefValidation.valid) {
-          throw new Error(tripPrefValidation.errors.join("; "));
-        }
-      }
-
       // Validate commute datetime if needed
       if (shouldShowCommuteDatetime.value && commuteDatetimeFormRef.value) {
         const commuteDatetimeValidation =
@@ -111,6 +89,16 @@ const validate = (): Promise<void> => {
           throw new Error(
             commuteDatetimeValidation.message ||
               "Commute datetime validation failed"
+          );
+        }
+      }
+
+      // Validate ride hailing form if needed
+      if (shouldShowRideHailing.value && rideHailingFormRef.value) {
+        const rideHailingValidation = await rideHailingFormRef.value.validate();
+        if (!rideHailingValidation.valid) {
+          throw new Error(
+            rideHailingValidation.message || "Ride hailing validation failed"
           );
         }
       }
@@ -181,29 +169,11 @@ watch(
             </template>
           </Cell>
         </PUAccordionItem>
-        <PUAccordionItem
-          v-if="shouldShowRoute"
-          name="route"
-          :title="dt('editor.route.title')"
-        >
-          <view class="space-p-y-med">
-            <RouteEditor
-              ref="routeEditorRef"
-              :modelValue="props.modelValue.route"
-              type="normal"
-            />
-          </view>
-        </PUAccordionItem>
-        <PUAccordionItem
-          v-if="shouldShowTripPreference"
-          name="tripPreference"
-          :title="dt('editor.trip_preference.title')"
-        >
-          <TripPreferenceForm
-            ref="tripPreferenceFormRef"
-            :modelValue="props.modelValue.trip_preference"
-          />
-        </PUAccordionItem>
+        <PRRideHailingForm
+          v-if="shouldShowRideHailing"
+          ref="rideHailingFormRef"
+          :form="(props.modelValue as unknown as RideHailingPRForm)"
+        />
         <PRCommuteForm
           v-if="shouldShowCommuteDatetime"
           ref="commuteDatetimeFormRef"

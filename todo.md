@@ -17,8 +17,11 @@
 - [ ] 抽离出 Section 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
 - [x] V.class 支持 extend
-- [ ] PUImmersiveForm (prop:`operations`)
-- [ ] Checkbox (复用 PUScrollView) (multi?)
+
+## PR Create
+
+- [ ] Use type specific form
+- [ ] Add form-item component
 
 ## Me Page
 

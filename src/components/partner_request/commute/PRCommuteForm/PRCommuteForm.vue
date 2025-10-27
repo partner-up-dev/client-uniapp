@@ -23,14 +23,18 @@ import PUCheckbox from "@/components/common/PUCheckbox/PUCheckbox.vue";
 import PUCheckboxGroup from "@/components/common/PUCheckboxGroup/PUCheckboxGroup.vue";
 import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
+import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 
 const props = defineProps(commuteDatetimeFormProps);
 const emit = defineEmits(commuteDatetimeFormEmits);
 
 // data
-const activeNames = ref<string[]>(["time"]);
+const activeNames = ref<string[]>(["route", "time"]);
 const errorMessage = ref<string>("");
 const transPickerVisible = ref<boolean>(false);
+
+// refs
+const routeEditorRef = ref<InstanceType<typeof RouteEditor> | null>(null);
 
 // methods
 function onFormChange(key: string) {
@@ -48,7 +52,17 @@ function handleOffAtChange(event: any) {
 }
 
 function validate(): Promise<{ valid: boolean; message?: string }> {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
+    // Validate route if available
+    if (routeEditorRef.value) {
+      const routeValidation = await routeEditorRef.value.validate();
+      if (!routeValidation.valid) {
+        errorMessage.value = routeValidation.errors.join("; ");
+        resolve({ valid: false, message: errorMessage.value });
+        return;
+      }
+    }
+
     // Validate workdays
     if (!props.form.workdays || props.form.workdays.length === 0) {
       errorMessage.value = domain_t("rules.workdays_required");
@@ -86,6 +100,17 @@ defineExpose<CommuteDatetimeFormExpose>({
 <template>
   <view class="commute-datetime-form">
     <PUAccordion v-model="activeNames">
+      <PUAccordionItem name="route" :title="domain_t('collapse_title.route')">
+        <view class="space-p-y-med">
+          <RouteEditor
+            ref="routeEditorRef"
+            :modelValue="props.form.route"
+            type="normal"
+            :disableDatetime="true"
+          />
+        </view>
+      </PUAccordionItem>
+
       <PUAccordionItem name="time" :title="domain_t('collapse_title.time')">
         <!-- 上班时间 -->
         <picker mode="time" :value="form.on_at || ''" @change="handleOnAtChange">
