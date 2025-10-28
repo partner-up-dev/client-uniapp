@@ -22,7 +22,6 @@ import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
 import PUNoticeBar from "@/components/common/PUNoticeBar/PUNoticeBar.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
-import { createFormByType } from "@/components/partner_request/PRForm/PRForm";
 
 const { dt: domain_t } = useTranslate("partner_request.create_end");
 
@@ -59,7 +58,7 @@ const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
 const PRFormRef = ref<InstanceType<typeof PRForm> | null>(null);
 const publishing = ref(false);
 const saving = ref(false);
-const form = ref(createFormByType(PRType.Undefined));
+const form = ref({});
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
@@ -265,7 +264,7 @@ onLoad(
       });
     } else if (props.value.type) {
       // load from type(empty form)
-      form.value = createFormByType(props.value.type) as any;
+      // PRForm will handle creating the form instance via its watcher
     }
   }
 );
