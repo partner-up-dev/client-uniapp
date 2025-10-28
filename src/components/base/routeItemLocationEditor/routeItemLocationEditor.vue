@@ -69,12 +69,8 @@ const hasAddress = computed(() => {
 
 // ==================== Methods ====================
 
-const { selectLocation } = usePickLocation((locationRef: LocationRef) => {
-  // 从 locationPicker 获取到 locationRef 后，加载完整的 Location 对象
-  Location.get(locationRef).then((location) => {
-    currentLocation.value = location as Location;
-    emit("change", location as Location);
-  });
+const { selectLocation } = usePickLocation((location) => {
+  emit("change", location);
 });
 
 function onChooseLocationClick() {
@@ -163,7 +159,7 @@ watch(
         currentLocation.value = location;
       } else {
         // 如果本地没有，异步加载
-        Location.get(newValue).then((location) => {
+        Location.getById(newValue).then((location) => {
           currentLocation.value = location as Location;
         });
       }

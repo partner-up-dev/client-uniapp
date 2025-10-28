@@ -43,7 +43,7 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
   transportation: nullable(TransportationV),
 })) {
 
-  public update(): Promise<CommutePR> {
+  public async update(): Promise<CommutePR> {
     return CommutePR.api.requestHTTP({
       method: 'PUT',
       endpoint: `/${this._id}`,
@@ -52,10 +52,10 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
     }).then(res => res.body.parsed);
   }
 
-  public create(): Promise<CommutePR> {
+  public async create(): Promise<CommutePR> {
     return CommutePR.api.requestHTTP({
       method: 'POST',
-      endpoint: '/',
+      endpoint: '',
       data: this,
       operation_id: 'PRV1CreateCommute',
     }).then(res => res.body.parsed);

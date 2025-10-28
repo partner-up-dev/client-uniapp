@@ -24,28 +24,13 @@ export class Location extends V.class(v.object({
   lng: v.number(),
   _id: LocationRefV,
 })) {
-  private static api = new APIClient<typeof Location>({
+  static api = new APIClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
   });
 
-  protected put() {
-    Location.api.requestHTTP({
-      method: "PUT",
-      endpoint: '',
-      data: {
-        address: this.address,
-        friendly_address: this.friendly_address,
-        lat: this.lat,
-        lng: this.lng,
-      },
-    }).then(({ body }) => {
-      this._id = body.parsed._id;
-    });
-  }
-
-  static async get(id: LocationRef): Promise<Location> {
+  static async getById(id: LocationRef): Promise<Location> {
     const locationStore = useBaseLocationStore(store);
     const cachedLocation = locationStore.fetchById(id);
     if (cachedLocation) {
@@ -71,7 +56,7 @@ export class Location extends V.class(v.object({
     const location = computed((): Location | undefined => {
       if (_location.value === undefined && _locationId.value !== undefined) {
         loading.value = true;
-        Location.get(_locationId.value).then(loc => {
+        Location.getById(_locationId.value).then(loc => {
           _location.value = loc;
         }).finally(() => {
           loading.value = false;
@@ -94,7 +79,18 @@ export class LocationForm extends V.formClass(v.object({
   lat: v.number(),
   lng: v.number(),
   _id: v.optional(LocationRefV, undefined),
-})) { }
+})) {
+  public async put(): Promise<Location> {
+    return Location.api.requestHTTP({
+      method: "PUT",
+      endpoint: '',
+      data: this,
+      schema: LocationRefV,
+    }).then(({ body }) => {
+      return new Location({ ...this, _id: body.parsed });
+    });
+  }
+}
 
 export class POI extends V.class(v.object({})) { }
 
@@ -140,7 +136,7 @@ export class RouteItem extends V.class(v.object({
     const location = computed((): Location | undefined => {
       if (_location.value === undefined) {
         loading.value = true;
-        Location.get(_routeItem.value.location).then(loc => {
+        Location.getById(_routeItem.value.location).then(loc => {
           _location.value = loc;
         }).finally(() => {
           loading.value = false;

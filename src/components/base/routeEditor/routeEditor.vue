@@ -10,7 +10,7 @@ import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useTranslate } from "@/locale/use";
 import { useOptionalVModel } from "@/composables/props";
-import { Route, RouteForm } from "@/business/base/route";
+import { Location, Route, RouteForm, RouteItemForm } from "@/business/base/route";
 import {
   routeEditorProps,
   routeEditorEmits,
@@ -19,10 +19,10 @@ import {
   validateRoute,
   type RouteItemType,
 } from "./routeEditor";
-import type { RouteItem } from "@/business/base/route";
+import type { RouteItem, LocationRef } from "@/business/base/route";
 import { getTencentLBSPluginCredentialString } from "@/utils";
 import { errorReport } from "@/utils/vendor";
-import { EVENT } from "@/data/enum";
+import { usePickLocation } from "@/components/base/locationPicker/usePickLocation";
 import RouteItemDatetimeEditor from "@/components/base/routeItemDatetimeEditor/routeItemDatetimeEditor.vue";
 import RouteItemLocationEditor from "@/components/base/routeItemLocationEditor/routeItemLocationEditor.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
@@ -40,14 +40,19 @@ const route = useOptionalVModel({
   defaultValue: new RouteForm({}),
 });
 
-// @ts-ignore - WeChat plugin
-const chooseLocationPlugin = requirePlugin("chooseLocation");
-
 // ==================== Data ====================
 const datetimeEditorVisible = ref(false);
-const locationEditorVisible = ref(false);
 const editingItemIndex = ref<number>(-1);
-const validationErrors = ref<string[]>([]);
+
+// ==================== Location Picker ====================
+const { selectLocation } = usePickLocation((location) => {
+  if (editingItemIndex.value === -1) return;
+
+  // Update the route item with the selected location
+  route.value.items[editingItemIndex.value].location = location._id;
+  onValueChange();
+  editingItemIndex.value = -1;
+});
 
 // ==================== Computed ====================
 const isNormalType = computed(() => props.type === "normal");
@@ -63,10 +68,16 @@ const waypointItems = computed(() =>
 
 const canAddWaypoint = computed(() => route.value.items.length < props.max);
 
+// Create location composables for each route item
+const routeLocations = computed(() => {
+  return route.value.items.map((item) => {
+    const { location } = Location.use(item.location);
+    return location;
+  });
+});
+
 // ==================== Methods ====================
 function onValueChange() {
-  // Trigger the setter to emit "update:modelValue"
-  route.value = RouteForm.parse(route.value);
   emit("change");
 
   // 检查是否所有必要数据已填写（仅 immersive 模式）
@@ -90,7 +101,11 @@ function addWaypoint() {
   }
 
   // 插入到终点之前
-  route.value.addWaypoint();
+  route.value.items.splice(
+    route.value.items.length - 1,
+    0,
+    new RouteItemForm({})
+  );
   onValueChange();
 }
 
@@ -125,63 +140,10 @@ function onDatetimeEditorConfirm() {
 
 function openLocationEditor(index: number) {
   editingItemIndex.value = index;
-
-  // 使用腾讯地图插件选择地点
-  chooseLocationPlugin.setLocation(null);
-
-  uni.$once(EVENT.ROUTE_EDITOR_PAGE_SHOWED, onLocationSelected);
-
   const currentItem = route.value.items[index];
-  let locationParam = "";
 
-  // 如果已有地点，传入当前位置
-  if (currentItem.location) {
-    // 这里需要从 location store 获取坐标
-    // 暂时简化处理
-  }
-
-  uni.navigateTo({
-    url: `plugin://chooseLocation/index?${getTencentLBSPluginCredentialString()}${locationParam}`,
-  });
-}
-
-function onLocationSelected() {
-  const selectedLocation = chooseLocationPlugin.getLocation();
-  if (!selectedLocation || editingItemIndex.value === -1) return;
-
-  // 处理地址
-  let address = "";
-  if (typeof selectedLocation.address === "string") {
-    address = selectedLocation.address
-      .replace(selectedLocation.province, "")
-      .replace(selectedLocation.city, "")
-      .replace(selectedLocation.district, "");
-  } else {
-    address = selectedLocation.address.join("|");
-  }
-
-  // 创建 Location 对象并保存
-  const Location = require("@/business/base/route").Location;
-  const newLocation = Location.parse({
-    lat: selectedLocation.latitude,
-    lng: selectedLocation.longitude,
-    address: [
-      selectedLocation.province,
-      selectedLocation.city,
-      selectedLocation.district,
-      address,
-    ],
-    friendly_address: selectedLocation.name,
-  });
-
-  // 保存到后端并更新 route item
-  newLocation.put();
-  if (newLocation._id) {
-    route.value.items[editingItemIndex.value].location = newLocation._id;
-    onValueChange();
-  }
-
-  editingItemIndex.value = -1;
+  // Use usePickLocation to handle location selection
+  selectLocation(currentItem.location);
 }
 
 function navigateToRoutePlan() {
@@ -208,12 +170,9 @@ function navigateToRoutePlan() {
 
 function navigateToRoutePlanPage() {
   // 需要获取 Location 对象来构建导航参数
-  // 这里简化处理，实际需要从 store 获取
-  const Location = require("@/business/base/route").Location;
-
   Promise.all([
-    Location.get(departureItem.value.location),
-    Location.get(arrivalItem.value.location),
+    Location.getById(departureItem.value.location!),
+    Location.getById(arrivalItem.value.location!),
   ])
     .then(([startLoc, endLoc]) => {
       const startPoint = JSON.stringify({
@@ -236,24 +195,17 @@ function navigateToRoutePlanPage() {
     });
 }
 
-function getLocationAddress(item: RouteItem, itemType: RouteItemType): string {
-  // 这里需要从 location store 获取，暂时返回占位符
-  if (!item.location) {
+function getLocationAddress(index: number, itemType: RouteItemType): string {
+  const item = route.value.items[index];
+  if (!item?.location) {
     return t(`placeholder.${itemType}`);
   }
-  return ""; // 实际应该返回 location.friendly_address
+
+  const location = routeLocations.value[index];
+  return location?.value?.friendly_address || t(`placeholder.${itemType}`);
 }
 
 // ==================== Watchers ====================
-watch(
-  () => route.value.items,
-  (newValue) => {
-    if (newValue) {
-      route.value.items = newValue;
-    }
-  }
-);
-
 watch(
   () => props.disableDatetime,
   (disabled) => {
@@ -303,7 +255,7 @@ watch(
           <text class="route-item__location" @click="openLocationEditor(index)">
             {{
               getLocationAddress(
-                item,
+                index,
                 getRouteItemType(index, route.items.length)
               )
             }}
@@ -341,7 +293,7 @@ watch(
         }}</view>
         <view class="route-item__content">
           <text class="route-item__location" @click="openLocationEditor(0)">
-            {{ getLocationAddress(departureItem, "departure") }}
+            {{ getLocationAddress(0, "departure") }}
           </text>
           <text class="route-item__text">{{
             t("immersive.departure.text")
@@ -366,7 +318,7 @@ watch(
             class="route-item__location"
             @click="openLocationEditor(index + 1)"
           >
-            {{ getLocationAddress(item, "waypoint") }}
+            {{ getLocationAddress(index + 1, "waypoint") }}
           </text>
           <text
             class="route-item__action i-mdi-minus-circle"
@@ -383,7 +335,7 @@ watch(
             class="route-item__location"
             @click="openLocationEditor(route.items.length - 1)"
           >
-            {{ getLocationAddress(arrivalItem, "arrival") }}
+            {{ getLocationAddress(route.items.length - 1, "arrival") }}
           </text>
         </view>
       </view>
@@ -405,7 +357,7 @@ watch(
     <template #full>
       <RouteItemDatetimeEditor
         v-if="editingItemIndex >= 0 && editingItemIndex < route.items.length"
-        :modelValue="route.items[editingItemIndex].datetime"
+        :modelValue="route.items[editingItemIndex].datetime as any"
         @confirm="onDatetimeEditorConfirm"
         @cancel="datetimeEditorVisible = false"
       />

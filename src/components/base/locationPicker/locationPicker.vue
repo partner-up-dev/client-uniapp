@@ -14,9 +14,9 @@ import { Location } from "@/business/base/route";
 const { dt } = useTranslate("base.location_picker");
 const props = defineProps(LocationPickerProps);
 const emit = defineEmits(LocationPickerEmits);
-const { selectLocation } = usePickLocation((location_id) => {
-  emit("update:modelValue", location_id);
-  emit("confirm", location_id);
+const { selectLocation } = usePickLocation((location) => {
+  emit("update:modelValue", location._id);
+  emit("confirm", location._id);
 });
 const { location } = Location.use(props.modelValue);
 </script>

@@ -1,6 +1,6 @@
 // 封装选择地点功能，参阅文档：https://git.hadream.ltd/anana/uniapp/base/wikis/Base/Composables/SelectLocation
 
-import { Location } from "@/business/base/route";
+import { Location, LocationForm } from "@/business/base/route";
 import { EVENT } from "@/data/enum";
 import { useTranslate } from "@/locale/use";
 import store from "@/store";
@@ -28,7 +28,7 @@ const RESIDENTIAL_POI_CATEGORY: string[] = ["280000", "240000"];
  * @param init_current_location 初始地点
  */
 export function usePickLocation(
-  locationSetter: (location_id: LocationRef) => void,
+  locationSetter: (location: Location) => void,
 ) {
   // methods
   /**
@@ -54,8 +54,8 @@ export function usePickLocation(
 
     // FIXMEs
     const location_string = current_location ? "&location=" + JSON.stringify({
-      latitude: Location.get(current_location)?.lat,
-      longitude: Location.get(current_location)?.lng
+      latitude: Location.getById(current_location)?.lat,
+      longitude: Location.getById(current_location)?.lng
     }) : '';
     uni.navigateTo({
       url: `plugin://chooseLocation/index?${getTencentLBSPluginCredentialString()}${location_string}`
@@ -80,7 +80,7 @@ export function usePickLocation(
       address = selected_location.address.join('|');
     }
 
-    const location_without_id: LocationWithoutId = {
+    const locationForm = new LocationForm({
       lat: selected_location.latitude,
       lng: selected_location.longitude,
       address: [
@@ -90,11 +90,9 @@ export function usePickLocation(
         address
       ],
       friendly_address: selected_location.name
-    }
+    });
 
-    Location.get(
-      location_without_id,
-    ).then(location => {
+    locationForm.put().then(location => {
       locationSetter(location);
     }).catch(() => {
       errorReport(dt('report.v1_base_get_location_failed'))
