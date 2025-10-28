@@ -66,8 +66,8 @@ export const V = {
 
           constructor(value: any) {
             const parsed = v.parse(mergedSchema, value);
-            // Create instance with proper prototype chain
-            const instance = Object.create(ExtendedClass.prototype);
+            // Use this.constructor.prototype to support further subclassing
+            const instance = Object.create((this.constructor as any).prototype);
             Object.assign(instance, parsed);
             return instance as any;
           }
@@ -76,14 +76,14 @@ export const V = {
 
           static parse<T = InstanceType<typeof ExtendedClass>>(data: unknown): T {
             const parsed = v.parse(mergedSchema, data);
-            const instance = Object.create(ExtendedClass.prototype) as T;
+            const instance = Object.create(this.prototype) as T;
             Object.assign(instance as object, parsed);
             return instance;
           }
 
           static async parseAsync<T = InstanceType<typeof ExtendedClass>>(data: unknown): Promise<T> {
             const parsed = await v.parseAsync(mergedSchema, data);
-            const instance = Object.create(ExtendedClass.prototype) as T;
+            const instance = Object.create(this.prototype) as T;
             Object.assign(instance as object, parsed);
             return instance;
           }
@@ -92,7 +92,7 @@ export const V = {
             const result = v.safeParse(mergedSchema, data);
             if (result.success) {
               const output = (result as any).output ?? (result as any).data;
-              const instance = Object.create(ExtendedClass.prototype) as T;
+              const instance = Object.create(this.prototype) as T;
               Object.assign(instance as object, output);
               return { success: true as const, output: instance };
             }
@@ -101,12 +101,20 @@ export const V = {
 
           static parseJSON<T = InstanceType<typeof ExtendedClass>>(json: string): T {
             const data = JSON.parse(json) as unknown;
-            return ExtendedClass.parse(data);
+            return this.parse(data);
+          }
+
+          static extend<TExtendSchema2 extends v.BaseSchema<any, any, any>>(
+            extendSchema: TExtendSchema2
+          ): any {
+            return ParentClass.extend.call(this, extendSchema);
           }
         }
 
         // Set up prototype chain to inherit instance methods from parent
         Object.setPrototypeOf(ExtendedClass.prototype, ParentClass.prototype);
+        // Set up static method inheritance
+        Object.setPrototypeOf(ExtendedClass, ParentClass);
 
         // Build an embedded schema for the extended class
         const embeddedExtendedSchema = v.pipe(
