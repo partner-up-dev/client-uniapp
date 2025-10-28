@@ -48,7 +48,7 @@ export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
   public create(): Promise<RideHailingPR> {
     return RideHailingPR.api.requestHTTP({
       method: 'POST',
-      endpoint: '/',
+      endpoint: '',
       data: this,
       operation_id: 'PRV1CreateRideHailing',
     }).then(res => res.body.parsed);

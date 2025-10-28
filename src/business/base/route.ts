@@ -245,28 +245,19 @@ export class RoutePlanning extends V.class(v.object({
   }
 }
 
-export class Route extends V.class(v.object({
-  items: v.array(instance(RouteItem))
-})
-) {
+export class Route extends V.class(v.array(instance(RouteItem)))
+{
 
-  get length(): number {
-    return this.items.length;
-  }
   get startItem(): RouteItem {
-    return this.items[0];
+    return this[0];
   }
 
   get waypoints(): RouteItem[] {
-    return this.items.slice(1, this.length - 1);
+    return this.slice(1, this.length - 1);
   }
 
   get endItem(): RouteItem {
-    return this.items[this.length - 1];
-  }
-
-  public addWaypoint() {
-    this.items.splice(this.length - 1, 0, new RouteItem({}));
+    return this[this.length - 1];
   }
 
   static use(route: Route) {
@@ -288,7 +279,7 @@ export class Route extends V.class(v.object({
     })
 
     watch(_route, (newRoute) => {
-      _locations.value = newRoute.items.map((ri) => {
+      _locations.value = newRoute.map((ri) => {
         const normalizedItem: RouteItem = RouteItem.parse(ri as unknown);
         const { location } = RouteItem.use(normalizedItem);
         return location;
@@ -307,4 +298,8 @@ export class RouteForm extends V.formClass(v.object({
   items: v.pipe(v.optional(
     v.array(instance(RouteItemForm)), () => [new RouteItemForm({}), new RouteItemForm({})]
   ), v.maxLength(4))
-})) { }
+})) {
+  public addWaypoint() {
+    this.items.splice(this.items.length - 1, 0, new RouteItemForm({}));
+  }
+}

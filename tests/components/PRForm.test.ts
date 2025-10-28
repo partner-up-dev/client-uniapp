@@ -53,7 +53,7 @@ describe("PRForm Component", () => {
   });
 
   it("shows route editor for ride_hailing type", () => {
-    const route = Route.parse({ items: [] });
+    const route = Route.parse([]);
     const wrapper = mount(PRForm, {
       props: {
         baseForm,
@@ -91,7 +91,7 @@ describe("PRForm Component", () => {
   });
 
   it("emits update:route when route changes", async () => {
-    const route = Route.parse({ items: [] });
+    const route = Route.parse([]);
     const wrapper = mount(PRForm, {
       props: {
         baseForm,
