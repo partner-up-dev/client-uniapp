@@ -68,7 +68,7 @@ const weekdayOptions: Weekday[] = [
     <PUAccordion v-model="activeNames">
       <PUAccordionItem name="route" :title="domain_t('collapse_title.route')">
         <view class="space-p-y-med">
-          <PUFormItem prop="route">
+          <PUFormItem prop="route" :includeSub="true">
             <RouteEditor
               ref="routeEditorRef"
               :modelValue="props.form.route"

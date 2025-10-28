@@ -30,74 +30,36 @@ provide(
 );
 
 /**
- * Validate the form using the provided schema
+ * Validate the form using the ValibotFormClass instance
  * @returns Promise with validation result
  */
-async function validate<T = any>(): Promise<FormValidationResult<T>> {
+function validate<T = any>(): Promise<FormValidationResult<T>> {
   formErrors.value = {};
 
   const schema = props.schema;
 
-  if (!schema || typeof schema.safeParse !== "function") {
-    console.error("PUForm: Invalid schema provided");
-    return {
-      success: false,
-      errors: { _form: "Invalid schema configuration" },
-    };
-  }
-
-  // Collect form data from slots (this is a simplified implementation)
-  // In a real scenario, you'd collect data from v-model bindings
-  // For now, we assume the parent component manages the data and passes it to validate
-  const formDataCollector = ref<any>({});
-  provide("puFormDataCollector", formDataCollector);
-
-  // This method should be called with form data from the parent
-  // For better API, we'll accept formData as parameter
-  return validateFormData(formDataCollector.value);
-}
-
-/**
- * Validate form data against schema
- */
-function validateFormData<T = any>(): Promise<FormValidationResult<T>> {
-  formErrors.value = {};
-
-  const schema = props.schema;
-
+  // Check if schema is a ValibotFormClass instance with validate method
   if (!schema || typeof schema.validate !== "function") {
+    console.error("PUForm: schema must be a ValibotFormClass instance with validate method");
     return Promise.resolve({
       success: false,
-      errors: { _form: "Invalid schema configuration" },
+      errors: { _form: "Invalid schema: must be a ValibotFormClass instance" },
     });
   }
 
-  return schema.validate().then((result) => {
+  // Call the validate method on the schema instance
+  return schema.validate().then((result: { success: boolean; errors: Record<string, string[]> }) => {
     if (result.success) {
       return {
         success: true,
-        validatedForm: result.output as T,
+        validatedForm: schema as T,
       };
     }
 
-    // Parse valibot issues into field errors
+    // Convert array of errors to single string per field for compatibility
     const errors: Record<string, string> = {};
-
-    if (result.issues && Array.isArray(result.issues)) {
-      result.issues.forEach((issue: v.BaseIssue<unknown>) => {
-        if (issue.path) {
-          const pathKey = issue.path
-            .map((p) => p.key)
-            .filter((k) => k !== undefined)
-            .join(".");
-
-          if (pathKey) {
-            errors[pathKey] = issue.message;
-          }
-        } else {
-          errors._form = issue.message;
-        }
-      });
+    for (const [key, messages] of Object.entries(result.errors)) {
+      errors[key] = messages.join(", ");
     }
 
     formErrors.value = errors;
@@ -111,7 +73,7 @@ function validateFormData<T = any>(): Promise<FormValidationResult<T>> {
 
 // Expose validate method
 defineExpose({
-  validate: () => validateFormData(),
+  validate,
 });
 </script>
 

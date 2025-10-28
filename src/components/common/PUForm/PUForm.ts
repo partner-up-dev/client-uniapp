@@ -21,13 +21,22 @@ export interface FormErrorState {
   errors: Record<string, string>;
 }
 
+/**
+ * ValibotFormClass instance with validate method
+ */
+export interface ValibotFormInstance {
+  validate(): Promise<{ success: boolean; errors: Record<string, string[]> }>;
+  [key: string]: any;
+}
+
 // ==================== 组件 Props 定义 ====================
 export const puFormProps = {
   /**
-   * Valibot schema class instance for form validation
+   * ValibotFormClass instance for form validation
+   * Must be an instance created via ValibotFormClass.parse() with validate() method
    */
   schema: {
-    type: Object as PropType<ValibotFormClass>,
+    type: Object as PropType<ValibotFormInstance>,
     required: true,
   },
   /**

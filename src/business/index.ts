@@ -199,6 +199,7 @@ export const V = {
   formClass<TSchema extends v.BaseSchema<any, any, any>>(schema: TSchema) {
     type Input = v.InferInput<TSchema>;
     type Output = v.InferOutput<TSchema>;
+    type ValidationResult = { success: boolean; errors: Record<string, string[]> };
 
     // First create the base class using V.class
     const BaseClass = V.class(schema);
@@ -209,7 +210,7 @@ export const V = {
        * and call _sub_validate on child components for complex validation
        * @returns Promise with validation result containing success status and errors
        */
-      public validate(): Promise<{ success: boolean; errors: Record<string, string[]> }> {
+      public validate(): Promise<ValidationResult> {
         const errors: Record<string, string[]> = {};
 
         // First, validate against the schema
@@ -227,24 +228,37 @@ export const V = {
         }
 
         return this._subclassValidate().then((subclassValidateResult) => {
-          if (!subclassValidateResult.success) {
+          if (subclassValidateResult.success) {
             // Collect all _sub_validate promises from child components
-            const subValidatePromises: Promise<{ success: boolean; errors: Record<string, string[]> }>[] = [];
+            const subValidatePromises: Promise<ValidationResult>[] = [];
 
-            // Iterate through all properties to find components with _sub_validate method
+            // Helper to add validation promise with prefixed errors
+            const addValidationPromise = (validateFn: () => Promise<ValidationResult>, prefix: string) => {
+              subValidatePromises.push(
+                validateFn().then((subResult) => {
+                  const prefixedErrors: Record<string, string[]> = {};
+                  for (const errorKey in subResult.errors) {
+                    prefixedErrors[`${prefix}.${errorKey}`] = subResult.errors[errorKey];
+                  }
+                  return { success: subResult.success, errors: prefixedErrors };
+                })
+              );
+            };
+
+            // Iterate through all properties to find components with validate method
             for (const key in this) {
               const value = (this as any)[key];
-              if (value && typeof value === 'object' && typeof value.validate === 'function') {
-                subValidatePromises.push(
-                  value.validate().then((subResult: { success: boolean; errors: Record<string, string[]> }) => {
-                    // Prefix sub-component errors with the property key
-                    const prefixedErrors: Record<string, string[]> = {};
-                    for (const errorKey in subResult.errors) {
-                      prefixedErrors[`${key}.${errorKey}`] = subResult.errors[errorKey];
-                    }
-                    return { success: subResult.success, errors: prefixedErrors };
-                  })
-                );
+
+              if (Array.isArray(value)) {
+                // Handle array: iterate through elements
+                value.forEach((element, index) => {
+                  if (element && typeof element === 'object' && typeof element.validate === 'function') {
+                    addValidationPromise(() => element.validate(), `${key}[${index}]`);
+                  }
+                });
+              } else if (value && typeof value === 'object' && typeof value.validate === 'function') {
+                // Handle single object
+                addValidationPromise(() => value.validate(), key);
               }
             }
 
@@ -279,12 +293,12 @@ export const V = {
             });
           }
           else {
-            return subclassValidateResult;
+            return Promise.resolve(subclassValidateResult);
           }
         });
       }
 
-      protected _subclassValidate(): Promise<{ success: boolean; errors: Record<string, string[]> }> {
+      protected _subclassValidate(): Promise<ValidationResult> {
         return Promise.resolve({ success: true, errors: {} });
       }
     }

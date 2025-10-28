@@ -25,7 +25,31 @@ const errorMessage = computed(() => {
   if (!props.prop || !formErrors?.value?.errors) {
     return undefined;
   }
-  return formErrors.value.errors[props.prop];
+
+  const errors = formErrors.value.errors;
+
+  // If includeSub is enabled, collect all errors for this prop and its sub-fields
+  if (props.includeSub) {
+    const prefix = props.prop + ".";
+    const relatedErrors: string[] = [];
+
+    // Collect exact match error
+    if (errors[props.prop]) {
+      relatedErrors.push(errors[props.prop]);
+    }
+
+    // Collect sub-field errors
+    for (const key in errors) {
+      if (key.startsWith(prefix)) {
+        relatedErrors.push(errors[key]);
+      }
+    }
+
+    return relatedErrors.length > 0 ? relatedErrors.join("; ") : undefined;
+  }
+
+  // Default behavior: only return exact match error
+  return errors[props.prop];
 });
 </script>
 

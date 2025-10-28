@@ -8,7 +8,6 @@ import { useTranslate } from "@/locale/use";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import { errorReport } from "@/utils/vendor";
-import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
 import { PRType, PRStatus } from "@/business/partner_request";
 import {
   PartnerRequest,
@@ -53,10 +52,8 @@ const props = ref<v.InferOutput<typeof propsSchema>>({
   immersive: false,
 });
 const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
-const PRFormRef = ref<InstanceType<typeof PRForm> | null>(null);
-const publishing = ref(false);
-const saving = ref(false);
-const form = ref({});
+const PRFormRef = ref<any>(null);
+const form = ref<any>({});
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
@@ -66,103 +63,36 @@ const publishing_notice = ref<string[]>([
 const prId = ref<number | undefined>(undefined);
 const { pr: partnerRequest, loading: prLoading } = PartnerRequest.use(prId.value);
 
+// Computed states from PRForm
+const publishing = computed(() => PRFormRef.value?.publishing || false);
+const saving = computed(() => PRFormRef.value?.saving || false);
+
 // methods
 /**
  * @name 处理"发布"
  * @description
- * 如果id不存在，则需要创建后再发布
- *
- * 为了防止修改没有被及时保存，发布前会先保存
+ * 调用 PRForm 的 publish 方法
  */
-function onPublish(retry: number = 0) {
-  PRFormRef.value
-    ?.validate()
-    .then(() => {
-      if (props.value.id) {
-        PartnerRequest.update(props.value.id, form.value)
-          .then(() => {
-            uni.requestSubscribeMessage({
-              tmplIds: [
-                WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS.new_message,
-                WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS.partner_application,
-              ],
-              complete() {
-                if (props.value.id) {
-                  publishing.value = true;
-                  PartnerRequest.publish(props.value.id).finally(() => {
-                    publishing.value = false;
-                  });
-                } else {
-                  errorReport(domain_t("publish.invalid_id"));
-                }
-              },
-            });
-          })
-          .catch(() => {
-            errorReport(domain_t("publish.failed_to_save"));
-          });
-      } else {
-        if (retry >= 1) {
-          // 防止死循环
-          return;
-        }
-        create()
-          .then(() => {
-            onPublish(retry + 1);
-          })
-          .catch(() => {
-            errorReport(domain_t("publish.failed_to_create"));
-          });
-      }
-    })
-    .catch(() => {});
-}
-
-function create(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    saving.value = true;
-
-    if (props.value.type === PRType.Undefined) {
-      errorReport(domain_t("save.invalid_form_type"));
-      reject();
-    } else {
-      PartnerRequest.create(form.value, props.value.type)
-        .then((pr) => {
-          props.value.id = pr._id;
-          resolve();
-        })
-        .catch(() => {
-          reject();
-        })
-        .finally(() => {
-          saving.value = false;
-        });
-    }
-  });
+function onPublish() {
+  PRFormRef.value?.publish();
 }
 
 /**
  * @name 处理"存稿"
  * @description
- * 如果id存在，则调用编辑接口；如果不存在，则调用创建接口
+ * 调用 PRForm 的 save 方法
  */
 function onSave() {
-  saving.value = true;
+  PRFormRef.value?.save();
+}
 
-  PRFormRef.value?.validate().then((result) => {
-    if (result.success) {
-      if (props.value.id) {
-        // FIXME
-        PartnerRequest.update(props.value.id, form.value).finally(() => {
-          saving.value = false;
-        });
-      } else {
-        create();
-      }
-    } else {
-      saving.value = false;
-    }
-  });
+/**
+ * @name 处理创建成功
+ * @description
+ * 更新 id
+ */
+function onPRFormCreated(pr: any) {
+  props.value.id = pr._id;
 }
 
 function onShare() {}
@@ -329,7 +259,14 @@ onShow(() => {
 
       <!-- Editor View -->
       <view class="editor-cont" v-if="!isPublished">
-        <PRForm ref="PRFormRef" v-model="form" :type="props.type" />
+        <PRForm
+          ref="PRFormRef"
+          v-model="form"
+          :type="props.type!"
+          :id="props.id"
+          @created="onPRFormCreated"
+          @update:id="(id) => (props.id = id)"
+        />
       </view>
     </view>
 

@@ -159,11 +159,18 @@ export class RouteItemForm extends V.formClass(v.object({
   datetime: v.optional(instance(RouteItemDatetimeForm), () => new RouteItemDatetimeForm({})),
   location: v.optional(LocationRefV, undefined),
 })) {
-  protected async _subclassValidate() {
-    const errors: Record<string, string[]> = {};
-    if (!this.location) {
-      errors['location'] = ['地点不能为空'];
-    }
+  protected _subclassValidate(): Promise<{ success: boolean; errors: Record<string, string[]> }> {
+    return new Promise((resolve, reject) => {
+      const errors: Record<string, string[]> = {};
+      if (!this.location) {
+        errors['location'] = ['地点不能为空'];
+      }
+      resolve({
+        success: Object.keys(errors).length === 0,
+        errors
+      });
+    })
+
   }
 }
 

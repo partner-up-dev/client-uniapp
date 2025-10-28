@@ -44,7 +44,7 @@ function onFormChange(key: string) {
     <PUAccordion v-model="activeNames">
       <PUAccordionItem name="route" :title="domain_t('route.title')">
         <view class="space-p-y-med">
-          <PUFormItem prop="route">
+          <PUFormItem prop="route" :includeSub="true">
             <RouteEditor
               ref="routeEditorRef"
               :modelValue="props.form.route"
