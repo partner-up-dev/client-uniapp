@@ -145,7 +145,7 @@ export class PartnerRequest extends V.class(v.object({
 
   static publish(pr_id: PRRef): Promise<void> {
     return this.api.requestHTTP({
-      method: 'POST',
+      method: 'PUT',
       endpoint: `/${pr_id}/publish`,
       operation_id: 'PartnerRequestV2Publish',
     }).then(() => undefined);

@@ -34,10 +34,13 @@ export const DEFAULT_ACCOUNT_WALLPAPER = "https://img.js.design/assets/img/67d78
 
 export const DEFAULT_LABEL_BG_COLOR = "#CFCFCF";
 
-export const WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS = {
-    partner_application: "f8ObZSVYpzUsZ9RU3zgwHYkJj674vDttSJtT19v7leA",
+/**
+ * 微信小程序订阅消息模板ID
+ */
+export const WXMP_SUBMESSAGE_TID = {
+    newPartnerApplication: "TkUpSdWNjdsqspxKwKxKLFfsW8PifmSpuCwf0RAf140",
     partner_application_result: "YbFPy_xB-4MRJ2gWXBU69Z8DjwB-h0IKBy_CjAI0siw",
-    new_message: "LdicRa405zPaQbYGnHwg0vvrMKxE-ygPi_gcne0V0bo",
+    newMessage: "LdicRa405zPaQbYGnHwg0vvrMKxE-ygPi_gcne0V0bo",
     new_approval: "TkUpSdWNjdsqspxKwKxKLFfsW8PifmSpuCwf0RAf140",
     ride_hailing_order_activity: "0JefB30HZGm_M1J161HsNCkMD5py4Yu_1GsYIyNnK1Q",
 }

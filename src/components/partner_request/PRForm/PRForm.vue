@@ -17,7 +17,7 @@ import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing"
 import { PartnerRequest } from "@/business/partner_request/base";
 import { type PRRef, PRType } from "@/business/partner_request";
 import { errorReport } from "@/utils/vendor";
-import { WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS } from "@/data/const";
+import { WXMP_SUBMESSAGE_TID } from "@/data/const";
 
 // composables
 import { ref, watch } from "vue";
@@ -41,8 +41,6 @@ const props = withDefaults(defineProps<PRFormProps<T>>(), {
 const emit = defineEmits({
   confirm: (partnerRequestId: number) => true,
   "update:modelValue": (value: GetFormTypeByPRType<T>) => true,
-  created: (pr: any) => true,
-  updated: (pr: any) => true,
   published: () => true,
 });
 
@@ -73,38 +71,49 @@ watch(
 );
 
 async function save(): Promise<void> {
-  puFormRef.value?.validate().then((result) => {
-    if (result.success) {
-      if (props.modelValue._id) {
-        props.modelValue.update();
+  saving.value = true;
+  return puFormRef.value
+    ?.validate()
+    .then((result) => {
+      if (result.success) {
+        if (props.modelValue._id) {
+          return props.modelValue.update().then((pr) => {
+            emit("update:modelValue", pr);
+            return Promise.resolve();
+          });
+        } else {
+          return props.modelValue.create().then((pr) => {
+            emit("update:modelValue", pr);
+            return Promise.resolve();
+          });
+        }
       } else {
-        props.modelValue.create();
+        return Promise.reject();
       }
-    }
-  });
+    })
+    .finally(() => {
+      saving.value = false;
+    });
 }
 
-function publish() {
-  save()
-    .then(() => {
-      const save = props.modelValue._id
-        ? props.modelValue.update
-        : props.modelValue.create;
-      save().then(() => {
-        return new Promise((resolve, reject) => {
+function publish(): Promise<void> {
+  return save()
+    .then(
+      () =>
+        new Promise((resolve) => {
           uni.requestSubscribeMessage({
             tmplIds: [
-              WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS.new_message,
-              WEIXIN_MESSAGE_SUBSRIPTION_TEMPLATE_IDS.partner_application,
+              WXMP_SUBMESSAGE_TID.newPartnerApplication,
+              WXMP_SUBMESSAGE_TID.newMessage,
             ],
             complete: resolve,
           });
-        }).then(() => {
-          publishing.value = true;
-          PartnerRequest.publish(props.modelValue._id!).then(() => {
-            emit("published");
-          });
-        });
+        })
+    )
+    .then(() => {
+      publishing.value = true;
+      PartnerRequest.publish(props.modelValue._id!).then(() => {
+        emit("published");
       });
     })
     .finally(() => {
@@ -117,7 +126,6 @@ defineExpose({
   validate: () => puFormRef.value?.validate(),
   save,
   publish,
-  saving,
   publishing,
 });
 </script>

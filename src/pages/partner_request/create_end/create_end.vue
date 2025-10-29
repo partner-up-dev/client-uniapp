@@ -30,12 +30,6 @@ const propsSchema = v.object({
       v.transform((value) => value === "true")
     )
   ),
-  id: v.optional(
-    v.pipe(
-      v.string(),
-      v.transform((value) => parseInt(value))
-    )
-  ),
   type: v.optional(v.enum(PRType)),
   immersive: v.optional(
     v.pipe(
@@ -47,59 +41,42 @@ const propsSchema = v.object({
 
 const props = ref<v.InferOutput<typeof propsSchema>>({
   cache: false,
-  id: undefined,
   type: PRType.Undefined,
   immersive: false,
 });
 const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
-const PRFormRef = ref<any>(null);
-const form = ref<any>({});
+const PRFormRef = ref();
+const form = ref<PartnerRequestForm>({} as unknown as PartnerRequestForm);
+const publishing = computed((): boolean => {
+  return PRFormRef.value ? PRFormRef.value.publishing : false;
+});
+const saving = ref(false);
 const publishing_notice = ref<string[]>([
   domain_t("publishing_notice.0"),
   domain_t("publishing_notice.1"),
 ]);
 
 // Use PartnerRequest business layer composable
-const prId = ref<number | undefined>(undefined);
-const { pr: partnerRequest, loading: prLoading } = PartnerRequest.use(prId.value);
-
-// Computed states from PRForm
-const publishing = computed(() => PRFormRef.value?.publishing || false);
-const saving = computed(() => PRFormRef.value?.saving || false);
+const { pr: partnerRequest, bindPRId } = PartnerRequest.use();
+bindPRId(() => form.value._id);
 
 // methods
-/**
- * @name 处理"发布"
- * @description
- * 调用 PRForm 的 publish 方法
- */
 function onPublish() {
-  PRFormRef.value?.publish();
+  PRFormRef.value!.publish();
 }
 
-/**
- * @name 处理"存稿"
- * @description
- * 调用 PRForm 的 save 方法
- */
 function onSave() {
-  PRFormRef.value?.save();
-}
-
-/**
- * @name 处理创建成功
- * @description
- * 更新 id
- */
-function onPRFormCreated(pr: any) {
-  props.value.id = pr._id;
+  PRFormRef.value!.save().finally(() => {
+    saving.value = false;
+  });
+  saving.value = true;
 }
 
 function onShare() {}
 
 function onView() {
   uni.navigateTo({
-    url: `${PAGE_PATH[PAGE_ID.PR_DETAIL]}?id=${props.value.id}`,
+    url: `${PAGE_PATH[PAGE_ID.PR_DETAIL]}?id=${form.value._id}`,
   });
 }
 
@@ -111,18 +88,11 @@ function onDiscover() {
 }
 
 // computed
-/**
- * @name 是否已经发布搭子请求
- * @description
- * 有id且对应搭子请求的状态为寻找搭子中
- */
 const isPublished = computed((): boolean => {
-  if (props.value.id && partnerRequest.value) {
-    prId.value = props.value.id;
+  if (partnerRequest.value) {
     return partnerRequest.value.status === PRStatus.Joinable;
   }
   return false;
-  // return true;  // TEMP
 });
 
 // lifecycle
@@ -164,9 +134,9 @@ onLoad(
       } else {
         errorReport(domain_t("on_load.load_form_from_cache.failed"));
       }
-    } else if (props.value.id) {
+    } else if (form.value._id) {
       // load from draft
-      PartnerRequest.get(props.value.id).then((pr) => {
+      PartnerRequest.get(form.value._id).then((pr) => {
         // Convert PartnerRequest to PartnerRequestForm
         form.value = PartnerRequestForm.parse({
           title: pr.title,
@@ -259,14 +229,7 @@ onShow(() => {
 
       <!-- Editor View -->
       <view class="editor-cont" v-if="!isPublished">
-        <PRForm
-          ref="PRFormRef"
-          v-model="form"
-          :type="props.type!"
-          :id="props.id"
-          @created="onPRFormCreated"
-          @update:id="(id) => (props.id = id)"
-        />
+        <PRForm ref="PRFormRef" v-model="form" :type="props.type!" />
       </view>
     </view>
 
@@ -281,7 +244,8 @@ onShow(() => {
             theme="SurfaceOutlined"
             prefix-icon="i-mdi-content-save"
             :text="domain_t('operations.save')"
-            :loading="publishing || saving"
+            :loading="saving"
+            :disabled="publishing"
             @click="onSave"
           />
 
@@ -292,6 +256,7 @@ onShow(() => {
             prefix-icon="i-mdi-check"
             :text="domain_t('operations.publish')"
             :loading="publishing || saving"
+            :disabled="publishing"
             @click="onPublish"
           />
 

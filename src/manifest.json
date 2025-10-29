@@ -62,11 +62,11 @@
     "usingComponents": true,
     "plugins": {
       "chooseLocation": {
-        "version": "1.0.12",
+        "version": "1.2.1",
         "provider": "wx76a9a06e5b4e693e"
       },
       "routePlan": {
-        "version": "1.0.18",
+        "version": "2.1.0",
         "provider": "wx50b5593e81dd937a"
       }
     },
