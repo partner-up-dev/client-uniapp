@@ -1,7 +1,12 @@
 <template>
   <view :class="buttonClasses" @click="onClick">
+    <!-- Loading Indicator -->
+    <view v-if="loading" class="loading-icon icon-wrapper">
+      <text class="i-mdi-loading icon loading-spinner"></text>
+    </view>
+
     <!-- Prefix Icon -->
-    <view v-if="prefixIcon" class="prefix-icon icon-wrapper">
+    <view v-if="!loading && prefixIcon" class="prefix-icon icon-wrapper">
       <text :class="prefixIcon" class="icon"></text>
       <!-- <text class="i-mdi-bookmark-sharp icon"></text> -->
     </view>
@@ -12,7 +17,7 @@
     </view>
 
     <!-- Suffix Icon -->
-    <view v-if="suffixIcon" class="suffix-icon icon-wrapper">
+    <view v-if="!loading && suffixIcon" class="suffix-icon icon-wrapper">
       <text :class="suffixIcon" class="icon"></text>
     </view>
 
@@ -32,56 +37,10 @@ export default {
 import { computed } from "vue";
 import { kebabCase } from "@/utils";
 import { BasicComponentOptions } from "@/utils/vue";
+import { puButtonProps, puButtonEmits } from "./PUButton";
 
-interface Props {
-  // Button content
-  text?: string;
-  prefixIcon?: string;
-  suffixIcon?: string;
-
-  // Display controls
-  showDot?: boolean;
-
-  // State controls
-  toggled?: boolean;
-  active?: boolean;
-
-  // Button variants
-  theme?:
-    | "Primary"
-    | "PrimaryContainer"
-    | "Tertiary"
-    | "Surface"
-    | "SurfaceOutlined"
-    | "Plain";
-  type?: "WithText" | "OnlyIcon" | "Bar";
-  size?: "xSmall" | "Small" | "Medium" | "Large";
-  rounded?: boolean;
-
-  // Interaction
-  disabled?: boolean;
-  loading?: boolean;
-
-  // Custom styling
-  customStyle?: Record<string, any>;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  text: "Button",
-  showDot: false,
-  toggled: false,
-  active: false,
-  theme: "PrimaryContainer",
-  type: "WithText",
-  size: "Small",
-  rounded: false,
-  disabled: false,
-  loading: false,
-});
-
-const emit = defineEmits<{
-  click: [event: any];
-}>();
+const props = defineProps(puButtonProps);
+const emit = defineEmits(puButtonEmits);
 
 const buttonClasses = computed(() => {
   const classes = ["pu-button"];

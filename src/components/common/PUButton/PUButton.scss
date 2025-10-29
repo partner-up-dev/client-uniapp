@@ -18,6 +18,21 @@
   justify-content: center;
 }
 
+.loading-icon {
+  .loading-spinner {
+    animation: pu-button-spin 1s linear infinite;
+  }
+}
+
+@keyframes pu-button-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .dot {
   position: absolute;
   top: $pu-spacing-xs;
