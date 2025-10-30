@@ -294,10 +294,13 @@ export class Route extends V.class(v.array(instance(RouteItem)))
 
 }
 
-export class RouteForm extends V.formClass(v.pipe(v.optional(
-  v.array(instance(RouteItemForm)), () => [new RouteItemForm({}), new RouteItemForm({})]
-), v.maxLength(4))
-) {
+export class RouteForm extends V.formClass(
+  v.optional(
+    v.pipe(
+      v.array(instance(RouteItemForm)),
+      v.maxLength(4)
+    ), () => [new RouteItemForm({}), new RouteItemForm({})]
+  )) {
   public addWaypoint() {
     this.splice(this.length - 1, 0, new RouteItemForm({}));
   }

@@ -1,13 +1,41 @@
 import * as v from "valibot";
 
+// Helper to detect if a schema is array-based by unwrapping wrappers
+function isArrayBasedSchema(schema: any): boolean {
+  // Direct array check
+  if (schema.type === 'array') {
+    return true;
+  }
+
+  // Check wrapped schemas (optional, nullable, nullish)
+  if (schema.type === 'optional' || schema.type === 'nullable' || schema.type === 'nullish') {
+    if (schema.wrapped) {
+      return isArrayBasedSchema(schema.wrapped);
+    }
+  }
+
+  // Check piped schemas
+  if (schema.type === 'pipe') {
+    // For pipe, check the first schema in the pipe
+    // The pipe structure has an '~standard' property with schemas array
+    if (schema['~standard'] && Array.isArray(schema['~standard'].schemas)) {
+      const firstSchema = schema['~standard'].schemas[0];
+      if (firstSchema) {
+        return isArrayBasedSchema(firstSchema);
+      }
+    }
+  }
+
+  return false;
+}
 
 export const V = {
   class<TSchema extends v.BaseSchema<any, any, any>>(schema: TSchema) {
     type Input = v.InferInput<TSchema>;
     type Output = v.InferOutput<TSchema>;
 
-    // Check if the schema is an array schema
-    const isArraySchema = (schema as any).type === 'array';
+    // Check if the schema is an array schema (including wrapped ones)
+    const isArraySchema = isArrayBasedSchema(schema);
 
     class ValibotClass {
       // Expose schema on the constructor for BusinessWithAPI.parse
@@ -276,8 +304,12 @@ export const V = {
       public validate(): Promise<ValidationResult> {
         const errors: Record<string, string[]> = {};
 
+        // For array-based schemas, we need to validate the underlying data, not the instance itself
+        // because the instance has a custom prototype that won't pass instanceof Array checks
+        const dataToValidate = isArraySchema ? Array.from(this as any) : this;
+
         // First, validate against the schema
-        const result = v.safeParse(schema, this);
+        const result = v.safeParse(schema, dataToValidate);
 
         if (!result.success) {
           // Convert Valibot issues to error format
@@ -366,8 +398,8 @@ export const V = {
       }
     }
 
-    // Check if the schema is an array schema
-    const isArraySchema = (schema as any).type === 'array';
+    // Check if the schema is an array schema (including wrapped array schemas)
+    const isArraySchema = isArrayBasedSchema(schema);
 
     // Copy the embedded schema properties
     const embeddedSchema = v.pipe(
@@ -480,18 +512,53 @@ export function nullable<T extends v.BaseSchema<any, any, any>>(schema: T) {
 export function instance<T extends ValibotClass>(cls: T) {
   // Accept either an existing instance of the class or a raw value that
   // the class (which itself behaves like a Valibot schema) can parse.
-  const schema = v.pipe(
-    v.any(),
-    v.transform((i) => {
-      if (typeof i === 'object' && i !== null) {
-        return cls.parse(i);
-      }
-      return i;
-    }),
-    v.instance(cls as unknown as new (...args: any[]) => object),
-  );
 
-  return schema as unknown as v.BaseSchema<unknown, InstanceType<T>, v.BaseIssue<unknown>>;
+  // Check if this is an array-based class using the same detection logic
+  const isArrayBasedClass = cls.V ? isArrayBasedSchema(cls.V) : false;
+
+  if (isArrayBasedClass) {
+    // For array-based classes, we need custom validation
+    // because v.instance() expects Array but receives the custom class
+    const schema = v.pipe(
+      v.any(),
+      v.transform((i) => {
+        // If already an instance of the class, return as-is
+        if (i instanceof cls || Object.getPrototypeOf(i) === cls.prototype) {
+          return i;
+        }
+        // Otherwise parse it
+        if (typeof i === 'object' && i !== null) {
+          return cls.parse(i);
+        }
+        return i;
+      }),
+      v.check((value) => {
+        // Check if value is an instance of the class by checking the prototype chain
+        return value instanceof cls || Object.getPrototypeOf(value) === cls.prototype;
+      }, `Invalid type: Expected ${cls.name} but received {received}`),
+    );
+
+    return schema as unknown as v.BaseSchema<unknown, InstanceType<T>, v.BaseIssue<unknown>>;
+  } else {
+    // For regular object-based classes, use v.instance()
+    const schema = v.pipe(
+      v.any(),
+      v.transform((i) => {
+        // If already an instance of the class, return as-is
+        if (i instanceof cls) {
+          return i;
+        }
+        // Otherwise parse it
+        if (typeof i === 'object' && i !== null) {
+          return cls.parse(i);
+        }
+        return i;
+      }),
+      v.instance(cls as unknown as new (...args: any[]) => object),
+    );
+
+    return schema as unknown as v.BaseSchema<unknown, InstanceType<T>, v.BaseIssue<unknown>>;
+  }
 }
 
 /**

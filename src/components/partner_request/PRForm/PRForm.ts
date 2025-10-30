@@ -28,14 +28,3 @@ export function createFormByType<T extends PRType>(type: T): GetFormTypeByPRType
       return new PartnerRequestForm({}) as GetFormTypeByPRType<T>;
   }
 }
-
-export function getFormSchemaByType<T extends PRType>(type: T) {
-  switch (type) {
-    case PRType.Commute:
-      return CommutePRForm;
-    case PRType.RideHailing:
-      return RideHailingPRForm;
-    default:
-      return PartnerRequestForm;
-  }
-}
