@@ -17,14 +17,14 @@ export class PartnerRequest extends V.class(v.object({
   created_by: v.string(),
   type: v.enum(PRType),
   status: v.enum(PRStatus),
-  title: nullable(limit_string(3, 12)),
-  introduction: nullable(limit_string(3, 60)),
+  title: nullable(v.string()),
+  introduction: nullable(v.string()),
   chat: nullable(v.number()),
   contract: v.number(),
 })) {
 
   static INTRODUCTION_MAXLENGTH = 60;
-  static TITLE_MAXLENGTH = 12;
+  static TITLE_MAXLENGTH = 16;
 
   static api = new APIClient({
     modulePrefix: '/partner_request',

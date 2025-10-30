@@ -40,7 +40,7 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
 }
 
 export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
-  route: v.optional(instance(RouteForm), () => new RouteForm({})),
+  route: v.optional(instance(RouteForm), () => new RouteForm(undefined)),
   trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
   ride_hailing_preference: v.optional(instance(RideHailingPreference), () => new RideHailingPreference({})),
 })) {

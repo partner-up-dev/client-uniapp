@@ -35,7 +35,7 @@ export class CommutePR extends PartnerRequest.extend(v.object({
 }
 
 export class CommutePRForm extends PartnerRequestForm.extend(v.object({
-  route: v.optional(instance(RouteForm), () => new RouteForm({})),
+  route: v.optional(instance(RouteForm), () => new RouteForm(undefined)),
   trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
   on_at: nullable(v.string()),
   off_at: nullable(v.string()),
