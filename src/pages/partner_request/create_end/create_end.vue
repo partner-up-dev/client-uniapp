@@ -7,7 +7,7 @@ import NavBar from "@/components/common/navBar/navBar.vue";
 import { useTranslate } from "@/locale/use";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import { usePartnerRequestStore } from "@/store/partner_request";
-import { errorReport } from "@/utils/vendor";
+import { errorReport, navigate } from "@/utils/vendor";
 import { PRType, PRStatus } from "@/business/partner_request";
 import {
   PartnerRequest,
@@ -75,15 +75,16 @@ function onSave() {
 function onShare() {}
 
 function onView() {
-  uni.navigateTo({
-    url: `${PAGE_PATH[PAGE_ID.PR_DETAIL]}?id=${form.value._id}`,
+  navigate({
+    page_id: PAGE_ID.PR_DETAIL,
+    params: { id: String(form.value._id) },
   });
 }
 
 function onDiscover() {
   // TODO，携带类型筛选器
-  uni.navigateTo({
-    url: PAGE_PATH[PAGE_ID.EXPLORE],
+  navigate({
+    page_id: PAGE_ID.EXPLORE,
   });
 }
 
@@ -92,7 +93,8 @@ const isPublished = computed((): boolean => {
   if (partnerRequest.value) {
     return partnerRequest.value.status === PRStatus.Joinable;
   }
-  return false;
+  // return false;
+  return true; // TEMP
 });
 
 // lifecycle

@@ -159,7 +159,7 @@ export class RouteItemForm extends V.formClass(v.object({
     return new Promise((resolve, reject) => {
       const errors: Record<string, string[]> = {};
       if (!this.location) {
-        errors['location'] = ['地点不能为空'];
+        // errors['location'] = ['地点不能为空'];  TEMP
       }
       resolve({
         success: Object.keys(errors).length === 0,

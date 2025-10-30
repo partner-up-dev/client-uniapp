@@ -15,11 +15,11 @@
 .af-pub {
   flex: 1;
   overflow-y: auto;
-  width: 87%;
-  margin: $pu-spacing-med auto 0 auto;
+  padding: $pu-spacing-med $pu-spacing-med $pu-spacing-lg $pu-spacing-med;
+  box-sizing: border-box;
 
   &__head {
-    border-radius: $pu-radius-sm;
+    border-radius: $pu-radius-med;
     background-color: $pu-color-surface-container;
     padding: 60px $pu-spacing-lg;
 
@@ -43,7 +43,6 @@
     display: flex;
     flex-direction: column;
     gap: $pu-spacing-med;
-    padding-bottom: $pu-spacing-lg;
 
     &::after {
       content: "";
@@ -57,12 +56,12 @@
   }
 
   &__card {
-    border-radius: $pu-radius-sm;
-    padding: $pu-spacing-lg;
+    border-radius: $pu-radius-med;
+    padding: $pu-spacing-med;
     background-color: $pu-color-surface-container;
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: $pu-spacing-sm;
 
     .title {
       @include pu-font(title-large);

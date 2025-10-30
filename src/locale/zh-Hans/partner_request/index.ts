@@ -260,7 +260,7 @@ export default {
         title: "发布成功！"
       },
       next: {
-        title: "接下来",
+        title: "下一步",
         description: "算法将自动匹配合适的搭子，您将收到搭子申请通知，请及时审批"
       },
       share: {
@@ -269,8 +269,8 @@ export default {
         operation: "一键分享"
       },
       stop: {
-        title: "停止寻找",
-        description: "当您认为找到足够的搭子后，可在详情页面停止寻找搭子"
+        title: "开始活动",
+        description: "当您认为找到足够的搭子后，可在详情页面停止寻找搭子并为开展搭子活动做好准备"
       }
     },
     operations: {
