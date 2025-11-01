@@ -12,6 +12,7 @@ import PUForm from "@/components/common/PUForm/PUForm.vue";
 import PRMetadataForm from "@/components/partner_request/PRMetadataForm/PRMetadataForm.vue";
 import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
 import PRRideHailingForm from "@/components/partner_request/ride_hailing/PRRideHailingForm/PRRideHailingForm.vue";
+import PartnersEditor from "@/components/partner_request/partnersEditor/partnersEditor.vue";
 import type { CommutePRForm } from "@/business/partner_request/commute";
 import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 import { PartnerRequest } from "@/business/partner_request/base";
@@ -139,6 +140,16 @@ defineExpose({
           :title="dt('editor.common_editor.title')"
         >
           <PRMetadataForm ref="metadataFormRef" :form="modelValue" />
+        </PUAccordionItem>
+        <PUAccordionItem
+          name="partners"
+          :title="dt('editor.partners_editor.title')"
+        >
+          <PartnersEditor
+            class="space-p-sm"
+            v-model="modelValue.partners"
+            :pr-type="props.type"
+          />
         </PUAccordionItem>
         <PRRideHailingForm
           v-if="props.type === PRType.RideHailing"

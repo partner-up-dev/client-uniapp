@@ -1,0 +1,48 @@
+@use "@/styles/main.scss" as *;
+
+.partner-editor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $pu-color-surface-container;
+  padding: $pu-spacing-sm $pu-spacing-med;
+  box-sizing: border-box;
+
+  .left {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-sm;
+    @include pu-font("label-large");
+
+    .play-button {
+      @include pu-icon("small", true);
+      color: $pu-color-on-surface;
+    }
+
+    .role {
+      display: flex;
+      align-items: center;
+      gap: $pu-spacing-xs;
+      cursor: pointer;
+    }
+
+    .text {
+      color: $pu-color-on-surface-variant;
+    }
+
+    .role-name {
+      color: $pu-color-tertiary;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: $pu-spacing-xs;
+
+    .remove-button {
+      @include pu-icon("small", true);
+      color: $pu-color-on-surface;
+    }
+  }
+}

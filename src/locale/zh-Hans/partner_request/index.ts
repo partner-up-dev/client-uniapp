@@ -183,6 +183,27 @@ export default {
     }
   },
   /**
+   * @name 搭子角色编辑器组件的翻译
+   */
+  partner_editor: {
+    need_one: "需要一位",
+    click_to_select: "点击选择",
+    you_will_play: "你将扮演",
+  },
+  /**
+   * @name 搭子角色选择器组件的翻译
+   */
+  partner_picker: {
+    title: "选择搭子角色",
+    confirm: "确认",
+  },
+  /**
+   * @name 搭子列表编辑器组件的翻译
+   */
+  partners_editor: {
+    add_partner: "添加搭子",
+  },
+  /**
    * @name 搭子请求一般内容编辑器组件的翻译
    */
   common_editor: {

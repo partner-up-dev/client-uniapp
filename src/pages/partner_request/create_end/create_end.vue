@@ -93,8 +93,8 @@ const isPublished = computed((): boolean => {
   if (partnerRequest.value) {
     return partnerRequest.value.status === PRStatus.Joinable;
   }
-  // return false;
-  return true; // TEMP
+  return false;
+  // return true; // TEMP
 });
 
 // lifecycle

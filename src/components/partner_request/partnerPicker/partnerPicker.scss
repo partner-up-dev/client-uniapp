@@ -1,0 +1,32 @@
+@use "@/styles/main.scss" as *;
+
+.partner-picker {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-med;
+  height: 100%;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-sm;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    // 选中状态
+    &.is-selected {
+      border-color: $pu-color-primary;
+      background-color: $pu-color-primary-container;
+    }
+  }
+
+  &__footer {
+    padding-top: $pu-spacing-med;
+    border-top: 1px solid $pu-color-outline;
+  }
+}

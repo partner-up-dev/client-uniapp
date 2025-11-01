@@ -13,7 +13,7 @@
 - [ ] vue-i18n types support
 - [ ] BusinessClass.use 的某些值的双向绑定问题解决方案作成 composable
 - [ ] 硬编码文本放到国际化中
-- [ ] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
+- [x] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
 - [ ] 抽离出 Section 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
 - [x] V.class 支持 extend
@@ -22,7 +22,7 @@
 
 - [ ] Use type specific form
 - [x] Add form-item component
-- [ ] validate 不等同于 parse。parse还有很多除数据正确性以外的复杂规则，包括跨字段的。
+- [x] validate 不等同于 parse。parse还有很多除数据正确性以外的复杂规则，包括跨字段的。（但似乎有 refine 这种东西）
 
 ## Me Page
 
@@ -36,8 +36,8 @@
 ## PRTimeline
 
 - [x] 编写测试
-- [ ] 改进 Card 组件 （Expandable）
-- [ ] 添加手风琴组件，控制只能展开几个
+- [x] 改进 Card 组件 （Expandable）
+- [x] 添加手风琴组件，控制只能展开几个
 - [ ] 其它状态的推荐操作
 
 ## Explore

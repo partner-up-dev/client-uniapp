@@ -2,7 +2,7 @@ import { useTranslate } from "@/locale/use";
 import { PRRefV } from ".";
 import { AccountRefV } from "../account";
 import { APIClient } from "../api";
-import { V } from "../index";
+import { V, nullable } from "../index";
 import * as v from 'valibot';
 import { computed, ref, watch } from "vue";
 import store from "@/store";
@@ -79,7 +79,7 @@ export class Partner extends V.class(v.object({
   _id: PartnerRefV,
   partner_request: PRRefV,
   role: PartnerRoleRefV,
-  player: v.nullable(AccountRefV),
+  player: nullable(AccountRefV),
   history: v.array(AccountRefV),
   disabled: v.boolean(),
 })) {
@@ -93,3 +93,10 @@ export class Partner extends V.class(v.object({
   }
 
 }
+
+
+export class PartnerForm extends V.formClass(v.object({
+  role: v.optional(PartnerRoleRefV, undefined),
+  player: nullable(AccountRefV),
+  // TODO disabled
+})) { }

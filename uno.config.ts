@@ -54,6 +54,9 @@ const safeListOfIcons = [
   'i-mdi-content-save',
   'i-mdi-check',
   'i-mdi-compass',
+  // PartnerEditor icons
+  'i-mdi-hand-front-right',
+  'i-mdi-hand-front-right-outline',
 ]
 
 export default {

@@ -1,0 +1,21 @@
+@use "@/styles/main.scss" as *;
+
+.partners-editor {
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-sm;
+  align-items: flex-end;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-sm;
+    align-self: stretch;
+  }
+
+  &__add-button {
+    display: flex;
+    justify-content: center;
+    padding: $pu-spacing-sm 0;
+  }
+}
