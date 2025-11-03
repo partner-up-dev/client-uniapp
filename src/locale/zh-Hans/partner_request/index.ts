@@ -201,7 +201,7 @@ export default {
    * @name 搭子列表编辑器组件的翻译
    */
   partners_editor: {
-    add_partner: "添加搭子",
+    add_partner: "添加角色",
   },
   /**
    * @name 搭子请求一般内容编辑器组件的翻译

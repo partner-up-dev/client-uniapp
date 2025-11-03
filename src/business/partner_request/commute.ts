@@ -9,6 +9,7 @@ import { PartnerRequest, PartnerRequestForm } from './base';
 import { Route, RouteForm } from '../base/route';
 import { TripPreference } from './trip';
 import { WeekdayV, TransportationV } from '../base';
+import { PartnerForm } from './partner';
 
 /**
  * 通勤搭子请求
@@ -35,6 +36,22 @@ export class CommutePR extends PartnerRequest.extend(v.object({
 }
 
 export class CommutePRForm extends PartnerRequestForm.extend(v.object({
+  partners: v.optional(
+    v.pipe(v.array(instance(PartnerForm)), v.minLength(2, "至少两名搭子"), v.maxLength(5, "最多五名搭子")),
+    () => {
+      return [
+        new PartnerForm({
+          role: 1  // 打车
+        }),
+        new PartnerForm({
+          role: 2  // 乘客
+        }),
+        new PartnerForm({
+          role: 2  // 乘客
+        }),
+      ]
+    },
+  ),
   route: v.optional(instance(RouteForm), () => new RouteForm(undefined)),
   trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
   on_at: nullable(v.string()),

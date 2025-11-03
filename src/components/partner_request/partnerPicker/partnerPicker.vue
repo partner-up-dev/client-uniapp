@@ -46,9 +46,9 @@ import {
 import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
 import PUButton from "@/components/common/PUButton/PUButton.vue";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
-import type {
+import {
   PartnerRole,
-  PartnerRoleRef,
+  type PartnerRoleRef,
 } from "@/business/partner_request/partner";
 import { useTranslate } from "@/locale/use";
 
@@ -73,12 +73,10 @@ const selectedValue = useOptionalVModel<PartnerRoleRef | PartnerRoleRef[]>({
 
 // ==================== Computed ====================
 
-/**
- * 可用的搭子角色列表
- */
-const availableRoles = computed<PartnerRole[]>(() => {
-  return getAvailablePartnerRoles(props.prType);
-});
+const { availableRoles, bindPRType } = PartnerRole.useAvailableRoles(
+  props.prType
+);
+bindPRType(() => props.prType);
 
 /**
  * 内部选中状态（多选模式）

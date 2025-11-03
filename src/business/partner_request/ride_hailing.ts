@@ -8,6 +8,7 @@ import { nullable } from '..';
 import { PartnerRequest, PartnerRequestForm } from './base';
 import { Route, RouteForm } from '../base/route';
 import { TripPreference } from './trip';
+import { PartnerForm } from './partner';
 
 export type RideHailingOrderRef = number;
 export const RideHailingOrderRefV = v.number();
@@ -40,6 +41,22 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
 }
 
 export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
+  partners: v.optional(
+    v.pipe(v.array(instance(PartnerForm)), v.minLength(2, "至少两名搭子"), v.maxLength(5, "最多五名搭子")),
+    () => {
+      return [
+        new PartnerForm({
+          role: 1
+        }),
+        new PartnerForm({
+          role: 2
+        }),
+        new PartnerForm({
+          role: 2
+        }),
+      ]
+    },
+  ),
   route: v.optional(instance(RouteForm), () => new RouteForm(undefined)),
   trip_preference: v.optional(instance(TripPreference), () => new TripPreference({})),
   ride_hailing_preference: v.optional(instance(RideHailingPreference), () => new RideHailingPreference({})),

@@ -75,6 +75,7 @@ export const partnerPickerEmits = {
  * TODO: 后端接口实现后替换为真实 API 调用
  */
 export function getAvailablePartnerRoles(prType: PRType): PartnerRole[] {
+
   // Mock 数据，根据不同类型返回不同的角色
   const mockRoles: Record<PRType, PartnerRole[]> = {
     undefined: [],

@@ -1,8 +1,8 @@
 import { useTranslate } from "@/locale/use";
-import { PRRefV } from ".";
+import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
 import { APIClient } from "../api";
-import { V, nullable } from "../index";
+import { V, nullable, instance } from "../index";
 import * as v from 'valibot';
 import { computed, ref, watch } from "vue";
 import store from "@/store";
@@ -68,6 +68,41 @@ export class PartnerRole extends V.class(v.object({
       partnerRole, roleId, loading, bindId
     }
 
+  }
+
+  static useAvailableRoles(type: PRType) {
+    const _availableRoles = ref<PartnerRole[]>([]);
+    const _prType = ref<PRType>(type);
+    const loading = ref(false);
+
+    const availableRoles = computed((): PartnerRole[] => {
+      if (!_availableRoles.value.length && !loading.value) {
+        loading.value = true;
+        this.api.requestHTTP({
+          method: "GET",
+          endpoint: "",
+          data: {
+            type: _prType.value
+          },
+          schema: v.array(instance(PartnerRole)),
+        }).then(({ body }) => {
+          _availableRoles.value = body.parsed;
+          loading.value = false;
+        })
+      }
+      return _availableRoles.value;
+    })
+
+    const bindPRType = (typeWatch: any) => {
+      watch(typeWatch, (val) => {
+        _prType.value = val;
+        _availableRoles.value = [];
+      });
+    }
+
+    return {
+      availableRoles, loading, bindPRType
+    }
   }
 }
 
