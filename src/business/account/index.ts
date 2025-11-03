@@ -5,7 +5,7 @@ export type AccountRef = string;
 export const AccountRefV = v.pipe(v.string(), v.uuid());
 
 export interface AccountSimple {
-  _id: AccountRef;
+  id: AccountRef;
   nickname: string;
-  avatar: string;
+  avatar?: string | null;
 }

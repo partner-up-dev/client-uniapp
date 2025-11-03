@@ -12,6 +12,8 @@ import { accountProps, accountEmits } from "./account";
 import { AccountBaseProfile } from "@/business/account/base";
 import type { AccountSimple } from "@/business/account";
 import { ref, onMounted } from "vue";
+import { navigate } from "@/utils/vendor";
+import { PAGE_ID } from "@/data/enum";
 
 const props = defineProps(accountProps);
 const emit = defineEmits(accountEmits);
@@ -28,6 +30,12 @@ onMounted(() => {
 
 function onClick() {
   emit("click");
+  navigate({
+    page_id: PAGE_ID.PROFILE,
+    params: {
+      id: account.value?.id,
+    },
+  });
 }
 </script>
 

@@ -47,6 +47,12 @@
       "style": {
         "navigationBarTitleText": "创建出行搭子请求"
       }
+    },
+    {
+      "path": "pages/account/profile/profile",
+      "style": {
+        "navigationBarTitleText": "用户资料"
+      }
     }
   ],
   "tabBar": {

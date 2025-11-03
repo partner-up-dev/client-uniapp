@@ -97,4 +97,15 @@ export class Chat extends V.class(v.object({
       schema: PartnerRequest,
     }).then(res => res.body.parsed);
   }
+
+  /**
+   * Get DM Chat
+   */
+  static getDMWith(accountId: string): Promise<Chat> {
+    return this.api.requestHTTP({
+      method: 'PUT',
+      endpoint: `/direct_message/${accountId}`,
+      operation_id: 'ChatV2PutDM',
+    }).then(res => res.body.parsed);
+  }
 }

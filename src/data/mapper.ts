@@ -10,6 +10,7 @@ export const PAGE_PATH: Record<PAGE_ID, string> = {
     [PAGE_ID.PR_CREATE_TRIP]: '/pages/partner_request/create_trip/create_trip',
     [PAGE_ID.PR_CREATE_END]: '/pages/partner_request/create_end/create_end',
     [PAGE_ID.CHAT]: '/pages/communication/chat',
+    [PAGE_ID.PROFILE]: '/pages/account/profile/profile',
 }
 
 export const TABBAR_INDEX: Record<TABBAR_PAGE_ID, number> = {

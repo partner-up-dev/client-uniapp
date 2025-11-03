@@ -125,9 +125,11 @@ const {
 } = usePulldownRefresher(getMessages);
 
 onMounted(() => {
-  getElementRect(".chat-content", getCurrentInstance()).then((rect) => {
-    scrollViewHeight.value = (rect.height || 0) - 32; // 16px padding top/bottom
-  });
+  setTimeout(() => {
+    getElementRect(".chat-content", getCurrentInstance()).then((rect) => {
+      scrollViewHeight.value = (rect.height || 0) - 32; // 16px padding top/bottom
+    });
+  }, 200);
 });
 </script>
 

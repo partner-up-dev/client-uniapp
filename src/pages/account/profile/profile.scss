@@ -1,0 +1,69 @@
+@use "@/styles/main.scss" as *;
+
+.profile-page {
+  --background-color: #{$pu-color-surface};
+
+  display: flex;
+  flex-direction: column;
+  gap: $pu-spacing-lg;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $pu-spacing-lg;
+  }
+
+  &__operations {
+    display: flex;
+    flex-direction: row;
+    gap: $pu-spacing-xs;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0 $pu-spacing-med;
+  }
+
+  .header {
+    position: absolute;
+    padding: 0 $pu-spacing-med;
+  }
+}
+
+.simple-profile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 429px;
+  width: 100%;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 0 $pu-spacing-med;
+    box-sizing: border-box;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+
+    .joined-at {
+      @include pu-font("label-small");
+      color: $pu-color-on-surface-variant;
+    }
+
+    .nickname {
+      @include pu-font("title-large");
+      color: $pu-color-on-surface;
+    }
+  }
+}

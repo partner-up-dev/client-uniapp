@@ -79,7 +79,7 @@ export function getMenuButtonRect(): {
  * @param path 页面路径，和 page_id 二选一
  * @param params 页面参数
  */
-export function navigate({ page_id, path, params }: { page_id?: PAGE_ID, path?: string, params?: Record<string, string> }) {
+export function navigate({ page_id, path, params }: { page_id?: PAGE_ID, path?: string, params?: Record<string, string | undefined> }) {
     const params_str = Object.entries(params || {}).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
     if (page_id) {
         path = PAGE_PATH[page_id];

@@ -54,7 +54,7 @@ onMounted(() => {
     .then((profile) => {
       if (profile && latestMessage.value) {
         senderAccount.value = {
-          _id: latestMessage.value.created_by,
+          id: latestMessage.value.created_by,
           nickname: profile.nickname,
           avatar: profile.avatar || "",
         };

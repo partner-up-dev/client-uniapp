@@ -68,6 +68,7 @@ export enum PAGE_ID {
     PR_CREATE_TRIP = "partner_request_create_trip",
     PR_CREATE_END = "partner_request_create_end",
     CHAT = "chat",
+    PROFILE = "profile",
 }
 
 export enum TABBAR_PAGE_ID {
