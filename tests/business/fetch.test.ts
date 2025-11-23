@@ -9,7 +9,7 @@ vi.mock("@/business/account/base", () => ({
   }
 }));
 
-import { fetch as apiFetch, FetchHeaders, FetchResponse } from "@/business/api";
+import { fetch as apiFetch, FetchHeaders, FetchResponse } from "@/business/api-fetch";
 
 describe("FetchHeaders", () => {
   it("should create empty headers", () => {
