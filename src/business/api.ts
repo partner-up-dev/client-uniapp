@@ -350,6 +350,17 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
 
 // ==================== Fetch API Compatible Wrapper ====================
 
+// Type definitions for Fetch API
+type HeadersInit = FetchHeaders | Record<string, string> | [string, string][];
+type BodyInit = string | ArrayBuffer | ArrayBufferView | URLSearchParams | FormData | Blob | object;
+
+export interface FetchRequestInit {
+  method?: string;
+  headers?: HeadersInit;
+  body?: BodyInit | null;
+  signal?: AbortSignal;
+}
+
 /**
  * Headers class compatible with Web Fetch API
  */
@@ -489,7 +500,7 @@ export class FetchResponse {
   }
 
   async formData(): Promise<FormData> {
-    throw new Error('FormData parsing is not supported in UniApp environment');
+    throw new Error('FormData is not supported in UniApp environment');
   }
 
   clone(): FetchResponse {
@@ -503,16 +514,6 @@ export class FetchResponse {
       url: this.url,
     });
   }
-}
-
-type HeadersInit = FetchHeaders | Record<string, string> | [string, string][];
-type BodyInit = string | ArrayBuffer | ArrayBufferView | URLSearchParams | FormData | Blob | object;
-
-export interface FetchRequestInit {
-  method?: string;
-  headers?: HeadersInit;
-  body?: BodyInit | null;
-  signal?: AbortSignal;
 }
 
 /**

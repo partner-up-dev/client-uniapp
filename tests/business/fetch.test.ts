@@ -170,7 +170,7 @@ describe("FetchResponse", () => {
 
   it("should throw error for formData()", async () => {
     const response = new FetchResponse("test");
-    await expect(response.formData()).rejects.toThrow("FormData parsing is not supported");
+    await expect(response.formData()).rejects.toThrow("FormData is not supported");
   });
 
   it("should clone response", () => {
