@@ -5,6 +5,7 @@ import type { GenericSchema } from "@supabase/postgrest-js";
 import { fetch as apiFetch } from "./api-fetch";
 import { useAccountStore } from "@/store/account";
 import store from "@/store";
+import log from "@/utils/log";
 
 // PostgREST URL from env
 const PGRST_URL: string = (import.meta.env.VITE_PGRST_URL || "") as string;
@@ -51,27 +52,40 @@ function createAuthenticatedFetch(): typeof fetch {
  * @typeParam Schema - Database schema type from postgrest-js
  */
 export class DBApiClient<Schema extends GenericSchema = GenericSchema> {
-  private _client: PostgrestClient<{ public: Schema }, {}, "public", Schema>;
+  private _client: PostgrestClient<{ public: Schema }, {}, "public", Schema> | null = null;
   private _tableName: string;
 
   constructor(opts: { tableName: string }) {
     this._tableName = opts.tableName;
-    this._client = new PostgrestClient<{ public: Schema }, {}, "public", Schema>(PGRST_URL, {
-      fetch: createAuthenticatedFetch(),
-    });
+
+    if (!PGRST_URL) {
+      log.warn("DBApiClient: VITE_PGRST_URL is not configured. PostgREST operations will fail.");
+    }
+  }
+
+  private ensureClient(): PostgrestClient<{ public: Schema }, {}, "public", Schema> {
+    if (!this._client) {
+      if (!PGRST_URL) {
+        throw new Error("DBApiClient: VITE_PGRST_URL environment variable is not configured.");
+      }
+      this._client = new PostgrestClient<{ public: Schema }, {}, "public", Schema>(PGRST_URL, {
+        fetch: createAuthenticatedFetch(),
+      });
+    }
+    return this._client;
   }
 
   /**
    * Access the underlying PostgrestClient for advanced operations
    */
   get client(): PostgrestClient<{ public: Schema }, {}, "public", Schema> {
-    return this._client;
+    return this.ensureClient();
   }
 
   /**
    * Get a query builder for the configured table
    */
   from() {
-    return this._client.from(this._tableName as string & keyof Schema["Tables"]);
+    return this.ensureClient().from(this._tableName as string & keyof Schema["Tables"]);
   }
 }
