@@ -6,7 +6,7 @@
 - [ ] 在 business/ 中将 computed 与类再进一步结合
 - [x] 移除 Business 或者 Business 基于 valibot
 - [x] Location.get 使用 Store 做缓存
-- [ ] TabBar 改为普通的版本，不用悬浮
+- [x] TabBar 改为普通的版本，不用悬浮
 - [ ] PRList 可以使用 scroll-view
 - [ ] uniuse (<https://uni-helper.js.org/uni-use/guide/installation>)
 - [ ] 基于对 wd-transition 原理的总结，再次尝试实现 wd-transition
