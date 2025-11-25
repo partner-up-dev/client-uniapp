@@ -24,68 +24,52 @@ function getAuthHeaders(): Record<string, string> {
 }
 
 /**
- * Creates a custom fetch that injects auth headers
- */
-function createAuthenticatedFetch(): typeof fetch {
-  return ((input: RequestInfo | URL, init?: RequestInit) => {
-    const authHeaders = getAuthHeaders();
-    const existingHeaders = init?.headers || {};
-    const mergedHeaders = {
-      ...authHeaders,
-      ...(existingHeaders instanceof Headers
-        ? Object.fromEntries(existingHeaders.entries())
-        : Array.isArray(existingHeaders)
-          ? Object.fromEntries(existingHeaders)
-          : existingHeaders),
-    };
-    return apiFetch(input as string | URL, {
-      ...init,
-      headers: mergedHeaders,
-    });
-  }) as typeof fetch;
-}
-
-/**
- * DBApiClient wrapping postgrest-js for pure CRUD operations.
+ * DBApiClient extending PostgrestClient for pure CRUD operations.
  * Uses the same credentials as the main backend API.
  *
- * @typeParam Schema - Database schema type from postgrest-js
+ * @typeParam SchemaName - The database schema name (e.g., 'public', 'communication', 'partner_request')
  */
-export class DBApiClient<Schema extends GenericSchema = GenericSchema> {
-  private _client: PostgrestClient<{ public: Schema }, {}, "public", Schema> | null = null;
+export class DBApiClient<
+  SchemaName extends string = "public"
+> extends PostgrestClient<Record<SchemaName, GenericSchema>, {}, SchemaName, GenericSchema> {
   private _tableName: string;
+  private _initialized: boolean = false;
 
-  constructor(opts: { tableName: string }) {
-    this._tableName = opts.tableName;
+  constructor(opts: { tableName: string; schema?: SchemaName }) {
+    const schemaName = opts.schema ?? ("public" as SchemaName);
 
     if (!PGRST_URL) {
       log.warn("DBApiClient: VITE_PGRST_URL is not configured. PostgREST operations will fail.");
-    }
-  }
-
-  private ensureClient(): PostgrestClient<{ public: Schema }, {}, "public", Schema> {
-    if (!this._client) {
-      if (!PGRST_URL) {
-        throw new Error("DBApiClient: VITE_PGRST_URL environment variable is not configured.");
-      }
-      this._client = new PostgrestClient<{ public: Schema }, {}, "public", Schema>(PGRST_URL, {
-        fetch: createAuthenticatedFetch(),
+      // Use empty string to allow construction, will fail on actual requests
+      super("", {
+        schema: schemaName,
+        fetch: apiFetch as typeof fetch,
       });
+    } else {
+      super(PGRST_URL, {
+        schema: schemaName,
+        headers: getAuthHeaders(),
+        fetch: apiFetch as typeof fetch,
+      });
+      this._initialized = true;
     }
-    return this._client;
+
+    this._tableName = opts.tableName;
   }
 
   /**
-   * Access the underlying PostgrestClient for advanced operations
-   */
-  get client(): PostgrestClient<{ public: Schema }, {}, "public", Schema> {
-    return this.ensureClient();
-  }
-
-  /**
-   * Get a query builder for the configured table
+   * Get a query builder for the configured table.
+   * Updates auth headers before each request.
    */
   from() {
-    return this.ensureClient().from(this._tableName as string & keyof Schema["Tables"]);
+    if (!this._initialized) {
+      throw new Error("DBApiClient: VITE_PGRST_URL environment variable is not configured.");
+    }
+    // Update headers with current auth state before each request
+    const currentHeaders = getAuthHeaders();
+    Object.entries(currentHeaders).forEach(([key, value]) => {
+      this.headers.set(key, value);
+    });
+    return super.from(this._tableName as any);
   }
 }

@@ -34,7 +34,8 @@ export class PartnerRequest extends V.class(v.object({
   })
 
   static dbClient = new DBApiClient({
-    tableName: 'partner_request',
+    tableName: 'base',
+    schema: 'partner_request',
   })
 
   static getL1Type(type: PRType): PRL1Type {

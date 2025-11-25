@@ -57,7 +57,8 @@ export class PartnerApplication extends V.class(v.object({
   });
 
   static dbClient = new DBApiClient({
-    tableName: 'partner_application',
+    tableName: 'application',
+    schema: 'partner_request',
   });
 
   static async get_mine(pr_id?: PRRef): Promise<PartnerApplication[]> {

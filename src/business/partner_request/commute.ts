@@ -32,7 +32,8 @@ export class CommutePR extends PartnerRequest.extend(v.object({
   });
 
   static dbClient = new DBApiClient({
-    tableName: 'commute_pr',
+    tableName: 'commute',
+    schema: 'partner_request',
   });
 
   get typeText() {

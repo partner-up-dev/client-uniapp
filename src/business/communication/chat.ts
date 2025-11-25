@@ -42,6 +42,7 @@ export class Chat extends V.class(v.object({
 
   static dbClient = new DBApiClient({
     tableName: 'chat',
+    schema: 'communication',
   });
 
   static async get(chatId: ChatRef): Promise<Chat> {
