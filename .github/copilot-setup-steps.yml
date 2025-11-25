@@ -1,10 +1,5 @@
-name: Setup Partner Up Uniapp Development Environment
-
-on:
-  workflow_dispatch:
-
 jobs:
-  setup:
+  copilot-setup-steps:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,21 +26,3 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Run tests
-        run: pnpm run test:mp-weixin
-
-      - name: Verify setup
-        run: |
-          echo "Node.js version: $(node --version)"
-          echo "pnpm version: $(pnpm --version)"
-          echo "Dependencies installed successfully"
-          echo "Tests passed successfully"
-          echo "Environment is ready for development"
-          echo ""
-          echo "Available commands:"
-          echo "  pnpm test:mp-weixin    - Run tests for WeChat platform"
-          echo "  pnpm test:h5           - Run tests for H5 platform"
-          echo "  pnpm type-check        - Run TypeScript type checking"
-          echo "  pnpm build:mp-weixin   - Build for WeChat Mini Program production"
-          echo "  pnpm build:mp-alipay   - Build for Alipay Mini Program production"

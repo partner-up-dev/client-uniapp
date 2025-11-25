@@ -24,6 +24,7 @@ dist
 .vscode/mcp.json
 
 pnpm-lock.yaml
+package-lock.json
 
 **/*.png
 **/*.jpg
