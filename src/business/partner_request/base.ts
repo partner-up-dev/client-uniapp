@@ -1,5 +1,6 @@
 import { Partner } from "./partner";
 import { APIClient } from "../api";
+import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { computed, ref, watch } from "vue";
 import { instance, V, nullable, limit_string } from "../index";
@@ -26,10 +27,14 @@ export class PartnerRequest extends V.class(v.object({
   static INTRODUCTION_MAXLENGTH = 60;
   static TITLE_MAXLENGTH = 16;
 
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: '/partner_request',
     dt: useTranslate('partner_request').dt,
     fallbackSchema: PartnerRequest,
+  })
+
+  static dbClient = new DBApiClient({
+    tableName: 'partner_request',
   })
 
   static getL1Type(type: PRType): PRL1Type {
@@ -37,7 +42,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static getPartners(pr_id: PRRef): Promise<Partner[]> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: "GET",
       endpoint: `/${pr_id}/partners`,
       schema: v.array(instance(Partner)),
@@ -72,7 +77,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static get(pr_id: PRRef): Promise<PartnerRequest> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/${pr_id}`,
       operation_id: 'PartnerRequestV2Get',
@@ -112,7 +117,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   get typeText() {
-    return PartnerRequest.api.dt(`type.${this.type}`)
+    return PartnerRequest.mainClient.dt(`type.${this.type}`)
   }
 
   static useDraftPRs() {
@@ -128,7 +133,7 @@ export class PartnerRequest extends V.class(v.object({
 
     const refresh = () => {
       loading.value = true;
-      return this.api.requestHTTP({
+      return this.mainClient.requestHTTP({
         method: 'GET',
         endpoint: '/list/draft',
         schema: v.array(PRRefV),
@@ -144,7 +149,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static publish(pr_id: PRRef): Promise<void> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'PUT',
       endpoint: `/${pr_id}/publish`,
       operation_id: 'PartnerRequestV2Publish',

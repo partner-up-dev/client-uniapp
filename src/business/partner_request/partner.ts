@@ -2,6 +2,7 @@ import { useTranslate } from "@/locale/use";
 import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
 import { APIClient } from "../api";
+import { DBApiClient } from "../db-api";
 import { V, nullable, instance } from "../index";
 import * as v from 'valibot';
 import { computed, ref, watch } from "vue";
@@ -17,10 +18,14 @@ export class PartnerRole extends V.class(v.object({
   name: v.string(),
   rule: v.string(),
 })) {
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: '/partner_request/partner_role',
     dt: useTranslate('partner_request.partner_role').dt,
     fallbackSchema: PartnerRole,
+  })
+
+  static dbClient = new DBApiClient({
+    tableName: 'partner_role',
   })
 
   static partnerRoleStore = usePartnerStore(store)
@@ -31,7 +36,7 @@ export class PartnerRole extends V.class(v.object({
       return cachedRole;
     }
 
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: "GET",
       endpoint: `/${id}`,
     }).then(({ body }) => {
@@ -78,7 +83,7 @@ export class PartnerRole extends V.class(v.object({
     const availableRoles = computed((): PartnerRole[] => {
       if (!_availableRoles.value.length && !loading.value) {
         loading.value = true;
-        this.api.requestHTTP({
+        this.mainClient.requestHTTP({
           method: "GET",
           endpoint: "",
           data: {

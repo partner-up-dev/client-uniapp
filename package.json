@@ -25,6 +25,7 @@
     "@dcloudio/uni-mp-xhs": "3.0.0-4070620250821001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-4070620250821001",
     "@iconify-json/mdi": "^1.2.3",
+    "@supabase/postgrest-js": "^2.84.0",
     "@uni-helper/uni-network": "^0.22.0",
     "@unocss/preset-icons": "^66.5.1",
     "cross-env": "^10.0.0",

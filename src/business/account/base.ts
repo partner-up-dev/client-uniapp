@@ -4,6 +4,7 @@ import { V, nullable } from "..";
 import * as v from "valibot";
 import { hideLoading, showLoading, errorReport } from "@/utils/vendor";
 import { APIClient } from "../api";
+import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { Chat } from "../communication/chat";
 import { useChatStore } from "@/store/communication/chat";
@@ -55,7 +56,7 @@ export class AccountBaseProfile extends V.class(v.object({
         return Promise.reject();
       }
     }
-    return Account.api.requestHTTP({
+    return Account.mainClient.requestHTTP({
       method: "GET",
       endpoint: `/profile/base/${accountId}`,
       schema: AccountBaseProfile,
@@ -63,7 +64,7 @@ export class AccountBaseProfile extends V.class(v.object({
   }
 
   public put(): Promise<void> {
-    return Account.api.requestHTTP({
+    return Account.mainClient.requestHTTP({
       method: "PUT",
       endpoint: `/profile/base/${this.id}`,
       data: this
@@ -74,9 +75,13 @@ export class AccountBaseProfile extends V.class(v.object({
 
 export class Account {
 
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: "/account",
     dt: useTranslate("account").dt,
+  });
+
+  static dbClient = new DBApiClient({
+    tableName: 'account',
   });
 
   static login(show_loading: boolean): Promise<AccountBaseProfile> {
@@ -97,7 +102,7 @@ export class Account {
       uni.login({
         provider: "weixin",
         success(res) {
-          that.api.requestHTTP({
+          that.mainClient.requestHTTP({
             method: "POST",
             endpoint: "/wxmp/wxmp_mp/login",
             data: {

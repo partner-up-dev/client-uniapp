@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { V, nullable, instance } from "../index";
 import { APIClient } from "../api";
+import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { AccountRefV } from "../account";
 import { Message } from "./message";
@@ -33,14 +34,18 @@ export class Chat extends V.class(v.object({
 })) {
 
   // API client for Chat-related endpoints
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: '/chat',
     dt: useTranslate('chat').dt,
     fallbackSchema: Chat,
   });
 
+  static dbClient = new DBApiClient({
+    tableName: 'chat',
+  });
+
   static async get(chatId: ChatRef): Promise<Chat> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/${chatId}`,
       operation_id: 'ChatV2Get',
@@ -48,7 +53,7 @@ export class Chat extends V.class(v.object({
   }
 
   static async get_mine(): Promise<Chat[]> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/mine`,
       operation_id: 'ChatV2GetMine',
@@ -73,7 +78,7 @@ export class Chat extends V.class(v.object({
     offset: number = 6,
     desc: boolean = true
   ): Promise<Message[]> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/${chatId}/messages`,
       data: {
@@ -90,7 +95,7 @@ export class Chat extends V.class(v.object({
    * Get PartnerRequest of this Chat
    */
   public getPartnerRequest(): Promise<PartnerRequest> {
-    return Chat.api.requestHTTP({
+    return Chat.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/${this._id}/partner_request`,
       operation_id: 'ChatV2GetPR',
@@ -102,7 +107,7 @@ export class Chat extends V.class(v.object({
    * Get DM Chat
    */
   static getDMWith(accountId: string): Promise<Chat> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'PUT',
       endpoint: `/direct_message/${accountId}`,
       operation_id: 'ChatV2PutDM',

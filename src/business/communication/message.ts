@@ -4,6 +4,7 @@ import { useAccountStore } from "@/store/account";
 import store from "@/store";
 import { AccountRefV } from "../account";
 import { APIClient } from "../api";
+import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { DatetimeV } from "../base";
 import { ChatRefV } from ".";
@@ -50,14 +51,18 @@ export class Message extends V.class(v.object({
   }
 
   // API client for Message-related endpoints
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: '/chat',
     dt: useTranslate('chat.message').dt,
     fallbackSchema: Message,
   });
 
+  static dbClient = new DBApiClient({
+    tableName: 'message',
+  });
+
   static async get(id: MessageRef): Promise<Message> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'GET',
       endpoint: `/messages/${id}`,
     }).then(res => res.body.parsed);
@@ -70,7 +75,7 @@ export class Message extends V.class(v.object({
    * @returns The created Message instance
    */
   static async send(chatId: number, content: string): Promise<Message> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: 'POST',
       endpoint: `/message/plain?to_chat=${chatId}`,
       data: content,

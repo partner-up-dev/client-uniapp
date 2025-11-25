@@ -5,6 +5,7 @@ import { AccountRefV } from '../account';
 import { ChatRefV } from '../communication';
 import { PartnerRoleRefV } from './partner';
 import { APIClient } from '../api';
+import { DBApiClient } from '../db-api';
 import { useTranslate } from '@/locale/use';
 import { DatetimeV } from '../base';
 
@@ -49,14 +50,18 @@ export class PartnerApplication extends V.class(v.object({
   sub_applications: SubApplicationsV,
 })) {
 
-  static api = new APIClient<typeof PartnerApplication>({
+  static mainClient = new APIClient<typeof PartnerApplication>({
     modulePrefix: '/partner_request/application',
     dt: useTranslate('partner_request.application').dt,
     fallbackSchema: PartnerApplication,
   });
 
+  static dbClient = new DBApiClient({
+    tableName: 'partner_application',
+  });
+
   static async get_mine(pr_id?: PRRef): Promise<PartnerApplication[]> {
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: "GET",
       endpoint: '/mine',
       data: { pr_id },
@@ -73,13 +78,13 @@ export class PartnerApplicationForm extends V.formClass(v.object({
   sub_applications: SubApplicationsV,
 })) {
 
-  static api = new APIClient({
+  static mainClient = new APIClient({
     modulePrefix: "/partner_request/application",
     fallbackSchema: PartnerApplication,
   });
 
   async submit(): Promise<PartnerApplication> {
-    return PartnerApplicationForm.api.requestHTTP({
+    return PartnerApplicationForm.mainClient.requestHTTP({
       method: "POST",
       endpoint: `/?partner_request_id=${this.partner_request}`,
       operation_id: "PRV2Apply",

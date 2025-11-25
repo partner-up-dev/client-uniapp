@@ -9,6 +9,7 @@ import { useTranslate } from "@/locale/use";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
 import { APIClient } from "@/business/api";
+import { DBApiClient } from "@/business/db-api";
 import dayjs from "dayjs";
 import { DatetimeV } from ".";
 
@@ -24,10 +25,14 @@ export class Location extends V.class(v.object({
   lng: v.number(),
   _id: LocationRefV,
 })) {
-  static api = new APIClient<typeof Location>({
+  static mainClient = new APIClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
+  });
+
+  static dbClient = new DBApiClient({
+    tableName: 'location',
   });
 
   static async getById(id: LocationRef): Promise<Location> {
@@ -38,7 +43,7 @@ export class Location extends V.class(v.object({
     }
 
     // 没有缓存，通过 API 获取
-    return this.api.requestHTTP({
+    return this.mainClient.requestHTTP({
       method: "GET",
       endpoint: `/${id}`,
     }).then(({ body }) => {
@@ -81,7 +86,7 @@ export class LocationForm extends V.formClass(v.object({
   _id: v.optional(LocationRefV, undefined),
 })) {
   public async put(): Promise<Location> {
-    return Location.api.requestHTTP({
+    return Location.mainClient.requestHTTP({
       method: "PUT",
       endpoint: '',
       data: this,
