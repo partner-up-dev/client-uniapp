@@ -105,6 +105,7 @@ export class RouteItemDatetime extends V.class(v.object({
     if (this.datetime) {
       return dayjs(this.datetime).format('YYYY.MM.DD');
     }
+    return undefined;
   }
 
   get timeRange(): { start?: string; end?: string } {

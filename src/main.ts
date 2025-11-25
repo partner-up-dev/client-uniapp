@@ -1,8 +1,8 @@
+import { createUnistorage } from "pinia-plugin-unistorage";
 import { createSSRApp } from "vue";
-import App from "./App.vue";
 import i18n from '@/locale'
 import store from '@/store';
-import { createUnistorage } from "pinia-plugin-unistorage";
+import App from "./App.vue";
 import 'weapp-cookie';
 import 'uno.css';
 
