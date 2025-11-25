@@ -45,11 +45,14 @@ export class Chat extends V.class(v.object({
   });
 
   static async get(chatId: ChatRef): Promise<Chat> {
-    return this.mainClient.requestHTTP({
-      method: 'GET',
-      endpoint: `/${chatId}`,
-      operation_id: 'ChatV2Get',
-    }).then(res => res.body.parsed);
+    return this.dbClient.from()
+      .select('*')
+      .eq('_id', chatId)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return Chat.parse(data);
+      });
   }
 
   static async get_mine(): Promise<Chat[]> {

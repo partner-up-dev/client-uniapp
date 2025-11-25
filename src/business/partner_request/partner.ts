@@ -36,14 +36,16 @@ export class PartnerRole extends V.class(v.object({
       return cachedRole;
     }
 
-    return this.mainClient.requestHTTP({
-      method: "GET",
-      endpoint: `/${id}`,
-    }).then(({ body }) => {
-      const role = body.parsed;
-      this.partnerRoleStore.upsert(role);
-      return role;
-    });
+    return this.dbClient.from()
+      .select('*')
+      .eq('id', id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        const role = PartnerRole.parse(data);
+        this.partnerRoleStore.upsert(role);
+        return role;
+      });
   }
 
   static use(id?: PartnerRoleRef, role?: PartnerRole) {

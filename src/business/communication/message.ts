@@ -62,10 +62,14 @@ export class Message extends V.class(v.object({
   });
 
   static async get(id: MessageRef): Promise<Message> {
-    return this.mainClient.requestHTTP({
-      method: 'GET',
-      endpoint: `/messages/${id}`,
-    }).then(res => res.body.parsed);
+    return this.dbClient.from()
+      .select('*')
+      .eq('_id', id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return Message.parse(data);
+      });
   }
 
   /**

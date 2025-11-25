@@ -77,11 +77,14 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static get(pr_id: PRRef): Promise<PartnerRequest> {
-    return this.mainClient.requestHTTP({
-      method: 'GET',
-      endpoint: `/${pr_id}`,
-      operation_id: 'PartnerRequestV2Get',
-    }).then(res => res.body.parsed);
+    return this.dbClient.from()
+      .select('*')
+      .eq('_id', pr_id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return PartnerRequest.parse(data);
+      });
   }
 
   static use(prId?: PRRef, partnerRequest?: PartnerRequest) {

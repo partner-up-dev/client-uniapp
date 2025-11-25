@@ -42,15 +42,17 @@ export class Location extends V.class(v.object({
       return cachedLocation;
     }
 
-    // 没有缓存，通过 API 获取
-    return this.mainClient.requestHTTP({
-      method: "GET",
-      endpoint: `/${id}`,
-    }).then(({ body }) => {
-      const location = body.parsed;
-      locationStore.upsert(location);
-      return location;
-    })
+    // 没有缓存，通过 PostgREST 获取
+    return this.dbClient.from()
+      .select('*')
+      .eq('_id', id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        const location = Location.parse(data);
+        locationStore.upsert(location);
+        return location;
+      });
   }
 
   static use(id?: LocationRef) {
