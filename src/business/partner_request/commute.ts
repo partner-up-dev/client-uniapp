@@ -1,4 +1,4 @@
-import { APIClient } from '../api';
+import { HTTPApiClient } from '../http-api';
 import { useTranslate } from '@/locale/use';
 import { instance } from '..';
 import * as v from 'valibot';
@@ -24,7 +24,7 @@ export class CommutePR extends PartnerRequest.extend(v.object({
   ride_hailing_orders: v.array(v.number()), // TODO reuse RideHailingOrderRefV
 })) {
 
-  static api = new APIClient({
+  static api = new HTTPApiClient({
     modulePrefix: '/partner_request/commute',
     dt: useTranslate('partner_request').dt,
     fallbackSchema: CommutePR,
@@ -61,7 +61,7 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
 })) {
 
   public async update(): Promise<CommutePR> {
-    return CommutePR.api.requestHTTP({
+    return CommutePR.api.request({
       method: 'PUT',
       endpoint: `/${this._id}`,
       data: this,
@@ -70,7 +70,7 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
   }
 
   public async create(): Promise<CommutePR> {
-    return CommutePR.api.requestHTTP({
+    return CommutePR.api.request({
       method: 'POST',
       endpoint: '',
       data: this,

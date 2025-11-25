@@ -8,7 +8,7 @@ import { errorReport } from "@/utils/vendor";
 import { useTranslate } from "@/locale/use";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
-import { APIClient } from "@/business/api";
+import { HTTPApiClient } from "@/business/http-api";
 import dayjs from "dayjs";
 import { DatetimeV } from ".";
 
@@ -24,7 +24,7 @@ export class Location extends V.class(v.object({
   lng: v.number(),
   _id: LocationRefV,
 })) {
-  static api = new APIClient<typeof Location>({
+  static api = new HTTPApiClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
@@ -38,7 +38,7 @@ export class Location extends V.class(v.object({
     }
 
     // 没有缓存，通过 API 获取
-    return this.api.requestHTTP({
+    return this.api.request({
       method: "GET",
       endpoint: `/${id}`,
     }).then(({ body }) => {
@@ -81,7 +81,7 @@ export class LocationForm extends V.formClass(v.object({
   _id: v.optional(LocationRefV, undefined),
 })) {
   public async put(): Promise<Location> {
-    return Location.api.requestHTTP({
+    return Location.api.request({
       method: "PUT",
       endpoint: '',
       data: this,

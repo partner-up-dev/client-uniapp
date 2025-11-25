@@ -1,7 +1,7 @@
 import { useTranslate } from "@/locale/use";
 import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
-import { APIClient } from "../api";
+import { HTTPApiClient } from "../http-api";
 import { V, nullable, instance } from "../index";
 import * as v from 'valibot';
 import { computed, ref, watch } from "vue";
@@ -17,7 +17,7 @@ export class PartnerRole extends V.class(v.object({
   name: v.string(),
   rule: v.string(),
 })) {
-  static api = new APIClient({
+  static api = new HTTPApiClient({
     modulePrefix: '/partner_request/partner_role',
     dt: useTranslate('partner_request.partner_role').dt,
     fallbackSchema: PartnerRole,
@@ -31,7 +31,7 @@ export class PartnerRole extends V.class(v.object({
       return cachedRole;
     }
 
-    return this.api.requestHTTP({
+    return this.api.request({
       method: "GET",
       endpoint: `/${id}`,
     }).then(({ body }) => {
@@ -78,7 +78,7 @@ export class PartnerRole extends V.class(v.object({
     const availableRoles = computed((): PartnerRole[] => {
       if (!_availableRoles.value.length && !loading.value) {
         loading.value = true;
-        this.api.requestHTTP({
+        this.api.request({
           method: "GET",
           endpoint: "",
           data: {
