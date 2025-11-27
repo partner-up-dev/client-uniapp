@@ -13,7 +13,7 @@ import {
   type OptionMode,
 } from "./PRTypePicker";
 import Card from "@/components/common/card/card.vue";
-import PUScrollView from "@/components/common/PUScrollView/PUScrollView.vue";
+import { PUScrollView } from "@partner-up-dev/design/uniapp";
 import { computed } from "vue";
 import { PRL1Type, PRL1Type2PRType, PRType } from "@/business/partner_request";
 import { useTranslate } from "@/locale/use";

@@ -14,9 +14,7 @@ import {
   type RideHailingFormExpose,
 } from "./PRRideHailingForm";
 import { ref } from "vue";
-import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
-import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
-import PUFormItem from "@/components/common/PUFormItem/PUFormItem.vue";
+import { PUAccordion, PUAccordionItem, PUFormItem } from "@partner-up-dev/design/uniapp";
 import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 

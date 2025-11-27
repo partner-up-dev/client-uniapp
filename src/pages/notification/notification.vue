@@ -31,7 +31,7 @@ const MY_PAGE_ID = TABBAR_PAGE_ID.NOTIFICATION;
 
 <script setup lang="ts">
 import { ref, computed, onMounted, getCurrentInstance } from "vue";
-import PUTabs from "@/components/common/PUTabs/PUTabs.vue";
+import { PUTabs } from "@partner-up-dev/design/uniapp";
 import safeAreaInset from "@/components/common/safeAreaInset.vue";
 import { getWindowInfo, getElementRect, getSafeArea } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";

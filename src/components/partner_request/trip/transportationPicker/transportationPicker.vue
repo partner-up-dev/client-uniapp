@@ -19,7 +19,7 @@ import {
 } from "./transportationPicker";
 import type { Transportation } from "@/business/partner_request/trip";
 import { useTranslate } from "@/locale/use";
-import PUScrollView from "@/components/common/PUScrollView/PUScrollView.vue";
+import { PUScrollView } from "@partner-up-dev/design/uniapp";
 
 const { dt } = useTranslate("base.transportation_picker");
 const props = defineProps(transportationPickerProps);

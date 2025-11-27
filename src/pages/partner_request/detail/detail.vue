@@ -212,8 +212,7 @@ import ChatContent from "@/components/communication/ChatContent/ChatContent.vue"
 import SafeArea from "@/components/common/safeArea/safeArea.vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import pageBack from "@/components/common/pageBack/pageBack.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
-import PUTag from "@/components/common/PUTag/PUTag.vue";
+import { PUButton, PUTag } from "@partner-up-dev/design/uniapp";
 
 import Partner from "@/components/partner_request/Partner/Partner.vue";
 import PRApplyForm from "@/components/partner_request/PRApplyForm/PRApplyForm.vue";

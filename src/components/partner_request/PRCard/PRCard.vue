@@ -85,7 +85,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design/uniapp";
 import Partners from "@/components/partner_request/partners/partners.vue";
 import {
   prCardProps,

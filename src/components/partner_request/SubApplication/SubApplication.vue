@@ -72,9 +72,7 @@ import { BasicComponentOptions } from "@/utils/vue";
 import { subApplicationProps, subApplicationEmits } from "./SubApplication";
 import { useTranslate } from "@/locale/use";
 import { PartnerRole } from "@/business/partner_request/partner";
-import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import { PUTextarea, PUButton, PUDrawer } from "@partner-up-dev/design/uniapp";
 
 const props = defineProps(subApplicationProps);
 const emit = defineEmits(subApplicationEmits);

@@ -18,7 +18,7 @@ import { useTranslate } from "@/locale/use";
 import { AccountBaseProfile } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design/uniapp";
 import dayjs from "dayjs";
 import { DEFAULT_ACCOUNT_WALLPAPER } from "@/data/const";
 import * as v from "valibot";

@@ -114,7 +114,7 @@ export default {
 <script setup lang="ts">
 import { ref } from "vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design/uniapp";
 import PRCard from "@/components/partner_request/PRCard/PRCard.vue";
 import { PRType, PRStatus } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";
