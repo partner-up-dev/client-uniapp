@@ -11,7 +11,7 @@ import {
   domain_t,
 } from "./PRMetadataForm";
 import Cell from "@/components/common/cell/cell.vue";
-import { PUInput, PUTextarea } from "@partner-up-dev/design/uniapp";
+import { PUInput, PUTextarea } from "@partner-up-dev/design-uniapp";
 import { PartnerRequest } from "@/business/partner_request/base";
 
 const props = defineProps(prMetadataFormProps);

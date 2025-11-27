@@ -43,7 +43,7 @@ import {
   partnerPickerEmits,
   getAvailablePartnerRoles,
 } from "./partnerPicker";
-import { PUDrawer, PUButton } from "@partner-up-dev/design/uniapp";
+import { PUDrawer, PUButton } from "@partner-up-dev/design-uniapp";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
 import {
   PartnerRole,

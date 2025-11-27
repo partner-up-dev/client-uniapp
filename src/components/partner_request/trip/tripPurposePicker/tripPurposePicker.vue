@@ -14,7 +14,7 @@ import {
   TRIP_PURPOSES,
 } from "./tripPurposePicker";
 import { useTranslate } from "@/locale/use";
-import { PUScrollView } from "@partner-up-dev/design/uniapp";
+import { PUScrollView } from "@partner-up-dev/design-uniapp";
 import type { TripPurpose } from "@/business/partner_request/trip";
 
 const { dt: domain_t } = useTranslate("base.trip_purpose_picker");

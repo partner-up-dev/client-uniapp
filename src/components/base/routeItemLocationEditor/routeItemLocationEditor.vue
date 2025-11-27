@@ -20,7 +20,7 @@ import {
   FRIENDLY_ADDRESS_MAX_LENGTH,
 } from "./routeItemLocationEditor";
 import Cell from "@/components/common/cell/cell.vue";
-import { PUInput, PUButton } from "@partner-up-dev/design/uniapp";
+import { PUInput, PUButton } from "@partner-up-dev/design-uniapp";
 
 const props = defineProps(routeItemLocationEditorProps);
 const emit = defineEmits(routeItemLocationEditorEmits);

@@ -18,7 +18,7 @@ import {
 } from "./routeItemDatetimeEditor";
 import { RouteItemDatetime } from "@/business/base/route";
 import Cell from "@/components/common/cell/cell.vue";
-import { PUButton, PUPicker } from "@partner-up-dev/design/uniapp";
+import { PUButton, PUPicker } from "@partner-up-dev/design-uniapp";
 import { useTranslate } from "@/locale/use";
 import dayjs from "dayjs";
 

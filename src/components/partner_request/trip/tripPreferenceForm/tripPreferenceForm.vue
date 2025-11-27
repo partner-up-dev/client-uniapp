@@ -17,7 +17,7 @@ import {
   tripPreferenceFormEmits,
 } from "./tripPreferenceForm";
 import Cell from "@/components/common/cell/cell.vue";
-import { PUInput, PUDrawer } from "@partner-up-dev/design/uniapp";
+import { PUInput, PUDrawer } from "@partner-up-dev/design-uniapp";
 import TripPurposePicker from "@/components/partner_request/trip/tripPurposePicker/tripPurposePicker.vue";
 
 const props = defineProps(tripPreferenceFormProps);

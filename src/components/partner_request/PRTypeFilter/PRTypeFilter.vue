@@ -34,7 +34,7 @@ export default {
 import { computed } from "vue";
 import { prTypeFilterProps, prTypeFilterEmits, ALL_PR_TYPES } from "./PRTypeFilter";
 import { PRType } from "@/business/partner_request";
-import { PUCheckbox, PUCheckboxGroup } from "@partner-up-dev/design/uniapp";
+import { PUCheckbox, PUCheckboxGroup } from "@partner-up-dev/design-uniapp";
 import { formatPRType as format } from "@/components/partner_request/PRCard/PRCard";
 
 const props = defineProps(prTypeFilterProps);

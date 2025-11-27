@@ -8,7 +8,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { prTypeProps, prTypeEmits } from "./PRType";
-import { PUTag } from "@partner-up-dev/design/uniapp";
+import { PUTag } from "@partner-up-dev/design-uniapp";
 
 const props = defineProps(prTypeProps);
 const emit = defineEmits(prTypeEmits);
