@@ -49,6 +49,7 @@ import type { GeoElementWithIndex } from "@partner-up-dev/design/uniapp";
 import GeoElementPreview from "@/components/common/GeoElement/GeoElement.vue";
 import { type GeoElement } from "@/components/common/GeoElement/GeoElement";
 import { type Coord } from "@/business/base/route";
+import { mockElements } from "./PRGeoElementFilter";
 import { makeStringProp } from "@/utils/props";
 import { useTranslate } from "@/locale/use";
 
