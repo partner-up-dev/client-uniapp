@@ -1,5 +1,5 @@
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
-import { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
+import type { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
 import { PostgrestHeaders } from './PostgrestHeaders';
 import { PostgrestURL } from './PostgrestURL';
 

@@ -1,5 +1,5 @@
 import { PostgrestTransformBuilder } from './PostgrestTransformBuilder';
-import { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
+import type { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
 import { PostgrestHeaders } from './PostgrestHeaders';
 
 // RegExp for PostgREST reserved characters

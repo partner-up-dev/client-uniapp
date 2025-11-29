@@ -2,7 +2,7 @@ import { PostgrestQueryBuilder } from './PostgrestQueryBuilder';
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
 import { PostgrestHeaders } from './PostgrestHeaders';
 import { PostgrestURL } from './PostgrestURL';
-import { PostgrestFetch } from './PostgrestBuilder';
+import type { PostgrestFetch } from './PostgrestBuilder';
 
 /**
  * PostgREST client
