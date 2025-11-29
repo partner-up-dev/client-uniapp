@@ -80,7 +80,7 @@ export class Message extends V.class(v.object({
    * @returns The created Message instance
    */
   static async send(chatId: number, content: string): Promise<Message> {
-    return this.api.requestHTTP({
+    return this.mainClient.request({
       method: 'POST',
       endpoint: `/message/plain?to_chat=${chatId}`,
       data: content,
