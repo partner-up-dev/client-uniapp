@@ -1,3 +1,7 @@
+# common
+*.local
+
+
 # Logs
 logs
 *.log
@@ -6,11 +10,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-.DS_Store
-dist
-*.local
 
 # Editor directories and files
 .idea
@@ -23,18 +22,25 @@ dist
 .VSCodeCounter/*
 .vscode/mcp.json
 
+# Package
 pnpm-lock.yaml
 package-lock.json
+pnpm-workspace.yaml
+node_modules
+.DS_Store
+dist
 
 **/*.png
 **/*.jpg
 **/*.svg
 
+# Environment variables
 .env.local
 .env.development
 .env.staging
 .env.production
 
+# Others
 *.key
 
 tests/__screenshots__/*
