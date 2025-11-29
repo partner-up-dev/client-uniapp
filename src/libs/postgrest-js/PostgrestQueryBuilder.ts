@@ -1,6 +1,7 @@
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
 import { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
 import { PostgrestHeaders } from './PostgrestHeaders';
+import { PostgrestURL } from './PostgrestURL';
 
 /**
  * Query builder for PostgREST queries
@@ -8,13 +9,13 @@ import { PostgrestHeaders } from './PostgrestHeaders';
  * Miniprogram-compatible implementation
  */
 export class PostgrestQueryBuilder<Result = unknown> {
-  protected url: URL;
+  protected url: PostgrestURL;
   protected headers: PostgrestHeaders;
   protected schema?: string;
   protected fetch?: PostgrestFetch;
 
   constructor(
-    url: URL,
+    url: PostgrestURL,
     {
       headers = {},
       schema,

@@ -1,5 +1,6 @@
 import { PostgrestHeaders } from './PostgrestHeaders';
 import { PostgrestError } from './PostgrestError';
+import { PostgrestURL } from './PostgrestURL';
 
 /**
  * PostgREST response type
@@ -43,7 +44,7 @@ export type PostgrestFetch = (url: string, init?: {
  */
 export interface PostgrestBuilderConfig {
   method: 'GET' | 'HEAD' | 'POST' | 'PATCH' | 'DELETE';
-  url: URL;
+  url: PostgrestURL;
   headers: PostgrestHeaders;
   schema?: string;
   body?: unknown;
@@ -60,7 +61,7 @@ export interface PostgrestBuilderConfig {
  */
 export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<Result>> {
   protected method: 'GET' | 'HEAD' | 'POST' | 'PATCH' | 'DELETE';
-  protected url: URL;
+  protected url: PostgrestURL;
   protected headers: PostgrestHeaders;
   protected schema?: string;
   protected body?: unknown;

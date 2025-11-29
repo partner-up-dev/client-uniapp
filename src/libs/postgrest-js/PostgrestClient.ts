@@ -1,6 +1,7 @@
 import { PostgrestQueryBuilder } from './PostgrestQueryBuilder';
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
 import { PostgrestHeaders } from './PostgrestHeaders';
+import { PostgrestURL } from './PostgrestURL';
 import { PostgrestFetch } from './PostgrestBuilder';
 
 /**
@@ -50,7 +51,7 @@ export class PostgrestClient {
     if (!relation || typeof relation !== 'string' || relation.trim() === '') {
       throw new Error('Invalid relation name: relation must be a non-empty string.');
     }
-    const url = new URL(`${this.url}/${relation}`);
+    const url = new PostgrestURL(`${this.url}/${relation}`);
     return new PostgrestQueryBuilder<T>(url, {
       headers: this.headers,
       schema: this.schemaName,
@@ -94,7 +95,7 @@ export class PostgrestClient {
     } = {}
   ): PostgrestFilterBuilder<unknown> {
     let method: 'GET' | 'HEAD' | 'POST';
-    const url = new URL(`${this.url}/rpc/${fn}`);
+    const url = new PostgrestURL(`${this.url}/rpc/${fn}`);
     let body: Record<string, unknown> | undefined;
 
     if (head || get) {
