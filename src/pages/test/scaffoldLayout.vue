@@ -91,10 +91,10 @@ function onMore() {
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/main.scss" as *;
+
 
 .section {
-  margin-bottom: $pu-spacing-xl;
+  margin-bottom: $pu-spacing-lg;
   border: 1px solid $pu-color-outline;
   border-radius: $pu-radius-med;
   overflow: hidden;

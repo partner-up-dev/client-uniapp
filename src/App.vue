@@ -19,7 +19,7 @@ body::-webkit-scrollbar {
 </style>
 
 <style lang="scss">
-@use "@/styles/main.scss" as *;
+
 
 .page-bg {
   position: fixed;

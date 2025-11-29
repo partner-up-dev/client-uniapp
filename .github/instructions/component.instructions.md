@@ -74,7 +74,8 @@ export function helperFunction() {
 ### compName.scss
 
 ```scss
-@use "@/styles/main.scss" as *;
+// Design tokens are auto-injected via Vite config, no import needed
+// Use $pu-* variables and pu-font, pu-elevation mixins directly
 
 // remember to use design tokens
 // component styles here, see .github/instructions/style.instructions.md for details
