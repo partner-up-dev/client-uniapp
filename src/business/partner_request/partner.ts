@@ -2,6 +2,7 @@ import { useTranslate } from "@/locale/use";
 import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
 import { HTTPApiClient } from "../http-api";
+import { DBApiClient } from "../db-api";
 import { V, nullable, instance } from "../index";
 import * as v from 'valibot';
 import { computed, ref, watch } from "vue";
@@ -17,10 +18,15 @@ export class PartnerRole extends V.class(v.object({
   name: v.string(),
   rule: v.string(),
 })) {
-  static api = new HTTPApiClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/partner_role',
     dt: useTranslate('partner_request.partner_role').dt,
     fallbackSchema: PartnerRole,
+  })
+
+  static dbClient = new DBApiClient({
+    tableName: 'partner_role',
+    schema: 'partner_request',
   })
 
   static partnerRoleStore = usePartnerStore(store)
@@ -31,14 +37,16 @@ export class PartnerRole extends V.class(v.object({
       return cachedRole;
     }
 
-    return this.api.request({
-      method: "GET",
-      endpoint: `/${id}`,
-    }).then(({ body }) => {
-      const role = body.parsed;
-      this.partnerRoleStore.upsert(role);
-      return role;
-    });
+    return this.dbClient.from()
+      .select('*')
+      .eq('id', id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        const role = PartnerRole.parse(data);
+        this.partnerRoleStore.upsert(role);
+        return role;
+      });
   }
 
   static use(id?: PartnerRoleRef, role?: PartnerRole) {
@@ -78,7 +86,7 @@ export class PartnerRole extends V.class(v.object({
     const availableRoles = computed((): PartnerRole[] => {
       if (!_availableRoles.value.length && !loading.value) {
         loading.value = true;
-        this.api.request({
+        this.mainClient.request({
           method: "GET",
           endpoint: "",
           data: {

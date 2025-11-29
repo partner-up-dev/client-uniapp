@@ -1,4 +1,5 @@
 import { HTTPApiClient } from '../http-api';
+import { DBApiClient } from '../db-api';
 import { useTranslate } from '@/locale/use';
 import { instance } from '..';
 import * as v from 'valibot';
@@ -24,14 +25,19 @@ export class CommutePR extends PartnerRequest.extend(v.object({
   ride_hailing_orders: v.array(v.number()), // TODO reuse RideHailingOrderRefV
 })) {
 
-  static api = new HTTPApiClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/commute',
     dt: useTranslate('partner_request').dt,
     fallbackSchema: CommutePR,
   });
 
+  static dbClient = new DBApiClient({
+    tableName: 'commute',
+    schema: 'partner_request',
+  });
+
   get typeText() {
-    return CommutePR.api.dt(`type.${this.type}`);
+    return CommutePR.mainClient.dt(`type.${this.type}`);
   }
 }
 
@@ -61,7 +67,7 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
 })) {
 
   public async update(): Promise<CommutePR> {
-    return CommutePR.api.request({
+    return CommutePR.mainClient.request({
       method: 'PUT',
       endpoint: `/${this._id}`,
       data: this,
@@ -70,7 +76,7 @@ export class CommutePRForm extends PartnerRequestForm.extend(v.object({
   }
 
   public async create(): Promise<CommutePR> {
-    return CommutePR.api.request({
+    return CommutePR.mainClient.request({
       method: 'POST',
       endpoint: '',
       data: this,

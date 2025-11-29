@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { V, nullable, instance } from "../index";
 import { HTTPApiClient } from "../http-api";
+import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { AccountRefV } from "../account";
 import { Message } from "./message";
@@ -33,22 +34,30 @@ export class Chat extends V.class(v.object({
 })) {
 
   // API client for Chat-related endpoints
-  static api = new HTTPApiClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/chat',
     dt: useTranslate('chat').dt,
     fallbackSchema: Chat,
   });
 
+  static dbClient = new DBApiClient({
+    tableName: 'chat',
+    schema: 'communication',
+  });
+
   static async get(chatId: ChatRef): Promise<Chat> {
-    return this.api.request({
-      method: 'GET',
-      endpoint: `/${chatId}`,
-      operation_id: 'ChatV2Get',
-    }).then(res => res.body.parsed);
+    return this.dbClient.from()
+      .select('*')
+      .eq('_id', chatId)
+      .single()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return Chat.parse(data);
+      });
   }
 
   static async get_mine(): Promise<Chat[]> {
-    return this.api.request({
+    return this.mainClient.request({
       method: 'GET',
       endpoint: `/mine`,
       operation_id: 'ChatV2GetMine',
@@ -73,7 +82,7 @@ export class Chat extends V.class(v.object({
     offset: number = 6,
     desc: boolean = true
   ): Promise<Message[]> {
-    return this.api.request({
+    return this.mainClient.request({
       method: 'GET',
       endpoint: `/${chatId}/messages`,
       data: {
@@ -90,7 +99,7 @@ export class Chat extends V.class(v.object({
    * Get PartnerRequest of this Chat
    */
   public getPartnerRequest(): Promise<PartnerRequest> {
-    return Chat.api.request({
+    return Chat.mainClient.request({
       method: 'GET',
       endpoint: `/${this._id}/partner_request`,
       operation_id: 'ChatV2GetPR',
@@ -102,7 +111,7 @@ export class Chat extends V.class(v.object({
    * Get DM Chat
    */
   static getDMWith(accountId: string): Promise<Chat> {
-    return this.api.request({
+    return this.mainClient.request({
       method: 'PUT',
       endpoint: `/direct_message/${accountId}`,
       operation_id: 'ChatV2PutDM',
