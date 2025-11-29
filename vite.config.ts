@@ -7,6 +7,13 @@ export default async () => {
     plugins: [
       uni(),
       UnoCSS()
-    ]
+    ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "@partner-up-dev/design-uniapp/styles" as *; @use "@partner-up-dev/design-uniapp/styles/mixins" as *;'
+        }
+      }
+    }
   })
 }

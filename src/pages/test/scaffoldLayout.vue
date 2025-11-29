@@ -91,7 +91,7 @@ function onMore() {
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/main.scss" as *;
+
 
 .section {
   margin-bottom: $pu-spacing-xl;

@@ -14,11 +14,11 @@ applyTo: "**/*.scss, src/styles/**"
 styles/
 ├── presets/
     └── design.ts         # 设计代币 UnoCSS 预设
-├── main.scss           # 入口文件
-├── _ref.scss           # 样式原始值
-├── _token.scss         # 设计代币 SCSS 变量与Mixins
-└── _mixin.scss         # Mixins
 ```
+
+设计代币由 `@partner-up-dev/design-uniapp` 包提供，通过 Vite 的 `css.preprocessorOptions.scss.additionalData` 自动注入：
+- `@partner-up-dev/design-uniapp/styles` - 设计代币 SCSS 变量
+- `@partner-up-dev/design-uniapp/styles/mixins` - Mixins（包括 `pu-font`, `pu-elevation`）
 
 组件样式文件：组件文件夹下的 `compName.scss`
 
@@ -43,8 +43,7 @@ styles/
 ## 最佳实践
 
 - 使用 Design Tokens
-  - 在 SCSS 中, 在头部添加 `@use "@/styles/main.scss" as *;` (`main.scss` 已经 forward 了 `_token.scss`)
-    查看 `src/styles/_design.scss` 了解可用的设计代币
+  - 在 SCSS 中，设计代币已通过 Vite 配置自动注入，无需手动导入，直接使用 `$pu-*` 变量和 `pu-font`, `pu-elevation` mixins
   - 在模板中, 使用 UnoCSS （查看`uno.config.ts`以了解可用的预设）
 - 不必考虑响应式设计
 - 使用 `utils/style` 提供的工具函数帮助处理样式
