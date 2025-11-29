@@ -49,7 +49,7 @@ import { partnersEditorProps, partnersEditorEmits } from "./partnersEditor";
 import { useTranslate } from "@/locale/use";
 import PartnerEditor from "../PartnerEditor/PartnerEditor.vue";
 import PartnerPicker from "../partnerPicker/partnerPicker.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design-uniapp";
 import {
   PartnerForm,
   type PartnerRole,

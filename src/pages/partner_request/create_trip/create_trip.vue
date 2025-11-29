@@ -20,7 +20,7 @@ import { useTranslate } from "@/locale/use";
 import TripPurposePicker from "@/components/partner_request/trip/tripPurposePicker/tripPurposePicker.vue";
 import { RideHailingPreference } from "@/business/partner_request/ride_hailing";
 import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import { PUDrawer } from "@partner-up-dev/design-uniapp";
 import * as v from "valibot";
 
 const { dt: domain_t } = useTranslate("partner_request.create_trip");

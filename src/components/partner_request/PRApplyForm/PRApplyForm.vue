@@ -58,8 +58,7 @@ export default {
 <script setup lang="ts">
 import { computed, onBeforeUpdate, onMounted, ref, watch } from "vue";
 import { useTranslate } from "@/locale/use";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import { PUButton, PUDrawer } from "@partner-up-dev/design-uniapp";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
 import { PartnerRequest } from "@/business/partner_request/base";
 import {

@@ -16,13 +16,8 @@ import {
 } from "./PRCommuteForm";
 import type { Weekday } from "@/business/base";
 import { ref } from "vue";
-import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
-import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
+import { PUAccordion, PUAccordionItem, PUCheckbox, PUCheckboxGroup, PUDrawer, PUFormItem } from "@partner-up-dev/design-uniapp";
 import Cell from "@/components/common/cell/cell.vue";
-import PUCheckbox from "@/components/common/PUCheckbox/PUCheckbox.vue";
-import PUCheckboxGroup from "@/components/common/PUCheckboxGroup/PUCheckboxGroup.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
-import PUFormItem from "@/components/common/PUFormItem/PUFormItem.vue";
 import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 

@@ -34,7 +34,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { PRRouteProps } from "./PRRoute";
-import PUMap from "@/components/common/PUMap/PUMap.vue";
+import { PUMap } from "@partner-up-dev/design-uniapp";
 import RouteItem from "@/components/common/routeItem/routeItem.vue";
 import { computed, ref } from "vue";
 

@@ -18,7 +18,7 @@ import { getSafeArea } from "@/utils/vendor";
 import { prImmersiveFormProps, prImmersiveFormEmits } from "./PRImmersiveForm";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import { PUDrawer } from "@partner-up-dev/design-uniapp";
 import type { PRType } from "@/business/partner_request";
 
 const { dt } = useTranslate("partner_request.immersive_create");

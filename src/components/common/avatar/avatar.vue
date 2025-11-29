@@ -11,9 +11,8 @@ import { BasicComponentOptions } from "@/utils/vue";
 import { kebabCase } from "@/utils";
 import { avatarProps, avatarEmits } from "./avatar";
 import { uploadObj, useChooseImage } from "@/business/oss";
-import PUImg from "@/components/common/PUImg/PUImg.vue";
+import { PUImg, PUImgCropper } from "@partner-up-dev/design-uniapp";
 import Badge from "@/components/common/badge/badge.vue";
-import PUImgCropper from "@/components/common/PUImgCropper/PUImgCropper.vue";
 
 const props = defineProps(avatarProps);
 defineEmits(avatarEmits);

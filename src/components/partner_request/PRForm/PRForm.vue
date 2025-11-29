@@ -6,9 +6,7 @@ export default {
 
 <script setup lang="ts" generic="T extends PRType">
 import { useTranslate } from "@/locale/use";
-import PUAccordion from "@/components/common/PUAccordion/PUAccordion.vue";
-import PUAccordionItem from "@/components/common/PUAccordion/PUAccordionItem.vue";
-import PUForm from "@/components/common/PUForm/PUForm.vue";
+import { PUAccordion, PUAccordionItem, PUForm } from "@partner-up-dev/design-uniapp";
 import PRMetadataForm from "@/components/partner_request/PRMetadataForm/PRMetadataForm.vue";
 import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
 import PRRideHailingForm from "@/components/partner_request/ride_hailing/PRRideHailingForm/PRRideHailingForm.vue";
