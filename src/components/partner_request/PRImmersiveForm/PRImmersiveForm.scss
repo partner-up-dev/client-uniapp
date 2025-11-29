@@ -4,13 +4,13 @@
   height: 100vh;
   width: 100vw;
 
-  background-color: $pu-color-surface;
-  color: $pu-color-on-surface;
+  background-color: sys-var(color, surface);
+  color: sys-var(color, on-surface);
 }
 
 .cont {
-  margin-right: $pu-spacing-med;
-  margin-left: $pu-spacing-med;
+  margin-right: sys-var(spacing, med);
+  margin-left: sys-var(spacing, med);
 
   display: flex;
   flex-direction: column;
@@ -18,12 +18,12 @@
 }
 
 .progress-indicator {
-  padding-top: $pu-spacing-sm;
-  padding-bottom: $pu-spacing-xs;
+  padding-top: sys-var(spacing, sm);
+  padding-bottom: sys-var(spacing, xs);
 
   text {
     @include pu-font("label-medium");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
   }
 }
 
@@ -33,50 +33,50 @@
   flex-direction: column;
   justify-content: center;
 
-  margin-bottom: $pu-spacing-lg;
+  margin-bottom: sys-var(spacing, lg);
 }
 
 .operations {
   margin-left: auto;
-  margin-bottom: $pu-spacing-med;
+  margin-bottom: sys-var(spacing, med);
 
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   .item {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
 
     @include pu-font("label-large");
   }
 }
 
 .next {
-  color: $pu-color-secondary;
+  color: sys-var(color, secondary);
 
   &__icon {
-    color: $pu-color-secondary;
+    color: sys-var(color, secondary);
     @include pu-icon("small");
   }
 }
 
 .skip-all {
-  color: $pu-color-on-surface;
+  color: sys-var(color, on-surface);
 
   &__icon {
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     @include pu-icon("small");
   }
 }
 
 .finish {
-  color: $pu-color-secondary;
+  color: sys-var(color, secondary);
 
   &__icon {
-    color: $pu-color-secondary;
+    color: sys-var(color, secondary);
     @include pu-icon("small");
   }
 }

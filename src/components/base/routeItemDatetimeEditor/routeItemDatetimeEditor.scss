@@ -3,13 +3,13 @@
 .route-item-datetime-editor {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   &__current {
     @include pu-font("body-large");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
     text-align: center;
-    padding: $pu-spacing-med 0;
+    padding: sys-var(spacing, med) 0;
   }
 
   &__form {
@@ -20,7 +20,7 @@
   &__operations {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: $pu-spacing-sm;
-    padding: $pu-spacing-med $pu-spacing-lg;
+    grid-gap: sys-var(spacing, sm);
+    padding: sys-var(spacing, med) sys-var(spacing, lg);
   }
 }

@@ -3,28 +3,28 @@
 .route-item-location-editor {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
   }
 
   &__address-value {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
 
     &--empty {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       opacity: 0.6;
     }
   }
 
   &__error-message {
     @include pu-font("label-large");
-    color: $pu-color-error;
-    padding: 0px $pu-spacing-lg;
+    color: sys-var(color, error);
+    padding: 0px sys-var(spacing, lg);
     min-height: 20px;
   }
 
@@ -35,8 +35,8 @@
     grid-template-areas:
       "choose-location choose-location"
       "cancel confirm";
-    gap: $pu-spacing-xs;
-    padding: 0px $pu-spacing-lg;
+    gap: sys-var(spacing, xs);
+    padding: 0px sys-var(spacing, lg);
   }
 
   &__choose-btn {

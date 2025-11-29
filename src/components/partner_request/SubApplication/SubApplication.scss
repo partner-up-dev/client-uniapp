@@ -3,14 +3,14 @@
 .sub-application {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
   padding: 0 0;
   background-color: transparent;
 
   &--readonly {
-    border: 1px solid $pu-color-outline;
-    border-radius: $pu-radius-xs;
-    padding: $pu-spacing-xs $pu-spacing-sm;
+    border: 1px solid sys-var(color, outline);
+    border-radius: sys-var(radius, xs);
+    padding: sys-var(spacing, xs) sys-var(spacing, sm);
   }
 
   .header {
@@ -21,16 +21,16 @@
     .left {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
 
       .id-text {
         @include pu-font("body-large", true);
-        color: $pu-color-on-surface-variant;
+        color: sys-var(color, on-surface-variant);
       }
 
       .role-name {
         @include pu-font("body-large");
-        color: $pu-color-on-surface;
+        color: sys-var(color, on-surface);
       }
     }
 
@@ -38,28 +38,28 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
     }
   }
 
   .rule {
-    @include pu-font-size("label-large");
-    color: $pu-color-on-surface;
+    font-size: sys-var(font, label-large, size);
+    color: sys-var(color, on-surface);
   }
 }
 
 .drawer-content {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   .rule {
     @include pu-font("label-medium");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
   }
 
   .rationale {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 }

@@ -3,7 +3,7 @@
 .transportation-picker {
   &__item {
     display: inline-flex;
-    margin-right: $pu-spacing-med;
+    margin-right: sys-var(spacing, med);
   }
 }
 
@@ -13,9 +13,9 @@
   align-items: center;
   justify-content: space-around;
   height: 100%;
-  padding: $pu-spacing-med $pu-spacing-sm;
-  background-color: $pu-color-surface-container;
-  border-radius: $pu-radius-xs;
+  padding: sys-var(spacing, med) sys-var(spacing, sm);
+  background-color: sys-var(color, surface-container);
+  border-radius: sys-var(radius, xs);
   box-sizing: border-box;
 
   border: 1px solid transparent;
@@ -24,17 +24,17 @@
 
   &__icon {
     @include pu-icon("large", true);
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   &__text {
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
 
     @include pu-font("label-large");
   }
 
   // 选中状态
   &.is-selected {
-    border: 1px solid $pu-color-primary;
+    border: 1px solid sys-var(color, primary);
   }
 }

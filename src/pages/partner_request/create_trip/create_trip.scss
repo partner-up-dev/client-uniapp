@@ -1,11 +1,11 @@
 
 
 .dep-datetime-editor {
-  padding: $pu-spacing-med;
+  padding: sys-var(spacing, med);
 }
 
 .title {
-  margin-bottom: $pu-spacing-lg;
+  margin-bottom: sys-var(spacing, lg);
 
   @include pu-font(headline-large);
 }

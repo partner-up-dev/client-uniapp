@@ -3,7 +3,7 @@
 .pr-geo-element-filter {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 }
 
 .geo-elements {
@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $pu-color-on-surface-variant;
-    @include pu-font-size("label-large");
+    color: sys-var(color, on-surface-variant);
+    font-size: sys-var(font, label-large, size);
   }
 }

@@ -8,10 +8,10 @@
 }
 
 .draft-item {
-  padding: $-sys-padding-1;
-  margin: $-sys-padding-1;
+  padding: sys-var(spacing, sm);
+  margin: sys-var(spacing, sm);
 
-  background-color: $-sys-color-surface-container;
+  background-color: sys-var(color, surface-container);
 
-  @include pu-radius-small;
+  border-radius: sys-var(radius, sm);
 }

@@ -11,12 +11,7 @@ export default async () => {
     css: {
       preprocessorOptions: {
         scss: {
-          // additionalData: (source: string, filePath: string) => {
-          //   if (filePath.includes('/src/components/') || filePath.includes('/src/pages/')) {
-          //     return '@use "@partner-up-dev/design-uniapp/styles" as *;\n' + source
-          //   }
-          //   return source
-          // }
+          additionalData: '@use "@partner-up-dev/design-uniapp/styles" as *;\n'
         }
       }
     }

@@ -62,7 +62,7 @@ export default {
   @extend .placeholder-base;
 
   @include pu-font("label-medium");
-  color: $pu-color-on-surface-variant;
+  color: sys-var(color, on-surface-variant);
 
   text-decoration: v-bind("underline ? 'underline' : 'none'");
 

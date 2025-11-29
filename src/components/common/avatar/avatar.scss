@@ -15,13 +15,13 @@
     right: 50%;
     bottom: 50%;
     transform: translate(50%, 50%);
-    color: $pu-color-neutral-on;
-    @include pu-font-size("label-large");
+    color: sys-var(color, on-neutral);
+    font-size: sys-var(font, label-large, size);
   }
 
   .error-indicator {
-    color: $pu-color-error;
-    @include pu-font-size("label-large");
+    color: sys-var(color, error);
+    font-size: sys-var(font, label-large, size);
   }
 
   .scrim {

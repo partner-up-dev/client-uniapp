@@ -1,30 +1,30 @@
 
 
 .profile-page {
-  --background-color: #{$pu-color-surface};
+  --background-color: #{sys-var(color, surface)};
 
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-lg;
+  gap: sys-var(spacing, lg);
 
   &__main {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-lg;
+    gap: sys-var(spacing, lg);
   }
 
   &__operations {
     display: flex;
     flex-direction: row;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
     align-items: flex-end;
     justify-content: flex-end;
-    padding: 0 $pu-spacing-med;
+    padding: 0 sys-var(spacing, med);
   }
 
   .header {
     position: absolute;
-    padding: 0 $pu-spacing-med;
+    padding: 0 sys-var(spacing, med);
   }
 }
 
@@ -46,7 +46,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    padding: 0 $pu-spacing-med;
+    padding: 0 sys-var(spacing, med);
     box-sizing: border-box;
   }
 
@@ -58,12 +58,12 @@
 
     .joined-at {
       @include pu-font("label-small");
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
     }
 
     .nickname {
       @include pu-font("title-large");
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
     }
   }
 }

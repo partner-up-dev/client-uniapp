@@ -2,30 +2,30 @@
 
 // ChatEntry styles
 .chat-entry {
-  padding: $pu-spacing-sm $pu-spacing-med;
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
   cursor: pointer;
 
   .row1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $pu-spacing-sm;
+    margin-bottom: sys-var(spacing, sm);
 
     .left {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
 
       .title {
         @include pu-font("body-large");
-        color: $pu-color-on-surface;
+        color: sys-var(color, on-surface);
       }
     }
 
     .time {
       flex-shrink: 0;
       @include pu-font("label-small");
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
     }
   }
 
@@ -38,24 +38,24 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: $pu-spacing-xs;
+      gap: sys-var(spacing, xs);
       min-width: 0;
 
       .sender {
         display: flex;
         align-items: center;
-        gap: $pu-spacing-xs;
+        gap: sys-var(spacing, xs);
 
         .nickname {
           @include pu-font("label-large");
-          color: $pu-color-on-surface;
+          color: sys-var(color, on-surface);
           white-space: nowrap;
         }
       }
 
       .content {
         @include pu-font("label-large");
-        color: $pu-color-on-surface-variant;
+        color: sys-var(color, on-surface-variant);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -63,14 +63,14 @@
     }
 
     .unread {
-      background-color: $pu-color-surface-container;
-      border-radius: $pu-radius-full;
-      padding: $pu-spacing-xs $pu-spacing-sm;
-      margin-left: $pu-spacing-sm;
+      background-color: sys-var(color, surface-container);
+      border-radius: sys-var(radius, full);
+      padding: sys-var(spacing, xs) sys-var(spacing, sm);
+      margin-left: sys-var(spacing, sm);
 
       .count {
         @include pu-font("label-small");
-        color: $pu-color-on-surface-variant;
+        color: sys-var(color, on-surface-variant);
       }
     }
   }

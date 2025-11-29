@@ -3,13 +3,13 @@
 .partner-picker {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
   height: 100%;
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
     flex: 1;
     overflow-y: auto;
   }
@@ -20,13 +20,13 @@
 
     // 选中状态
     &.is-selected {
-      border-color: $pu-color-primary;
-      background-color: $pu-color-primary-container;
+      border-color: sys-var(color, primary);
+      background-color: sys-var(color, primary-container);
     }
   }
 
   &__footer {
-    padding-top: $pu-spacing-med;
-    border-top: 1px solid $pu-color-outline;
+    padding-top: sys-var(spacing, med);
+    border-top: 1px solid sys-var(color, outline);
   }
 }

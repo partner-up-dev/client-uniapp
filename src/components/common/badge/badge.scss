@@ -11,9 +11,9 @@
     height: 18px;
     line-height: 18px;
     padding: 0 6px;
-    background-color: $pu-color-error; /* default danger */
-    border-radius: $pu-radius-lg;
-    color: $pu-color-primary-on; /* foreground on colored bg */
+    background-color: sys-var(color, error); /* default danger */
+    border-radius: sys-var(radius, lg);
+    color: sys-var(color, on-primary); /* foreground on colored bg */
 
     text-align: center;
     white-space: nowrap;
@@ -35,19 +35,19 @@
     }
 
     &--primary {
-      background-color: $pu-color-primary;
+      background-color: sys-var(color, primary);
     }
     &--success {
-      background-color: $pu-color-green;
+      background-color: sys-var(color, green);
     }
     &--warning {
-      background-color: $pu-color-warning;
+      background-color: sys-var(color, warning);
     }
     &--info {
-      background-color: $pu-color-neutral-variant;
+      background-color: sys-var(color, outline-variant);
     }
     &--danger {
-      background-color: $pu-color-error;
+      background-color: sys-var(color, error);
     }
   }
 }

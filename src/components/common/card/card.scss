@@ -1,11 +1,11 @@
 
 
 .card {
-  background-color: $pu-color-surface-container;
-  padding: $pu-spacing-sm $pu-spacing-med;
+  background-color: sys-var(color, surface-container);
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   &--reverse {
     flex-direction: column-reverse;
@@ -18,18 +18,18 @@
 
     &__title {
       @include pu-font("body-large");
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
     }
   }
 
   &__icon {
     @include pu-icon("medium", true);
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   &__description {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     white-space: normal;
   }
 }

@@ -1,7 +1,7 @@
 
 
 .chat-content {
-  background-color: var(--chat-content-bg-color, #{$pu-color-surface});
+  background-color: var(--chat-content-bg-color, #{sys-var(color, surface)});
   overflow-y: scroll;
 
   &--flex {
@@ -21,14 +21,14 @@
 
   &__loading {
     .loading-text {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       font-size: 14px;
     }
   }
 
   &__error {
     .error-text {
-      color: $pu-color-error;
+      color: sys-var(color, error);
       font-size: 14px;
       text-align: center;
     }
@@ -36,7 +36,7 @@
 
   &__empty {
     .empty-text {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       font-size: 14px;
     }
   }

@@ -94,31 +94,31 @@ function onMore() {
 
 
 .section {
-  margin-bottom: $pu-spacing-lg;
-  border: 1px solid $pu-color-outline;
-  border-radius: $pu-radius-med;
+  margin-bottom: sys-var(spacing, lg);
+  border: 1px solid sys-var(color, outline);
+  border-radius: sys-var(radius, med);
   overflow: hidden;
 
   &-title {
     display: block;
     font-size: 16px;
     font-weight: 500;
-    color: $pu-color-on-surface;
-    padding: $pu-spacing-sm $pu-spacing-med;
-    background: $pu-color-surface-container;
+    color: sys-var(color, on-surface);
+    padding: sys-var(spacing, sm) sys-var(spacing, med);
+    background: sys-var(color, surface-container);
   }
 }
 
 .custom-header {
-  padding: $pu-spacing-med;
-  background: $pu-color-primary;
-  color: $pu-color-on-primary;
+  padding: sys-var(spacing, med);
+  background: sys-var(color, primary);
+  color: sys-var(color, on-primary);
   font-weight: 500;
 }
 
 .demo-content {
-  padding: $pu-spacing-med;
-  background: $pu-color-surface;
+  padding: sys-var(spacing, med);
+  background: sys-var(color, surface);
   min-height: 200px;
   display: flex;
   align-items: center;
@@ -126,41 +126,41 @@ function onMore() {
 
   &.scrollable {
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
   }
 }
 
 .demo-text {
   display: block;
-  color: $pu-color-on-surface;
+  color: sys-var(color, on-surface);
   line-height: 1.5;
 }
 
 .demo-footer {
-  padding: $pu-spacing-med;
-  background: $pu-color-surface-container;
-  color: $pu-color-on-surface;
+  padding: sys-var(spacing, med);
+  background: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
   text-align: center;
 
   &.with-actions {
     display: flex;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
   }
 }
 
 .action-btn {
   flex: 1;
-  padding: $pu-spacing-sm;
-  background: $pu-color-surface-container;
-  color: $pu-color-on-surface;
-  border: 1px solid $pu-color-outline;
-  border-radius: $pu-radius-sm;
+  padding: sys-var(spacing, sm);
+  background: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
+  border: 1px solid sys-var(color, outline);
+  border-radius: sys-var(radius, sm);
   font-size: 14px;
 
   &.primary {
-    background: $pu-color-primary;
-    color: $pu-color-on-primary;
-    border-color: $pu-color-primary;
+    background: sys-var(color, primary);
+    color: sys-var(color, on-primary);
+    border-color: sys-var(color, primary);
   }
 }
 </style>

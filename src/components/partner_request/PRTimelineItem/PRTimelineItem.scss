@@ -1,25 +1,25 @@
 
 
 .pr-ti {
-  padding: $pu-spacing-sm $pu-spacing-med;
-  background-color: $pu-color-surface-container;
-  color: $pu-color-on-surface;
-  border-radius: $pu-radius-sm;
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
+  background-color: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
+  border-radius: sys-var(radius, sm);
   cursor: pointer;
   box-sizing: border-box;
   width: 100%;
 
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   &--current {
-    border: 2px solid $pu-color-primary;
+    border: 2px solid sys-var(color, primary);
   }
 
   &--past {
     .pr-ti__header {
-      opacity: $pu-opacity-invalid;
+      opacity: sys-var(opacity, invalid);
     }
   }
 
@@ -38,11 +38,11 @@
 
   &__title {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
 
     // Current state title color override
     .pr-ti--current & {
-      color: $pu-color-primary-on;
+      color: sys-var(color, on-primary);
     }
   }
 
@@ -54,12 +54,12 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: sys-var(spacing, med);
   }
 
   &__description {
     @include pu-font("label-medium");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   // Actions section
@@ -70,7 +70,7 @@
     // Apply disabled opacity to actions for non-current states
     .pr-ti--past &,
     .pr-ti--future & {
-      opacity: $pu-opacity-disabled;
+      opacity: sys-var(opacity, disabled);
     }
   }
 }

@@ -28,7 +28,6 @@ body::-webkit-scrollbar {
   bottom: 0;
   right: 0;
   z-index: -100;
-  // background-color: $pu-color-surface;
   background-color: sys-var(color, surface);
   color: sys-var(color, on-surface);
 }

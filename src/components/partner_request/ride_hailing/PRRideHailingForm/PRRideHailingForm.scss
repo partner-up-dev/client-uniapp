@@ -4,8 +4,8 @@
 
 .ride-hailing-form {
   &__error {
-    color: $pu-color-error;
-    padding: $pu-spacing-xs;
+    color: sys-var(color, error);
+    padding: sys-var(spacing, xs);
     margin-left: auto;
     @include pu-font("label-medium");
   }

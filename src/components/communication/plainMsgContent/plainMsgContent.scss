@@ -2,12 +2,12 @@
 
 .plain-msg {
   text-align: start;
-  padding: $pu-spacing-sm 12px;
+  padding: sys-var(spacing, sm) 12px;
   box-sizing: border-box;
-  border-radius: 0 $pu-radius-med $pu-radius-med $pu-radius-med;
+  border-radius: 0 sys-var(radius, med) sys-var(radius, med) sys-var(radius, med);
 
-  background: $pu-color-surface-container;
-  color: $pu-color-on-surface;
+  background: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
 
   &__text {
     word-wrap: break-word;
@@ -15,9 +15,9 @@
   }
 
   &--mine {
-    background: $pu-color-primary-container;
-    color: $pu-color-primary-container-on;
-    border-radius: $pu-radius-med 0 $pu-radius-med $pu-radius-med;
+    background: sys-var(color, primary-container);
+    color: sys-var(color, on-primary-container);
+    border-radius: sys-var(radius, med) 0 sys-var(radius, med) sys-var(radius, med);
     text-align: end;
   }
 }

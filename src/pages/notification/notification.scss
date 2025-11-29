@@ -1,14 +1,14 @@
 
 
 .notification {
-  padding: $pu-spacing-med 0;
+  padding: sys-var(spacing, med) 0;
 
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
 
   .header {
-    padding: 0 $pu-spacing-med;
+    padding: 0 sys-var(spacing, med);
     box-sizing: border-box;
     width: 100%;
   }
