@@ -19,7 +19,7 @@
   .poi-item {
     display: flex;
     align-items: center;
-    gap: 12px; // sm + xs = 8px + 4px
+    gap: 12px; // Equivalent to spacing-sm (8px) + spacing-xs (4px), hardcoded due to SCSS/CSS variable limitation
     width: 100%;
   }
 
