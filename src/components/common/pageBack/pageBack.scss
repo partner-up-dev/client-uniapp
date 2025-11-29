@@ -6,7 +6,7 @@
   justify-content: center;
   transition: background 0.15s ease;
   &:active {
-    background: $pu-color-surface-container;
+    background: sys-var(color, surface-container);
   }
 
   &.small {
@@ -17,6 +17,6 @@
   }
 
   .icon {
-    @include pu-font-size("label-large");
+    font-size: sys-var(font, label-large, size);
   }
 }

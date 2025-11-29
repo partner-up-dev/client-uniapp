@@ -6,7 +6,7 @@
   height: 100vh;
 
   .header {
-    padding: $pu-spacing-sm $pu-spacing-med;
+    padding: sys-var(spacing, sm) sys-var(spacing, med);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -14,7 +14,7 @@
 
     .ops {
       display: flex;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
     }
   }
 
@@ -22,7 +22,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: sys-var(spacing, med);
     overflow-y: scroll;
 
     .drawer-placeholder {
@@ -32,29 +32,29 @@
 
   .section {
     flex-direction: column;
-    gap: $pu-spacing-sm;
-    padding: $pu-spacing-sm $pu-spacing-med;
+    gap: sys-var(spacing, sm);
+    padding: sys-var(spacing, sm) sys-var(spacing, med);
   }
 
   .section-title {
     @include pu-font("title-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   .section-subtitle {
     @include pu-font("label-medium");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
   }
 
   .partners {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .roles {
       display: flex;
       flex-direction: column;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
     }
   }
 
@@ -70,32 +70,32 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: $pu-spacing-lg $pu-spacing-med;
+    padding: sys-var(spacing, lg) sys-var(spacing, med);
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: sys-var(spacing, med);
 
-    background: linear-gradient(180deg, transparent 0%, $pu-color-surface 30%);
+    background: linear-gradient(180deg, transparent 0%, sys-var(color, surface) 30%);
     backdrop-filter: blur(0.5px);
 
     /* smooth snap animation via top change (computed in script) */
     transition: top 220ms ease-out;
 
     &.expanded {
-      gap: $pu-spacing-lg;
-      padding-top: $pu-spacing-sm;
+      gap: sys-var(spacing, lg);
+      padding-top: sys-var(spacing, sm);
       backdrop-filter: blur(8px);
     }
 
     .page-metadata {
       display: flex;
       flex-direction: column;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
 
       .tags {
         display: flex;
         justify-content: flex-end;
-        gap: $pu-spacing-sm;
+        gap: sys-var(spacing, sm);
       }
 
       .identifier {
@@ -106,11 +106,11 @@
 
         .id {
           font-weight: 100;
-          color: $pu-color-on-surface-variant;
+          color: sys-var(color, on-surface-variant);
           @include pu-font("headline-large", true);
         }
         .title {
-          color: $pu-color-on-surface;
+          color: sys-var(color, on-surface);
         }
       }
 
@@ -122,11 +122,11 @@
         @include pu-font("body-large");
 
         .title {
-          color: $pu-color-on-surface;
+          color: sys-var(color, on-surface);
         }
 
         .description {
-          color: $pu-color-on-surface-variant;
+          color: sys-var(color, on-surface-variant);
         }
       }
     }
@@ -135,14 +135,14 @@
       flex: 1;
       overflow-y: scroll;
 
-      // --pu-textarea-bg-color: #{$pu-color-surface-container};
-      --chat-content-bg-color: #{$pu-color-surface-container};
+      // --pu-textarea-bg-color: #{sys-var(color, surface-container)};
+      --chat-content-bg-color: #{sys-var(color, surface-container)};
     }
 
     .operations {
       display: flex;
       flex-direction: column;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
     }
   }
 }

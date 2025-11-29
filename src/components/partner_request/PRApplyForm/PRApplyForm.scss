@@ -3,17 +3,17 @@
 .pr-apply-form {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
 
   .title {
     display: flex;
     flex-direction: column;
     .title-text {
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
       @include pu-font("title-medium");
     }
     .subtitle {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       @include pu-font("label-medium");
     }
   }
@@ -21,7 +21,7 @@
   .applying-roles {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: sys-var(spacing, med);
     overflow-y: auto;
   }
 }

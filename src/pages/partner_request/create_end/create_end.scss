@@ -15,13 +15,13 @@
 .af-pub {
   flex: 1;
   overflow-y: auto;
-  padding: $pu-spacing-med $pu-spacing-med $pu-spacing-lg $pu-spacing-med;
+  padding: sys-var(spacing, med) sys-var(spacing, med) sys-var(spacing, lg) sys-var(spacing, med);
   box-sizing: border-box;
 
   &__head {
-    border-radius: $pu-radius-med;
-    background-color: $pu-color-surface-container;
-    padding: 60px $pu-spacing-lg;
+    border-radius: sys-var(radius, med);
+    background-color: sys-var(color, surface-container);
+    padding: 60px sys-var(spacing, lg);
 
     display: flex;
     justify-content: center;
@@ -39,10 +39,10 @@
   &__body {
     flex: 1;
     overflow-y: auto;
-    margin-top: $pu-spacing-med;
+    margin-top: sys-var(spacing, med);
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
+    gap: sys-var(spacing, med);
 
     &::after {
       content: "";
@@ -51,17 +51,17 @@
       left: 0;
       right: 0;
       height: 32px;
-      background: linear-gradient(to bottom, transparent, $pu-color-surface);
+      background: linear-gradient(to bottom, transparent, sys-var(color, surface));
     }
   }
 
   &__card {
-    border-radius: $pu-radius-med;
-    padding: $pu-spacing-med;
-    background-color: $pu-color-surface-container;
+    border-radius: sys-var(radius, med);
+    padding: sys-var(spacing, med);
+    background-color: sys-var(color, surface-container);
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .title {
       @include pu-font(title-large);
@@ -97,21 +97,21 @@
 }
 
 .footer {
-  background-color: $pu-color-surface-container;
-  color: $pu-color-on-surface;
+  background-color: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
 }
 
 .operations {
-  padding: $pu-spacing-med;
+  padding: sys-var(spacing, med);
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
 }
 
 .button {
   margin: 0;
   height: 36px;
   min-width: auto;
-  padding: 0 $pu-spacing-lg;
+  padding: 0 sys-var(spacing, lg);
 }

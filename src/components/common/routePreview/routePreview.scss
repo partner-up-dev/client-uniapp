@@ -4,32 +4,32 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-xs;
+  gap: sys-var(spacing, xs);
 
   .route-item {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-sm + $pu-spacing-xs; // 12px gap
+    gap: 12px; // sm + xs = 8px + 4px
   }
 
   .type-indicator {
     width: 10px;
     height: 10px;
     margin: 5px;
-    border-radius: $pu-radius-full;
+    border-radius: sys-var(radius, full);
   }
 
   .indicator-type-start {
-    background-color: $pu-color-green;
+    background-color: sys-var(color, green);
   }
 
   .indicator-type-end {
-    background-color: $pu-color-red;
+    background-color: sys-var(color, red);
   }
 
   .address {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     white-space: nowrap;
     text-overflow: ellipsis;
   }

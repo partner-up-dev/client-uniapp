@@ -10,28 +10,28 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  padding: 0 $pu-spacing-med;
-  gap: $pu-spacing-med;
+  padding: 0 sys-var(spacing, med);
+  gap: sys-var(spacing, med);
   flex: 1;
   overflow-y: scroll;
 
-  margin-bottom: $pu-spacing-med;
+  margin-bottom: sys-var(spacing, med);
 }
 
 .header {
-  height: $pu-size-large;
+  height: sys-var(size, large);
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   .filters {
     display: flex;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
     align-items: center;
 
     .fixed-filters {
       display: flex;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
       align-items: center;
     }
   }
@@ -49,7 +49,7 @@
 .pr-list {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
   overflow-y: scroll;
   flex: 1;
 }

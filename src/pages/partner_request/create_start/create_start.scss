@@ -1,8 +1,8 @@
 
 
 .headline {
-  margin-left: $pu-spacing-med;
-  margin-top: $pu-spacing-med;
+  margin-left: sys-var(spacing, med);
+  margin-top: sys-var(spacing, med);
 
   &__fir {
     @include pu-font(headline-large);
@@ -13,21 +13,21 @@
   }
 
   &__sec {
-    margin-top: $pu-spacing-sm;
-    color: $pu-color-secondary;
+    margin-top: sys-var(spacing, sm);
+    color: sys-var(color, secondary);
 
     @include pu-font(title-medium);
   }
 }
 
 .cont {
-  margin-top: $pu-spacing-lg;
-  margin-left: $pu-spacing-med;
-  margin-right: $pu-spacing-med;
+  margin-top: sys-var(spacing, lg);
+  margin-left: sys-var(spacing, med);
+  margin-right: sys-var(spacing, med);
 
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-lg;
+  gap: sys-var(spacing, lg);
 }
 
 .l1-type-picker {
@@ -38,7 +38,7 @@
 
   &__picker {
     margin-left: auto;
-    margin-top: $pu-spacing-med;
+    margin-top: sys-var(spacing, med);
 
     height: 32vh;
     width: 76vw;
@@ -53,7 +53,7 @@
   }
 
   .picker {
-    margin-top: $pu-spacing-med;
+    margin-top: sys-var(spacing, med);
 
     height: 15vh;
     max-height: 200px;
@@ -63,7 +63,7 @@
 
 .con-from-cache {
   text-align: right;
-  $-font-color: $pu-color-secondary;
+  $-font-color: sys-var(color, secondary);
 
   &__title {
     color: $-font-color;
@@ -75,6 +75,6 @@
 
   .icon {
     color: $-font-color !important;
-    font-size: $pu-font-title-medium-size;
+    font-size: sys-var(font, title-medium, size);
   }
 }

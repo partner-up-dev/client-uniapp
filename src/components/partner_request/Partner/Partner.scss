@@ -3,11 +3,11 @@
 .partner {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   &.type-default {
-    padding: $pu-spacing-sm $pu-spacing-med;
-    background-color: $pu-color-surface-container;
+    padding: sys-var(spacing, sm) sys-var(spacing, med);
+    background-color: sys-var(color, surface-container);
   }
 
   &.type-editor {
@@ -23,16 +23,16 @@
     .left {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
 
       .id-text {
         @include pu-font("label-large", true);
-        color: $pu-color-on-surface-variant;
+        color: sys-var(color, on-surface-variant);
       }
 
       .role-name {
         @include pu-font("label-large");
-        color: $pu-color-on-surface;
+        color: sys-var(color, on-surface);
       }
     }
 
@@ -40,15 +40,15 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
 
       .player {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: $pu-spacing-xs;
-        color: $pu-color-on-surface;
-        @include pu-font-size("label-small");
+        gap: sys-var(spacing, xs);
+        color: sys-var(color, on-surface);
+        font-size: sys-var(font, label-small, size);
       }
 
       .chevron {
@@ -63,11 +63,11 @@
   .content {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .rule {
-      @include pu-font-size("label-large");
-      color: $pu-color-on-surface;
+      font-size: sys-var(font, label-large, size);
+      color: sys-var(color, on-surface);
     }
   }
 

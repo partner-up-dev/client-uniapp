@@ -3,21 +3,21 @@
 .pr-route {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   .setoff-date {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
 
     .date {
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
       @include pu-font("label-medium", true);
     }
 
     .label {
       @include pu-font("label-medium");
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
     }
   }
 

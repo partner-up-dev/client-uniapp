@@ -5,24 +5,24 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  padding: $pu-spacing-sm $pu-spacing-med;
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
 
   &__container {
     &--secondary {
-      background-color: $pu-color-secondary;
-      color: $pu-color-secondary-on;
+      background-color: sys-var(color, secondary);
+      color: sys-var(color, on-secondary);
     }
 
     &--surface {
-      background-color: $pu-color-surface;
-      color: $pu-color-on-surface;
+      background-color: sys-var(color, surface);
+      color: sys-var(color, on-surface);
     }
   }
 
   &__left {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
     max-width: 54%;
     overflow-x: scroll;
 
@@ -36,7 +36,7 @@
   &__right {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
   }
 
   &__icon-button {

@@ -6,14 +6,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
 
   .field__title {
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   .field__value {
-    color: $pu-color-tertiary;
+    color: sys-var(color, tertiary);
     word-break: break-word;
   }
 
@@ -24,7 +24,7 @@
   }
 
   &.is-small {
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
 
     .field__value {
       @include pu-font("body-large");
@@ -36,7 +36,7 @@
   }
 
   &.is-medium {
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .field__value {
       @include pu-font("title-large");

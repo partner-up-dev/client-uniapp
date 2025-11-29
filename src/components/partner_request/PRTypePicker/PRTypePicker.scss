@@ -18,7 +18,7 @@
       width: 240px;
       height: 100%;
       display: inline-flex;
-      margin-right: $pu-spacing-sm;
+      margin-right: sys-var(spacing, sm);
       transition: transform 0.2s ease-in-out;
 
       &:active {
@@ -36,7 +36,7 @@
     height: 100%;
 
     .pr-type-picker__item {
-      margin-bottom: $pu-spacing-lg;
+      margin-bottom: sys-var(spacing, lg);
       transition: transform 0.2s ease-in-out;
 
       &:active {

@@ -4,29 +4,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $pu-spacing-sm $pu-spacing-med;
-  background-color: $pu-color-surface-container;
-  min-height: $pu-size-small;
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
+  background-color: sys-var(color, surface-container);
+  min-height: sys-var(size, small);
 
   .preview {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
     width: 116px;
   }
 
   .poi-item {
     display: flex;
     align-items: center;
-    gap: $pu-spacing-sm + $pu-spacing-xs; // 12px gap
+    gap: 12px; // sm + xs = 8px + 4px
     width: 100%;
   }
 
   .type-indicator {
     flex-shrink: 0;
-    width: $pu-icon-size-small;
-    height: $pu-icon-size-small;
+    width: sys-var(icon, size, small);
+    height: sys-var(icon, size, small);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,12 +35,12 @@
   .type-icon {
     width: 100%;
     height: 100%;
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   .address {
     @include pu-font("body-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -49,8 +49,8 @@
 
   .item-type {
     flex-shrink: 0;
-    width: $pu-icon-size-medium;
-    height: $pu-icon-size-medium;
+    width: sys-var(icon, size, medium);
+    height: sys-var(icon, size, medium);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -60,6 +60,6 @@
   .item-type-icon {
     width: 100%;
     height: 100%;
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 }

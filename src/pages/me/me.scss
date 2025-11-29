@@ -1,7 +1,7 @@
 
 
 .me-page {
-  --background-color: #{$pu-color-surface};
+  --background-color: #{sys-var(color, surface)};
 
   display: flex;
   flex-direction: column;
@@ -9,27 +9,27 @@
   &__main {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-lg;
-    padding: 0 $pu-spacing-med;
+    gap: sys-var(spacing, lg);
+    padding: 0 sys-var(spacing, med);
   }
 
   &__welcome {
     @include pu-font(headline-large);
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-med;
-    padding: 0 $pu-spacing-sm;
+    gap: sys-var(spacing, med);
+    padding: 0 sys-var(spacing, sm);
   }
 
   // Operations buttons area
   &__operations {
     display: flex;
     flex-direction: row;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
     align-items: center;
   }
 
@@ -47,7 +47,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border-radius: $pu-radius-med;
+  border-radius: sys-var(radius, med);
 
   background-repeat: no-repeat;
   background-position: center;
@@ -55,23 +55,23 @@
 
   .nickname {
     @include pu-font("title-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     height: 1.4em;
   }
 
   .nickname-editor {
-    color: $pu-color-tertiary;
+    color: sys-var(color, tertiary);
   }
 
   .joined-at {
     @include pu-font("label-small");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
   }
 }
 
 .edit-card__fields {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
-  padding: $pu-spacing-xs 0;
+  gap: sys-var(spacing, sm);
+  padding: sys-var(spacing, xs) 0;
 }

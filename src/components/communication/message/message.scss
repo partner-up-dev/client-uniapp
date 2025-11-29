@@ -2,7 +2,7 @@
 
 .msg {
   display: flex;
-  gap: $pu-spacing-xs;
+  gap: sys-var(spacing, xs);
   width: 100%;
 
   &--mine {
@@ -20,12 +20,12 @@
 
   &__nickname {
     @include pu-font("label-small");
-    color: $pu-color-on-surface-variant;
+    color: sys-var(color, on-surface-variant);
     white-space: nowrap;
   }
 
   &__content {
-    margin-top: $pu-spacing-xs;
+    margin-top: sys-var(spacing, xs);
     width: 100%;
   }
 }

@@ -4,12 +4,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $pu-spacing-xs;
-  border-radius: $pu-radius-sm;
+  gap: sys-var(spacing, xs);
+  border-radius: sys-var(radius, sm);
 
   .name {
     @include pu-font("label-small");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     white-space: nowrap;
   }
 
@@ -19,7 +19,7 @@
   }
 
   &.type-tag {
-    background: $pu-color-surface-container-highest;
-    padding: $pu-spacing-xs $pu-spacing-sm;
+    background: sys-var(color, surface-container-highest);
+    padding: sys-var(spacing, xs) sys-var(spacing, sm);
   }
 }

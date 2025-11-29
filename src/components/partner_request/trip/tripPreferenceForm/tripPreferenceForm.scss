@@ -8,10 +8,10 @@
 .luggage-input {
   display: flex;
   align-items: center;
-  gap: $pu-spacing-xs;
+  gap: sys-var(spacing, xs);
 }
 
 .luggage-unit {
-  @include pu-font-size("label-large");
-  color: $pu-color-on-surface;
+  font-size: sys-var(font, label-large, size);
+  color: sys-var(color, on-surface);
 }

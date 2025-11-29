@@ -3,33 +3,33 @@
 .partners {
   display: flex;
   align-items: center;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   .avatars {
     display: flex;
     align-items: center;
-    padding: 0 $pu-spacing-sm 0 0;
+    padding: 0 sys-var(spacing, sm) 0 0;
   }
 
   .avatar {
-    margin-right: -$pu-spacing-sm;
+    margin-right: -sys-var(spacing, sm);
   }
 
   .joinable-indicator {
-    border: 1px dotted $pu-color-outline;
+    border: 1px dotted sys-var(color, outline);
 
-    border-radius: $pu-radius-full;
+    border-radius: sys-var(radius, full);
     display: flex;
     align-items: center;
     justify-content: center;
 
     // Align with Avatar.size
-    width: $pu-size-small;
-    height: $pu-size-small;
+    width: sys-var(size, small);
+    height: sys-var(size, small);
 
     .text {
-      @include pu-font-size("label-medium");
-      color: $pu-color-on-surface-variant;
+      font-size: sys-var(font, label-medium, size);
+      color: sys-var(color, on-surface-variant);
     }
   }
 }

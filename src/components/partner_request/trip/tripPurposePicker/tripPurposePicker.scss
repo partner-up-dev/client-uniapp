@@ -9,45 +9,45 @@
   }
 
   &__list {
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
     height: 100%;
-    padding: $pu-spacing-sm 0;
+    padding: sys-var(spacing, sm) 0;
   }
 
   &__item {
     display: inline-flex;
-    margin-right: $pu-spacing-sm;
+    margin-right: sys-var(spacing, sm);
   }
 
   &__card {
     min-width: 88px;
     height: 100%;
-    background-color: $pu-color-surface-container;
-    border-radius: $pu-radius-xs;
-    padding: $pu-spacing-sm $pu-spacing-med;
+    background-color: sys-var(color, surface-container);
+    border-radius: sys-var(radius, xs);
+    padding: sys-var(spacing, sm) sys-var(spacing, med);
     border: 1px solid transparent;
     box-sizing: border-box;
 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
 
     transition: border 0.2s ease;
 
     &.is-selected {
-      border: 1px solid $pu-color-primary;
+      border: 1px solid sys-var(color, primary);
     }
   }
 
   &__icon {
     @include pu-icon("large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
   }
 
   &__text {
     @include pu-font("label-large");
-    color: $pu-color-on-surface;
+    color: sys-var(color, on-surface);
     text-align: center;
   }
 }

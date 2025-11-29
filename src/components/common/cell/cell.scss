@@ -10,12 +10,12 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .cell__left {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
       flex: 1;
       min-width: 0;
     }
@@ -31,25 +31,25 @@
     .cell__main {
       display: flex;
       flex-direction: column;
-      gap: $pu-spacing-xs;
+      gap: sys-var(spacing, xs);
       flex: 1;
       min-width: 0;
     }
 
     .cell__title {
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
       @include pu-font("label-large");
     }
 
     .cell__subtitle {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       @include pu-font("label-small");
     }
 
     .cell__right {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
       flex-shrink: 0;
     }
 
@@ -60,7 +60,7 @@
     }
 
     .cell__arrow {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       font-size: 24px;
       display: flex;
       align-items: center;
@@ -76,20 +76,20 @@
   // Vertical type: vertical layout
   &.is-vertical {
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .cell__header {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
     }
 
     .cell__header-left {
       display: flex;
       align-items: center;
-      gap: $pu-spacing-sm;
+      gap: sys-var(spacing, sm);
       flex: 1;
       min-width: 0;
     }
@@ -103,7 +103,7 @@
     }
 
     .cell__title {
-      color: $pu-color-on-surface;
+      color: sys-var(color, on-surface);
       @include pu-font("label-large");
       flex: 1;
       min-width: 0;
@@ -115,7 +115,7 @@
     }
 
     .cell__value {
-      color: $pu-color-on-surface-variant;
+      color: sys-var(color, on-surface-variant);
       @include pu-font("label-large");
       word-break: break-word;
     }
@@ -123,16 +123,16 @@
 
   // Error message styles
   .cell__error-message {
-    color: $pu-color-error;
+    color: sys-var(color, error);
     @include pu-font("label-medium");
-    margin-top: $pu-spacing-xs;
+    margin-top: sys-var(spacing, xs);
     line-height: 1.4;
   }
 
   // Error state
   &.has-error {
     .cell__title {
-      color: $pu-color-error;
+      color: sys-var(color, error);
     }
   }
 }

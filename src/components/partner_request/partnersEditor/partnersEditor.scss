@@ -3,19 +3,19 @@
 .partners-editor {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
   align-items: flex-end;
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
     align-self: stretch;
   }
 
   &__add-button {
     display: flex;
     justify-content: center;
-    padding: $pu-spacing-sm 0;
+    padding: sys-var(spacing, sm) 0;
   }
 }

@@ -4,7 +4,7 @@
 
 .location-picker {
   .value {
-    color: $pu-color-tertiary;
+    color: sys-var(color, tertiary);
 
     @include pu-font("label-large");
   }

@@ -1,12 +1,12 @@
 
 
 .form-item-value {
-  padding: $pu-spacing-sm 0px;
+  padding: sys-var(spacing, sm) 0px;
 }
 .tips {
-  @include pu-font-size("label-medium");
-  color: $pu-color-on-surface-variant;
-  margin-top: $pu-spacing-xs;
+  font-size: sys-var(font, label-medium, size);
+  color: sys-var(color, on-surface-variant);
+  margin-top: sys-var(spacing, xs);
 }
 
 .pr-editor {
@@ -21,7 +21,7 @@
   .left-buttons,
   .right-buttons {
     display: flex;
-    gap: $pu-spacing-xs;
+    gap: sys-var(spacing, xs);
   }
 }
 

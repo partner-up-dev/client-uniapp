@@ -2,22 +2,22 @@
 
 // ==================== Content ====================
 .chat-page__content {
-  background-color: $pu-color-surface;
-  padding: $pu-spacing-med;
+  background-color: sys-var(color, surface);
+  padding: sys-var(spacing, med);
 }
 
 // ==================== Footer ====================
 .chat-page__footer-container {
-  background-color: $pu-color-surface-container;
-  color: $pu-color-on-surface;
+  background-color: sys-var(color, surface-container);
+  color: sys-var(color, on-surface);
 }
 
 .chat-page__footer {
   display: flex;
   align-items: center;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
   flex-shrink: 0;
-  padding: $pu-spacing-sm $pu-spacing-med;
+  padding: sys-var(spacing, sm) sys-var(spacing, med);
 
   .field {
     flex: 1;
@@ -29,7 +29,7 @@
     cursor: pointer;
 
     &--disabled {
-      opacity: $pu-opacity-disabled;
+      opacity: sys-var(opacity, disabled);
       cursor: not-allowed;
     }
   }

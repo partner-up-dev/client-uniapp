@@ -2,29 +2,29 @@
 
 .pr-card {
   position: relative;
-  border: 1px solid $pu-color-outline;
-  border-radius: $pu-radius-sm;
+  border: 1px solid sys-var(color, outline);
+  border-radius: sys-var(radius, sm);
   background-color: transparent;
   box-sizing: border-box;
   cursor: pointer;
   transition: all 0.2s ease;
 
-  padding: $pu-spacing-med;
+  padding: sys-var(spacing, med);
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-med;
+  gap: sys-var(spacing, med);
 }
 
 .metadata {
   display: flex;
   flex-direction: column;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
 
   .type-and-time {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $pu-spacing-sm;
+    gap: sys-var(spacing, sm);
 
     .pr-type {
       display: flex;
@@ -32,8 +32,8 @@
       justify-content: center;
 
       .type-text {
-        @include pu-font-size("label-medium");
-        color: $ref-color-neutral-100;
+        font-size: sys-var(font, label-medium, size);
+        color: ref-var(color, neutral, 100);
         font-weight: normal;
         line-height: 16px;
         white-space: nowrap;
@@ -46,8 +46,8 @@
       justify-content: center;
 
       .time-text {
-        @include pu-font-size("label-medium");
-        color: $pu-color-on-surface-variant;
+        font-size: sys-var(font, label-medium, size);
+        color: sys-var(color, on-surface-variant);
         font-weight: normal;
         line-height: 16px;
         white-space: nowrap;
@@ -66,8 +66,8 @@
       justify-content: center;
 
       .type-text {
-        @include pu-font-size("label-medium");
-        color: $ref-color-neutral-100;
+        font-size: sys-var(font, label-medium, size);
+        color: ref-var(color, neutral, 100);
         font-weight: normal;
         line-height: 16px;
         white-space: nowrap;
@@ -80,7 +80,7 @@
     align-items: center;
 
     .primary-text {
-      @include pu-font-size("body-large");
+      font-size: sys-var(font, body-large, size);
       white-space: nowrap;
       text-overflow: ellipsis;
     }
@@ -91,8 +91,8 @@
     align-items: center;
 
     .secondary-text {
-      @include pu-font-size("label-large");
-      color: $pu-color-on-surface-variant;
+      font-size: sys-var(font, label-large, size);
+      color: sys-var(color, on-surface-variant);
       white-space: nowrap;
       text-overflow: ellipsis;
     }
@@ -101,7 +101,7 @@
 
 .operations {
   display: flex;
-  gap: $pu-spacing-sm;
+  gap: sys-var(spacing, sm);
   align-items: center;
   justify-content: flex-end;
   overflow: hidden;

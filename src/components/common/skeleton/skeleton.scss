@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    background-color: $pu-color-neutral-variant-container;
+    background-color: sys-var(color, outline-variant);
 
     &:first-child:last-child,
     &:last-child {
@@ -85,7 +85,7 @@
   }
   50% {
     opacity: 0.3;
-    background-color: $pu-color-neutral-container;
+    background-color: sys-var(color, neutral-container);
   }
   100% {
     opacity: 1;
