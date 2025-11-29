@@ -2,7 +2,7 @@ import { definePreset } from 'unocss'
 
 const colors = {
     primary: '#96D945',
-    'primary-on': '##050A00',
+    'primary-on': '#050A00',
     'primary-container': '#CDEDA4',
     'primary-container-on': '#102000',
     secondary: '#85976E',
