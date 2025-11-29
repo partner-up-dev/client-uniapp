@@ -27,7 +27,8 @@ function getAuthHeaders(): Record<string, string> {
  * 
  * Uses miniprogram-compatible postgrest-js implementation.
  *
- * @typeParam SchemaName - The database schema name (e.g., 'public', 'communication', 'partner_request')
+ * @param opts.tableName - The table name to query
+ * @param opts.schema - The database schema name (e.g., 'public', 'communication', 'partner_request')
  */
 export class DBApiClient extends PostgrestClient {
   private _tableName: string;
