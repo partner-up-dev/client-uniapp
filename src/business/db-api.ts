@@ -1,8 +1,6 @@
 // ==================== PostgREST API Client ====================
 
-import { PostgrestClient } from "@supabase/postgrest-js";
-import type { GenericSchema } from "@supabase/postgrest-js";
-import { fetch as apiFetch } from "./api-fetch";
+import { PostgrestClient } from "@/libs/postgrest-js";
 import { useAccountStore } from "@/store/account";
 import store from "@/store";
 import log from "@/utils/log";
@@ -26,30 +24,29 @@ function getAuthHeaders(): Record<string, string> {
 /**
  * DBApiClient extending PostgrestClient for pure CRUD operations.
  * Uses the same credentials as the main backend API.
+ * 
+ * Uses miniprogram-compatible postgrest-js implementation.
  *
  * @typeParam SchemaName - The database schema name (e.g., 'public', 'communication', 'partner_request')
  */
-export class DBApiClient<
-  SchemaName extends string = "public"
-> extends PostgrestClient<Record<SchemaName, GenericSchema>, {}, SchemaName, GenericSchema> {
+export class DBApiClient extends PostgrestClient {
   private _tableName: string;
   private _initialized: boolean = false;
 
-  constructor(opts: { tableName: string; schema?: SchemaName }) {
-    const schemaName = opts.schema ?? ("public" as SchemaName);
+  constructor(opts: { tableName: string; schema?: string }) {
+    const schemaName = opts.schema ?? "public";
 
     if (!PGRST_URL) {
       log.warn("DBApiClient: VITE_PGRST_URL is not configured. PostgREST operations will fail.");
       // Use empty string to allow construction, will fail on actual requests
       super("", {
         schema: schemaName,
-        fetch: apiFetch as typeof fetch,
+        headers: getAuthHeaders(),
       });
     } else {
       super(PGRST_URL, {
         schema: schemaName,
         headers: getAuthHeaders(),
-        fetch: apiFetch as typeof fetch,
       });
       this._initialized = true;
     }
@@ -70,6 +67,6 @@ export class DBApiClient<
     Object.entries(currentHeaders).forEach(([key, value]) => {
       this.headers.set(key, value);
     });
-    return super.from(this._tableName as any);
+    return super.from(this._tableName);
   }
 }
