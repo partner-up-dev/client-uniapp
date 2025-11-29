@@ -52,7 +52,7 @@ import { prTimelineItemProps, prTimelineItemEmits } from "./PRTimelineItem";
 import { useTranslate } from "@/locale/use";
 import { useOptionalVModel } from "@/composables/props";
 import { PRStatus } from "@/business/partner_request";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design-uniapp";
 
 const props = defineProps(prTimelineItemProps);
 const emit = defineEmits(prTimelineItemEmits);

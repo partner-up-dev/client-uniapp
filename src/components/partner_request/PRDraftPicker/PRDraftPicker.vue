@@ -11,7 +11,7 @@ import { PartnerRequest } from "@/business/partner_request/base";
 import PRCard from "../PRCard/PRCard.vue";
 import { PRDraftPickerEmits, PRDraftPickerProps } from "./types";
 import Placeholder from "@/components/common/placeholder.vue";
-import PUScrollView from "@/components/common/PUScrollView/PUScrollView.vue";
+import { PUScrollView } from "@partner-up-dev/design-uniapp";
 import { useTranslate } from "@/locale/use";
 
 const { dt } = useTranslate("partner_request.draft_picker");

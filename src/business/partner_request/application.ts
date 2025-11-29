@@ -4,7 +4,7 @@ import * as v from 'valibot';
 import { AccountRefV } from '../account';
 import { ChatRefV } from '../communication';
 import { PartnerRoleRefV } from './partner';
-import { APIClient } from '../api';
+import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
 import { useTranslate } from '@/locale/use';
 import { DatetimeV } from '../base';
@@ -50,7 +50,7 @@ export class PartnerApplication extends V.class(v.object({
   sub_applications: SubApplicationsV,
 })) {
 
-  static mainClient = new APIClient<typeof PartnerApplication>({
+  static mainClient = new HTTPApiClient<typeof PartnerApplication>({
     modulePrefix: '/partner_request/application',
     dt: useTranslate('partner_request.application').dt,
     fallbackSchema: PartnerApplication,
@@ -62,7 +62,7 @@ export class PartnerApplication extends V.class(v.object({
   });
 
   static async get_mine(pr_id?: PRRef): Promise<PartnerApplication[]> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: "GET",
       endpoint: '/mine',
       data: { pr_id },
@@ -79,13 +79,13 @@ export class PartnerApplicationForm extends V.formClass(v.object({
   sub_applications: SubApplicationsV,
 })) {
 
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: "/partner_request/application",
     fallbackSchema: PartnerApplication,
   });
 
   async submit(): Promise<PartnerApplication> {
-    return PartnerApplicationForm.mainClient.requestHTTP({
+    return PartnerApplicationForm.mainClient.request({
       method: "POST",
       endpoint: `/?partner_request_id=${this.partner_request}`,
       operation_id: "PRV2Apply",

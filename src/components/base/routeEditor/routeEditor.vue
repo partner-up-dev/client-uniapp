@@ -23,8 +23,7 @@ import { getTencentLBSPluginCredentialString } from "@/utils";
 import { errorReport } from "@/utils/vendor";
 import { usePickLocation } from "@/components/base/locationPicker/usePickLocation";
 import RouteItemDatetimeEditor from "@/components/base/routeItemDatetimeEditor/routeItemDatetimeEditor.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
-import PUDrawer from "@/components/common/PUDrawer/PUDrawer.vue";
+import { PUButton, PUDrawer } from "@partner-up-dev/design-uniapp";
 
 const { dt: t } = useTranslate("base.route_editor");
 const props = defineProps(routeEditorProps);

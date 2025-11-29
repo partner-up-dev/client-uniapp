@@ -3,7 +3,7 @@ import { V, nullable } from "../index";
 import { useAccountStore } from "@/store/account";
 import store from "@/store";
 import { AccountRefV } from "../account";
-import { APIClient } from "../api";
+import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { DatetimeV } from "../base";
@@ -51,7 +51,7 @@ export class Message extends V.class(v.object({
   }
 
   // API client for Message-related endpoints
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/chat',
     dt: useTranslate('chat.message').dt,
     fallbackSchema: Message,
@@ -80,7 +80,7 @@ export class Message extends V.class(v.object({
    * @returns The created Message instance
    */
   static async send(chatId: number, content: string): Promise<Message> {
-    return this.mainClient.requestHTTP({
+    return this.api.requestHTTP({
       method: 'POST',
       endpoint: `/message/plain?to_chat=${chatId}`,
       data: content,

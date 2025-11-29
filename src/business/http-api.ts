@@ -56,14 +56,14 @@ export class Body<S extends ParseTarget | undefined = undefined> {
   }
 }
 
-export interface APIResponse<S extends ParseTarget | undefined = undefined> {
+export interface HttpApiResponse<S extends ParseTarget | undefined = undefined> {
   body: Body<S>;
   statusCode: number;
   header: Record<string, unknown>;
   cookies: string[];
 }
 
-export interface requestAPIParams<S extends ParseTarget | undefined = undefined> {
+export interface requestHttpApiParams<S extends ParseTarget | undefined = undefined> {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   endpoint: string;
   data?: object | Array<any> | string | ArrayBuffer | ArrayBufferView | URLSearchParams;
@@ -75,7 +75,7 @@ export interface requestAPIParams<S extends ParseTarget | undefined = undefined>
   // Optional schema or ValibotClass to validate/parse the response body on demand
   schema?: S;
   code_handlers?: {
-    [property: number]: (res: APIResponse<S>) => boolean;
+    [property: number]: (res: HttpApiResponse<S>) => boolean;
   };
   success_codes?: number[];
 }
@@ -84,7 +84,7 @@ export interface requestAPIParams<S extends ParseTarget | undefined = undefined>
 type SchemaOr<S extends ParseTarget | undefined, FS extends ParseTarget | undefined> =
   S extends undefined ? FS : S;
 
-export class APIClient<FS extends ParseTarget | undefined = undefined> {
+export class HTTPApiClient<FS extends ParseTarget | undefined = undefined> {
 
   protected _modulePrefix: string;
   protected _clientId: string;
@@ -101,7 +101,7 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
     __schema?: ParseTarget;
     __operation_id?: string;
     __success_codes?: number[];
-    __code_handlers?: { [status: number]: (res: APIResponse<any>) => boolean };
+    __code_handlers?: { [status: number]: (res: HttpApiResponse<any>) => boolean };
     __retry_left?: number;
     __retry_delay?: number;
   } {
@@ -113,7 +113,7 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
   private buildApiResponse<S2 extends ParseTarget | undefined>(
     response: any,
     schema?: S2,
-  ): APIResponse<S2> {
+  ): HttpApiResponse<S2> {
     return {
       body: new Body<S2>(response?.data as unknown, schema),
       statusCode: (response?.status ?? 0) as number,
@@ -135,7 +135,7 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
   }
 
   // Handle 401 with optional retry/login; returns retried response or rejects with APIResponse
-  private async handle401(response: any, extras: ReturnType<APIClient['getExtras']>) {
+  private async handle401(response: any, extras: ReturnType<HTTPApiClient['getExtras']>) {
     const retryLeft = extras.__retry_left ?? 0;
     const retryDelay = extras.__retry_delay ?? DEFAULT_RETRY_DELAY;
     const toApiRes = (schema?: ParseTarget) =>
@@ -274,17 +274,17 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
 
   // Public instance method to support composition-based API usage
   // Overload 1: caller provides a concrete schema S per request -> returns APIResponse<S>
-  public requestHTTP<S extends ParseTarget>(
-    params: Omit<requestAPIParams<S>, 'schema'> & { schema: S }
-  ): Promise<APIResponse<S>>;
+  public request<S extends ParseTarget>(
+    params: Omit<requestHttpApiParams<S>, 'schema'> & { schema: S }
+  ): Promise<HttpApiResponse<S>>;
   // Overload 2: caller provides no schema -> returns APIResponse<FS> using client's fallback schema
-  public requestHTTP(
-    params: Omit<requestAPIParams<undefined>, 'schema'> & { schema?: undefined }
-  ): Promise<APIResponse<FS>>;
+  public request(
+    params: Omit<requestHttpApiParams<undefined>, 'schema'> & { schema?: undefined }
+  ): Promise<HttpApiResponse<FS>>;
   // Implementation signature covering both overloads
-  public requestHTTP<S extends ParseTarget | undefined = undefined>(
-    params: requestAPIParams<S>
-  ): Promise<APIResponse<SchemaOr<S, FS>>> {
+  public request<S extends ParseTarget | undefined = undefined>(
+    params: requestHttpApiParams<S>
+  ): Promise<HttpApiResponse<SchemaOr<S, FS>>> {
     let {
       method,
       endpoint,
@@ -326,7 +326,7 @@ export class APIClient<FS extends ParseTarget | undefined = undefined> {
           const apiRes = this.buildApiResponse(response, schemaForBody);
 
           log.info(`Request to ${method} ${fullUrl} Done`, apiRes);
-          resolve(apiRes as unknown as APIResponse<SchemaOr<S, FS>>);
+          resolve(apiRes as unknown as HttpApiResponse<SchemaOr<S, FS>>);
         })
         .catch((err) => {
           // log

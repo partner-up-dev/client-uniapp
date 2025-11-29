@@ -1,4 +1,4 @@
-import { APIClient } from '../api';
+import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
 import { useTranslate } from '@/locale/use';
 import { instance } from '..';
@@ -30,7 +30,7 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
   ride_hailing_order: nullable(v.number()),
 })) {
 
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/ride_hailing',
     dt: useTranslate('partner_request').dt,
     fallbackSchema: RideHailingPR,
@@ -69,7 +69,7 @@ export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
 })) {
 
   public create(): Promise<RideHailingPR> {
-    return RideHailingPR.mainClient.requestHTTP({
+    return RideHailingPR.mainClient.request({
       method: 'POST',
       endpoint: '',
       data: this,
@@ -78,7 +78,7 @@ export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
   }
 
   public update(): Promise<RideHailingPR> {
-    return RideHailingPR.mainClient.requestHTTP({
+    return RideHailingPR.mainClient.request({
       method: 'PUT',
       endpoint: `/${this._id}`,
       data: this,

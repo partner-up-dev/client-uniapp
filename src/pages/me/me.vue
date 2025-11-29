@@ -24,7 +24,7 @@ import Avatar from "@/components/common/avatar/avatar.vue";
 import Cell from "@/components/common/cell/cell.vue";
 import Card from "@/components/common/card/card.vue";
 import Field from "@/components/common/field/field.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUButton } from "@partner-up-dev/design-uniapp";
 import dayjs from "dayjs";
 import { useChooseImage } from "@/business/oss/index";
 import { GENDER_OPTIONS, MBTI_OPTIONS } from "@/data/const";

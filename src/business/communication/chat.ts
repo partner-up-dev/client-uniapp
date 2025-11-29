@@ -1,6 +1,6 @@
 import * as v from "valibot";
 import { V, nullable, instance } from "../index";
-import { APIClient } from "../api";
+import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { AccountRefV } from "../account";
@@ -34,7 +34,7 @@ export class Chat extends V.class(v.object({
 })) {
 
   // API client for Chat-related endpoints
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/chat',
     dt: useTranslate('chat').dt,
     fallbackSchema: Chat,
@@ -57,7 +57,7 @@ export class Chat extends V.class(v.object({
   }
 
   static async get_mine(): Promise<Chat[]> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: 'GET',
       endpoint: `/mine`,
       operation_id: 'ChatV2GetMine',
@@ -82,7 +82,7 @@ export class Chat extends V.class(v.object({
     offset: number = 6,
     desc: boolean = true
   ): Promise<Message[]> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: 'GET',
       endpoint: `/${chatId}/messages`,
       data: {
@@ -99,7 +99,7 @@ export class Chat extends V.class(v.object({
    * Get PartnerRequest of this Chat
    */
   public getPartnerRequest(): Promise<PartnerRequest> {
-    return Chat.mainClient.requestHTTP({
+    return Chat.mainClient.request({
       method: 'GET',
       endpoint: `/${this._id}/partner_request`,
       operation_id: 'ChatV2GetPR',
@@ -111,7 +111,7 @@ export class Chat extends V.class(v.object({
    * Get DM Chat
    */
   static getDMWith(accountId: string): Promise<Chat> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: 'PUT',
       endpoint: `/direct_message/${accountId}`,
       operation_id: 'ChatV2PutDM',

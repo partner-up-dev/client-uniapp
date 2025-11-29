@@ -3,7 +3,7 @@ import { useAccountStore } from "@/store/account";
 import { V, nullable } from "..";
 import * as v from "valibot";
 import { hideLoading, showLoading, errorReport } from "@/utils/vendor";
-import { APIClient } from "../api";
+import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { Chat } from "../communication/chat";
@@ -56,7 +56,7 @@ export class AccountBaseProfile extends V.class(v.object({
         return Promise.reject();
       }
     }
-    return Account.mainClient.requestHTTP({
+    return Account.mainClient.request({
       method: "GET",
       endpoint: `/profile/base/${accountId}`,
       schema: AccountBaseProfile,
@@ -64,7 +64,7 @@ export class AccountBaseProfile extends V.class(v.object({
   }
 
   public put(): Promise<void> {
-    return Account.mainClient.requestHTTP({
+    return Account.mainClient.request({
       method: "PUT",
       endpoint: `/profile/base/${this.id}`,
       data: this
@@ -75,7 +75,7 @@ export class AccountBaseProfile extends V.class(v.object({
 
 export class Account {
 
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: "/account",
     dt: useTranslate("account").dt,
   });
@@ -102,7 +102,7 @@ export class Account {
       uni.login({
         provider: "weixin",
         success(res) {
-          that.mainClient.requestHTTP({
+          that.mainClient.request({
             method: "POST",
             endpoint: "/wxmp/wxmp_mp/login",
             data: {

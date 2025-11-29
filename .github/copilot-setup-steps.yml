@@ -10,6 +10,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@partner-up-dev"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3
@@ -26,3 +28,5 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

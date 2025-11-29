@@ -17,8 +17,7 @@ import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
-import PUNoticeBar from "@/components/common/PUNoticeBar/PUNoticeBar.vue";
-import PUButton from "@/components/common/PUButton/PUButton.vue";
+import { PUNoticeBar, PUButton } from "@partner-up-dev/design-uniapp";
 
 const { dt: domain_t } = useTranslate("partner_request.create_end");
 

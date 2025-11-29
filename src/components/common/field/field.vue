@@ -7,7 +7,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { FieldEmits, FieldProps, type FieldValueType } from "./field";
-import PUPicker from "@/components/common/PUPicker/PUPicker.vue";
+import { PUPicker } from "@partner-up-dev/design-uniapp";
 import LocationPicker from "@/components/base/locationPicker/locationPicker.vue";
 import { withFallback } from "@/utils";
 import type { LocationRef } from "@/business/base/route";

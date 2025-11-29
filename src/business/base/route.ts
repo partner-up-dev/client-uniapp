@@ -8,7 +8,7 @@ import { errorReport } from "@/utils/vendor";
 import { useTranslate } from "@/locale/use";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
-import { APIClient } from "@/business/api";
+import { HTTPApiClient } from "@/business/http-api";
 import { DBApiClient } from "@/business/db-api";
 import dayjs from "dayjs";
 import { DatetimeV } from ".";
@@ -25,7 +25,7 @@ export class Location extends V.class(v.object({
   lng: v.number(),
   _id: LocationRefV,
 })) {
-  static mainClient = new APIClient<typeof Location>({
+  static mainClient = new HTTPApiClient<typeof Location>({
     modulePrefix: '/base/location',
     dt: useTranslate('base.location').dt,
     fallbackSchema: Location,
@@ -88,7 +88,7 @@ export class LocationForm extends V.formClass(v.object({
   _id: v.optional(LocationRefV, undefined),
 })) {
   public async put(): Promise<Location> {
-    return Location.mainClient.requestHTTP({
+    return Location.mainClient.request({
       method: "PUT",
       endpoint: '',
       data: this,
@@ -112,6 +112,7 @@ export class RouteItemDatetime extends V.class(v.object({
     if (this.datetime) {
       return dayjs(this.datetime).format('YYYY.MM.DD');
     }
+    return undefined;
   }
 
   get timeRange(): { start?: string; end?: string } {

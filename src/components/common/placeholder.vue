@@ -56,7 +56,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-@use "@/styles/main.scss" as *;
+
 
 .placeholder {
   @extend .placeholder-base;

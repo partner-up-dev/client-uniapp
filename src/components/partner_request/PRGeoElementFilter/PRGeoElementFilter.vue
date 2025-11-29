@@ -44,10 +44,10 @@ export default {
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import PUMap from "@/components/common/PUMap/PUMap.vue";
+import { PUMap } from "@partner-up-dev/design-uniapp";
+import type { GeoElementWithIndex } from "@partner-up-dev/design-uniapp";
 import GeoElementPreview from "@/components/common/GeoElement/GeoElement.vue";
 import { type GeoElement } from "@/components/common/GeoElement/GeoElement";
-import { type GeoElementWithIndex } from "@/components/common/PUMap/PUMap";
 import { type Coord } from "@/business/base/route";
 import { mockElements } from "./PRGeoElementFilter";
 import { makeStringProp } from "@/utils/props";

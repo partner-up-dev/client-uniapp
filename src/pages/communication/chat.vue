@@ -12,7 +12,7 @@ import { Chat } from "@/business/communication/chat";
 import { Message } from "@/business/communication/message";
 import ChatContent from "@/components/communication/ChatContent/ChatContent.vue";
 import safeAreaInset from "@/components/common/safeAreaInset.vue";
-import PUTextarea from "@/components/common/PUTextarea/PUTextarea.vue";
+import { PUTextarea } from "@partner-up-dev/design-uniapp";
 import NavBar from "@/components/common/navBar/navBar.vue";
 import ScaffoldLayout from "@/components/common/layout/scaffoldLayout.vue";
 import type { ChatPageParams } from "./chat";

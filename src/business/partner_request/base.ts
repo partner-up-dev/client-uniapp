@@ -1,5 +1,5 @@
 import { Partner } from "./partner";
-import { APIClient } from "../api";
+import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
 import { useTranslate } from "@/locale/use";
 import { computed, ref, watch } from "vue";
@@ -27,7 +27,7 @@ export class PartnerRequest extends V.class(v.object({
   static INTRODUCTION_MAXLENGTH = 60;
   static TITLE_MAXLENGTH = 16;
 
-  static mainClient = new APIClient({
+  static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request',
     dt: useTranslate('partner_request').dt,
     fallbackSchema: PartnerRequest,
@@ -43,7 +43,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static getPartners(pr_id: PRRef): Promise<Partner[]> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: "GET",
       endpoint: `/${pr_id}/partners`,
       schema: v.array(instance(Partner)),
@@ -137,7 +137,7 @@ export class PartnerRequest extends V.class(v.object({
 
     const refresh = () => {
       loading.value = true;
-      return this.mainClient.requestHTTP({
+      return this.mainClient.request({
         method: 'GET',
         endpoint: '/list/draft',
         schema: v.array(PRRefV),
@@ -153,7 +153,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static publish(pr_id: PRRef): Promise<void> {
-    return this.mainClient.requestHTTP({
+    return this.mainClient.request({
       method: 'PUT',
       endpoint: `/${pr_id}/publish`,
       operation_id: 'PartnerRequestV2Publish',
