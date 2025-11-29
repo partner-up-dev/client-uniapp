@@ -19,7 +19,7 @@ body::-webkit-scrollbar {
 </style>
 
 <style lang="scss">
-
+@use "@partner-up-dev/design-uniapp/styles" as *;
 
 .page-bg {
   position: fixed;
@@ -28,7 +28,8 @@ body::-webkit-scrollbar {
   bottom: 0;
   right: 0;
   z-index: -100;
-  background-color: $pu-color-surface;
-  color: $pu-color-on-surface;
+  // background-color: $pu-color-surface;
+  background-color: sys-var(color, surface);
+  color: sys-var(color, on-surface);
 }
 </style>
