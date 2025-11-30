@@ -1,12 +1,18 @@
 /**
- * Miniprogram-compatible Headers class for PostgREST
+ * Miniprogram-compatible Headers class
+ * 
+ * A unified Headers implementation that works in UniApp miniprogram environment
+ * where native Headers API is not available.
  */
-export class PostgrestHeaders implements Iterable<[string, string]> {
+
+type HeadersInit = Headers | Record<string, string> | [string, string][];
+
+export class Headers implements Iterable<[string, string]> {
   private _headers: Map<string, string> = new Map();
 
-  constructor(init?: Record<string, string> | PostgrestHeaders | [string, string][]) {
+  constructor(init?: HeadersInit) {
     if (init) {
-      if (init instanceof PostgrestHeaders) {
+      if (init instanceof Headers) {
         init._headers.forEach((value, key) => this._headers.set(key, value));
       } else if (Array.isArray(init)) {
         init.forEach(([key, value]) => this._headers.set(key.toLowerCase(), value));
@@ -40,7 +46,7 @@ export class PostgrestHeaders implements Iterable<[string, string]> {
     this._headers.set(name.toLowerCase(), value);
   }
 
-  forEach(callbackfn: (value: string, key: string, parent: PostgrestHeaders) => void, thisArg?: any): void {
+  forEach(callbackfn: (value: string, key: string, parent: Headers) => void, thisArg?: any): void {
     this._headers.forEach((value, key) => {
       callbackfn.call(thisArg, value, key, this);
     });

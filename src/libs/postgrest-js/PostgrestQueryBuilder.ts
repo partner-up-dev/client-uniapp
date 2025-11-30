@@ -1,7 +1,6 @@
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
-import type { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
-import { PostgrestHeaders } from './PostgrestHeaders';
-import { PostgrestURL } from './PostgrestURL';
+import type { PostgrestBuilderConfig } from './PostgrestBuilder';
+import { Headers, URL } from '@/libs/fetch-polyfill';
 
 /**
  * Query builder for PostgREST queries
@@ -9,27 +8,23 @@ import { PostgrestURL } from './PostgrestURL';
  * Miniprogram-compatible implementation
  */
 export class PostgrestQueryBuilder<Result = unknown> {
-  protected url: PostgrestURL;
-  protected headers: PostgrestHeaders;
+  protected url: URL;
+  protected headers: Headers;
   protected schema?: string;
-  protected fetch?: PostgrestFetch;
 
   constructor(
-    url: PostgrestURL,
+    url: URL,
     {
       headers = {},
       schema,
-      fetch,
     }: {
-      headers?: Record<string, string> | PostgrestHeaders;
+      headers?: Record<string, string> | Headers;
       schema?: string;
-      fetch?: PostgrestFetch;
     }
   ) {
     this.url = url;
-    this.headers = headers instanceof PostgrestHeaders ? headers : new PostgrestHeaders(headers);
+    this.headers = headers instanceof Headers ? headers : new Headers(headers);
     this.schema = schema;
-    this.fetch = fetch;
   }
 
   /**
@@ -70,7 +65,6 @@ export class PostgrestQueryBuilder<Result = unknown> {
       url: this.url,
       headers: this.headers,
       schema: this.schema,
-      fetch: this.fetch,
     });
   }
 
@@ -111,7 +105,6 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
-      fetch: this.fetch,
     });
   }
 
@@ -162,7 +155,6 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
-      fetch: this.fetch,
     });
   }
 
@@ -192,7 +184,6 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
-      fetch: this.fetch,
     });
   }
 
@@ -217,7 +208,6 @@ export class PostgrestQueryBuilder<Result = unknown> {
       url: this.url,
       headers: this.headers,
       schema: this.schema,
-      fetch: this.fetch,
     });
   }
 }

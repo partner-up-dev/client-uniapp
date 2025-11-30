@@ -1,6 +1,5 @@
 import { PostgrestBuilder } from './PostgrestBuilder';
-import type { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
-import { PostgrestHeaders } from './PostgrestHeaders';
+import type { PostgrestBuilderConfig } from './PostgrestBuilder';
 
 /**
  * Transform builder for PostgREST queries

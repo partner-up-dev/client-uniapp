@@ -1,41 +1,14 @@
 /**
- * Miniprogram-compatible URL class for PostgREST
+ * Miniprogram-compatible URL and URLSearchParams classes
  * 
- * A simplified URL implementation that doesn't rely on browser APIs
+ * Simplified URL implementations that don't rely on browser APIs and work in
+ * UniApp miniprogram environment.
  */
-export class PostgrestURL {
-  private _baseUrl: string;
-  private _searchParams: PostgrestURLSearchParams;
-
-  constructor(url: string) {
-    // Parse the URL
-    const questionIndex = url.indexOf('?');
-    if (questionIndex !== -1) {
-      this._baseUrl = url.substring(0, questionIndex);
-      this._searchParams = new PostgrestURLSearchParams(url.substring(questionIndex + 1));
-    } else {
-      this._baseUrl = url;
-      this._searchParams = new PostgrestURLSearchParams();
-    }
-  }
-
-  get searchParams(): PostgrestURLSearchParams {
-    return this._searchParams;
-  }
-
-  toString(): string {
-    const queryString = this._searchParams.toString();
-    if (queryString) {
-      return `${this._baseUrl}?${queryString}`;
-    }
-    return this._baseUrl;
-  }
-}
 
 /**
- * Miniprogram-compatible URLSearchParams class for PostgREST
+ * URLSearchParams class compatible with Web API
  */
-export class PostgrestURLSearchParams {
+export class URLSearchParams {
   private _params: Map<string, string[]> = new Map();
 
   constructor(init?: string | Record<string, string>) {
@@ -55,7 +28,6 @@ export class PostgrestURLSearchParams {
       try {
         const eqIndex = pair.indexOf('=');
         if (eqIndex === -1) {
-          // No '=' found, treat as key with empty value
           const key = decodeURIComponent(pair);
           if (key) {
             this.append(key, '');
@@ -141,5 +113,36 @@ export class PostgrestURLSearchParams {
       values.push(...vals);
     });
     return values[Symbol.iterator]();
+  }
+}
+
+/**
+ * URL class compatible with Web API
+ */
+export class URL {
+  private _baseUrl: string;
+  private _searchParams: URLSearchParams;
+
+  constructor(url: string) {
+    const questionIndex = url.indexOf('?');
+    if (questionIndex !== -1) {
+      this._baseUrl = url.substring(0, questionIndex);
+      this._searchParams = new URLSearchParams(url.substring(questionIndex + 1));
+    } else {
+      this._baseUrl = url;
+      this._searchParams = new URLSearchParams();
+    }
+  }
+
+  get searchParams(): URLSearchParams {
+    return this._searchParams;
+  }
+
+  toString(): string {
+    const queryString = this._searchParams.toString();
+    if (queryString) {
+      return `${this._baseUrl}?${queryString}`;
+    }
+    return this._baseUrl;
   }
 }
