@@ -43,7 +43,7 @@ export class Location extends V.class(v.object({
     }
 
     // 没有缓存，通过 PostgREST 获取
-    return this.dbClient.from()
+    return this.dbClient
       .select('*')
       .eq('_id', id)
       .single()

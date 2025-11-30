@@ -78,7 +78,7 @@ export class PartnerRequest extends V.class(v.object({
   }
 
   static get(pr_id: PRRef): Promise<PartnerRequest> {
-    return this.dbClient.from()
+    return this.dbClient
       .select('*')
       .eq('_id', pr_id)
       .single()

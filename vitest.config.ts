@@ -26,6 +26,7 @@ export default defineConfig({
   },
   define: {
     'import.meta.env.VITE_TENCENT_LBS_KEY': JSON.stringify('mock-tencent-lbs-key'),
+    'import.meta.env.VITE_PGRST_URL': JSON.stringify('https://pgrst.example.com'),
   },
   test: {
     environment: 'jsdom',

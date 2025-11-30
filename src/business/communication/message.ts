@@ -63,7 +63,7 @@ export class Message extends V.class(v.object({
   });
 
   static async get(id: MessageRef): Promise<Message> {
-    return this.dbClient.from()
+    return this.dbClient
       .select('*')
       .eq('_id', id)
       .single()

@@ -37,7 +37,7 @@ export class PartnerRole extends V.class(v.object({
       return cachedRole;
     }
 
-    return this.dbClient.from()
+    return this.dbClient
       .select('*')
       .eq('id', id)
       .single()
