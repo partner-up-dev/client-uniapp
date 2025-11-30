@@ -17,27 +17,7 @@ export interface RequestInit {
   signal?: AbortSignal;
 }
 
-/**
- * Fetch type for postgrest-js compatibility
- * This is a simplified fetch signature that postgrest-js uses internally
- */
-export type FetchFn = (url: string, init?: {
-  method?: string;
-  headers?: Record<string, string>;
-  body?: string;
-  signal?: AbortSignal;
-}) => Promise<{
-  ok: boolean;
-  status: number;
-  statusText: string;
-  text: () => Promise<string>;
-  headers: {
-    get: (name: string) => string | null;
-  };
-}>;
-
 const DEFAULT_TIMEOUT = 5000;
-const POSTGREST_TIMEOUT = 30000;
 
 /**
  * Fetch function compatible with Web Fetch API, wrapping uni.request
@@ -125,63 +105,4 @@ export function fetch(
       });
     }
   });
-}
-
-/**
- * Create a fetch function for postgrest-js compatibility
- * 
- * This creates a fetch function that returns the simplified response type
- * that postgrest-js expects internally. Uses a longer timeout (30s) for
- * database operations.
- */
-export function createPostgrestFetch(): FetchFn {
-  return (url: string, init?: {
-    method?: string;
-    headers?: Record<string, string>;
-    body?: string;
-    signal?: AbortSignal;
-  }) => {
-    return new Promise((resolve, reject) => {
-      const requestTask = uni.request({
-        url,
-        method: (init?.method ?? 'GET') as UniApp.RequestOptions['method'],
-        data: init?.body,
-        header: init?.headers,
-        timeout: POSTGREST_TIMEOUT,
-        success: (res) => {
-          const responseHeaders: Record<string, string> = {};
-          if (res.header) {
-            Object.entries(res.header).forEach(([key, value]) => {
-              responseHeaders[key.toLowerCase()] = String(value);
-            });
-          }
-
-          resolve({
-            ok: res.statusCode >= 200 && res.statusCode < 300,
-            status: res.statusCode,
-            statusText: '',
-            text: async () => {
-              if (typeof res.data === 'string') {
-                return res.data;
-              }
-              return JSON.stringify(res.data);
-            },
-            headers: {
-              get: (name: string) => responseHeaders[name.toLowerCase()] ?? null,
-            },
-          });
-        },
-        fail: (err) => {
-          reject(new Error(err.errMsg || 'Network request failed'));
-        },
-      });
-
-      if (init?.signal) {
-        init.signal.addEventListener('abort', () => {
-          requestTask.abort();
-          reject(new Error('Request aborted'));
-        });
-      }
-    });
-  };
 }

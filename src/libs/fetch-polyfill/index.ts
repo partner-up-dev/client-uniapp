@@ -24,4 +24,4 @@
 export { Headers } from './Headers';
 export { Response, type ResponseInit } from './Response';
 export { URL, URLSearchParams } from './URL';
-export { fetch, createPostgrestFetch, type RequestInit, type FetchFn } from './fetch';
+export { fetch, type RequestInit } from './fetch';

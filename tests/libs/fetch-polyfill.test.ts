@@ -6,7 +6,6 @@ import {
   URL,
   URLSearchParams,
   fetch,
-  createPostgrestFetch,
 } from "@/libs/fetch-polyfill";
 
 describe("Headers", () => {
@@ -485,75 +484,5 @@ describe("fetch", () => {
         },
       })
     );
-  });
-});
-
-describe("createPostgrestFetch", () => {
-  let mockUniRequest: ReturnType<typeof vi.fn>;
-
-  beforeEach(() => {
-    mockUniRequest = uni.request as ReturnType<typeof vi.fn>;
-    vi.mocked(uni).request = vi.fn();
-  });
-
-  afterEach(() => {
-    vi.mocked(uni).request = mockUniRequest;
-  });
-
-  it("should create a fetch function for postgrest-js", async () => {
-    const postgrestFetch = createPostgrestFetch();
-    
-    const mockResponse = {
-      data: { id: 1, name: "test" },
-      statusCode: 200,
-      header: { "content-range": "0-0/1" },
-    };
-
-    (uni.request as ReturnType<typeof vi.fn>).mockImplementation((config: { success: (res: typeof mockResponse) => void }) => {
-      config.success(mockResponse);
-      return { abort: vi.fn() };
-    });
-
-    const response = await postgrestFetch("https://example.com/rest/v1/table", {
-      method: "GET",
-      headers: { "Accept": "application/json" },
-    });
-
-    expect(response.ok).toBe(true);
-    expect(response.status).toBe(200);
-    expect(response.headers.get("content-range")).toBe("0-0/1");
-    
-    const text = await response.text();
-    expect(text).toBe(JSON.stringify({ id: 1, name: "test" }));
-  });
-
-  it("should handle string response data", async () => {
-    const postgrestFetch = createPostgrestFetch();
-    
-    const mockResponse = {
-      data: "plain text response",
-      statusCode: 200,
-      header: {},
-    };
-
-    (uni.request as ReturnType<typeof vi.fn>).mockImplementation((config: { success: (res: typeof mockResponse) => void }) => {
-      config.success(mockResponse);
-      return { abort: vi.fn() };
-    });
-
-    const response = await postgrestFetch("https://example.com/rest/v1/table");
-    const text = await response.text();
-    expect(text).toBe("plain text response");
-  });
-
-  it("should handle request failure", async () => {
-    const postgrestFetch = createPostgrestFetch();
-
-    (uni.request as ReturnType<typeof vi.fn>).mockImplementation((config: { fail: (err: { errMsg: string }) => void }) => {
-      config.fail({ errMsg: "Network request failed" });
-      return { abort: vi.fn() };
-    });
-
-    await expect(postgrestFetch("https://example.com/rest/v1/table")).rejects.toThrow("Network request failed");
   });
 });
