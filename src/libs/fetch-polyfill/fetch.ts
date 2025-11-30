@@ -37,6 +37,7 @@ export type FetchFn = (url: string, init?: {
 }>;
 
 const DEFAULT_TIMEOUT = 5000;
+const POSTGREST_TIMEOUT = 30000;
 
 /**
  * Fetch function compatible with Web Fetch API, wrapping uni.request
@@ -130,7 +131,8 @@ export function fetch(
  * Create a fetch function for postgrest-js compatibility
  * 
  * This creates a fetch function that returns the simplified response type
- * that postgrest-js expects internally.
+ * that postgrest-js expects internally. Uses a longer timeout (30s) for
+ * database operations.
  */
 export function createPostgrestFetch(): FetchFn {
   return (url: string, init?: {
@@ -145,7 +147,7 @@ export function createPostgrestFetch(): FetchFn {
         method: (init?.method ?? 'GET') as UniApp.RequestOptions['method'],
         data: init?.body,
         header: init?.headers,
-        timeout: 30000,
+        timeout: POSTGREST_TIMEOUT,
         success: (res) => {
           const responseHeaders: Record<string, string> = {};
           if (res.header) {
