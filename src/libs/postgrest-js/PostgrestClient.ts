@@ -1,7 +1,6 @@
 import { PostgrestQueryBuilder } from './PostgrestQueryBuilder';
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
-import { PostgrestHeaders } from './PostgrestHeaders';
-import { PostgrestURL } from './PostgrestURL';
+import { Headers, URL } from '@/libs/fetch-polyfill';
 import type { PostgrestFetch } from './PostgrestBuilder';
 
 /**
@@ -11,7 +10,7 @@ import type { PostgrestFetch } from './PostgrestBuilder';
  */
 export class PostgrestClient {
   protected url: string;
-  public headers: PostgrestHeaders;
+  public headers: Headers;
   protected schemaName?: string;
   protected fetch?: PostgrestFetch;
 
@@ -37,7 +36,7 @@ export class PostgrestClient {
     } = {}
   ) {
     this.url = url;
-    this.headers = new PostgrestHeaders(headers);
+    this.headers = new Headers(headers);
     this.schemaName = schema;
     this.fetch = fetch;
   }
@@ -51,7 +50,7 @@ export class PostgrestClient {
     if (!relation || typeof relation !== 'string' || relation.trim() === '') {
       throw new Error('Invalid relation name: relation must be a non-empty string.');
     }
-    const url = new PostgrestURL(`${this.url}/${relation}`);
+    const url = new URL(`${this.url}/${relation}`);
     return new PostgrestQueryBuilder<T>(url, {
       headers: this.headers,
       schema: this.schemaName,
@@ -95,7 +94,7 @@ export class PostgrestClient {
     } = {}
   ): PostgrestFilterBuilder<unknown> {
     let method: 'GET' | 'HEAD' | 'POST';
-    const url = new PostgrestURL(`${this.url}/rpc/${fn}`);
+    const url = new URL(`${this.url}/rpc/${fn}`);
     let body: Record<string, unknown> | undefined;
 
     if (head || get) {
@@ -114,7 +113,7 @@ export class PostgrestClient {
       body = args;
     }
 
-    const headers = new PostgrestHeaders(this.headers.toObject());
+    const headers = new Headers(this.headers.toObject());
     if (count) {
       headers.set('Prefer', `count=${count}`);
     }

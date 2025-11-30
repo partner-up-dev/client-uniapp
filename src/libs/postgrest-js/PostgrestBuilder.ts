@@ -1,6 +1,5 @@
-import { PostgrestHeaders } from './PostgrestHeaders';
+import { Headers, URL } from '@/libs/fetch-polyfill';
 import { PostgrestError } from './PostgrestError';
-import { PostgrestURL } from './PostgrestURL';
 
 /**
  * PostgREST response type
@@ -44,8 +43,8 @@ export type PostgrestFetch = (url: string, init?: {
  */
 export interface PostgrestBuilderConfig {
   method: 'GET' | 'HEAD' | 'POST' | 'PATCH' | 'DELETE';
-  url: PostgrestURL;
-  headers: PostgrestHeaders;
+  url: URL;
+  headers: Headers;
   schema?: string;
   body?: unknown;
   fetch?: PostgrestFetch;
@@ -61,8 +60,8 @@ export interface PostgrestBuilderConfig {
  */
 export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<Result>> {
   protected method: 'GET' | 'HEAD' | 'POST' | 'PATCH' | 'DELETE';
-  protected url: PostgrestURL;
-  protected headers: PostgrestHeaders;
+  protected url: URL;
+  protected headers: Headers;
   protected schema?: string;
   protected body?: unknown;
   protected shouldThrowOnError: boolean = false;
@@ -73,7 +72,7 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
   constructor(builder: PostgrestBuilderConfig) {
     this.method = builder.method;
     this.url = builder.url;
-    this.headers = new PostgrestHeaders(builder.headers.toObject());
+    this.headers = new Headers(builder.headers.toObject());
     this.schema = builder.schema;
     this.body = builder.body;
     this.shouldThrowOnError = builder.shouldThrowOnError ?? false;
