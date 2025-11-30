@@ -1,6 +1,7 @@
 import { PostgrestHeaders } from './PostgrestHeaders';
 import { PostgrestError } from './PostgrestError';
 import { PostgrestURL } from './PostgrestURL';
+import { createPostgrestFetch, type FetchFn } from '@/libs/fetch-polyfill';
 
 /**
  * PostgREST response type
@@ -23,21 +24,9 @@ export interface PostgrestMaybeSingleResponse<T> extends PostgrestResponse<T> {
 
 /**
  * Fetch function type for miniprogram
+ * Re-exported from fetch-polyfill for backwards compatibility
  */
-export type PostgrestFetch = (url: string, init?: {
-  method?: string;
-  headers?: Record<string, string>;
-  body?: string;
-  signal?: AbortSignal;
-}) => Promise<{
-  ok: boolean;
-  status: number;
-  statusText: string;
-  text: () => Promise<string>;
-  headers: {
-    get: (name: string) => string | null;
-  };
-}>;
+export type PostgrestFetch = FetchFn;
 
 /**
  * Builder configuration
@@ -83,64 +72,9 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
     if (builder.fetch) {
       this.fetch = builder.fetch;
     } else {
-      // Use uni.request as default fetch
-      this.fetch = this.createUniFetch();
+      // Use the unified fetch from fetch-polyfill
+      this.fetch = createPostgrestFetch();
     }
-  }
-
-  /**
-   * Create a fetch function using uni.request
-   */
-  private createUniFetch(): PostgrestFetch {
-    return (url: string, init?: {
-      method?: string;
-      headers?: Record<string, string>;
-      body?: string;
-      signal?: AbortSignal;
-    }) => {
-      return new Promise((resolve, reject) => {
-        const requestTask = uni.request({
-          url,
-          method: (init?.method ?? 'GET') as any,
-          data: init?.body,
-          header: init?.headers,
-          timeout: 30000,
-          success: (res) => {
-            const responseHeaders: Record<string, string> = {};
-            if (res.header) {
-              Object.entries(res.header).forEach(([key, value]) => {
-                responseHeaders[key.toLowerCase()] = String(value);
-              });
-            }
-
-            resolve({
-              ok: res.statusCode >= 200 && res.statusCode < 300,
-              status: res.statusCode,
-              statusText: '',
-              text: async () => {
-                if (typeof res.data === 'string') {
-                  return res.data;
-                }
-                return JSON.stringify(res.data);
-              },
-              headers: {
-                get: (name: string) => responseHeaders[name.toLowerCase()] ?? null,
-              },
-            });
-          },
-          fail: (err) => {
-            reject(new Error(err.errMsg || 'Network request failed'));
-          },
-        });
-
-        if (init?.signal) {
-          init.signal.addEventListener('abort', () => {
-            requestTask.abort();
-            reject(new Error('Request aborted'));
-          });
-        }
-      });
-    };
   }
 
   /**
