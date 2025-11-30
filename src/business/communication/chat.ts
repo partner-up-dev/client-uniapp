@@ -46,7 +46,7 @@ export class Chat extends V.class(v.object({
   });
 
   static async get(chatId: ChatRef): Promise<Chat> {
-    return this.dbClient.from()
+    return this.dbClient
       .select('*')
       .eq('_id', chatId)
       .single()
