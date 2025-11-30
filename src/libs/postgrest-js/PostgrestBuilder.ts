@@ -1,4 +1,4 @@
-import { Headers, URL } from '@/libs/fetch-polyfill';
+import { Headers, URL, fetch } from '@/libs/fetch-polyfill';
 import { PostgrestError } from './PostgrestError';
 
 /**
@@ -21,24 +21,6 @@ export interface PostgrestMaybeSingleResponse<T> extends PostgrestResponse<T> {
 }
 
 /**
- * Fetch function type for miniprogram
- */
-export type PostgrestFetch = (url: string, init?: {
-  method?: string;
-  headers?: Record<string, string>;
-  body?: string;
-  signal?: AbortSignal;
-}) => Promise<{
-  ok: boolean;
-  status: number;
-  statusText: string;
-  text: () => Promise<string>;
-  headers: {
-    get: (name: string) => string | null;
-  };
-}>;
-
-/**
  * Builder configuration
  */
 export interface PostgrestBuilderConfig {
@@ -47,7 +29,6 @@ export interface PostgrestBuilderConfig {
   headers: Headers;
   schema?: string;
   body?: unknown;
-  fetch?: PostgrestFetch;
   shouldThrowOnError?: boolean;
   signal?: AbortSignal;
   isMaybeSingle?: boolean;
@@ -66,7 +47,6 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
   protected body?: unknown;
   protected shouldThrowOnError: boolean = false;
   protected signal?: AbortSignal;
-  protected fetch: PostgrestFetch;
   protected isMaybeSingle: boolean = false;
 
   constructor(builder: PostgrestBuilderConfig) {
@@ -78,68 +58,6 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
     this.shouldThrowOnError = builder.shouldThrowOnError ?? false;
     this.signal = builder.signal;
     this.isMaybeSingle = builder.isMaybeSingle ?? false;
-
-    if (builder.fetch) {
-      this.fetch = builder.fetch;
-    } else {
-      // Use uni.request as default fetch
-      this.fetch = this.createUniFetch();
-    }
-  }
-
-  /**
-   * Create a fetch function using uni.request
-   */
-  private createUniFetch(): PostgrestFetch {
-    return (url: string, init?: {
-      method?: string;
-      headers?: Record<string, string>;
-      body?: string;
-      signal?: AbortSignal;
-    }) => {
-      return new Promise((resolve, reject) => {
-        const requestTask = uni.request({
-          url,
-          method: (init?.method ?? 'GET') as any,
-          data: init?.body,
-          header: init?.headers,
-          timeout: 30000,
-          success: (res) => {
-            const responseHeaders: Record<string, string> = {};
-            if (res.header) {
-              Object.entries(res.header).forEach(([key, value]) => {
-                responseHeaders[key.toLowerCase()] = String(value);
-              });
-            }
-
-            resolve({
-              ok: res.statusCode >= 200 && res.statusCode < 300,
-              status: res.statusCode,
-              statusText: '',
-              text: async () => {
-                if (typeof res.data === 'string') {
-                  return res.data;
-                }
-                return JSON.stringify(res.data);
-              },
-              headers: {
-                get: (name: string) => responseHeaders[name.toLowerCase()] ?? null,
-              },
-            });
-          },
-          fail: (err) => {
-            reject(new Error(err.errMsg || 'Network request failed'));
-          },
-        });
-
-        if (init?.signal) {
-          init.signal.addEventListener('abort', () => {
-            requestTask.abort();
-            reject(new Error('Request aborted'));
-          });
-        }
-      });
-    };
   }
 
   /**
@@ -176,8 +94,7 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
       this.headers.set('Content-Type', 'application/json');
     }
 
-    const _fetch = this.fetch;
-    let res = _fetch(this.url.toString(), {
+    let res = fetch(this.url.toString(), {
       method: this.method,
       headers: this.headers.toObject(),
       body: this.body !== undefined ? JSON.stringify(this.body) : undefined,

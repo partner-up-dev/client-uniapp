@@ -9,5 +9,5 @@ export { PostgrestClient } from './PostgrestClient';
 export { PostgrestQueryBuilder } from './PostgrestQueryBuilder';
 export { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
 export { PostgrestTransformBuilder } from './PostgrestTransformBuilder';
-export { PostgrestBuilder, type PostgrestResponse, type PostgrestFetch } from './PostgrestBuilder';
+export { PostgrestBuilder, type PostgrestResponse } from './PostgrestBuilder';
 export { PostgrestError, type PostgrestErrorContext } from './PostgrestError';

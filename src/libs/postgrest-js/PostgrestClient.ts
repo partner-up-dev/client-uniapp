@@ -1,7 +1,6 @@
 import { PostgrestQueryBuilder } from './PostgrestQueryBuilder';
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
 import { Headers, URL } from '@/libs/fetch-polyfill';
-import type { PostgrestFetch } from './PostgrestBuilder';
 
 /**
  * PostgREST client
@@ -12,7 +11,6 @@ export class PostgrestClient {
   protected url: string;
   public headers: Headers;
   protected schemaName?: string;
-  protected fetch?: PostgrestFetch;
 
   /**
    * Creates a PostgREST client.
@@ -21,24 +19,20 @@ export class PostgrestClient {
    * @param options - Named parameters
    * @param options.headers - Custom headers
    * @param options.schema - Postgres schema to switch to
-   * @param options.fetch - Custom fetch
    */
   constructor(
     url: string,
     {
       headers = {},
       schema,
-      fetch,
     }: {
       headers?: Record<string, string>;
       schema?: string;
-      fetch?: PostgrestFetch;
     } = {}
   ) {
     this.url = url;
     this.headers = new Headers(headers);
     this.schemaName = schema;
-    this.fetch = fetch;
   }
 
   /**
@@ -54,7 +48,6 @@ export class PostgrestClient {
     return new PostgrestQueryBuilder<T>(url, {
       headers: this.headers,
       schema: this.schemaName,
-      fetch: this.fetch,
     });
   }
 
@@ -69,7 +62,6 @@ export class PostgrestClient {
     return new PostgrestClient(this.url, {
       headers: this.headers.toObject(),
       schema,
-      fetch: this.fetch,
     });
   }
 
@@ -124,7 +116,6 @@ export class PostgrestClient {
       headers,
       schema: this.schemaName,
       body,
-      fetch: this.fetch,
     });
   }
 }

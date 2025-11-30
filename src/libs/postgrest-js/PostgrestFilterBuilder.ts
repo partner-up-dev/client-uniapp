@@ -1,5 +1,5 @@
 import { PostgrestTransformBuilder } from './PostgrestTransformBuilder';
-import type { PostgrestBuilderConfig, PostgrestFetch } from './PostgrestBuilder';
+import type { PostgrestBuilderConfig } from './PostgrestBuilder';
 
 // RegExp for PostgREST reserved characters
 const PostgrestReservedCharsRegexp = new RegExp('[,()]');
