@@ -5,6 +5,9 @@
   align-items: center;
   justify-content: center;
   transition: background 0.15s ease;
+
+  color: sys-var(color, on-surface);
+
   &:active {
     background: sys-var(color, surface-container);
   }
@@ -14,9 +17,5 @@
   }
   &.large {
     @include pu-icon("large");
-  }
-
-  .icon {
-    font-size: sys-var(font, label-large, size);
   }
 }
