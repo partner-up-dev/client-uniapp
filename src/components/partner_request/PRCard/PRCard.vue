@@ -46,32 +46,16 @@
     <!-- 操作区域 - Draft 类型不显示 -->
     <view v-if="props.type !== 'Draft'" class="operations">
       <!-- 复制按钮 -->
-      <PUButton
-        theme="Surface"
-        type="OnlyIcon"
-        size="Small"
-        prefix-icon="i-mdi-content-copy"
-        @click.stop="onCopyClick"
-      />
+      <PuButton theme="Surface" type="OnlyIcon" size="Small" prefix-icon="i-mdi-content-copy"
+        @click.stop="onCopyClick" />
 
       <!-- 收藏按钮 -->
-      <PUButton
-        theme="Surface"
-        type="OnlyIcon"
-        size="Small"
-        prefix-icon="i-mdi-bookmark-outline"
-        @click.stop="onBookmarkClick"
-      />
+      <PuButton theme="Surface" type="OnlyIcon" size="Small" prefix-icon="i-mdi-bookmark-outline"
+        @click.stop="onBookmarkClick" />
 
       <!-- 加入按钮 -->
-      <PUButton
-        theme="PrimaryContainer"
-        type="WithText"
-        size="Small"
-        text="加入"
-        prefix-icon="i-mdi-plus"
-        @click.stop="onJoinClick"
-      />
+      <PuButton theme="PrimaryContainer" type="WithText" size="Small" text="加入" prefix-icon="i-mdi-plus"
+        @click.stop="onJoinClick" />
     </view>
   </view>
 </template>
@@ -85,7 +69,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { PUButton } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import Partners from "@/components/partner_request/partners/partners.vue";
 import {
   prCardProps,

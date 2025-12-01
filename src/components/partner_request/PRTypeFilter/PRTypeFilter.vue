@@ -1,24 +1,12 @@
 <template>
   <view class="pr-type-filter">
-    <PUCheckboxGroup
-      :model-value="innerValue"
-      inline
-      shape="square"
-      @update:modelValue="onGroupUpdate"
-      @change="onGroupChange"
-      class="pr-type-filter__group"
-    >
-      <PUCheckbox
-        v-for="type in types"
-        :key="type"
-        :model-value="type"
-        type="Bar"
-        shape="square"
-        class="pr-type-filter__item"
-      >
+    <PuCheckboxGroup :model-value="innerValue" inline shape="square" @update:modelValue="onGroupUpdate"
+      @change="onGroupChange" class="pr-type-filter__group">
+      <PuCheckbox v-for="type in types" :key="type" :model-value="type" type="Bar" shape="square"
+        class="pr-type-filter__item">
         <text>{{ format(type) }}</text>
-      </PUCheckbox>
-    </PUCheckboxGroup>
+      </PuCheckbox>
+    </PuCheckboxGroup>
   </view>
 </template>
 
@@ -34,7 +22,8 @@ export default {
 import { computed } from "vue";
 import { prTypeFilterProps, prTypeFilterEmits, ALL_PR_TYPES } from "./PRTypeFilter";
 import { PRType } from "@/business/partner_request";
-import { PUCheckbox, PUCheckboxGroup } from "@partner-up-dev/design-uniapp";
+import PuCheckbox from "@partner-up-dev/design-uniapp/components/puCheckbox/puCheckbox.vue";
+import PuCheckboxGroup from "@partner-up-dev/design-uniapp/components/puCheckboxGroup/puCheckboxGroup.vue";
 import { formatPRType as format } from "@/components/partner_request/PRCard/PRCard";
 
 const props = defineProps(prTypeFilterProps);

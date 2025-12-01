@@ -8,40 +8,26 @@
     </view>
 
     <view class="applying-roles">
-      <SubApplication
-        v-for="(subApplication, index) in applyingPartners"
-        :key="subApplication.role"
-        :subApplication="subApplication"
-        :editable="true"
-        @delete="onDeleteRole(index)"
-      />
+      <SubApplication v-for="(subApplication, index) in applyingPartners" :key="subApplication.role"
+        :subApplication="subApplication" :editable="true" @delete="onDeleteRole(index)" />
     </view>
 
     <!-- Operations: add role + submit -->
     <view class="ops" v-if="!props.externalOps">
-      <PUButton
-        theme="SurfaceOutlined"
-        text="添加角色"
-        @click="showRoleDrawer = true"
-      />
-      <PUButton theme="Primary" :text="dt('submit')" @click="submit" />
+      <PuButton theme="SurfaceOutlined" text="添加角色" @click="showRoleDrawer = true" />
+      <PuButton theme="Primary" :text="dt('submit')" @click="submit" />
     </view>
 
     <!-- Available roles drawer -->
     <root-portal :enable="true">
-      <PUDrawer title="空闲角色" v-model:visible="showRoleDrawer" height="30vh">
+      <PuDrawer title="空闲角色" v-model:visible="showRoleDrawer" height="30vh">
         <view v-if="availableRoles.length === 0" class="empty">
           <text>无更多可用角色</text>
         </view>
         <view v-else class="roles">
-          <PartnerRoleComp
-            v-for="role in availableRoles"
-            :key="role"
-            :roleId="role"
-            @click="onSelectRole(role)"
-          />
+          <PartnerRoleComp v-for="role in availableRoles" :key="role" :roleId="role" @click="onSelectRole(role)" />
         </view>
-      </PUDrawer>
+      </PuDrawer>
     </root-portal>
   </view>
 </template>
@@ -58,7 +44,8 @@ export default {
 <script setup lang="ts">
 import { computed, onBeforeUpdate, onMounted, ref, watch } from "vue";
 import { useTranslate } from "@/locale/use";
-import { PUButton, PUDrawer } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
+import PuDrawer from "@partner-up-dev/design-uniapp/components/puDrawer/puDrawer.vue";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
 import { PartnerRequest } from "@/business/partner_request/base";
 import {

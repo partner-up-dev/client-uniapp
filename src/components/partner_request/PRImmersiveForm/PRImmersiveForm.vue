@@ -18,7 +18,7 @@ import { getSafeArea } from "@/utils/vendor";
 import { prImmersiveFormProps, prImmersiveFormEmits } from "./PRImmersiveForm";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
-import { PUDrawer } from "@partner-up-dev/design-uniapp";
+import PuDrawer from "@partner-up-dev/design-uniapp/components/puDrawer/puDrawer.vue";
 import type { PRType } from "@/business/partner_request";
 
 const { dt } = useTranslate("partner_request.immersive_create");
@@ -132,22 +132,13 @@ defineExpose({
 </script>
 
 <template>
-  <swiper
-    class="swiper"
-    :current="currentStepIndex"
-    vertical
-    easingFunction="easeOutCubic"
-    @change="onSwiperChange"
-  >
+  <swiper class="swiper" :current="currentStepIndex" vertical easingFunction="easeOutCubic" @change="onSwiperChange">
     <swiper-item v-for="(slot, index) in steps" :item-id="slot" :key="slot">
-      <view
-        class="cont"
-        :style="{
-          marginBottom: getSafeArea().bottom + 'px',
-          marginTop: getSafeArea().top + 'px',
-          height: `calc(100% - ${getSafeArea().top + getSafeArea().bottom}px)`,
-        }"
-      >
+      <view class="cont" :style="{
+        marginBottom: getSafeArea().bottom + 'px',
+        marginTop: getSafeArea().top + 'px',
+        height: `calc(100% - ${getSafeArea().top + getSafeArea().bottom}px)`,
+      }">
         <view class="progress-indicator">
           <text>{{ index + 1 }}/{{ steps.length }}</text>
         </view>
@@ -157,27 +148,15 @@ defineExpose({
         </view>
 
         <view class="operations">
-          <view
-            v-if="index === steps.length - 1"
-            class="item finish"
-            @click="onFinishClick"
-          >
+          <view v-if="index === steps.length - 1" class="item finish" @click="onFinishClick">
             <text>{{ dt("operations.finish.text") }}</text>
             <text class="i-mdi-arrow-right finish__icon" />
           </view>
-          <view
-            v-if="index < steps.length - 1"
-            class="item next"
-            @click="onNextClick"
-          >
+          <view v-if="index < steps.length - 1" class="item next" @click="onNextClick">
             <text>{{ dt("operations.next.text") }}</text>
             <text class="i-mdi-arrow-right next__icon" />
           </view>
-          <view
-            v-if="index < steps.length - 1"
-            class="skip-all item"
-            @click="onSkipAllClick"
-          >
+          <view v-if="index < steps.length - 1" class="skip-all item" @click="onSkipAllClick">
             <text>{{ dt("operations.skip_all.text") }}</text>
             <text class="i-mdi-arrow-right skip-all__icon" />
           </view>
@@ -186,19 +165,10 @@ defineExpose({
     </swiper-item>
   </swiper>
 
-  <PUDrawer
-    v-model:visible="showL2TypePicker"
-    :title="dt('l2type_picker.title')"
-    height="360px"
-  >
-    <PRTypePicker
-      style="height: 260px"
-      option-mode="l2"
-      :l1-type="props.l1Type"
-      blend-to-background="bottom"
-      @select="onL2TypeSelect"
-    />
-  </PUDrawer>
+  <PuDrawer v-model:visible="showL2TypePicker" :title="dt('l2type_picker.title')" height="360px">
+    <PRTypePicker style="height: 260px" option-mode="l2" :l1-type="props.l1Type" blend-to-background="bottom"
+      @select="onL2TypeSelect" />
+  </PuDrawer>
 </template>
 
 <style lang="scss" scoped src="./PRImmersiveForm.scss"></style>

@@ -12,7 +12,7 @@ import { Chat } from "@/business/communication/chat";
 import { Message } from "@/business/communication/message";
 import ChatContent from "@/components/communication/ChatContent/ChatContent.vue";
 import safeAreaInset from "@/components/common/safeAreaInset.vue";
-import { PUTextarea } from "@partner-up-dev/design-uniapp";
+import PuTextarea from "@partner-up-dev/design-uniapp/components/puTextarea/puTextarea.vue";
 import NavBar from "@/components/common/navBar/navBar.vue";
 import ScaffoldLayout from "@/components/common/layout/scaffoldLayout.vue";
 import type { ChatPageParams } from "./chat";
@@ -130,39 +130,20 @@ function onMoreButtonClick() {
   <view class="page-bg"></view>
   <ScaffoldLayout>
     <template #header>
-      <NavBar
-        :title="chatTitle"
-        @refresh="onRefreshButtonClick"
-        @more="onMoreButtonClick"
-      />
+      <NavBar :title="chatTitle" @refresh="onRefreshButtonClick" @more="onMoreButtonClick" />
     </template>
 
     <!-- 聊天内容区域 -->
-    <ChatContent
-      v-if="chatId"
-      class="chat-page__content"
-      ref="chatContentRef"
-      :chat-id="chatId"
-      mode="scroll-view"
-    />
+    <ChatContent v-if="chatId" class="chat-page__content" ref="chatContentRef" :chat-id="chatId" mode="scroll-view" />
 
     <template #footer>
       <view class="chat-page__footer-container">
         <view class="chat-page__footer">
-          <PUTextarea
-            class="field"
-            v-model="messageContent"
-            :placeholder="'输入消息文本'"
-            :maxlength="MAX_MESSAGE_LENGTH"
-            :height="28"
-          />
+          <PuTextarea class="field" v-model="messageContent" :placeholder="'输入消息文本'" :maxlength="MAX_MESSAGE_LENGTH"
+            :height="28" />
 
-          <!-- TODO Reuse PUButton -->
-          <view
-            class="send-button"
-            :class="{ 'send-button--disabled': !canSend }"
-            @click="onSendButtonClick"
-          >
+          <!-- TODO Reuse PuButton -->
+          <view class="send-button" :class="{ 'send-button--disabled': !canSend }" @click="onSendButtonClick">
             <text class="i-mdi-send icon"></text>
           </view>
         </view>

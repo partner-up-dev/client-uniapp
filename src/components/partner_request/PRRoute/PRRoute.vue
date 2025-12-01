@@ -1,7 +1,7 @@
 <template>
   <view class="pr-route">
     <!-- Route preview -->
-    <PUMap height="180px" :elements="[props.route]" />
+    <PuMap height="180px" :elements="[props.route]" />
 
     <!-- Datetime summary -->
     <!-- TODO -->
@@ -12,14 +12,8 @@
 
     <!-- Route list -->
     <view class="route-list">
-      <RouteItem
-        v-for="(item, index) in props.route.items"
-        :key="index"
-        :item="item"
-        :type="getRouteItemType(index, props.route.items.length)"
-        layout="2rows"
-        :show-datetime="true"
-      />
+      <RouteItem v-for="(item, index) in props.route.items" :key="index" :item="item"
+        :type="getRouteItemType(index, props.route.items.length)" layout="2rows" :show-datetime="true" />
     </view>
   </view>
 </template>
@@ -34,7 +28,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { PRRouteProps } from "./PRRoute";
-import { PUMap } from "@partner-up-dev/design-uniapp";
+import PuMap from "@/components/common/PUMap/PUMap.vue";
 import RouteItem from "@/components/common/routeItem/routeItem.vue";
 import { computed, ref } from "vue";
 

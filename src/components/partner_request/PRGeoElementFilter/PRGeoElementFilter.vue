@@ -1,30 +1,16 @@
 <template>
   <view class="pr-geo-element-filter">
     <!-- 地图预览组件 -->
-    <PUMap
-      v-model:center="mapCenter"
-      v-model:activeElement="activeElement"
-      :elements="elements"
-      :map-id="'pr-geo-filter-map'"
-      :height="props.mapHeight"
-    >
+    <PuMap v-model:center="mapCenter" v-model:activeElement="activeElement" :elements="elements"
+      :map-id="'pr-geo-filter-map'" :height="props.mapHeight">
       <view class="pu-map-operation" @tap="onReset">
         <text class="i-mdi-filter-off"></text>
       </view>
-    </PUMap>
+    </PuMap>
     <!-- 所有元素预览：使用 swiper；当前展示的元素即 activeElement -->
-    <swiper
-      class="geo-elements"
-      v-if="swiperCurrent !== undefined"
-      :current="swiperCurrent"
-      circular
-      @change="onSwiperChange"
-    >
-      <swiper-item
-        v-for="(el, idx) in elements"
-        :key="idx"
-        class="geo-elements item"
-      >
+    <swiper class="geo-elements" v-if="swiperCurrent !== undefined" :current="swiperCurrent" circular
+      @change="onSwiperChange">
+      <swiper-item v-for="(el, idx) in elements" :key="idx" class="geo-elements item">
         <GeoElementPreview :element="el" />
       </swiper-item>
     </swiper>
@@ -44,7 +30,7 @@ export default {
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { PUMap } from "@partner-up-dev/design-uniapp";
+import PuMap from "@/components/common/PUMap/PUMap.vue";
 import type { GeoElementWithIndex } from "@partner-up-dev/design-uniapp";
 import GeoElementPreview from "@/components/common/GeoElement/GeoElement.vue";
 import { type GeoElement } from "@/components/common/GeoElement/GeoElement";

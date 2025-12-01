@@ -13,7 +13,7 @@ import type { FormErrorState } from "@partner-up-dev/design-uniapp";
 const props = defineProps(CellProps);
 const emit = defineEmits(CellEmits);
 
-// Inject form context if inside PUForm
+// Inject form context if inside PuForm
 const formErrors = inject<{ value: FormErrorState } | undefined>(
   "puFormErrors",
   undefined
@@ -38,11 +38,8 @@ const cellPadding = computed(() => {
 </script>
 
 <template>
-  <view
-    :class="['cell', `is-${size}`, `is-${type}`, { 'has-error': !!errorMessage }]"
-    :style="{ padding: cellPadding }"
-    @click="emit('click')"
-  >
+  <view :class="['cell', `is-${size}`, `is-${type}`, { 'has-error': !!errorMessage }]" :style="{ padding: cellPadding }"
+    @click="emit('click')">
     <!-- Horizontal type: horizontal layout -->
     <template v-if="type === 'horizontal'">
       <view class="cell__left">

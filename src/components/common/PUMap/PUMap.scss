@@ -1,0 +1,22 @@
+.pu-map {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: sys-var(radius, sm);
+
+  .map-view {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 地图操作按钮容器 */
+  .operations {
+    position: absolute;
+    bottom: sys-var(spacing, sm);
+    right: sys-var(spacing, sm);
+    display: flex;
+    flex-direction: column;
+    gap: sys-var(spacing, xs);
+    opacity: 0.8;
+  }
+}

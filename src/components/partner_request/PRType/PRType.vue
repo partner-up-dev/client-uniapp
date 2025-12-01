@@ -8,7 +8,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { prTypeProps, prTypeEmits } from "./PRType";
-import { PUTag } from "@partner-up-dev/design-uniapp";
+import PuTag from "@partner-up-dev/design-uniapp/components/puTag/puTag.vue";
 
 const props = defineProps(prTypeProps);
 const emit = defineEmits(prTypeEmits);
@@ -19,7 +19,7 @@ if (props.pr === undefined) {
 </script>
 
 <template>
-  <PUTag :text="props.pr.typeText" size="xSmall" theme="Surface" />
+  <PuTag :text="props.pr.typeText" size="xSmall" theme="Surface" />
 </template>
 
 <style lang="scss" scoped src="./PRType.scss"></style>

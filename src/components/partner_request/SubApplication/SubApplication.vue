@@ -1,8 +1,5 @@
 <template>
-  <view
-    class="sub-application"
-    :class="{ 'sub-application--readonly': !editable }"
-  >
+  <view class="sub-application" :class="{ 'sub-application--readonly': !editable }">
     <!-- Header -->
     <view class="header">
       <view class="left">
@@ -13,49 +10,28 @@
       </view>
 
       <view class="right">
-        <PUButton
-          v-if="editable"
-          theme="Plain"
-          type="OnlyIcon"
-          size="xSmall"
-          prefix-icon="i-mdi-delete-outline"
-          @click.stop="onDeleteClick"
-        />
-        <PUButton
-          v-else
-          theme="Plain"
-          type="OnlyIcon"
-          size="xSmall"
-          prefix-icon="i-mdi-chevron-right"
-          @click.stop="onExpandClick"
-        />
+        <PuButton v-if="editable" theme="Plain" type="OnlyIcon" size="xSmall" prefix-icon="i-mdi-delete-outline"
+          @click.stop="onDeleteClick" />
+        <PuButton v-else theme="Plain" type="OnlyIcon" size="xSmall" prefix-icon="i-mdi-chevron-right"
+          @click.stop="onExpandClick" />
       </view>
     </view>
 
     <view class="rule" v-if="editable">{{ roleRule }}</view>
 
-    <PUTextarea
-      v-if="editable"
-      v-model="rationale"
-      :placeholder="dt('rationale_editor.placeholder')"
-      :height="28"
-      :focusHeight="56"
-    />
+    <PuTextarea v-if="editable" v-model="rationale" :placeholder="dt('rationale_editor.placeholder')" :height="28"
+      :focusHeight="56" />
   </view>
 
   <root-portal :enable="true" :style="{ position: 'absolute' }">
-    <PUDrawer
-      v-model:visible="drawerVisible"
-      :title="`#${roleId} ${roleName}`"
-      height="30vh"
-    >
+    <PuDrawer v-model:visible="drawerVisible" :title="`#${roleId} ${roleName}`" height="30vh">
       <view class="drawer-content">
         <text class="rule">{{ roleRule }}</text>
         <text class="rationale">
           {{ rationale || "你没有填写" }}
         </text>
       </view>
-    </PUDrawer>
+    </PuDrawer>
   </root-portal>
 </template>
 
@@ -72,7 +48,9 @@ import { BasicComponentOptions } from "@/utils/vue";
 import { subApplicationProps, subApplicationEmits } from "./SubApplication";
 import { useTranslate } from "@/locale/use";
 import { PartnerRole } from "@/business/partner_request/partner";
-import { PUTextarea, PUButton, PUDrawer } from "@partner-up-dev/design-uniapp";
+import PuTextarea from "@partner-up-dev/design-uniapp/components/puTextarea/puTextarea.vue";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
+import PuDrawer from "@partner-up-dev/design-uniapp/components/puDrawer/puDrawer.vue";
 
 const props = defineProps(subApplicationProps);
 const emit = defineEmits(subApplicationEmits);

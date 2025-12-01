@@ -5,6 +5,7 @@ import store from '@/store';
 import App from "./App.vue";
 import 'weapp-cookie';
 import 'uno.css';
+import '@partner-up-dev/design-uniapp/styles'
 
 export function createApp() {
   const app = createSSRApp(App);

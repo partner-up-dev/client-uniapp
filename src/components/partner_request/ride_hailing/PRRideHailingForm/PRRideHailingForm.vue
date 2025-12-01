@@ -14,7 +14,9 @@ import {
   type RideHailingFormExpose,
 } from "./PRRideHailingForm";
 import { ref } from "vue";
-import { PUAccordion, PUAccordionItem, PUFormItem } from "@partner-up-dev/design-uniapp";
+import PuAccordion from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordion.vue";
+import PuAccordionItem from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordionItem.vue";
+import PuFormItem from "@partner-up-dev/design-uniapp/components/puFormItem/puFormItem.vue";
 import TripPreferenceForm from "@/components/partner_request/trip/tripPreferenceForm/tripPreferenceForm.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 
@@ -39,30 +41,20 @@ function onFormChange(key: string) {
 
 <template>
   <view class="ride-hailing-form">
-    <PUAccordion v-model="activeNames">
-      <PUAccordionItem name="route" :title="domain_t('route.title')">
+    <PuAccordion v-model="activeNames">
+      <PuAccordionItem name="route" :title="domain_t('route.title')">
         <view class="space-p-y-med">
-          <PUFormItem prop="route" :includeSub="true">
-            <RouteEditor
-              ref="routeEditorRef"
-              :modelValue="props.form.route"
-              type="normal"
-            />
-          </PUFormItem>
+          <PuFormItem prop="route" :includeSub="true">
+            <RouteEditor ref="routeEditorRef" :modelValue="props.form.route" type="normal" />
+          </PuFormItem>
         </view>
-      </PUAccordionItem>
+      </PuAccordionItem>
 
-      <PUAccordionItem
-        name="tripPreference"
-        :title="domain_t('trip_preference.title')"
-      >
-        <TripPreferenceForm
-          ref="tripPreferenceFormRef"
-          :modelValue="props.form.trip_preference"
-          @change="onFormChange('trip_preference')"
-        />
-      </PUAccordionItem>
-    </PUAccordion>
+      <PuAccordionItem name="tripPreference" :title="domain_t('trip_preference.title')">
+        <TripPreferenceForm ref="tripPreferenceFormRef" :modelValue="props.form.trip_preference"
+          @change="onFormChange('trip_preference')" />
+      </PuAccordionItem>
+    </PuAccordion>
 
     <!-- Error message -->
     <view v-if="errorMessage" class="ride-hailing-form__error">

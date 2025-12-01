@@ -18,7 +18,7 @@ import { useTranslate } from "@/locale/use";
 import { AccountBaseProfile } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
-import { PUButton } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import dayjs from "dayjs";
 import { DEFAULT_ACCOUNT_WALLPAPER } from "@/data/const";
 import * as v from "valibot";
@@ -109,14 +109,8 @@ onLoad((query) => {
 
       <!-- 操作按钮区域 -->
       <view class="profile-page__operations">
-        <PUButton
-          :text="dt('profile.operation.chat_with_me')"
-          prefix-icon="i-mdi-message-text-outline"
-          theme="PrimaryContainer"
-          type="WithText"
-          size="Small"
-          @click="onDirectMessageClick"
-        />
+        <PuButton :text="dt('profile.operation.chat_with_me')" prefix-icon="i-mdi-message-text-outline"
+          theme="PrimaryContainer" type="WithText" size="Small" @click="onDirectMessageClick" />
       </view>
     </view>
 

@@ -1,5 +1,6 @@
-import uni from '@dcloudio/vite-plugin-uni'
-import { defineConfig } from 'vite'
+import uni from '@dcloudio/vite-plugin-uni';
+import { defineConfig } from 'vite';
+
 // https://vitejs.dev/config/
 export default async () => {
   const UnoCSS = (await import("unocss/vite")).default;
@@ -11,7 +12,12 @@ export default async () => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "@partner-up-dev/design-uniapp/styles" as *;\n'
+          additionalData: (source: string, filePath: string) => {
+            if (filePath.includes('/src/components/') || filePath.includes('/src/pages/')) {
+              return `@use "@partner-up-dev/design-uniapp/styles/mixins" as *;@use "@partner-up-dev/design-uniapp/styles/functions" as *;\n${source}`
+            }
+            return source
+          }
         }
       }
     }

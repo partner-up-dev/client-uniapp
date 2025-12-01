@@ -9,43 +9,23 @@
       <view class="uno-flex">
         <view class="header uno-flex-1">
           <!-- Refresh Button -->
-          <PUButton
-            class="refresh-btn"
-            theme="Surface"
-            type="OnlyIcon"
-            size="Large"
-            prefix-icon="i-mdi-refresh"
-            @click="onRefreshClick"
-          />
+          <PuButton class="refresh-btn" theme="Surface" type="OnlyIcon" size="Large" prefix-icon="i-mdi-refresh"
+            @click="onRefreshClick" />
 
           <!-- Filters -->
           <view class="filters">
             <!-- Fixed Filters -->
             <view class="fixed-filters">
               <!-- Geo Element Filter -->
-              <PUButton
-                class="pr-geo-ele-filter"
-                theme="Surface"
-                size="Large"
-                prefix-icon="i-mdi-map"
-                type="OnlyIcon"
-                :toggled="currentFilter === 0"
-                @click="onGeoFilterClick"
-              />
+              <PuButton class="pr-geo-ele-filter" theme="Surface" size="Large" prefix-icon="i-mdi-map" type="OnlyIcon"
+                :toggled="currentFilter === 0" @click="onGeoFilterClick" />
               <!-- PR Type Filter -->
-              <PUButton
-                class="pr-type-filter"
-                theme="Surface"
-                size="Large"
-                prefix-icon="i-mdi-bookmark-outline"
-                text="搭子类型"
-                :toggled="currentFilter === 1"
-                @click="onPRTypeFilterClick"
-              />
+              <PuButton class="pr-type-filter" theme="Surface" size="Large" prefix-icon="i-mdi-bookmark-outline"
+                text="搭子类型" :toggled="currentFilter === 1" @click="onPRTypeFilterClick" />
             </view>
 
             <!-- DISABLED TEMPORARILY Open Filters Button -->
-            <!-- <PUButton
+            <!-- <PuButton
               class="open-filters-btn"
               theme="Surface"
               type="OnlyIcon"
@@ -59,38 +39,20 @@
       </view>
 
       <!-- Geo Element -->
-      <swiper
-        class="pr-filters"
-        :current="currentFilter"
-        :disable-touch="true"
-        :autoplay="false"
-        :circular="false"
-      >
+      <swiper class="pr-filters" :current="currentFilter" :disable-touch="true" :autoplay="false" :circular="false">
         <swiper-item @touchmove.stop="true">
           <PRGeoElementFilter class="pr-filter" mapHeight="22vh" />
         </swiper-item>
         <swiper-item @touchmove.stop="true">
-          <PRTypeFilter
-            class="pr-filter"
-            v-model="selectedPRTypes"
-            @change="onPRTypesChange"
-          />
+          <PRTypeFilter class="pr-filter" v-model="selectedPRTypes" @change="onPRTypesChange" />
         </swiper-item>
       </swiper>
 
       <!-- PR List -->
       <view class="pr-list">
-        <PRCard
-          v-for="pr in mockPartnerRequests"
-          :key="pr._id"
-          :partner-request="pr"
-          :partners="mockPartners"
-          type="Explore"
-          @card-click="onCardClick"
-          @join-click="onJoinClick"
-          @copy-click="onCopyClick"
-          @bookmark-click="onBookmarkClick"
-        />
+        <PRCard v-for="pr in mockPartnerRequests" :key="pr._id" :partner-request="pr" :partners="mockPartners"
+          type="Explore" @card-click="onCardClick" @join-click="onJoinClick" @copy-click="onCopyClick"
+          @bookmark-click="onBookmarkClick" />
       </view>
     </view>
     <!-- TabBar Safe Area -->
@@ -114,7 +76,7 @@ export default {
 <script setup lang="ts">
 import { ref } from "vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
-import { PUButton } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import PRCard from "@/components/partner_request/PRCard/PRCard.vue";
 import { PRType, PRStatus } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";

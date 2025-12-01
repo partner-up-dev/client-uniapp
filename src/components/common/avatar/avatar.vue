@@ -11,7 +11,8 @@ import { BasicComponentOptions } from "@/utils/vue";
 import { kebabCase } from "@/utils";
 import { avatarProps, avatarEmits } from "./avatar";
 import { uploadObj, useChooseImage } from "@/business/oss";
-import { PUImg, PUImgCropper } from "@partner-up-dev/design-uniapp";
+import PuImg from "@partner-up-dev/design-uniapp/components/puImg/puImg.vue";
+import PuImgCropper from "@partner-up-dev/design-uniapp/components/puImgCropper/puImgCropper.vue";
 import Badge from "@/components/common/badge/badge.vue";
 
 const props = defineProps(avatarProps);
@@ -48,19 +49,8 @@ function onImgClick() {
 
 <template>
   <view id="avatar" :class="['avatar', props.customClass]" @click="onImgClick">
-    <Badge
-      custom-style="line-height: 0.8"
-      :max="props.badgeMax"
-      :modelValue="props.badge"
-      :right="0"
-      :bottom="0"
-    >
-      <PUImg
-        :size="props.size"
-        :src="`${props.src}?t=${imgT}`"
-        :radius="props.radius"
-        custom-image="img"
-      >
+    <Badge custom-style="line-height: 0.8" :max="props.badgeMax" :modelValue="props.badge" :right="0" :bottom="0">
+      <PuImg :size="props.size" :src="`${props.src}?t=${imgT}`" :radius="props.radius" custom-image="img">
         <template #error>
           <view class="error-wrap">
             <text class="i-mdi-emotion-dead error-indicator" />
@@ -72,7 +62,7 @@ function onImgClick() {
             <wd-loading color="#96d945" :size="24" />
           </view>
         </template>
-      </PUImg>
+      </PuImg>
 
       <text v-if="props.editable" class="i-mdi-camera editing-indicator" />
 

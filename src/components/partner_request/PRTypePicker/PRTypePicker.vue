@@ -13,7 +13,7 @@ import {
   type OptionMode,
 } from "./PRTypePicker";
 import Card from "@/components/common/card/card.vue";
-import { PUScrollView } from "@partner-up-dev/design-uniapp";
+import PuScrollView from "@partner-up-dev/design-uniapp/components/puScrollView/puScrollView.vue";
 import { computed } from "vue";
 import { PRL1Type, PRL1Type2PRType, PRType } from "@/business/partner_request";
 import { useTranslate } from "@/locale/use";
@@ -93,20 +93,11 @@ function onCardClick(type: SelectType<T>) {
 
 <template>
   <view :class="rootClass" :style="customStyle">
-    <PUScrollView
-      :direction="scrollDirection"
-      :edge-fade="fade ? 'auto' : undefined"
-      class="pr-type-picker__scroll"
-    >
-      <Card
-        v-for="(type, index) in options"
-        :key="type"
-        :class="['pr-type-picker__item', isLastItem(index) ? 'last-child' : '']"
-        :title="getTypeTitle(type)"
-        :description="getTypeDescription(type)"
-        @click="onCardClick(type)"
-      />
-    </PUScrollView>
+    <PuScrollView :direction="scrollDirection" :edge-fade="fade ? 'auto' : undefined" class="pr-type-picker__scroll">
+      <Card v-for="(type, index) in options" :key="type"
+        :class="['pr-type-picker__item', isLastItem(index) ? 'last-child' : '']" :title="getTypeTitle(type)"
+        :description="getTypeDescription(type)" @click="onCardClick(type)" />
+    </PuScrollView>
   </view>
 </template>
 

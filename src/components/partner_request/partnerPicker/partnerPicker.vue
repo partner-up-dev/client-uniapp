@@ -1,30 +1,20 @@
 <template>
-  <PUDrawer
-    v-model:visible="drawerVisible"
-    :title="dt('title')"
-    :height="props.height"
-  >
+  <PuDrawer v-model:visible="drawerVisible" :title="dt('title')" :height="props.height">
     <view class="partner-picker">
       <!-- Partner Role List -->
       <view class="partner-picker__list">
-        <PartnerRoleComp
-          v-for="role in availableRoles"
-          :key="role.id"
-          :role="role"
-          :class="[
-            'partner-picker__item',
-            { 'is-selected': isSelected(role.id) },
-          ]"
-          @click="onPartnerRoleClick(role)"
-        />
+        <PartnerRoleComp v-for="role in availableRoles" :key="role.id" :role="role" :class="[
+          'partner-picker__item',
+          { 'is-selected': isSelected(role.id) },
+        ]" @click="onPartnerRoleClick(role)" />
       </view>
 
       <!-- Confirm Button for Multiple Mode -->
       <view v-if="props.mode === 'multiple'" class="partner-picker__footer">
-        <PUButton theme="Primary" :text="dt('confirm')" @click="onConfirmClick" />
+        <PuButton theme="Primary" :text="dt('confirm')" @click="onConfirmClick" />
       </view>
     </view>
-  </PUDrawer>
+  </PuDrawer>
 </template>
 
 <script lang="ts">
@@ -43,7 +33,8 @@ import {
   partnerPickerEmits,
   getAvailablePartnerRoles,
 } from "./partnerPicker";
-import { PUDrawer, PUButton } from "@partner-up-dev/design-uniapp";
+import PuDrawer from "@partner-up-dev/design-uniapp/components/puDrawer/puDrawer.vue";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
 import {
   PartnerRole,

@@ -14,24 +14,16 @@
       <view class="pr-ti__actions">
         <!-- Type:Draft -->
         <template v-if="type === PRStatus.Draft">
-          <PUButton
-            :theme="isCurrent ? 'PrimaryContainer' : 'Plain'"
-            type="Bar"
-            :text="dt('actions.edit')"
-            suffix-icon="i-mdi-chevron-right"
-          />
-          <PUButton theme="Plain" type="Bar" :text="dt('actions.delete')" />
+          <PuButton :theme="isCurrent ? 'PrimaryContainer' : 'Plain'" type="Bar" :text="dt('actions.edit')"
+            suffix-icon="i-mdi-chevron-right" />
+          <PuButton theme="Plain" type="Bar" :text="dt('actions.delete')" />
         </template>
         <!-- Type:Joinable -->
         <template v-if="type === PRStatus.Joinable">
-          <PUButton
-            :theme="isCurrent ? 'PrimaryContainer' : 'Plain'"
-            type="Bar"
-            :text="dt('actions.approve_applications')"
-            suffix-icon="i-mdi-chevron-right"
-          />
-          <PUButton theme="Plain" type="Bar" :text="dt('actions.ready')" />
-          <PUButton theme="Plain" type="Bar" :text="dt('actions.share')" />
+          <PuButton :theme="isCurrent ? 'PrimaryContainer' : 'Plain'" type="Bar"
+            :text="dt('actions.approve_applications')" suffix-icon="i-mdi-chevron-right" />
+          <PuButton theme="Plain" type="Bar" :text="dt('actions.ready')" />
+          <PuButton theme="Plain" type="Bar" :text="dt('actions.share')" />
         </template>
       </view>
     </view>
@@ -52,7 +44,7 @@ import { prTimelineItemProps, prTimelineItemEmits } from "./PRTimelineItem";
 import { useTranslate } from "@/locale/use";
 import { useOptionalVModel } from "@/composables/props";
 import { PRStatus } from "@/business/partner_request";
-import { PUButton } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 
 const props = defineProps(prTimelineItemProps);
 const emit = defineEmits(prTimelineItemEmits);

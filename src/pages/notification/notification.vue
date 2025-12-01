@@ -3,12 +3,8 @@
   <safeAreaInset position="top" />
   <safeAreaInset position="wxmp-menu" />
   <view class="notification">
-    <PUTabs class="header" v-model="activeTab" :tabs="tabs" size="Large" />
-    <scroll-view
-      :scroll-y="true"
-      class="chat-list"
-      :style="{ height: makeNumberPX(chatListHeight) }"
-    >
+    <PuTabs class="header" v-model="activeTab" :tabs="tabs" size="Large" />
+    <scroll-view :scroll-y="true" class="chat-list" :style="{ height: makeNumberPX(chatListHeight) }">
       <ChatEntry v-for="chatId in chatList" :key="chatId" :chat-id="chatId" />
       <!-- ChatList content left blank as per requirements -->
       <!-- TODO add line between each elements -->
@@ -31,7 +27,7 @@ const MY_PAGE_ID = TABBAR_PAGE_ID.NOTIFICATION;
 
 <script setup lang="ts">
 import { ref, computed, onMounted, getCurrentInstance } from "vue";
-import { PUTabs } from "@partner-up-dev/design-uniapp";
+import PuTabs from "@partner-up-dev/design-uniapp/components/puTabs/puTabs.vue";
 import safeAreaInset from "@/components/common/safeAreaInset.vue";
 import { getWindowInfo, getElementRect, getSafeArea } from "@/utils/vendor";
 import { makeNumberPX } from "@/utils/style";

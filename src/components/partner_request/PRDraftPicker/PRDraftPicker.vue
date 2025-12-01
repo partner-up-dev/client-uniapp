@@ -11,7 +11,7 @@ import { PartnerRequest } from "@/business/partner_request/base";
 import PRCard from "../PRCard/PRCard.vue";
 import { PRDraftPickerEmits, PRDraftPickerProps } from "./types";
 import Placeholder from "@/components/common/placeholder.vue";
-import { PUScrollView } from "@partner-up-dev/design-uniapp";
+import PuScrollView from "@partner-up-dev/design-uniapp/components/puScrollView/puScrollView.vue";
 import { useTranslate } from "@/locale/use";
 
 const { dt } = useTranslate("partner_request.draft_picker");
@@ -23,22 +23,11 @@ const { draftPRs, refresh } = PartnerRequest.useDraftPRs();
 
 <template>
   <view :class="['pr-draft-picker', props.customClass]">
-    <PUScrollView
-      class="draft-list"
-      direction="y"
-      :edge-fade="props.fade ? 'auto' : undefined"
-      :on-refresh="refresh"
-    >
-      <PRCard
-        class="draft-item"
-        v-for="(draft_id, index) in draftPRs"
-        :key="`draft-${index}`"
-        @tap="emit('select', draft_id)"
-        type="Draft"
-        :pr-id="draft_id"
-      />
+    <PuScrollView class="draft-list" direction="y" :edge-fade="props.fade ? 'auto' : undefined" :on-refresh="refresh">
+      <PRCard class="draft-item" v-for="(draft_id, index) in draftPRs" :key="`draft-${index}`"
+        @tap="emit('select', draft_id)" type="Draft" :pr-id="draft_id" />
       <Placeholder :text="dt('placeholder.no_drafts')" v-if="!draftPRs.length" />
-    </PUScrollView>
+    </PuScrollView>
   </view>
 </template>
 

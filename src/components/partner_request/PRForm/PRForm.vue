@@ -6,7 +6,9 @@ export default {
 
 <script setup lang="ts" generic="T extends PRType">
 import { useTranslate } from "@/locale/use";
-import { PUAccordion, PUAccordionItem, PUForm } from "@partner-up-dev/design-uniapp";
+import PuAccordion from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordion.vue";
+import PuAccordionItem from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordionItem.vue";
+import PuForm from "@partner-up-dev/design-uniapp/components/puForm/puForm.vue";
 import PRMetadataForm from "@/components/partner_request/PRMetadataForm/PRMetadataForm.vue";
 import PRCommuteForm from "@/components/partner_request/commute/PRCommuteForm/PRCommuteForm.vue";
 import PRRideHailingForm from "@/components/partner_request/ride_hailing/PRRideHailingForm/PRRideHailingForm.vue";
@@ -50,8 +52,8 @@ const saving = ref(false);
 const publishing = ref(false);
 
 // refs
-const puFormRef = ref<InstanceType<typeof PUForm> | null>(null);
-const metadataCollapseRef = ref<InstanceType<typeof PUAccordion> | null>(null);
+const puFormRef = ref<InstanceType<typeof PuForm> | null>(null);
+const metadataCollapseRef = ref<InstanceType<typeof PuAccordion> | null>(null);
 const metadataFormRef = ref<InstanceType<typeof PRMetadataForm> | null>(null);
 const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
   null
@@ -131,36 +133,20 @@ defineExpose({
 
 <template>
   <view class="pr-editor">
-    <PUForm ref="puFormRef" :schema="modelValue">
-      <PUAccordion v-model="collapse" ref="metadataCollapseRef">
-        <PUAccordionItem
-          name="metadata"
-          :title="dt('editor.common_editor.title')"
-        >
+    <PuForm ref="puFormRef" :schema="modelValue">
+      <PuAccordion v-model="collapse" ref="metadataCollapseRef">
+        <PuAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
           <PRMetadataForm ref="metadataFormRef" :form="modelValue" />
-        </PUAccordionItem>
-        <PUAccordionItem
-          name="partners"
-          :title="dt('editor.partners_editor.title')"
-        >
-          <PartnersEditor
-            class="space-p-sm"
-            v-model="modelValue.partners"
-            :pr-type="props.type"
-          />
-        </PUAccordionItem>
-        <PRRideHailingForm
-          v-if="props.type === PRType.RideHailing"
-          ref="rideHailingFormRef"
-          :form="(props.modelValue as RideHailingPRForm)"
-        />
-        <PRCommuteForm
-          v-if="props.type === PRType.Commute"
-          ref="commuteDatetimeFormRef"
-          :form="(props.modelValue as CommutePRForm)"
-        />
-      </PUAccordion>
-    </PUForm>
+        </PuAccordionItem>
+        <PuAccordionItem name="partners" :title="dt('editor.partners_editor.title')">
+          <PartnersEditor class="space-p-sm" v-model="modelValue.partners" :pr-type="props.type" />
+        </PuAccordionItem>
+        <PRRideHailingForm v-if="props.type === PRType.RideHailing" ref="rideHailingFormRef"
+          :form="(props.modelValue as RideHailingPRForm)" />
+        <PRCommuteForm v-if="props.type === PRType.Commute" ref="commuteDatetimeFormRef"
+          :form="(props.modelValue as CommutePRForm)" />
+      </PuAccordion>
+    </PuForm>
   </view>
 </template>
 

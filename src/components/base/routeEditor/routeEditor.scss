@@ -104,7 +104,8 @@
 
       &__action {
         flex-shrink: 0;
-        color: $pu_color_tertiary;
+        // color: $pu_color_tertiary;
+        color: sys-var(color, tertiary);
         cursor: pointer;
 
         @include pu-icon(medium, true);

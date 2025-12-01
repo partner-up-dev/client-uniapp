@@ -20,7 +20,8 @@ import {
   FRIENDLY_ADDRESS_MAX_LENGTH,
 } from "./routeItemLocationEditor";
 import Cell from "@/components/common/cell/cell.vue";
-import { PUInput, PUButton } from "@partner-up-dev/design-uniapp";
+import PuInput from "@partner-up-dev/design-uniapp/components/puInput/puInput.vue";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 
 const props = defineProps(routeItemLocationEditorProps);
 const emit = defineEmits(routeItemLocationEditorEmits);
@@ -181,40 +182,24 @@ defineExpose({
   <view class="route-item-location-editor">
     <view class="route-item-location-editor__form">
       <!-- 地点名称输入框 -->
-      <Cell
-        :title="dt('field.friendly_address.title')"
-        :subtitle="dt('field.friendly_address.subtitle')"
-        type="default"
-        size="small"
-      >
+      <Cell :title="dt('field.friendly_address.title')" :subtitle="dt('field.friendly_address.subtitle')" type="default"
+        size="small">
         <template #value>
-          <PUInput
-            v-model="currentLocation.friendly_address"
-            :placeholder="dt('field.friendly_address.placeholder')"
-            :maxlength="FRIENDLY_ADDRESS_MAX_LENGTH"
-            :show-word-limit="true"
-            size="large"
-          />
+          <PuInput v-model="currentLocation.friendly_address" :placeholder="dt('field.friendly_address.placeholder')"
+            :maxlength="FRIENDLY_ADDRESS_MAX_LENGTH" :show-word-limit="true" size="large" />
         </template>
       </Cell>
 
       <!-- 地址选择 -->
-      <Cell
-        :title="dt('field.address.title')"
-        type="default"
-        size="small"
-        suffix-icon="i-mdi-chevron-right"
-        @click="onChooseLocationClick"
-      >
+      <Cell :title="dt('field.address.title')" type="default" size="small" suffix-icon="i-mdi-chevron-right"
+        @click="onChooseLocationClick">
         <template #value>
-          <text
-            :class="[
-              'route-item-location-editor__address-value',
-              !hasAddress
-                ? 'route-item-location-editor__address-value--empty'
-                : '',
-            ]"
-          >
+          <text :class="[
+            'route-item-location-editor__address-value',
+            !hasAddress
+              ? 'route-item-location-editor__address-value--empty'
+              : '',
+          ]">
             {{ hasAddress ? addressDisplay : dt("field.address.placeholder") }}
           </text>
         </template>
@@ -229,35 +214,18 @@ defineExpose({
     <!-- 操作按钮 -->
     <view class="route-item-location-editor__operations">
       <view class="route-item-location-editor__choose-btn">
-        <PUButton
-          :text="dt('button.choose_location')"
-          theme="SurfaceOutlined"
-          type="WithText"
-          size="Medium"
-          @click="onChooseLocationClick"
-        />
+        <PuButton :text="dt('button.choose_location')" theme="SurfaceOutlined" type="WithText" size="Medium"
+          @click="onChooseLocationClick" />
       </view>
 
       <view class="route-item-location-editor__cancel-btn">
-        <PUButton
-          :text="dt('button.cancel')"
-          theme="SurfaceOutlined"
-          type="WithText"
-          size="Medium"
-          @click="onCancelClick"
-        />
+        <PuButton :text="dt('button.cancel')" theme="SurfaceOutlined" type="WithText" size="Medium"
+          @click="onCancelClick" />
       </view>
 
       <view class="route-item-location-editor__confirm-btn">
-        <PUButton
-          :text="dt('button.confirm')"
-          theme="Primary"
-          type="WithText"
-          size="Medium"
-          :disabled="isSaving"
-          :loading="isSaving"
-          @click="onConfirmClick"
-        />
+        <PuButton :text="dt('button.confirm')" theme="Primary" type="WithText" size="Medium" :disabled="isSaving"
+          :loading="isSaving" @click="onConfirmClick" />
       </view>
     </view>
   </view>

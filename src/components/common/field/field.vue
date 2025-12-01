@@ -7,7 +7,7 @@ export default {
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
 import { FieldEmits, FieldProps, type FieldValueType } from "./field";
-import { PUPicker } from "@partner-up-dev/design-uniapp";
+import PuPicker from "@partner-up-dev/design-uniapp/components/puPicker/puPicker.vue";
 import LocationPicker from "@/components/base/locationPicker/locationPicker.vue";
 import { withFallback } from "@/utils";
 import type { LocationRef } from "@/business/base/route";
@@ -78,14 +78,8 @@ watch(editor_activating, (new_val, old_val) => {
         {{ title }}
       </slot>
     </view>
-    <PUPicker
-      v-if="editorType === 'common_picker'"
-      v-model="innner_value"
-      :columns="editorData"
-      @confirm="onPickerEditorConfirm"
-      @open="activateEditor"
-      @cancel="deactivateEditor"
-    >
+    <PuPicker v-if="editorType === 'common_picker'" v-model="innner_value" :columns="editorData"
+      @confirm="onPickerEditorConfirm" @open="activateEditor" @cancel="deactivateEditor">
       <view :class="['field__value']">
         {{
           withFallback(
@@ -95,12 +89,9 @@ watch(editor_activating, (new_val, old_val) => {
           )
         }}
       </view>
-    </PUPicker>
-    <LocationPicker
-      v-else-if="editorType === 'location_picker'"
-      :modelValue="(innner_value as LocationRef)"
-      @confirm="onPickerEditorConfirm"
-    >
+    </PuPicker>
+    <LocationPicker v-else-if="editorType === 'location_picker'" :modelValue="(innner_value as LocationRef)"
+      @confirm="onPickerEditorConfirm">
       <view :class="['field__value']">
         {{
           withFallback(
@@ -113,20 +104,10 @@ watch(editor_activating, (new_val, old_val) => {
         }}
       </view>
     </LocationPicker>
-    <view
-      :class="['field__value']"
-      v-if="editorType === 'common_input'"
-      @click="activateEditor"
-    >
-      <input
-        :class="['field__input-value']"
-        v-if="editor_activating"
-        :value="innner_value?.toString()"
-        :placeholder="inValuePlaceholder"
-        @confirm="onInputEditorConfirm"
-        @blur="deactivateEditor"
-        @input="innner_value = $event.detail.value"
-      />
+    <view :class="['field__value']" v-if="editorType === 'common_input'" @click="activateEditor">
+      <input :class="['field__input-value']" v-if="editor_activating" :value="innner_value?.toString()"
+        :placeholder="inValuePlaceholder" @confirm="onInputEditorConfirm" @blur="deactivateEditor"
+        @input="innner_value = $event.detail.value" />
       <view v-if="!editor_activating">
         {{
           withFallback(
@@ -138,11 +119,7 @@ watch(editor_activating, (new_val, old_val) => {
       </view>
     </view>
     <view :class="['field__value']" v-if="editorType === 'get_phone_number'">
-      <GetPhoneNumber
-        v-model:show="editor_activating"
-        @success="onPickerEditorConfirm"
-        @cancel="deactivateEditor"
-      />
+      <GetPhoneNumber v-model:show="editor_activating" @success="onPickerEditorConfirm" @cancel="deactivateEditor" />
       <view @click="activateEditor">
         {{
           withFallback(

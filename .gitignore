@@ -43,4 +43,8 @@ dist
 # Others
 *.key
 
+# Temporary files
+*.tmp
+temp/
+
 tests/__screenshots__/*

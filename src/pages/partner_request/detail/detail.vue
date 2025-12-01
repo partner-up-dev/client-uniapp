@@ -10,41 +10,15 @@
         <pageBack size="large" />
         <view class="ops">
           <template v-if="Iam !== 'partner'">
-            <PUButton
-              theme="Surface"
-              type="OnlyIcon"
-              size="Large"
-              prefix-icon="i-mdi-content-copy"
-              @click="onForkClick"
-            />
-            <PUButton
-              theme="Surface"
-              size="Large"
-              prefix-icon="i-mdi-bookmark-outline"
-              :text="dt('header.favorite')"
-              @click="onBookmarkClick"
-            />
+            <PuButton theme="Surface" type="OnlyIcon" size="Large" prefix-icon="i-mdi-content-copy"
+              @click="onForkClick" />
+            <PuButton theme="Surface" size="Large" prefix-icon="i-mdi-bookmark-outline" :text="dt('header.favorite')"
+              @click="onBookmarkClick" />
           </template>
           <template v-else>
-            <PUButton
-              theme="Surface"
-              type="OnlyIcon"
-              size="Large"
-              prefix-icon="i-mdi-chat-outline"
-              :dot="hasUnread"
-            />
-            <PUButton
-              theme="Surface"
-              type="OnlyIcon"
-              size="Large"
-              prefix-icon="i-mdi-share-variant-outline"
-            />
-            <PUButton
-              theme="Surface"
-              type="OnlyIcon"
-              size="Large"
-              prefix-icon="i-mdi-dots-vertical"
-            />
+            <PuButton theme="Surface" type="OnlyIcon" size="Large" prefix-icon="i-mdi-chat-outline" :dot="hasUnread" />
+            <PuButton theme="Surface" type="OnlyIcon" size="Large" prefix-icon="i-mdi-share-variant-outline" />
+            <PuButton theme="Surface" type="OnlyIcon" size="Large" prefix-icon="i-mdi-dots-vertical" />
           </template>
         </view>
       </view>
@@ -62,11 +36,7 @@
       <view class="section partners">
         <text class="section-title">{{ dt("partners.title") }}</text>
         <view class="roles">
-          <Partner
-            v-for="(partner, index) in partners"
-            :key="index"
-            :partner="partner"
-          />
+          <Partner v-for="(partner, index) in partners" :key="index" :partner="partner" />
         </view>
       </view>
 
@@ -79,23 +49,13 @@
     <SafeAreaInset position="bottom" />
 
     <!-- Drawer (metadata + operations) -->
-    <view
-      class="drawer"
-      id="pr-drawer"
-      :class="{ expanded: drawerExpanded }"
-      :style="drawerStyle"
-      @transitionend="drawerTransitioning = false"
-    >
-      <view
-        class="page-metadata"
-        @touchstart.stop="onHandleTouchStart"
-        @touchmove.stop="onHandleTouchMove"
-        @touchend.stop="onHandleTouchEnd"
-        @touchcancel.stop="onHandleTouchEnd"
-      >
+    <view class="drawer" id="pr-drawer" :class="{ expanded: drawerExpanded }" :style="drawerStyle"
+      @transitionend="drawerTransitioning = false">
+      <view class="page-metadata" @touchstart.stop="onHandleTouchStart" @touchmove.stop="onHandleTouchMove"
+        @touchend.stop="onHandleTouchEnd" @touchcancel.stop="onHandleTouchEnd">
         <view class="tags">
-          <PUTag :text="t('partner_request.status.joinable')" />
-          <PUTag :text="t('partner_request.type.ride_hailing')" />
+          <PuTag :text="t('partner_request.status.joinable')" />
+          <PuTag :text="t('partner_request.type.ride_hailing')" />
         </view>
         <view class="identifier">
           <text class="id">#128</text>
@@ -106,20 +66,10 @@
           <text class="description">赶时间，不要拖</text>
         </view>
       </view>
-      <view
-        :style="drawerTransitioning ? { flex: 1 } : { flex: 0 }"
-        v-if="!drawerExpanded"
-      ></view>
-      <view
-        class="content"
-        :style="{ display: drawerExpanded ? 'flex' : 'none' }"
-      >
+      <view :style="drawerTransitioning ? { flex: 1 } : { flex: 0 }" v-if="!drawerExpanded"></view>
+      <view class="content" :style="{ display: drawerExpanded ? 'flex' : 'none' }">
         <template v-if="Iam === 'passby'">
-          <PRApplyForm
-            :PRId="props?.id || 0"
-            :externalOps="true"
-            ref="PRApplyFormRef"
-          />
+          <PRApplyForm :PRId="props?.id || 0" :externalOps="true" ref="PRApplyFormRef" />
         </template>
         <template v-if="Iam === 'applicant'">
           <!-- SubApplications -->
@@ -135,25 +85,15 @@
                 </text>
               </view>
             </view>
-            <SubApplication
-              v-for="(subApplication, index) in myApplication?.sub_applications"
-              :key="index"
-              :sub-application="subApplication"
-            />
+            <SubApplication v-for="(subApplication, index) in myApplication?.sub_applications" :key="index"
+              :sub-application="subApplication" />
           </view>
           <!-- Application Chat -->
-          <view
-            class="flex flex-col gap-sm overflow-y-scroll"
-            style="min-height: 160px"
-          >
+          <view class="flex flex-col gap-sm overflow-y-scroll" style="min-height: 160px">
             <view class="section-title">
               {{ dt("application_chat.title") }}
             </view>
-            <ChatContent
-              class="flex-1 radius-med space-p-x-med space-p-y-sm"
-              :chatId="123"
-              mode="flex"
-            />
+            <ChatContent class="flex-1 radius-med space-p-x-med space-p-y-sm" :chatId="123" mode="flex" />
             <!-- TODO: replace with pr.chat -->
           </view>
           <!-- EClose Reason (If has) -->
@@ -172,19 +112,10 @@
       </view>
       <view class="operations">
         <template v-if="Iam !== 'partner'">
-          <PUButton
-            v-if="drawerExpanded && Iam === 'passby'"
-            theme="SurfaceOutlined"
-            :text="dt('drawer.add_role')"
-            @click="onAddRoleClick"
-          />
-          <PUButton
-            class="apply-btn"
-            :theme="Iam === 'passby' ? 'Primary' : 'SurfaceOutlined'"
-            :text="applyBtnText"
-            :disabled="Iam === 'applicant'"
-            @click="onApplyClick"
-          />
+          <PuButton v-if="drawerExpanded && Iam === 'passby'" theme="SurfaceOutlined" :text="dt('drawer.add_role')"
+            @click="onAddRoleClick" />
+          <PuButton class="apply-btn" :theme="Iam === 'passby' ? 'Primary' : 'SurfaceOutlined'" :text="applyBtnText"
+            :disabled="Iam === 'applicant'" @click="onApplyClick" />
         </template>
       </view>
     </view>
@@ -212,7 +143,8 @@ import ChatContent from "@/components/communication/ChatContent/ChatContent.vue"
 import SafeArea from "@/components/common/safeArea/safeArea.vue";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import pageBack from "@/components/common/pageBack/pageBack.vue";
-import { PUButton, PUTag } from "@partner-up-dev/design-uniapp";
+import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
+import PuTag from "@partner-up-dev/design-uniapp/components/puTag/puTag.vue";
 
 import Partner from "@/components/partner_request/Partner/Partner.vue";
 import PRApplyForm from "@/components/partner_request/PRApplyForm/PRApplyForm.vue";
@@ -281,8 +213,8 @@ const mockRoute = new Route([
   },
 ]);
 // Handlers
-const onForkClick = () => {};
-const onBookmarkClick = () => {};
+const onForkClick = () => { };
+const onBookmarkClick = () => { };
 const onApplyClick = () => {
   if (!drawerExpanded.value) {
     expandDrawer();

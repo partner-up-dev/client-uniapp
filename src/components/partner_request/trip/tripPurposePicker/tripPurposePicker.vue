@@ -14,7 +14,7 @@ import {
   TRIP_PURPOSES,
 } from "./tripPurposePicker";
 import { useTranslate } from "@/locale/use";
-import { PUScrollView } from "@partner-up-dev/design-uniapp";
+import PuScrollView from "@partner-up-dev/design-uniapp/components/puScrollView/puScrollView.vue";
 import type { TripPurpose } from "@/business/partner_request/trip";
 
 const { dt: domain_t } = useTranslate("base.trip_purpose_picker");
@@ -33,33 +33,18 @@ function onPurposeSelect(purpose: TripPurpose) {
 </script>
 
 <template>
-  <view
-    class="trip-purpose-picker"
-    :class="props.customClass"
-    :style="props.customStyle"
-  >
-    <PUScrollView
-      direction="x"
-      :edge-fade="props.edgeFade"
-      custom-class="trip-purpose-picker__scroll"
-    >
-      <view
-        v-for="purpose in TRIP_PURPOSES"
-        :key="purpose"
-        @click="onPurposeSelect(purpose)"
-        :class="[
-          'trip-purpose-picker__card trip-purpose-picker__item',
-          props.modelValue === purpose ? 'is-selected' : '',
-        ]"
-      >
-        <text
-          :class="[TRIP_PURPOSE_ICONS[purpose], 'trip-purpose-picker__icon']"
-        ></text>
+  <view class="trip-purpose-picker" :class="props.customClass" :style="props.customStyle">
+    <PuScrollView direction="x" :edge-fade="props.edgeFade" custom-class="trip-purpose-picker__scroll">
+      <view v-for="purpose in TRIP_PURPOSES" :key="purpose" @click="onPurposeSelect(purpose)" :class="[
+        'trip-purpose-picker__card trip-purpose-picker__item',
+        props.modelValue === purpose ? 'is-selected' : '',
+      ]">
+        <text :class="[TRIP_PURPOSE_ICONS[purpose], 'trip-purpose-picker__icon']"></text>
         <view class="trip-purpose-picker__text">
           {{ domain_t(`purpose_text.${purpose}`) }}
         </view>
       </view>
-    </PUScrollView>
+    </PuScrollView>
   </view>
 </template>
 
