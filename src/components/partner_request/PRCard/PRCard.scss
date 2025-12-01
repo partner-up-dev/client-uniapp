@@ -32,7 +32,7 @@
       justify-content: center;
 
       .type-text {
-        font-size: sys-var(font, label-medium, size);
+        @include pu-font("label-medium");
         color: ref-var(color, neutral, 100);
         font-weight: normal;
         line-height: 16px;
@@ -46,7 +46,7 @@
       justify-content: center;
 
       .time-text {
-        font-size: sys-var(font, label-medium, size);
+        @include pu-font("label-medium");
         color: sys-var(color, on-surface-variant);
         font-weight: normal;
         line-height: 16px;
@@ -66,7 +66,7 @@
       justify-content: center;
 
       .type-text {
-        font-size: sys-var(font, label-medium, size);
+        @include pu-font("label-medium");
         color: ref-var(color, neutral, 100);
         font-weight: normal;
         line-height: 16px;
@@ -80,7 +80,7 @@
     align-items: center;
 
     .primary-text {
-      font-size: sys-var(font, body-large, size);
+      @include pu-font("body-large");
       white-space: nowrap;
       text-overflow: ellipsis;
     }
@@ -91,7 +91,7 @@
     align-items: center;
 
     .secondary-text {
-      font-size: sys-var(font, label-large, size);
+      @include pu-font("label-large");
       color: sys-var(color, on-surface-variant);
       white-space: nowrap;
       text-overflow: ellipsis;
