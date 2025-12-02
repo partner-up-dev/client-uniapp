@@ -1,5 +1,5 @@
-import { nullable, V } from "..";
 import * as v from "valibot";
+import { nullable, V } from "..";
 
 /**
  * 出行目的

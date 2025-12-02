@@ -1,9 +1,9 @@
 // Types of Component:Base:RouteItemDatetimeEditor
 
-import type { PropType } from "vue";
-import type { RouteItemDatetime } from "@/business/base/route";
-import { makeNumberProp } from "@/utils/props";
 import dayjs from "dayjs";
+import type { PropType } from "vue";
+import type { RouteItemDatetimeForm } from "@/business/base/route";
+import { makeNumberProp } from "@/utils/props";
 
 // ==================== 组件相关类型定义 ====================
 
@@ -34,7 +34,7 @@ export const TIME_LOSS_OPTIONS: TimeLossOption[] = [
 export const routeItemDatetimeEditorProps = {
   /** 路线节点时间数据 */
   modelValue: {
-    type: Object as PropType<RouteItemDatetime>,
+    type: Object as PropType<RouteItemDatetimeForm>,
     required: true,
   },
 
@@ -46,10 +46,10 @@ export const routeItemDatetimeEditorProps = {
 
 export const routeItemDatetimeEditorEmits = {
   /** 值变化事件 */
-  change: (datetime: RouteItemDatetime) => true,
+  change: (datetime: RouteItemDatetimeForm) => true,
 
   /** 确认事件 */
-  confirm: (datetime: RouteItemDatetime) => true,
+  confirm: (datetime: RouteItemDatetimeForm) => true,
 
   /** 取消事件 */
   cancel: () => true,

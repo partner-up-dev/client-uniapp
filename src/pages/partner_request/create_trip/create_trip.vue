@@ -11,9 +11,9 @@ import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 import RouteItemDatetimeEditor from "@/components/base/routeItemDatetimeEditor/routeItemDatetimeEditor.vue";
 import {
   TripPreference,
-  type Transportation,
 } from "@/business/partner_request/trip";
-import { Route, RouteForm, RouteItem } from "@/business/base/route";
+import { type Transportation } from "@/business/base";
+import { RouteForm } from "@/business/base/route";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { EVENT } from "@/data/enum";
 import { useTranslate } from "@/locale/use";
@@ -27,7 +27,6 @@ const { dt: domain_t } = useTranslate("partner_request.create_trip");
 
 // Define props schema with valibot
 const propsSchema = v.object({
-  l1_type: v.optional(v.picklist(Object.values(PRL1Type))),
 });
 
 const props = ref<v.InferOutput<typeof propsSchema>>({});
@@ -44,7 +43,7 @@ const form = ref<{
   ride_hailing_preference: RideHailingPreference;
   transportation: Transportation;
 }>({
-  route: new RouteForm({}),
+  route: new RouteForm(undefined),
   trip_preference: new TripPreference({}),
   ride_hailing_preference: new RideHailingPreference({}),
   transportation: "ride_hailing",
@@ -92,11 +91,11 @@ function onTripPurposeComplete(go_next: boolean = true) {
 function onTransportationComplete(go_next: boolean = true) {
   if (l2_type.value !== PRType.Commute) {
     const transportation = form.value.transportation;
-    if (transportation === Transportation.Moped) {
+    if (transportation === "moped") {
       l2_type.value = PRType.Moped;
-    } else if (transportation === Transportation.SelfDriveAutomobile) {
+    } else if (transportation === "self_drive_automobile") {
       l2_type.value = PRType.Hitchhiking;
-    } else if (transportation === Transportation.RideHailing) {
+    } else if (transportation === "ride_hailing") {
       l2_type.value = PRType.RideHailing;
     }
   }
@@ -109,7 +108,7 @@ function onTransportationComplete(go_next: boolean = true) {
 }
 
 // lifecycle
-onLoad((query?: { l1_type?: string }) => {
+onLoad((query) => {
   // parse and validate params with valibot
   props.value = v.parse(propsSchema, query || {});
 });
@@ -128,7 +127,7 @@ watch(dep_datetime_editor_popup, (newVal, oldVal) => {
 
 <template>
   <page-meta :page-style="`overflow:${dep_datetime_editor_popup ? 'hidden' : 'visible'};`"></page-meta>
-  <PRImmersiveForm ref="immersiveCreateRef" :l1-type="props.l1_type || PRL1Type.Trip" :l2-type="l2_type"
+  <PRImmersiveForm ref="immersiveCreateRef" :l1-type="PRL1Type.Trip" :l2-type="l2_type"
     @update:l2-type="l2_type = $event" :pr-form="form" :steps="['route', 'tripPurpose', 'transportation']"
     @next="onImmersiveCreateNext">
     <template v-slot:route>
@@ -153,7 +152,7 @@ watch(dep_datetime_editor_popup, (newVal, oldVal) => {
   <PuDrawer v-model:visible="dep_datetime_editor_popup" height="60vh" :full-custom="true">
     <template #full>
       <RouteItemDatetimeEditor class="dep-datetime-editor" ref="depDatetimeEditorRef"
-        :modelValue="form.route.startItem.datetime" @confirm="dep_datetime_editor_popup = false"
+        :modelValue="form.route[0].datetime" @confirm="dep_datetime_editor_popup = false"
         @cancel="dep_datetime_editor_popup = false" />
     </template>
   </PuDrawer>
