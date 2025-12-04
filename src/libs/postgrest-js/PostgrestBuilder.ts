@@ -1,11 +1,14 @@
 import { Headers, URL, fetch } from '@/libs/fetch-polyfill';
 import { PostgrestError } from './PostgrestError';
+import * as v from 'valibot';
+import { type TableSchemaT } from './PostgrestQueryBuilder';
+import { type ParseTarget, Data } from './Data';
 
 /**
  * PostgREST response type
  */
 export interface PostgrestResponse<T> {
-  data: T | null;
+  data: Data<ParseTarget | undefined> | null;
   error: PostgrestError | null;
   count: number | null;
   status: number;
@@ -13,11 +16,11 @@ export interface PostgrestResponse<T> {
 }
 
 export interface PostgrestSingleResponse<T> extends PostgrestResponse<T> {
-  data: T | null;
+  data: Data<ParseTarget | undefined> | null;
 }
 
 export interface PostgrestMaybeSingleResponse<T> extends PostgrestResponse<T> {
-  data: T | null;
+  data: Data<ParseTarget | undefined> | null;
 }
 
 /**
@@ -32,6 +35,7 @@ export interface PostgrestBuilderConfig {
   shouldThrowOnError?: boolean;
   signal?: AbortSignal;
   isMaybeSingle?: boolean;
+  tableSchema?: TableSchemaT;
 }
 
 /**
@@ -48,6 +52,7 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
   protected shouldThrowOnError: boolean = false;
   protected signal?: AbortSignal;
   protected isMaybeSingle: boolean = false;
+  protected tableSchema?: ParseTarget;
 
   constructor(builder: PostgrestBuilderConfig) {
     this.method = builder.method;
@@ -58,6 +63,7 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
     this.shouldThrowOnError = builder.shouldThrowOnError ?? false;
     this.signal = builder.signal;
     this.isMaybeSingle = builder.isMaybeSingle ?? false;
+    this.tableSchema = builder.tableSchema;
   }
 
   /**
@@ -101,7 +107,8 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
       signal: this.signal,
     }).then(async (res) => {
       let error: PostgrestError | null = null;
-      let data: Result | null = null;
+      let data: Data<ParseTarget | undefined> | null = null;
+      let rawData: unknown = null;
       let count: number | null = null;
       let status = res.status;
       let statusText = res.statusText;
@@ -112,9 +119,9 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
           if (body === '') {
             // Prefer: return=minimal
           } else if (this.headers.get('Accept') === 'text/csv') {
-            data = body as unknown as Result;
+            rawData = body;
           } else {
-            data = JSON.parse(body);
+            rawData = JSON.parse(body);
           }
         }
 
@@ -125,22 +132,32 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
         }
 
         // Handle maybeSingle
-        if (this.isMaybeSingle && this.method === 'GET' && Array.isArray(data)) {
-          if (data.length > 1) {
+        if (this.isMaybeSingle && this.method === 'GET' && Array.isArray(rawData)) {
+          if (rawData.length > 1) {
             error = new PostgrestError({
               code: 'PGRST116',
-              details: `Results contain ${data.length} rows, application/vnd.pgrst.object+json requires 1 row`,
+              details: `Results contain ${rawData.length} rows, application/vnd.pgrst.object+json requires 1 row`,
               hint: '',
               message: 'JSON object requested, multiple (or no) rows returned',
             });
-            data = null;
+            rawData = null;
             count = null;
             status = 406;
             statusText = 'Not Acceptable';
-          } else if (data.length === 1) {
-            data = data[0];
+          } else if (rawData.length === 1) {
+            rawData = rawData[0];
           } else {
-            data = null;
+            rawData = null;
+          }
+        }
+
+        // Wrap data with tableSchema for lazy validation
+        if (!error && rawData !== null) {
+          if (Array.isArray(rawData)) {
+            data = new Data(rawData, v.array((this.tableSchema ?? v.any()) as v.BaseSchema<any, any, any>));
+          }
+          else {
+            data = new Data(rawData, this.tableSchema);
           }
         }
       } else {
@@ -149,7 +166,7 @@ export class PostgrestBuilder<Result> implements PromiseLike<PostgrestResponse<R
           error = new PostgrestError(JSON.parse(body));
           // Workaround for empty 404 responses
           if (Array.isArray(error) && res.status === 404) {
-            data = [] as unknown as Result;
+            data = new Data([], this.tableSchema);
             error = null;
             status = 200;
             statusText = 'OK';

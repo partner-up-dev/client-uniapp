@@ -5,6 +5,8 @@ import { useAccountStore } from "@/store/account";
 import store from "@/store";
 import log from "@/utils/log";
 import { Headers, URL } from "@/libs/fetch-polyfill";
+import type { TableSchemaT } from "@/libs/postgrest-js";
+
 
 // PostgREST URL from env
 const PGRST_URL: string = (import.meta.env.VITE_PGRST_URL || "") as string;
@@ -49,14 +51,16 @@ function getAuthHeaders(): Record<string, string> {
  *
  * @param opts.tableName - The table name to query
  * @param opts.schema - The database schema name (e.g., 'public', 'communication', 'partner_request')
+ * @param opts.tableSchema - The Valibot schema for validating table rows
  */
 export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result> {
   private _baseUrl: string;
   private _tableName: string;
   private _schema?: string;
+  private _tableSchema?: TableSchemaT;
   private _initialized: boolean = false;
 
-  constructor(opts: { tableName: string; schema?: string }) {
+  constructor(opts: { tableName: string; schema?: string; tableSchema?: TableSchemaT }) {
     const schemaName = opts.schema ?? "public";
     const baseUrl = PGRST_URL || "";
     const tableUrl = `${baseUrl}/${opts.tableName}`;
@@ -69,11 +73,13 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
     super(new URL(tableUrl), {
       headers: getAuthHeaders(),
       schema: schemaName,
+      tableSchema: opts.tableSchema,
     });
 
     this._baseUrl = baseUrl;
     this._tableName = opts.tableName;
     this._schema = schemaName;
+    this._tableSchema = opts.tableSchema;
     this._initialized = !!PGRST_URL;
   }
 
@@ -85,13 +91,17 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
     if (!this._initialized) {
       throw new Error("DBApiClient: VITE_PGRST_URL environment variable is not configured.");
     }
-    
+
     const freshUrl = new URL(`${this._baseUrl}/${this._tableName}`);
     const freshHeaders = new Headers(getAuthHeaders());
-    
+
+    // Extract the actual Valibot schema if tableSchema is a Valibot class
+    const actualSchema = this._tableSchema && 'V' in this._tableSchema ? this._tableSchema.V : this._tableSchema;
+
     return new PostgrestQueryBuilder<Result>(freshUrl, {
       headers: freshHeaders,
       schema: this._schema,
+      tableSchema: actualSchema,
     });
   }
 

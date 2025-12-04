@@ -43,3 +43,8 @@ export default async () => {
   })
 }
 ```
+
+```ts
+// main.ts
+import "uno.css";
+```

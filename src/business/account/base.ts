@@ -82,6 +82,7 @@ export class Account {
 
   static dbClient = new DBApiClient({
     tableName: 'account',
+    tableSchema: AccountBaseProfile,
   });
 
   static login(show_loading: boolean): Promise<AccountBaseProfile> {

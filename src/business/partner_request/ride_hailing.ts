@@ -39,6 +39,7 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
   static dbClient = new DBApiClient({
     tableName: 'ride_hailing',
     schema: 'partner_request',
+    tableSchema: RideHailingPR,
   });
 
   get typeText() {

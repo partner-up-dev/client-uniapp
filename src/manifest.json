@@ -75,11 +75,16 @@
         "desc": "地图选点"
       }
     },
-    "requiredPrivateInfos": ["getLocation", "chooseLocation"],
+    "requiredPrivateInfos": [
+      "getLocation",
+      "chooseLocation"
+    ],
     "optimization": {
       "subPackages": true
     },
-    "embeddedAppIdList": ["wxdda4c7baff6748d1"],
+    "embeddedAppIdList": [
+      "wxdda4c7baff6748d1"
+    ],
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "rendererOptions": {

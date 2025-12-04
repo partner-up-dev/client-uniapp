@@ -18,6 +18,10 @@
 - [ ] 合并 root-portal 到 PUDrawer 中
 - [x] V.class 支持 extend
 
+## 接入后端
+
+- [ ] 获取可选搭子角色列表
+
 ## PR Create
 
 - [ ] Use type specific form

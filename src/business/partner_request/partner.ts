@@ -27,6 +27,7 @@ export class PartnerRole extends V.class(v.object({
   static dbClient = new DBApiClient({
     tableName: 'partner_role',
     schema: 'partner_request',
+    tableSchema: PartnerRole,
   })
 
   static partnerRoleStore = usePartnerStore(store)

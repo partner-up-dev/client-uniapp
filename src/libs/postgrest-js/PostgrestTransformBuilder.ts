@@ -62,8 +62,7 @@ export class PostgrestTransformBuilder<Result> extends PostgrestBuilder<Result> 
     const existingOrder = this.url.searchParams.get(key);
     this.url.searchParams.set(
       key,
-      `${existingOrder ? `${existingOrder},` : ''}${column}.${ascending ? 'asc' : 'desc'}${
-        nullsFirst === undefined ? '' : nullsFirst ? '.nullsfirst' : '.nullslast'
+      `${existingOrder ? `${existingOrder},` : ''}${column}.${ascending ? 'asc' : 'desc'}${nullsFirst === undefined ? '' : nullsFirst ? '.nullsfirst' : '.nullslast'
       }`
     );
     return this;
@@ -119,7 +118,7 @@ export class PostgrestTransformBuilder<Result> extends PostgrestBuilder<Result> 
    * Query result must be one row (e.g. using `.limit(1)`), otherwise this
    * returns an error.
    */
-  single<T = Result>(): PostgrestBuilder<T> {
+  single<T = Result extends (infer U)[] ? U : Result>(): PostgrestBuilder<T> {
     this.headers.set('Accept', 'application/vnd.pgrst.object+json');
     return this as unknown as PostgrestBuilder<T>;
   }
@@ -130,7 +129,7 @@ export class PostgrestTransformBuilder<Result> extends PostgrestBuilder<Result> 
    * Query result must be zero or one row (e.g. using `.limit(1)`), otherwise
    * this returns an error.
    */
-  maybeSingle<T = Result>(): PostgrestBuilder<T | null> {
+  maybeSingle<T = Result extends (infer U)[] ? U : Result>(): PostgrestBuilder<T | null> {
     if (this.method === 'GET') {
       this.headers.set('Accept', 'application/json');
     } else {

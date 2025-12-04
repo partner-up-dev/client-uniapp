@@ -1,6 +1,8 @@
 import { PostgrestFilterBuilder } from './PostgrestFilterBuilder';
-import type { PostgrestBuilderConfig } from './PostgrestBuilder';
 import { Headers, URL } from '@/libs/fetch-polyfill';
+import * as v from 'valibot';
+
+export type TableSchemaT = { V: v.BaseSchema<any, any, any>; parse: (data: any) => any };
 
 /**
  * Query builder for PostgREST queries
@@ -11,20 +13,24 @@ export class PostgrestQueryBuilder<Result = unknown> {
   protected url: URL;
   protected headers: Headers;
   protected schema?: string;
+  protected tableSchema?: TableSchemaT;
 
   constructor(
     url: URL,
     {
       headers = {},
       schema,
+      tableSchema,
     }: {
       headers?: Record<string, string> | Headers;
       schema?: string;
+      tableSchema?: TableSchemaT;
     }
   ) {
     this.url = url;
     this.headers = headers instanceof Headers ? headers : new Headers(headers);
     this.schema = schema;
+    this.tableSchema = tableSchema;
   }
 
   /**
@@ -65,6 +71,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       url: this.url,
       headers: this.headers,
       schema: this.schema,
+      tableSchema: this.tableSchema,
     });
   }
 
@@ -105,6 +112,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
+      tableSchema: this.tableSchema,
     });
   }
 
@@ -155,6 +163,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
+      tableSchema: this.tableSchema,
     });
   }
 
@@ -184,6 +193,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       headers: this.headers,
       schema: this.schema,
       body: values,
+      tableSchema: this.tableSchema,
     });
   }
 
@@ -208,6 +218,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       url: this.url,
       headers: this.headers,
       schema: this.schema,
+      tableSchema: this.tableSchema,
     });
   }
 }
