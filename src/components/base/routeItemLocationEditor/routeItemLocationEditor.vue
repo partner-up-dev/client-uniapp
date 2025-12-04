@@ -98,7 +98,7 @@ async function onConfirmClick() {
 
   try {
     // 如果没有 _id，需要保存到服务器
-    if (!currentLocation.value._id) {
+    if (!currentLocation.value.id) {
       // 调用 protected put() 方法保存地点
       // @ts-ignore - accessing protected method
       await currentLocation.value.put();
@@ -109,11 +109,11 @@ async function onConfirmClick() {
     }
 
     // 确保有 _id
-    if (currentLocation.value._id) {
+    if (currentLocation.value.id) {
       // 保存到本地 store
       locationStore.upsert(currentLocation.value as Location);
 
-      emit("update:modelValue", currentLocation.value._id);
+      emit("update:modelValue", currentLocation.value.id);
       emit("confirm", currentLocation.value as Location);
 
       uni.showToast({
@@ -182,24 +182,40 @@ defineExpose({
   <view class="route-item-location-editor">
     <view class="route-item-location-editor__form">
       <!-- 地点名称输入框 -->
-      <Cell :title="dt('field.friendly_address.title')" :subtitle="dt('field.friendly_address.subtitle')" type="default"
-        size="small">
+      <Cell
+        :title="dt('field.friendly_address.title')"
+        :subtitle="dt('field.friendly_address.subtitle')"
+        type="default"
+        size="small"
+      >
         <template #value>
-          <PuInput v-model="currentLocation.friendly_address" :placeholder="dt('field.friendly_address.placeholder')"
-            :maxlength="FRIENDLY_ADDRESS_MAX_LENGTH" :show-word-limit="true" size="large" />
+          <PuInput
+            v-model="currentLocation.friendly_address"
+            :placeholder="dt('field.friendly_address.placeholder')"
+            :maxlength="FRIENDLY_ADDRESS_MAX_LENGTH"
+            :show-word-limit="true"
+            size="large"
+          />
         </template>
       </Cell>
 
       <!-- 地址选择 -->
-      <Cell :title="dt('field.address.title')" type="default" size="small" suffix-icon="i-mdi-chevron-right"
-        @click="onChooseLocationClick">
+      <Cell
+        :title="dt('field.address.title')"
+        type="default"
+        size="small"
+        suffix-icon="i-mdi-chevron-right"
+        @click="onChooseLocationClick"
+      >
         <template #value>
-          <text :class="[
-            'route-item-location-editor__address-value',
-            !hasAddress
-              ? 'route-item-location-editor__address-value--empty'
-              : '',
-          ]">
+          <text
+            :class="[
+              'route-item-location-editor__address-value',
+              !hasAddress
+                ? 'route-item-location-editor__address-value--empty'
+                : '',
+            ]"
+          >
             {{ hasAddress ? addressDisplay : dt("field.address.placeholder") }}
           </text>
         </template>
@@ -214,18 +230,35 @@ defineExpose({
     <!-- 操作按钮 -->
     <view class="route-item-location-editor__operations">
       <view class="route-item-location-editor__choose-btn">
-        <PuButton :text="dt('button.choose_location')" theme="SurfaceOutlined" type="WithText" size="Medium"
-          @click="onChooseLocationClick" />
+        <PuButton
+          :text="dt('button.choose_location')"
+          theme="SurfaceOutlined"
+          type="WithText"
+          size="Medium"
+          @click="onChooseLocationClick"
+        />
       </view>
 
       <view class="route-item-location-editor__cancel-btn">
-        <PuButton :text="dt('button.cancel')" theme="SurfaceOutlined" type="WithText" size="Medium"
-          @click="onCancelClick" />
+        <PuButton
+          :text="dt('button.cancel')"
+          theme="SurfaceOutlined"
+          type="WithText"
+          size="Medium"
+          @click="onCancelClick"
+        />
       </view>
 
       <view class="route-item-location-editor__confirm-btn">
-        <PuButton :text="dt('button.confirm')" theme="Primary" type="WithText" size="Medium" :disabled="isSaving"
-          :loading="isSaving" @click="onConfirmClick" />
+        <PuButton
+          :text="dt('button.confirm')"
+          theme="Primary"
+          type="WithText"
+          size="Medium"
+          :disabled="isSaving"
+          :loading="isSaving"
+          @click="onConfirmClick"
+        />
       </view>
     </view>
   </view>

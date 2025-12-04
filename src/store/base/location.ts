@@ -29,8 +29,8 @@ export const useBaseLocationStore = defineStore('base/location', {
     },
     actions: {
         upsert(location: Location) {
-            if (!location._id) return;
-            this.locations[location._id] = location;
+            if (!location.id) return;
+            this.locations[location.id] = location;
         }
     }
 })

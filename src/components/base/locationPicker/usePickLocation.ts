@@ -3,9 +3,7 @@
 import { Location, LocationForm } from "@/business/base/route";
 import { EVENT } from "@/data/enum";
 import { useTranslate } from "@/locale/use";
-import store from "@/store";
-import { useBaseLocationStore } from "@/store/base/location";
-import type { LocationRef, LocationWithoutId } from "@/types/partner_request/trip";
+import { type LocationRef } from "@/business/base/route";
 import { errorReport } from "@/utils/vendor";
 import { getTencentLBSPluginCredentialString } from "@/utils/lbs";
 
@@ -44,7 +42,7 @@ export function usePickLocation(
    * 
    */
   function selectLocation(
-    current_location?: LocationRef,
+    current_location_id?: LocationRef,
     category: string[] = []
   ) {
     // 清除之前选择的结果
@@ -52,13 +50,16 @@ export function usePickLocation(
 
     uni.$once(EVENT.ROUTE_EDITOR_PAGE_SHOWED, locationSelected);
 
-    // FIXMEs
-    const location_string = current_location ? "&location=" + JSON.stringify({
-      latitude: Location.getById(current_location)?.lat,
-      longitude: Location.getById(current_location)?.lng
-    }) : '';
-    uni.navigateTo({
-      url: `plugin://chooseLocation/index?${getTencentLBSPluginCredentialString()}${location_string}`
+    const getLocationPromise = current_location_id ? Location.getById(current_location_id) : Promise.reject();
+    getLocationPromise.then((current_location) => {
+      return current_location ? `&location=${JSON.stringify({
+        latitude: current_location.lat,
+        longitude: current_location.lng
+      })}` : '';
+    }).catch(() => {
+      return '';
+    }).then((location_str) => {
+      uni.navigateTo({ url: `plugin://chooseLocation/index?${getTencentLBSPluginCredentialString()}${location_str}` });
     });
   }
 

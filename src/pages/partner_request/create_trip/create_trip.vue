@@ -9,9 +9,7 @@ import { nextTick, ref, watch } from "vue";
 import PRImmersiveForm from "@/components/partner_request/PRImmersiveForm/PRImmersiveForm.vue";
 import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 import RouteItemDatetimeEditor from "@/components/base/routeItemDatetimeEditor/routeItemDatetimeEditor.vue";
-import {
-  TripPreference,
-} from "@/business/partner_request/trip";
+import { TripPreference } from "@/business/partner_request/trip";
 import { type Transportation } from "@/business/base";
 import { RouteForm } from "@/business/base/route";
 import { onShow, onLoad } from "@dcloudio/uni-app";
@@ -26,8 +24,7 @@ import * as v from "valibot";
 const { dt: domain_t } = useTranslate("partner_request.create_trip");
 
 // Define props schema with valibot
-const propsSchema = v.object({
-});
+const propsSchema = v.object({});
 
 const props = ref<v.InferOutput<typeof propsSchema>>({});
 
@@ -126,34 +123,64 @@ watch(dep_datetime_editor_popup, (newVal, oldVal) => {
 </script>
 
 <template>
-  <page-meta :page-style="`overflow:${dep_datetime_editor_popup ? 'hidden' : 'visible'};`"></page-meta>
-  <PRImmersiveForm ref="immersiveCreateRef" :l1-type="PRL1Type.Trip" :l2-type="l2_type"
-    @update:l2-type="l2_type = $event" :pr-form="form" :steps="['route', 'tripPurpose', 'transportation']"
-    @next="onImmersiveCreateNext">
+  <page-meta
+    :page-style="`overflow:${dep_datetime_editor_popup ? 'hidden' : 'visible'};`"
+  ></page-meta>
+  <PRImmersiveForm
+    ref="immersiveCreateRef"
+    :l1-type="PRL1Type.Trip"
+    :l2-type="l2_type"
+    @update:l2-type="l2_type = $event"
+    :pr-form="form"
+    :steps="['route', 'tripPurpose', 'transportation']"
+    @next="onImmersiveCreateNext"
+  >
     <template v-slot:route>
-      <RouteEditor ref="routeEditorRef" type="immersive" :model-value="form.route" :use-dep-datetime-editor="false"
-        @edit_dep_time="dep_datetime_editor_popup = true" @complete="immersiveCreateRef?.nextStep" />
+      <RouteEditor
+        ref="routeEditorRef"
+        type="immersive"
+        :model-value="form.route"
+        :use-dep-datetime-editor="false"
+        @edit_dep_time="dep_datetime_editor_popup = true"
+        @complete="immersiveCreateRef?.nextStep"
+      />
     </template>
     <template #tripPurpose>
       <view class="tp__title">
         {{ domain_t("trip_purpose.title") }}
       </view>
-      <TripPurposePicker class="tp__picker" blend-to-background="right" v-model="form.trip_preference.purpose"
-        @complete="onTripPurposeComplete" />
+      <TripPurposePicker
+        class="tp__picker"
+        blend-to-background="right"
+        v-model="form.trip_preference.purpose"
+        @complete="onTripPurposeComplete"
+      />
     </template>
     <template #transportation>
       <view class="trpn__title">
         {{ domain_t("transportation.title") }}
       </view>
-      <TransportationPicker class="trpn__picker" v-model="form.transportation" @complete="onTransportationComplete" />
+      <TransportationPicker
+        class="trpn__picker"
+        v-model="form.transportation"
+        @complete="onTransportationComplete"
+      />
     </template>
   </PRImmersiveForm>
 
-  <PuDrawer v-model:visible="dep_datetime_editor_popup" height="60vh" :full-custom="true">
+  <PuDrawer
+    v-model:visible="dep_datetime_editor_popup"
+    height="60vh"
+    :full-custom="true"
+  >
     <template #full>
-      <RouteItemDatetimeEditor class="dep-datetime-editor" ref="depDatetimeEditorRef"
-        :modelValue="form.route[0].datetime" @confirm="dep_datetime_editor_popup = false"
-        @cancel="dep_datetime_editor_popup = false" />
+      <RouteItemDatetimeEditor
+        class="dep-datetime-editor"
+        ref="depDatetimeEditorRef"
+        :modelValue="form.route[0].datetime"
+        @confirm="dep_datetime_editor_popup = false"
+        @cancel="dep_datetime_editor_popup = false"
+      />
     </template>
   </PuDrawer>
 </template>

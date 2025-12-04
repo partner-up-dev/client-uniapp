@@ -15,8 +15,8 @@ const { dt } = useTranslate("base.location_picker");
 const props = defineProps(LocationPickerProps);
 const emit = defineEmits(LocationPickerEmits);
 const { selectLocation } = usePickLocation((location) => {
-  emit("update:modelValue", location._id);
-  emit("confirm", location._id);
+  emit("update:modelValue", location.id);
+  emit("confirm", location.id);
 });
 const { location } = Location.use(props.modelValue);
 </script>

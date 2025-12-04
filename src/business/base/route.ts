@@ -12,6 +12,7 @@ import { HTTPApiClient } from "@/business/http-api";
 import { DBApiClient } from "@/business/db-api";
 import dayjs from "dayjs";
 import { DatetimeV } from ".";
+import md5 from 'crypto-js/md5';
 
 const { dt } = useTranslate('base.route_map');
 
@@ -23,7 +24,7 @@ export class Location extends V.class(v.object({
   friendly_address: v.string(),
   lat: v.number(),
   lng: v.number(),
-  _id: LocationRefV,
+  id: LocationRefV,
 })) {
   static mainClient = new HTTPApiClient<typeof Location>({
     modulePrefix: '/base/location',
@@ -31,11 +32,12 @@ export class Location extends V.class(v.object({
     fallbackSchema: Location,
   });
 
-  static dbClient = new DBApiClient({
+  static dbClient = new DBApiClient<Location>({
     tableName: 'location',
+    tableSchema: Location,
   });
 
-  static async getById(id: LocationRef): Promise<Location> {
+  static async getById(id: LocationRef): Promise<Location | undefined> {
     const locationStore = useBaseLocationStore(store);
     const cachedLocation = locationStore.fetchById(id);
     if (cachedLocation) {
@@ -43,15 +45,13 @@ export class Location extends V.class(v.object({
     }
 
     // 没有缓存，通过 PostgREST 获取
-    return this.dbClient
+    return Location.dbClient
       .select('*')
-      .eq('_id', id)
+      .eq('id', id)
       .single()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        const location = Location.parse(data);
-        locationStore.upsert(location);
-        return location;
+      .then(({ data }) => {
+        locationStore.upsert(data?.parsed);
+        return data?.parsed;
       });
   }
 
@@ -85,17 +85,18 @@ export class LocationForm extends V.formClass(v.object({
   friendly_address: v.string(),
   lat: v.number(),
   lng: v.number(),
-  _id: v.optional(LocationRefV, undefined),
+  id: v.optional(LocationRefV, undefined),
 })) {
+
+  public calId(): LocationRef {
+    return md5(this.lat.toString() + this.lng.toString()).toString();
+  }
+
   public async put(): Promise<Location> {
-    return Location.mainClient.request({
-      method: "PUT",
-      endpoint: '',
-      data: this,
-      schema: LocationRefV,
-    }).then(({ body }) => {
-      return new Location({ ...this, _id: body.parsed });
-    });
+    return Location.dbClient.upsert({
+      ...this,
+      id: this.calId(),
+    }).select().single().then(({ data }) => data!.parsed);
   }
 }
 

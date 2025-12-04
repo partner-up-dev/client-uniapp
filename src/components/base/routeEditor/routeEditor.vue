@@ -47,7 +47,7 @@ const { selectLocation } = usePickLocation((location) => {
   if (editingItemIndex.value === -1) return;
 
   // Update the route item with the selected location
-  route.value[editingItemIndex.value].location = location._id;
+  route.value[editingItemIndex.value].location = location.id;
   onValueChange();
   editingItemIndex.value = -1;
 });
@@ -167,6 +167,9 @@ function navigateToRoutePlanPage() {
     Location.getById(arrivalItem.value.location!),
   ])
     .then(([startLoc, endLoc]) => {
+      if (!startLoc || !endLoc) {
+        throw new Error("Failed to get locations for navigation");
+      }
       const startPoint = JSON.stringify({
         latitude: startLoc.lat,
         longitude: startLoc.lng,
@@ -218,23 +221,51 @@ watch(
   <!-- Normal -->
   <view v-if="isNormalType" class="route-editor route-editor--normal">
     <view class="operations">
-      <PuButton type="OnlyIcon" theme="Plain" size="Small" prefixIcon="i-mdi-map" @click="navigateToRoutePlan" />
-      <PuButton type="OnlyIcon" theme="Plain" size="Small" prefixIcon="i-mdi-plus" @click="addWaypoint" />
+      <PuButton
+        type="OnlyIcon"
+        theme="Plain"
+        size="Small"
+        prefixIcon="i-mdi-map"
+        @click="navigateToRoutePlan"
+      />
+      <PuButton
+        type="OnlyIcon"
+        theme="Plain"
+        size="Small"
+        prefixIcon="i-mdi-plus"
+        @click="addWaypoint"
+      />
     </view>
 
     <view class="content">
-      <view v-for="(item, index) in route" :key="`route-item-${index}`" class="route-item-wrapper">
+      <view
+        v-for="(item, index) in route"
+        :key="`route-item-${index}`"
+        class="route-item-wrapper"
+      >
         <view class="route-item">
           <text class="route-item__location" @click="openLocationEditor(index)">
             {{ getLocationAddress(index, getRouteItemType(index, route.length)) }}
           </text>
 
-          <PuButton v-if="!disableDatetime" type="OnlyIcon" theme="Plain" prefixIcon="i-mdi-clock" size="xSmall"
-            @click.stop="openDatetimeEditor(index)" />
+          <PuButton
+            v-if="!disableDatetime"
+            type="OnlyIcon"
+            theme="Plain"
+            prefixIcon="i-mdi-clock"
+            size="xSmall"
+            @click.stop="openDatetimeEditor(index)"
+          />
         </view>
 
-        <PuButton v-if="isRouteItemRemovable(index, route.length)" type="OnlyIcon" theme="Plain" size="xSmall"
-          prefixIcon="i-mdi-minus-circle" @click="removeWaypoint(index - 1)" />
+        <PuButton
+          v-if="isRouteItemRemovable(index, route.length)"
+          type="OnlyIcon"
+          theme="Plain"
+          size="xSmall"
+          prefixIcon="i-mdi-minus-circle"
+          @click="removeWaypoint(index - 1)"
+        />
       </view>
     </view>
   </view>
@@ -254,18 +285,32 @@ watch(
           <text class="route-item__text">{{
             t("immersive.departure.text")
           }}</text>
-          <text v-if="!disableDatetime" class="route-item__action i-mdi-clock" @click="openDatetimeEditor(0)" />
+          <text
+            v-if="!disableDatetime"
+            class="route-item__action i-mdi-clock"
+            @click="openDatetimeEditor(0)"
+          />
         </view>
       </view>
 
       <!-- Waypoints -->
-      <view v-for="(item, index) in waypointItems" :key="`waypoint-${index}`" class="route-item route-item--waypoint">
+      <view
+        v-for="(item, index) in waypointItems"
+        :key="`waypoint-${index}`"
+        class="route-item route-item--waypoint"
+      >
         <text class="route-item__title">{{ t("immersive.waypoint.title") }}</text>
         <view class="route-item__content">
-          <text class="route-item__location" @click="openLocationEditor(index + 1)">
+          <text
+            class="route-item__location"
+            @click="openLocationEditor(index + 1)"
+          >
             {{ getLocationAddress(index + 1, "waypoint") }}
           </text>
-          <text class="route-item__action i-mdi-minus-circle" @click="removeWaypoint(index)" />
+          <text
+            class="route-item__action i-mdi-minus-circle"
+            @click="removeWaypoint(index)"
+          />
         </view>
       </view>
 
@@ -273,7 +318,10 @@ watch(
       <view class="route-item route-item--arrival">
         <text class="route-item__title">{{ t("immersive.arrival.title") }}</text>
         <view class="route-item__content">
-          <text class="route-item__location" @click="openLocationEditor(route.length - 1)">
+          <text
+            class="route-item__location"
+            @click="openLocationEditor(route.length - 1)"
+          >
             {{ getLocationAddress(route.length - 1, "arrival") }}
           </text>
         </view>
@@ -287,11 +335,19 @@ watch(
   </view>
 
   <!-- Datetime Editor Drawer -->
-  <PuDrawer v-model:visible="datetimeEditorVisible" title="编辑时间" :full-custom="true" height="50vh">
+  <PuDrawer
+    v-model:visible="datetimeEditorVisible"
+    title="编辑时间"
+    :full-custom="true"
+    height="50vh"
+  >
     <template #full>
-      <RouteItemDatetimeEditor v-if="editingItemIndex >= 0 && editingItemIndex < route.length"
-        :modelValue="(route[editingItemIndex].datetime as any)" @confirm="onDatetimeEditorConfirm"
-        @cancel="datetimeEditorVisible = false" />
+      <RouteItemDatetimeEditor
+        v-if="editingItemIndex >= 0 && editingItemIndex < route.length"
+        :modelValue="(route[editingItemIndex].datetime as any)"
+        @confirm="onDatetimeEditorConfirm"
+        @cancel="datetimeEditorVisible = false"
+      />
     </template>
   </PuDrawer>
 </template>
