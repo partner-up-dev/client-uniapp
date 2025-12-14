@@ -87,7 +87,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
   insert(
     values: Partial<Result> | Partial<Result>[],
     options?: { count?: 'exact' | 'planned' | 'estimated'; defaultToNull?: boolean }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     const { count, defaultToNull = true } = options ?? {};
     const method = 'POST';
 
@@ -106,7 +106,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       }
     }
 
-    return new PostgrestFilterBuilder<null>({
+    return new PostgrestFilterBuilder<Result>({
       method,
       url: this.url,
       headers: this.headers,
@@ -133,7 +133,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       count?: 'exact' | 'planned' | 'estimated';
       defaultToNull?: boolean;
     }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     const { onConflict, ignoreDuplicates = false, count, defaultToNull = true } = options ?? {};
     const method = 'POST';
 
@@ -179,7 +179,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
   update(
     values: Partial<Result>,
     options?: { count?: 'exact' | 'planned' | 'estimated' }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     const { count } = options ?? {};
     const method = 'PATCH';
 
@@ -187,7 +187,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       this.headers.append('Prefer', `count=${count}`);
     }
 
-    return new PostgrestFilterBuilder<null>({
+    return new PostgrestFilterBuilder<Result>({
       method,
       url: this.url,
       headers: this.headers,
@@ -205,7 +205,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
    *
    * @param options - Named parameters
    */
-  delete(options?: { count?: 'exact' | 'planned' | 'estimated' }): PostgrestFilterBuilder<null> {
+  delete(options?: { count?: 'exact' | 'planned' | 'estimated' }): PostgrestFilterBuilder<Result> {
     const { count } = options ?? {};
     const method = 'DELETE';
 
@@ -213,7 +213,7 @@ export class PostgrestQueryBuilder<Result = unknown> {
       this.headers.append('Prefer', `count=${count}`);
     }
 
-    return new PostgrestFilterBuilder<null>({
+    return new PostgrestFilterBuilder<Result>({
       method,
       url: this.url,
       headers: this.headers,

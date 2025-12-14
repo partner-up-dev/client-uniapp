@@ -50,8 +50,8 @@ export class Location extends V.class(v.object({
       .eq('id', id)
       .single()
       .then(({ data }) => {
-        locationStore.upsert(data?.parsed);
-        return data?.parsed;
+        locationStore.upsert(data.parsed);
+        return data.parsed;
       });
   }
 
@@ -96,7 +96,7 @@ export class LocationForm extends V.formClass(v.object({
     return Location.dbClient.upsert({
       ...this,
       id: this.calId(),
-    }).select().single().then(({ data }) => data!.parsed);
+    }).select().single().then(({ data }) => data.parsed);
   }
 }
 

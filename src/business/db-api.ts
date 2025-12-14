@@ -129,7 +129,7 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
   override insert(
     values: Partial<Result> | Partial<Result>[],
     options?: { count?: 'exact' | 'planned' | 'estimated'; defaultToNull?: boolean }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     return this.createFreshBuilder().insert(values, options);
   }
 
@@ -148,7 +148,7 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
       count?: 'exact' | 'planned' | 'estimated';
       defaultToNull?: boolean;
     }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     return this.createFreshBuilder().upsert(values, options);
   }
 
@@ -162,7 +162,7 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
   override update(
     values: Partial<Result>,
     options?: { count?: 'exact' | 'planned' | 'estimated' }
-  ): PostgrestFilterBuilder<null> {
+  ): PostgrestFilterBuilder<Result> {
     return this.createFreshBuilder().update(values, options);
   }
 
@@ -172,7 +172,7 @@ export class DBApiClient<Result = unknown> extends PostgrestQueryBuilder<Result>
    *
    * @param options - Named parameters
    */
-  override delete(options?: { count?: 'exact' | 'planned' | 'estimated' }): PostgrestFilterBuilder<null> {
+  override delete(options?: { count?: 'exact' | 'planned' | 'estimated' }): PostgrestFilterBuilder<Result> {
     return this.createFreshBuilder().delete(options);
   }
 }

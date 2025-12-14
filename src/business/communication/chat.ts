@@ -51,10 +51,7 @@ export class Chat extends V.class(v.object({
       .select('*')
       .eq('_id', chatId)
       .single()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        return Chat.parse(data);
-      });
+      .then(({ data }) => Chat.parse(data.parsed));
   }
 
   static async get_mine(): Promise<Chat[]> {

@@ -11,7 +11,7 @@ export interface PartnerState {
 }
 
 
-export const usePartnerStore = defineStore('partner_request/partner_role', {
+export const usePartnerStore = defineStore('partner_request/partner', {
   unistorage: true,
   state: (): PartnerState => {
     return {
@@ -19,7 +19,7 @@ export const usePartnerStore = defineStore('partner_request/partner_role', {
     }
   },
   getters: {
-    fetchById(state: PartnerState) {
+    fetchRoleById(state: PartnerState) {
       return (role_id: PartnerRoleRef): PartnerRole | undefined => {
         const data = state.roles[role_id];
         if (!data) return undefined;

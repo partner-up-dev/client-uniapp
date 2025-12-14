@@ -83,10 +83,7 @@ export class PartnerRequest extends V.class(v.object({
       .select('*')
       .eq('_id', pr_id)
       .single()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        return PartnerRequest.parse(data);
-      });
+      .then(({ data }) => PartnerRequest.parse(data.parsed));
   }
 
   static use(prId?: PRRef, partnerRequest?: PartnerRequest) {

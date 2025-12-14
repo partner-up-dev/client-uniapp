@@ -16,8 +16,7 @@ import PartnersEditor from "@/components/partner_request/partnersEditor/partners
 import type { CommutePRForm } from "@/business/partner_request/commute";
 import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 import { PartnerRequest } from "@/business/partner_request/base";
-import { type PRRef, PRType } from "@/business/partner_request";
-import { errorReport } from "@/utils/vendor";
+import { PRType } from "@/business/partner_request";
 import { WXMP_SUBMESSAGE_TID } from "@/data/const";
 
 // composables
@@ -135,16 +134,32 @@ defineExpose({
   <view class="pr-editor">
     <PuForm ref="puFormRef" :schema="modelValue">
       <PuAccordion v-model="collapse" ref="metadataCollapseRef">
-        <PuAccordionItem name="metadata" :title="dt('editor.common_editor.title')">
+        <PuAccordionItem
+          name="metadata"
+          :title="dt('editor.common_editor.title')"
+        >
           <PRMetadataForm ref="metadataFormRef" :form="modelValue" />
         </PuAccordionItem>
-        <PuAccordionItem name="partners" :title="dt('editor.partners_editor.title')">
-          <PartnersEditor class="space-p-sm" v-model="modelValue.partners" :pr-type="props.type" />
+        <PuAccordionItem
+          name="partners"
+          :title="dt('editor.partners_editor.title')"
+        >
+          <PartnersEditor
+            class="space-p-sm"
+            v-model="modelValue.partners"
+            :pr-type="props.type"
+          />
         </PuAccordionItem>
-        <PRRideHailingForm v-if="props.type === PRType.RideHailing" ref="rideHailingFormRef"
-          :form="(props.modelValue as RideHailingPRForm)" />
-        <PRCommuteForm v-if="props.type === PRType.Commute" ref="commuteDatetimeFormRef"
-          :form="(props.modelValue as CommutePRForm)" />
+        <PRRideHailingForm
+          v-if="props.type === PRType.RideHailing"
+          ref="rideHailingFormRef"
+          :form="(props.modelValue as RideHailingPRForm)"
+        />
+        <PRCommuteForm
+          v-if="props.type === PRType.Commute"
+          ref="commuteDatetimeFormRef"
+          :form="(props.modelValue as CommutePRForm)"
+        />
       </PuAccordion>
     </PuForm>
   </view>

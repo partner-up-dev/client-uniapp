@@ -68,10 +68,7 @@ export class Message extends V.class(v.object({
       .select('*')
       .eq('_id', id)
       .single()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        return Message.parse(data);
-      });
+      .then(({ data }) => Message.parse(data.parsed));
   }
 
   /**

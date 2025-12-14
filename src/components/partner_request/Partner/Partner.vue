@@ -71,7 +71,9 @@ const role = computed((): PartnerRole | undefined => {
 
 const idText = computed(() => `#${props.partner._id}`);
 const roleName = computed(() => role.value?.name ?? "角色名称");
-const roleRule = computed(() => role.value?.rule ?? "角色的权利与义务明细");
+const roleRule = computed(
+  () => role.value?.description ?? "角色的权利与义务明细"
+);
 
 const accountStore = useAccountStore();
 const isPlayingByYou = computed(

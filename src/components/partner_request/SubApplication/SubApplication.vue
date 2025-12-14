@@ -1,5 +1,8 @@
 <template>
-  <view class="sub-application" :class="{ 'sub-application--readonly': !editable }">
+  <view
+    class="sub-application"
+    :class="{ 'sub-application--readonly': !editable }"
+  >
     <!-- Header -->
     <view class="header">
       <view class="left">
@@ -10,21 +13,42 @@
       </view>
 
       <view class="right">
-        <PuButton v-if="editable" theme="Plain" type="OnlyIcon" size="xSmall" prefix-icon="i-mdi-delete-outline"
-          @click.stop="onDeleteClick" />
-        <PuButton v-else theme="Plain" type="OnlyIcon" size="xSmall" prefix-icon="i-mdi-chevron-right"
-          @click.stop="onExpandClick" />
+        <PuButton
+          v-if="editable"
+          theme="Plain"
+          type="OnlyIcon"
+          size="xSmall"
+          prefix-icon="i-mdi-delete-outline"
+          @click.stop="onDeleteClick"
+        />
+        <PuButton
+          v-else
+          theme="Plain"
+          type="OnlyIcon"
+          size="xSmall"
+          prefix-icon="i-mdi-chevron-right"
+          @click.stop="onExpandClick"
+        />
       </view>
     </view>
 
     <view class="rule" v-if="editable">{{ roleRule }}</view>
 
-    <PuTextarea v-if="editable" v-model="rationale" :placeholder="dt('rationale_editor.placeholder')" :height="28"
-      :focusHeight="56" />
+    <PuTextarea
+      v-if="editable"
+      v-model="rationale"
+      :placeholder="dt('rationale_editor.placeholder')"
+      :height="28"
+      :focusHeight="56"
+    />
   </view>
 
   <root-portal :enable="true" :style="{ position: 'absolute' }">
-    <PuDrawer v-model:visible="drawerVisible" :title="`#${roleId} ${roleName}`" height="30vh">
+    <PuDrawer
+      v-model:visible="drawerVisible"
+      :title="`#${roleId} ${roleName}`"
+      height="30vh"
+    >
       <view class="drawer-content">
         <text class="rule">{{ roleRule }}</text>
         <text class="rationale">
@@ -63,7 +87,9 @@ const role = computed((): PartnerRole | undefined => {
 
 const roleName = computed(() => role.value?.name ?? "角色名称");
 const roleId = computed(() => role.value?.id ?? "00");
-const roleRule = computed(() => role.value?.rule ?? "角色的权利与义务明细");
+const roleRule = computed(
+  () => role.value?.description ?? "角色的权利与义务明细"
+);
 
 const rationale = computed(() => props.subApplication.rationale || "");
 

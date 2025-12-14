@@ -30,11 +30,11 @@ export function getElementRect(selector: string, instance: any): Promise<UniApp.
 }
 
 export function getWindowHeight(): number {
-    return uni.getSystemInfoSync().windowHeight;
+    return uni.getWindowInfo().windowHeight;
 }
 
 export function getSafeArea() {
-    const data = uni.getSystemInfoSync().safeAreaInsets;
+    const data = uni.getWindowInfo().safeAreaInsets;
     if (!data) {
         return {
             'top': 0, 'bottom': 0, 'left': 0, 'right': 0
@@ -59,8 +59,8 @@ export function getMenuButtonRect(): {
     const raw = uni.getMenuButtonBoundingClientRect();
 
     const top = raw.top;
-    const right = uni.getSystemInfoSync().windowWidth - raw.right;
-    const bottom = uni.getSystemInfoSync().windowHeight - raw.bottom;
+    const right = uni.getWindowInfo().windowWidth - raw.right;
+    const bottom = uni.getWindowInfo().windowHeight - raw.bottom;
     const left = raw.left;
 
     return {

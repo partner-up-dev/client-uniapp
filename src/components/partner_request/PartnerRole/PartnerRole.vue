@@ -42,7 +42,7 @@ function onClick() {
       }}</text>
     </view>
     <view class="color-surface-on font-label-large">
-      {{ partnerRole?.rule }}
+      {{ partnerRole?.description }}
     </view>
   </view>
 </template>

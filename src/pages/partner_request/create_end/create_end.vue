@@ -13,7 +13,6 @@ import {
   PartnerRequest,
   PartnerRequestForm,
 } from "@/business/partner_request/base";
-import { PAGE_PATH } from "@/data/mapper";
 import { PAGE_ID } from "@/data/enum";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import { EVENT } from "@/data/enum";
@@ -41,7 +40,7 @@ const propsSchema = v.object({
 
 const props = ref<v.InferOutput<typeof propsSchema>>({
   cache: false,
-  type: PRType.Undefined,
+  type: undefined,
   immersive: false,
 });
 const navBarRef = ref<InstanceType<typeof NavBar> | null>(null);
@@ -72,7 +71,7 @@ function onSave() {
   saving.value = true;
 }
 
-function onShare() { }
+function onShare() {}
 
 function onView() {
   navigate({
@@ -168,10 +167,23 @@ onShow(() => {
   <ScaffoldLayout>
     <!-- Header Slot -->
     <template #header>
-      <NavBar ref="navBarRef" mode="small" theme="surface" :title="domain_t(`title.${props.type}`)" />
+      <NavBar
+        ref="navBarRef"
+        mode="small"
+        theme="surface"
+        :title="domain_t(`title.${props.type}`)"
+      />
 
-      <PuNoticeBar class="publishing-notice" v-if="publishing" :text="publishing_notice" prefix="lightbulb"
-        background-color="#f6d77d" color="#372a04" direction="vertical" :scrollable="false" />
+      <PuNoticeBar
+        class="publishing-notice"
+        v-if="publishing"
+        :text="publishing_notice"
+        prefix="lightbulb"
+        background-color="#f6d77d"
+        color="#372a04"
+        direction="vertical"
+        :scrollable="false"
+      />
     </template>
 
     <!-- Content Slot -->
@@ -199,8 +211,13 @@ onShow(() => {
             <view class="description">{{
               domain_t("after_publish.share.description")
             }}</view>
-            <PuButton class="operation" theme="Primary" prefix-icon="i-mdi-share"
-              :text="domain_t('after_publish.share.operation')" @click="onShare" />
+            <PuButton
+              class="operation"
+              theme="Primary"
+              prefix-icon="i-mdi-share"
+              :text="domain_t('after_publish.share.operation')"
+              @click="onShare"
+            />
           </view>
           <view class="af-pub__stop af-pub__card">
             <view class="title">{{ domain_t("after_publish.stop.title") }}</view>
@@ -213,7 +230,12 @@ onShow(() => {
 
       <!-- Editor View -->
       <view class="editor-cont" v-if="!isPublished">
-        <PRForm ref="PRFormRef" v-model="form" :type="props.type!" />
+        <PRForm
+          ref="PRFormRef"
+          v-if="props.type"
+          v-model="form"
+          :type="props.type"
+        />
       </view>
     </view>
 
@@ -222,20 +244,46 @@ onShow(() => {
       <view class="footer">
         <view class="operations">
           <!-- Not Published -->
-          <PuButton class="operations__save button" v-if="!isPublished" theme="SurfaceOutlined"
-            prefix-icon="i-mdi-content-save" :text="domain_t('operations.save')" :loading="saving"
-            :disabled="publishing" @click="onSave" />
+          <PuButton
+            class="operations__save button"
+            v-if="!isPublished"
+            theme="SurfaceOutlined"
+            prefix-icon="i-mdi-content-save"
+            :text="domain_t('operations.save')"
+            :loading="saving"
+            :disabled="publishing"
+            @click="onSave"
+          />
 
-          <PuButton class="operations__publish button" v-if="!isPublished" theme="Primary" prefix-icon="i-mdi-check"
-            :text="domain_t('operations.publish')" :loading="publishing || saving" :disabled="publishing"
-            @click="onPublish" />
+          <PuButton
+            class="operations__publish button"
+            v-if="!isPublished"
+            theme="Primary"
+            prefix-icon="i-mdi-check"
+            :text="domain_t('operations.publish')"
+            :loading="publishing || saving"
+            :disabled="publishing"
+            @click="onPublish"
+          />
 
           <!-- Published -->
-          <PuButton class="operations__view button" v-if="isPublished" theme="SurfaceOutlined" prefix-icon="i-mdi-eye"
-            :text="domain_t('operations.view')" @click="onView" />
+          <PuButton
+            class="operations__view button"
+            v-if="isPublished"
+            theme="SurfaceOutlined"
+            prefix-icon="i-mdi-eye"
+            :text="domain_t('operations.view')"
+            @click="onView"
+          />
 
-          <PuButton class="operations__discover button" v-if="isPublished" theme="Primary" prefix-icon="i-mdi-compass"
-            :text="domain_t('operations.discover')" @click="onDiscover" />
+          <PuButton
+            class="operations__discover button"
+            v-if="isPublished"
+            theme="Primary"
+            prefix-icon="i-mdi-compass"
+            :text="domain_t('operations.discover')"
+            @click="onDiscover"
+          />
         </view>
 
         <SafeAreaInset position="bottom" />

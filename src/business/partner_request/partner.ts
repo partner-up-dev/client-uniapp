@@ -16,7 +16,8 @@ export const PartnerRoleRefV = v.number();
 export class PartnerRole extends V.class(v.object({
   id: PartnerRoleRefV,
   name: v.string(),
-  rule: v.string(),
+  description: nullable(v.string()),
+  apply_to: v.optional(v.array(v.enum(PRType)), () => []),
 })) {
   static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/partner_role',
@@ -24,16 +25,16 @@ export class PartnerRole extends V.class(v.object({
     fallbackSchema: PartnerRole,
   })
 
-  static dbClient = new DBApiClient({
+  static dbClient = new DBApiClient<PartnerRole>({
     tableName: 'partner_role',
     schema: 'partner_request',
     tableSchema: PartnerRole,
   })
 
-  static partnerRoleStore = usePartnerStore(store)
+  static partnerStore = usePartnerStore(store)
 
   static async get(id: PartnerRoleRef): Promise<PartnerRole> {
-    const cachedRole = this.partnerRoleStore.fetchById(id);
+    const cachedRole = this.partnerStore.fetchRoleById(id);
     if (cachedRole) {
       return cachedRole;
     }
@@ -42,11 +43,10 @@ export class PartnerRole extends V.class(v.object({
       .select('*')
       .eq('id', id)
       .single()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        const role = PartnerRole.parse(data);
-        this.partnerRoleStore.upsert(role);
-        return role;
+      .then(({ data }) => {
+        // TODO data.parsed should be PartnerRole
+        this.partnerStore.upsert(data.parsed);
+        return data.parsed;
       });
   }
 
@@ -87,15 +87,8 @@ export class PartnerRole extends V.class(v.object({
     const availableRoles = computed((): PartnerRole[] => {
       if (!_availableRoles.value.length && !loading.value) {
         loading.value = true;
-        this.mainClient.request({
-          method: "GET",
-          endpoint: "",
-          data: {
-            type: _prType.value
-          },
-          schema: v.array(instance(PartnerRole)),
-        }).then(({ body }) => {
-          _availableRoles.value = body.parsed;
+        this.dbClient.select().contains('apply_to', [_prType.value]).then(({ data }) => {
+          _availableRoles.value = data.parsed;
           loading.value = false;
         })
       }

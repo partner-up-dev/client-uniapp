@@ -1,4 +1,4 @@
-import { PostgrestBuilder } from './PostgrestBuilder';
+import { PostgrestBuilder, PostgrestSingleBuilder } from './PostgrestBuilder';
 import type { PostgrestBuilderConfig } from './PostgrestBuilder';
 
 /**
@@ -118,9 +118,18 @@ export class PostgrestTransformBuilder<Result> extends PostgrestBuilder<Result> 
    * Query result must be one row (e.g. using `.limit(1)`), otherwise this
    * returns an error.
    */
-  single<T = Result extends (infer U)[] ? U : Result>(): PostgrestBuilder<T> {
+  single<T = Result extends (infer U)[] ? U : Result>(): PostgrestSingleBuilder<T> {
     this.headers.set('Accept', 'application/vnd.pgrst.object+json');
-    return this as unknown as PostgrestBuilder<T>;
+    return new PostgrestSingleBuilder<T>({
+      method: this.method,
+      url: this.url,
+      headers: this.headers,
+      schema: this.schema,
+      body: this.body,
+      signal: this.signal,
+      isMaybeSingle: false,
+      tableSchema: this.tableSchema as any,
+    });
   }
 
   /**

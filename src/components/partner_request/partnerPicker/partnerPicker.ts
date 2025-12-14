@@ -83,65 +83,65 @@ export function getAvailablePartnerRoles(prType: PRType): PartnerRole[] {
       new PartnerRole({
         id: 1,
         name: "司机",
-        rule: "负责开车，遵守交通规则，确保乘客安全",
+        description: "负责开车，遵守交通规则，确保乘客安全",
       }),
       new PartnerRole({
         id: 2,
         name: "乘客",
-        rule: "按时到达上车地点，支付相应费用",
+        description: "按时到达上车地点，支付相应费用",
       }),
     ],
     ride_hailing: [
       new PartnerRole({
         id: 3,
         name: "发起者",
-        rule: "负责叫车并支付费用，协调其他乘客",
+        description: "负责叫车并支付费用，协调其他乘客",
       }),
       new PartnerRole({
         id: 4,
         name: "拼车者",
-        rule: "按约定分摊车费，准时到达上车点",
+        description: "按约定分摊车费，准时到达上车点",
       }),
     ],
     hitchhiking: [
       new PartnerRole({
         id: 5,
         name: "车主",
-        rule: "提供车辆和驾驶服务，确保行车安全",
+        description: "提供车辆和驾驶服务，确保行车安全",
       }),
       new PartnerRole({
         id: 6,
         name: "搭车者",
-        rule: "支付油费或过路费，尊重车主的行车习惯",
+        description: "支付油费或过路费，尊重车主的行车习惯",
       }),
     ],
     moped: [
       new PartnerRole({
         id: 7,
         name: "骑手",
-        rule: "负责驾驶电动车，确保乘客安全",
+        description: "负责驾驶电动车，确保乘客安全",
       }),
       new PartnerRole({
         id: 8,
         name: "后座",
-        rule: "配合骑手，注意安全，戴好头盔",
+        description: "配合骑手，注意安全，戴好头盔",
       }),
     ],
     travel: [
       new PartnerRole({
         id: 9,
         name: "组织者",
-        rule: "负责行程规划和协调，确保旅行顺利",
+        description: "负责行程规划和协调，确保旅行顺利",
       }),
       new PartnerRole({
         id: 10,
         name: "参与者",
-        rule: "遵守行程安排，分摊费用，共同维护团队和谐",
+        description: "遵守行程安排，分摊费用，共同维护团队和谐",
       }),
       new PartnerRole({
         id: 11,
         name: "摄影师",
-        rule: "负责记录旅行精彩瞬间，分享照片给团队",
+        description: "负责记录旅行精彩瞬间，分享照片给团队",
       }),
     ],
   };

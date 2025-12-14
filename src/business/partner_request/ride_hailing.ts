@@ -56,7 +56,7 @@ export class RideHailingPRForm extends PartnerRequestForm.extend(v.object({
           role: 1
         }),
         new PartnerForm({
-          role: 2
+          role: 1
         }),
         new PartnerForm({
           role: 2
