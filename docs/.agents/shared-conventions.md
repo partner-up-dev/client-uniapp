@@ -1,0 +1,72 @@
+# Shared Development Conventions
+
+Common conventions that apply to all Vue components, pages, and UI code in this project.
+
+## Code style
+
+- **Promise handling**: Prefer `Promise.then().catch()` over `async/await` for TypeScript
+- **Conditions**: Keep conditions readable; extract complex checks into named variables
+- **Comments**: Avoid "WHAT" comments; only add "WHY" or high-level overview comments
+- **UniApp tags only**: Use `<view>`, `<text>`, `<image>`, etc. Never use web-only tags like `<div>`, `<span>`, `<button>`
+
+## Vue conventions (shared)
+
+- **Component API**: Use `<script setup>` for Vue 3 Composition API
+
+## i18n (internationalization)
+
+- **Never hard-code text**: All user-facing text must use localization
+- **Use `useTranslate()`**: Import from `src/locale/use.ts`
+- **Domain-scoped translations**: Use `dt()` for domain-specific keys
+- **Global translations**: Use `t()` for common/shared keys
+
+Example:
+
+```typescript
+const { dt, t } = useTranslate("domain_name");
+
+dt("welcome.greeting")  // looks up "domain_name.welcome.greeting"
+t("common.yes")         // looks up "common.yes"
+```
+
+## Error handling
+
+- **Report errors**: Use `errorReport()` from `src/utils/vendor.ts`
+- **User-facing errors**: `errorReport()` handles error dialog + logging automatically
+- **Promise pattern**:
+
+  ```typescript
+  BusinessModel.method()
+    .then((result) => {
+      // Update UI
+    })
+    .catch((err) => {
+      errorReport(err);
+    });
+  ```
+
+## Essential references
+
+**Instruction files** (read before making changes):
+
+- `.github/instructions/coding.instructions.md` — general coding conventions
+- `.github/instructions/typescript.instructions.md` — TypeScript-specific rules
+- `.github/instructions/vue.instructions.md` — Vue 3 component conventions
+- `.github/instructions/style.instructions.md` — styling guidelines
+
+**Core utilities**:
+
+- `src/utils/vendor.ts` — `navigate()`, `errorReport()`, UniApp helpers
+- `src/locale/use.ts` — `useTranslate()` hook
+- `src/utils/format.ts`, `src/utils/string.ts` — formatting helpers
+- `src/utils/time.ts` — time/datetime utilities
+
+**Business layer**:
+
+- `src/business/` — domain models and API clients
+- `src/business/AGENTS.md` — business layer development guide
+
+**State management**:
+
+- `src/store/` — Pinia stores with persistence via `pinia-plugin-unistorage`
+- Store hooks follow pattern: `DomainModel.use()` returns reactive refs

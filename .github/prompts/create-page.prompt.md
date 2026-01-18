@@ -1,6 +1,6 @@
 遵循下列步骤实现新页面：
 
-1. 创建[文件结构](.github/instructions/page.instructions.md#文件结构)定义的文件
+1. 参考 [src/pages/FILESYSTEM.md](../../src/pages/FILESYSTEM.md) 创建文件结构
 2. 在 `src/pages.json` 中按如下示例注册页面：
 
 - 对于主包中的页面（也就是在 `src/pages` 中的页面 ）

@@ -1,81 +1,84 @@
 # TODOs
 
+## Technical & Refactoring
+
 - [ ] 添加模板代码的格式化（标签对齐、属性换行巴拉巴拉）
-- [ ] PUButton 通过 inject/provide 读取属性（可以用于 ButtonGroup 或者常见的 Operations 中）
-- [x] Avatar组件、Partners组件
+- [ ] PUButton 通过 inject/provide 读取属性
 - [ ] 在 business/ 中将 computed 与类再进一步结合
 - [x] 移除 Business 或者 Business 基于 valibot
 - [x] Location.get 使用 Store 做缓存
 - [x] TabBar 改为普通的版本，不用悬浮
 - [ ] PRList 可以使用 scroll-view
-- [ ] uniuse (<https://uni-helper.js.org/uni-use/guide/installation>)
-- [ ] 基于对 wd-transition 原理的总结，再次尝试实现 wd-transition
-- [ ] vue-i18n types support
+- [ ] 引入 uniuse, uni-promisesm
+- [ ] 尝试 uni-devtools
+- [ ] retry migrate wd-transition
+- [ ] i18n lint automation
 - [ ] BusinessClass.use 的某些值的双向绑定问题解决方案作成 composable
 - [ ] 硬编码文本放到国际化中
-- [x] 组件单元测试页面模板组件（写明对应的props；处理安全区域）
+- [x] 组件单元测试页面模板组件
 - [ ] 抽离出 Section 组件
 - [ ] 合并 root-portal 到 PUDrawer 中
 - [x] V.class 支持 extend
+- [ ] `pages.json` 作为 SSoT
+- [ ] PR Create Use type specific form
 
-## 接入后端
+## Auth & Profile (注册/登录/资料)
 
-- [ ] 获取可选搭子角色列表
+- [x] Avatar Component (Basic)
+- [ ] Register / Login (UI & Logic integration)
+- [x] Profile Edit (Nickname, Bio, Gender, MBTI)
+- [x] Avatar Switch/Upload
+- [ ] Student Verification (大学生认证)
+- [ ] Phone Number Edit
 
-## PR Create
+## Partner Request (My Requests)
 
-- [ ] Use type specific form
-- [x] Add form-item component
-- [x] validate 不等同于 parse。parse还有很多除数据正确性以外的复杂规则，包括跨字段的。（但似乎有 refine 这种东西）
+- [ ] My Requests List (我的搭子请求)
+- [ ] Create Partner Request (创建)
+  - [x] Basic Flow (Start/Trip/End)
+  - [x] Form Items
+  - [ ] Backend Integration (Create)
+- [ ] Edit Partner Request (编辑)
+- [ ] Publish Logic (发布)
 
-## Me Page
+## Explore (探索)
 
-- [x] 将 vertical-cell 分离为 field 组件
-- [x] OSS use fp extension if key extension is missing
-- [x] Nickname 编辑
-- [x] Bio, gender, mbti, birthday 编辑
-- [ ] 大学生认证 <https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/student.html#%E4%BA%94%E3%80%81%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3>
-- [ ] 手机号编辑
+- [x] Explore Page UI
+- [x] GeoElement Filter
+- [x] PUMap Multi-route support
+- [ ] Get Explore Results (Backend)
+- [ ] Lazy Plan (Map loads more routes on zoom)
 
-## PRTimeline
+## Collections (收藏)
 
-- [x] 编写测试
-- [x] 改进 Card 组件 （Expandable）
-- [x] 添加手风琴组件，控制只能展开几个
-- [ ] 其它状态的推荐操作
+- [ ] My Collections List (我的搭子请求收藏)
+- [ ] Collect / Uncollect Action (收藏/取消收藏)
 
-## Explore
+## Applications & Participation (申请/参与)
 
-- [x] 添加 GeoElementFilter Button 到 FixedFilters （目前只有这两种 Filter，所以可以这么做）
+- [x] Apply Form (申请入队 - PRApplyForm)
+- [x] Partner Role Component & List (获取搭子角色)
+- [x] Available Partner Roles Drawer
+- [ ] Get Partner Requests Partners List (获取搭子列表)
+- [ ] Check Participation Status (Acting/Not Acting check)
+- [ ] Approve / Reject Application (同意/拒绝)
+- [ ] Withdraw Application
 
-## PRDetail
+## Social (社交)
 
-- [x] Partners Section
-- [ ] Partner Header 都可点击，有点击反馈
-- [x] Route Section
-- [x] Drawer expand
-  - [x] PRApplyForm
-  - [x] AddPartner
-  - [x] DeletePartner
-  - [x] Available PartnerRoles 抽屉效果优化（点击遮罩层收起、动画）（独立的组件）
-  - [x] PartnerRole 组件
-- [ ] 点击 PRStatusTag 则抽屉展开并且显示 Timeline (Tag背景色更深，表示 toggled)
-- [ ] 点击 More-Btn 弹出底部 ActionSheet
-- [ ] Share 操作（选择分享目标）
+- [ ] Share Partner Request (分享搭子请求)
+- [ ] Invite Partner (搭子邀请)
 
-## PRGeoElementFilter
+## Onboarding (引导)
 
-- [x] 移除 filtering 属性
-- [x] Filtering -> GeoElement
-- [x] 滑动 GeoElementPreview 区域切换 GeoElement
-- [ ] 添加放大按钮
-- [x] 修改复位按钮的图标
+- [ ] Onboarding Flow
+- [ ] Interests / Subscriptions (兴趣/订阅)
+- [ ] Trust Issues (信任问题)
 
-## PUMap
+## Partner Types (搭子类型)
 
-- [x] 支持多路线（未选中的路线多段线和气泡都叠加 disabled 的透明度），仅可以激活一条（双向绑定激活值）
-- [x] includePoints 仅激活路线
-- [x] 双向绑定 `v-model:activeElement` ，删除 `emit:element-click`
-- [ ] 随着视野的缩放加载更多路线（lazyPlan）
-- [ ] simplify props
-- [x] 添加 operations slot
+- [ ] Beauty (美妆)
+- [ ] Concert (演唱会)
+- [ ] Carpool (拼车 - Commute/RideHailing exists)
+- [ ] Merch (谷搭子)
+- [ ] Shopping (逛街/山姆)

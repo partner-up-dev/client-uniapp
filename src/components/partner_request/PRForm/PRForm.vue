@@ -51,15 +51,8 @@ const saving = ref(false);
 const publishing = ref(false);
 
 // refs
+// @ts-ignore
 const puFormRef = ref<InstanceType<typeof PuForm> | null>(null);
-const metadataCollapseRef = ref<InstanceType<typeof PuAccordion> | null>(null);
-const metadataFormRef = ref<InstanceType<typeof PRMetadataForm> | null>(null);
-const commuteDatetimeFormRef = ref<InstanceType<typeof PRCommuteForm> | null>(
-  null
-);
-const rideHailingFormRef = ref<InstanceType<typeof PRRideHailingForm> | null>(
-  null
-);
 
 // watches
 watch(

@@ -20,7 +20,9 @@ lerna-debug.log*
 *.sw?
 
 .VSCodeCounter/*
-.vscode/mcp.json
+.vscode/*
+!.vscode/extensions.json
+!.vscode/*.example.jsonc
 
 # Package
 pnpm-lock.yaml

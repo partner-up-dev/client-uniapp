@@ -45,7 +45,7 @@
     "weapp-cookie": "^1.4.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.7",
+    "@biomejs/biome": "^2.3.9",
     "@dcloudio/types": "^3.4.8",
     "@dcloudio/uni-automator": "3.0.0-4080520251106001",
     "@dcloudio/uni-cli-shared": "3.0.0-4080520251106001",

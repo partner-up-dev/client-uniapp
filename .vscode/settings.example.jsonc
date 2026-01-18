@@ -1,0 +1,17 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "files.exclude": {
+    ".VSCodeCounter": true,
+    "**/__screenshots__": true,
+    "dist": true,
+    "node_modules": true,
+    "**/*.key": true,
+    "pnpm-lock.yaml": true,
+    "package-lock.json": true
+  },
+  "editor.rulers": [
+    {
+      "column": 82
+    }
+  ]
+}
