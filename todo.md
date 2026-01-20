@@ -12,7 +12,6 @@
 - [ ] 引入 uniuse, uni-promisesm
 - [ ] 尝试 uni-devtools
 - [ ] retry migrate wd-transition
-- [ ] i18n lint automation
 - [ ] BusinessClass.use 的某些值的双向绑定问题解决方案作成 composable
 - [ ] 硬编码文本放到国际化中
 - [x] 组件单元测试页面模板组件
@@ -21,6 +20,12 @@
 - [x] V.class 支持 extend
 - [ ] `pages.json` 作为 SSoT
 - [ ] PR Create Use type specific form
+- [ ] 重构国际化
+  - [x] messages 模块化杂乱不清晰且过度设计
+  - typescript 与 i18n Ally 兼容性不好，换成 json
+  - 工程化: lint (eslint-plugin-vue-i18n), Type Schema, automation (vue-i18n-extract)
+  - use 的拆分是没有必要的，直接放在 index 里就行
+  - src/locales/AGENTS.md, and <>
 
 ## Auth & Profile (注册/登录/资料)
 

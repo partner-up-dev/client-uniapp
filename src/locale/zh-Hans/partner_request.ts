@@ -1,0 +1,847 @@
+import type { named } from "@/locale/types";
+
+export default {
+    trip: {
+        /**
+         * @name 出行偏好编辑器的翻译
+         */
+        preference_editor: {
+            purpose: {
+                title: "出行目的",
+                placeholder: "点击选择"
+            },
+            luggage: {
+                prefix: "行李",
+                placeholder: "输入数量",
+                unit: "件"
+            },
+            flight: {
+                placeholder: "航班号"
+            },
+            train: {
+                placeholder: "列车号"
+            },
+        },
+        /**
+         * @name 火车/飞机出行补充性信息编辑器的翻译
+         */
+        rf_trip_sup_info_editor: {
+            flight_takeoff_at: {
+                label: "航班起飞时间",
+            },
+            flight_arrives_at: {
+                label: "航班落地时间",
+            },
+            railway_setoff_at: {
+                label: "火车开点",
+            },
+            railway_arrives_at: {
+                label: "火车到站时间",
+            },
+            /** 推荐日期时间配置调整 */
+            rdta: {
+                title: {
+                    prefix: "据",
+                    airport_dropoff: "起飞时间",
+                    airport_pickup: "落地时间",
+                    railway_dropoff: "火车开点",
+                    railway_pickup: "到站时间",
+                    suffix: "调整出发时间"
+                },
+                content: {
+                    anatomy_dropoff: {
+                        route_eta: "车程约",
+                        reserve_time: {
+                            railway_dropoff: "分钟，另为进站安检、堵车等预留",
+                            airport_dropoff: "分钟，另为安检托运、堵车等预留"
+                        },
+                        unit: "分钟"
+                    },
+                    anatomy_pickup: {
+                        reserve_time: {
+                            railway_pickup: "为出站等预留",
+                            airport_pickup: "为穿梭、取行李等预留"
+                        },
+                        unit: "分钟"
+                    },
+                    new_dep: {
+                        prefix: "故建议",
+                        suffix: "出发",
+                        airport_dropoff: "去机场",
+                        railway_dropoff: "去火车站",
+                        airport_pickup: "离开机场",
+                        railway_pickup: "离开火车站",
+                        undefined: "错误的出行目的"
+                    },
+                    new_arr: {
+                        prefix: "建议",
+                        suffix: "到达",
+                        airport_dropoff: "去机场",
+                        railway_dropoff: "去火车站",
+                        airport_pickup: "离开机场",
+                        railway_pickup: "离开火车站",
+                        undefined: "未知出行目的"
+                    },
+                    est_arr: {
+                        prefix: "预计",
+                        suffix: "到达，车程",
+                        unit: "分种",
+                    },
+                    bring_ahead: {
+                        prefix: "最多接受提前",
+                        suffix: "分钟出发的搭子，不延后",
+                        unit: "分钟"
+                    },
+                    put_off: {
+                        prefix: "最多接受延后",
+                        suffix: "分钟出发的搭子，不提前",
+                        unit: "分钟"
+                    }
+                },
+                tension_slider: {
+                    title: "调整松紧度",
+                    level_name: {
+                        0: "踩点到",
+                        1: "不多不少",
+                        2: "留够时间"
+                    }
+                },
+                operations: {
+                    cancel: "取消",
+                    accept: "接受",
+                    tips: "接受后你仍然可以根据需要调整"
+                },
+            },
+            toast: {
+                failed_to_apply_config: "无法应用时间配置",
+                failed_to_estimate: "无法估算路线耗时",
+                invalid_trip_purpose: "无效的出行目的",
+            }
+        }
+    },
+    commute: {
+        specific_content_editor: {
+            collapse_title: {
+                route: "通勤路线",
+                time: "通勤时间",
+                transportation: "交通"
+            },
+            on_at: {
+                title: "上班时间",
+                label: "何时从家里出发"
+            },
+            off_at: {
+                title: "下班时间",
+                label: "何时从公司出发"
+            },
+            workdays: {
+                title: "工作日"
+            },
+            transportation: {
+                title: "交通方式",
+                placeholder: "点击选择",
+            },
+            rules: {
+                either_or_on_off_at: "上下班时间必须填写一个",
+                workdays_required: "工作日至少一天",
+            }
+        },
+        datetime_pr_content_item: {
+            on_at: {
+                desc: "上班"
+            },
+            off_at: {
+                desc: "下班"
+            },
+            workdays: {
+                title: "工作日"
+            }
+        },
+        /** Component:CommuteSpecificContentDisplay */
+        specific_content_display: {
+            on_at: ({ named }: { named: named }) => `${named("time")} 上班`,
+            off_at: ({ named }: { named: named }) => `${named("time")} 下班`,
+            workday_segment: ({ named }: { named: named }) => `${named("start")} 到 ${named("end")}`
+        },
+        /** Component:CommuteContentSwiper */
+        content_swiper: {
+            route: {
+                title: "通勤信息"
+            },
+            ride_hailing_orders: {
+                title: "网约车订单"
+            }
+        }
+    },
+    ride_hailing: {
+        title: {
+            // PRContentId: title
+            // 用于PRContentItem的front-title
+            route: "路线信息"
+        },
+        operation: {
+            route: {
+                execute: {
+
+                }
+            }
+        },
+        /** 从搭子请求到网约车下单入口按钮 */
+        on_pr_order_button: {
+            view_order: "查看订单",
+            go_order: "去打车",
+            toast: {
+                invalid_order_id: "无效的订单号",
+                stop_waiting_for_partners_first: "请先停止寻找搭子"
+            }
+        },
+        contract: {
+            // PRContentId: clause title
+            // 条款/契约场景下的PRContentId对应标题
+            // 用于PRContentItem的back-title
+            title: {
+                route: "打车之路线条款"
+            }
+        },
+        store: {
+            to_partner_request_datail: {
+                null: "没有绑定搭子请求"
+            }
+        },
+        order_placing: {
+            partner_request: {
+                prefix: "你正在为",
+                suffix: "呼叫网约车"
+            },
+            passengers: {
+                with_you: "将会与你同行"
+            },
+            price: {
+                unselected: "未选择"
+            },
+            footer: {
+                departure_at: "出发",
+                edit_location: "编辑路线",
+                place_order: "呼叫"
+            },
+            place: {
+                toast: {
+                    loading: "下单中...",
+                    split_bill_lost: "平账账单丢失，请报告",
+                    split_bill_rejected: "你否决了账单，订单取消",
+                    invalid_departure_at: "无效的出发时间，请重试",
+                    caller_phone_required: "请填写联系电话",
+                }
+            },
+            route: {
+                no_more_then_2: "暂不支持途经点下单",
+                pr_has_an_order: "该搭子请求已下单",
+            }
+        },
+        order_detail: {
+            on_load: {
+                invalid_order_id: "无效的订单号"
+            },
+            refresh_order: {
+                get_status_error: "无法获取最新状态"
+            },
+            metadata: {
+                status: {
+                    pending: "需要审批并预付",
+                    dispatching: "派单中",
+                    accepted: "已接单",
+                    picking_up: "接客中",
+                    arrived: "已到达上车点",
+                    picked: "已接到乘客",
+                    in_progress: "送客中",
+                    dropped: "已送达",
+                    unpaid: "需要支付",
+                    review_opening: "可以评价",
+                    closed: "已完单",
+                    cancelled: "已取消",
+                    error: "订单异常",
+                    on_prosecuted: "客服介入"
+                },
+                status_description: {
+                    pending: "所有同行人都同意并支付后，将会自动派单（注意查看账单时限）",
+                    dispatching: "努力为您寻找司机中...",
+                    accepted: "已接单，等待司机出发接客",
+                    picking_up: "司机正在前往上车点，请提前到达约定地点",
+                    arrived: "请尽快上车",
+                    picked: "请系好安全带，司机即将出发",
+                    in_progress: "坐和放宽，司机正在前往目的地",
+                    dropped: "请携带好随身物品，注意车辆侧后方情况，安全下车",
+                    unpaid: "有未支付款项，前往账单中查看",
+                    review_opening: "已经结清，可以对本次服务进行评价",
+                    closed: "感谢您的使用，期待再与您同行",
+                    error: "请联系客服介入",
+                    on_prosecuted: "客服处理中，请耐心等待结果",
+                    cancelled: "订单已被取消，可以在账单中查看费用；理由："
+                },
+                cancel_reason: {
+                    competitors_expired: "价格信息已过期",
+                    payment_timedout: "有同行人超时未预付账单",
+                    competitors_unresponsive: "无司机接单",
+                    passenger_unreachable: "司机反映无法联系到乘客",
+                    route_changed: "行程有变",
+                    no_reason: "无理由",
+                    consensual: "司乘协商一致",
+                    pickup_late: "司机迟到",
+                    accidental: "误操作",
+                    driver_unreachable: "无法联系到司机",
+                }
+            },
+            navigation_info: {
+                null: "无导航信息",
+                route_null: "无行驶路线信息",
+                failed_to_fetch: "获取路线与导航信息失败",
+            },
+            passengers: {
+                desc: "与你同行"
+            },
+            operation: {
+                check_split_bill: "查看账单",
+                cancel_order: "取消订单",
+                check_partner_request: "查看搭子请求",
+                review_order: "评价订单"
+            },
+            more_actions_sheet: {
+                title: "更多操作"
+            },
+            ordered_ride_types: {
+                title: "已下单车型"
+            },
+            preference: {
+                title: "偏好",
+            },
+            route: {
+                title: "路线",
+            }
+        },
+        driver_info_display: {
+            call: {
+                you_are_not_passenger: "您不是乘客",
+                phone_not_found: "服务商未支持您联系司机"
+            }
+        },
+        ride_type_display: {
+            right: {
+                estimated_to_be: "预计",
+                fare_type: {
+                    common: "正常计费",
+                    route_fixed: "路线一口价",
+                    special_fixed: "尊享一口价"
+                }
+            }
+        },
+        cancel_order: {
+            title: {
+                not_cancelled: "取消订单",
+                cancelled: "订单已取消"
+            },
+            description: {
+                available: ({ named }: { named: named }) => `预计有${named("cancel_fee")}元的取消费`,
+                unavailable: '已经不可取消',
+                cancelled: ({ named }: { named: named }) => `已被取消，取消原因：${named("cancel_reason")}`
+            },
+            reason: {
+                null: "未取消",
+                no_reason: "无理由",
+                accidental: "误操作",
+                driver_unreachable: "无法联系到司机",
+                pickup_late: "司机迟到",
+                route_changed: "行程变更",
+                consensual: "司乘协商一致",
+                competitors_expired: "价格信息已过期",
+                competitors_unresponsive: "无司机接单",
+                passenger_unreachable: "司机反映无法联系到乘客"
+            },
+            detail: {
+                placeholder: "您可以补充具体原因，也可以不填"
+            },
+            cancel: {
+                success: "取消成功",
+                loading: "取消中..."
+            }
+        },
+        ride_type_ad: {
+            default: {
+                title: "推广标题",
+                desc: "推广描述文本，如果你读到此处，代表数据加载失败，请刷新页面；如果问题持续，请报告给开发者"
+            },
+            error: {
+                appid_invalid: "推广APPID无效",
+                route_invalid: "无效的路线信息",
+                route_copy_failed: "复制失败"
+            },
+            success: {
+                route_copied: "已复制路线信息"
+            },
+            operations: {
+                cta: "去领取优惠",
+                tips: "路线信息会自动复制到剪贴板"
+            }
+        },
+        ad_manager: {
+            title: "打车有优惠"
+        },
+        /** RideHailingOrders Component i18n */
+        orders: {
+            title: "网约车订单"
+        },
+        /** 
+         * @name 网约车搭子请求特有内容编辑器的翻译
+         */
+        specific_content_editor: {
+            trip_preference: {
+                title: "出行偏好"
+            },
+            route: {
+                title: "路线"
+            }
+        }
+    },
+    geo_filter: {
+        reset: "复位",
+        filtering_title: "地理筛选",
+        no_selection: "点击地图选择筛选区域",
+        route_selected: "已选择路线",
+        poi_selected: "已选择地点",
+        area_selected: "已选择区域",
+        map_error: "地图加载失败",
+        location_error: "定位失败",
+        select_an_element: "浏览地图，选择一个元素",
+    },
+    title: {
+        default: "搭子请求",
+        specific_content: {
+            ride_hailing: {
+                route: "路线信息"
+            }
+        }
+    },
+    type: {
+        null: "未知搭子",
+        undefined: "未知搭子",
+        ride_hailing: "网约车搭子",
+        travel: "旅游搭子",
+        trip: "出行搭子",
+        commute: "通勤搭子",
+        moped: "电驴搭子",
+        hitchhiking: "便车搭子",
+    },
+    status: {
+        joinable: "可加入",
+        ready: "已就绪",
+        executing: "执行中",
+        closing: "结算中",
+        closed: "已关闭",
+        draft: "未发布"
+    },
+    "status_desc": {
+        "waiting_for_partners": "匹配到搭子会立马通知您",
+        "waiting_for_execution": "已组成搭子，起草并签署契约",
+        "contract_signed": "所有搭子已签署契约，等待执行",
+        "order_created": "网约车订单已创建",
+        "executing": "执行过程受契约保护",
+        "closing": "根据契约进行结算",
+        "closed": "完全关闭",
+        "draft": "快去发布吧"
+    },
+    operation: {
+        favorite: "想搭",
+        unfavorite: "取消想搭",
+        apply: "搭一把",
+        view_application: "查看申请",
+        more: {
+            title: "更多操作",
+            stop_waiting_for_partners: "停止寻找搭子"
+        },
+        stop_waiting_for_partners: {
+            modal_desc: "这意味着其它人无法继续申请该搭子请求（未审批的申请将被驳回），而你们将可以签署契约并进行相关活动",
+            disabled: "冲突或无权限"
+        }
+    },
+    detail: {
+        header: {
+            favorite: "关注",
+            favorited: "已关注",
+        },
+        drawer: {
+            apply: "申请加入",
+            submit_apply: "提交申请",
+            add_role: "申请更多角色",
+            application_approving: "加入申请审核中",
+            application_rejected: "加入申请被拒绝",
+        },
+        partners: {
+            title: "搭子角色",
+        },
+        route: {
+            title: "路线"
+        },
+        application_chat: {
+            title: "沟通"
+        },
+        sub_applications: {
+            title: "申请的角色",
+            submitted_at: "提交于"
+        },
+        application_eclose: {
+            title_rejected: "驳回原因",
+            title_withdrawn: "撤回原因",
+        }
+    },
+    partner: {
+        status: {
+            playing: "扮演",
+            free: "等待扮演",
+            playing_by_you: "由你扮演"
+        },
+        rationale_editor: {
+            placeholder: "申请该角色的补充说明"
+        }
+    },
+    apply_form: {
+        title: "加入搭子请求",
+        subtitle: "每个搭子角色有对应的义务和权利，扮演即成为搭子。",
+    },
+    "specific_content": {
+        "ride_hailing_config": {
+            "estimated_price": "综合预估价格",
+            "preference": "叫车预设",
+            "simple_estimated_price_desc": "预计",
+            "estimated_price_null": "无法计算"
+        },
+        "ride_hailing_type": {
+            "estimated_price": "预计",
+            "ride_type": {
+                "normal": "专车",
+                "fast": "快车"
+            },
+            "platform": {
+                "didi": "滴滴",
+                "feizhu": "飞猪"
+            }
+        }
+    },
+    "execution": {
+        "title": "执行",
+        "contract": {
+            "title": "契约",
+            "view": "查看契约",
+            "create": "起草契约",
+            "edit": "编辑契约",
+            "create_hint": "你现在可以创建或者发布契约，为执行准备"
+        },
+    },
+    "discover_more": "发现更多",
+    /**
+     * @name 搭子请求编辑器组件的翻译
+     */
+    editor: {
+        "stage1": {
+            "confirm": "开始创建搭子请求",
+            "partner_request_type": "选择搭子请求类型",
+            "partner_request_draft": "或者从草稿继续",
+            "progress_bar": {
+                "start": "开始",
+                "detail": "详情",
+                "done": "发布"
+            },
+            "load_cached_form": "发现存档，点击继续填写",
+            "load_from_cache": "从自动存档继续"
+        },
+        common_editor: {
+            title: "基本信息"
+        },
+        route: {
+            title: "路线信息"
+        },
+        trip_preference: {
+            title: "出行偏好"
+        },
+        commute_datetime: {
+            title: "通勤时间"
+        },
+        partners_editor: {
+            title: "搭子角色"
+        }
+    },
+    /**
+     * @name 搭子角色编辑器组件的翻译
+     */
+    partner_editor: {
+        need_one: "需要一位",
+        click_to_select: "点击选择",
+        you_will_play: "你将扮演",
+    },
+    /**
+     * @name 搭子角色选择器组件的翻译
+     */
+    partner_picker: {
+        title: "选择搭子角色",
+        confirm: "确认",
+    },
+    /**
+     * @name 搭子列表编辑器组件的翻译
+     */
+    partners_editor: {
+        add_partner: "添加角色",
+    },
+    /**
+     * @name 搭子请求一般内容编辑器组件的翻译
+     */
+    common_editor: {
+        title: {
+            title: "标题",
+            placeholder: "搭子活动的关键内容"
+        },
+        introduction: {
+            title: "简介",
+            placeholder: "其它说明与补充"
+        },
+    },
+    /**
+     * @name 搭子请求草稿选择器组件的翻译
+     */
+    draft_picker: {
+        placeholder: {
+            no_drafts: "没有草稿",
+        }
+    },
+    /**
+     * @name 搭子请求类型展示组件的翻译
+     */
+    type_display: {
+        title: {
+            trip: "出行搭子",
+            travel: "旅游搭子",
+            commute: "通勤搭子",
+            ride_hailing: "网约车搭子",
+            moped: "电驴搭子",
+            hitchhiking: "便车搭子"
+        },
+        description: {
+            trip: "通勤、去地铁站、火车站，拼个电驴/网约车/顺风车",
+            travel: "旅游是延长生命的艺术，找个搭子轻松又划算",
+            commute: "通勤也可以省钱又舒适，做个精致上班族",
+            ride_hailing: "打车一起坐，价格直砍半",
+            moped: "电瓶车两个座，短途最佳",
+            hitchhiking: "我开车，找个搭子省点油钱"
+        }
+    },
+    /**
+     * @name 搭子请求创建开始页面的翻译
+     */
+    create_start: {
+        headline: {
+            1: "创建搭子请求",
+            2: "系统帮找，省心省力"
+        },
+        l1_type_picker: {
+            title: "找什么搭子",
+
+        },
+        continue_from_draft: {
+            title: "从草稿继续"
+        },
+        continue_from_cache: {
+            title: "从自动保存继续"
+        }
+    },
+    /**
+     * @name 搭子请求创建结束页面的翻译
+     */
+    create_end: {
+        title: {
+            undefined: "发布搭子请求",
+            travel: "发布旅游搭子请求",
+            ride_hailing: "发布网约车搭子请求",
+            commute: "发布通勤搭子请求",
+            moped: "发布电驴搭子请求",
+            hitchhiking: "发布便车搭子请求"
+        },
+        after_publish: {
+            head: {
+                title: "发布成功！"
+            },
+            next: {
+                title: "下一步",
+                description: "算法将自动匹配合适的搭子，您将收到搭子申请通知，请及时审批"
+            },
+            share: {
+                title: "加快速度",
+                description: "分享该搭子请求到群聊、朋友圈、小红书等，提升曝光加速匹配",
+                operation: "一键分享"
+            },
+            stop: {
+                title: "开始活动",
+                description: "当您认为找到足够的搭子后，可在详情页面停止寻找搭子并为开展搭子活动做好准备"
+            }
+        },
+        operations: {
+            publish: "发布",
+            save: "存稿",
+            share: "一键分享",
+            view: "查看详情",
+            discover: "探索搭子"
+        },
+        publishing_notice: {
+            0: '创建群聊中...',
+            1: '生成契约中...'
+        },
+        publish: {
+            invalid_id: "无效的搭子请求ID",
+            success: "成功",
+            failed_to_save: "保存失败",
+            failed_to_create: "创建失败",
+        },
+        save: {
+            invalid_form_type: "无效的搭子类型"
+        },
+        on_load: {
+            load_form_from_cache: {
+                failed: "自动存稿加载失败"
+            }
+        }
+    },
+    /**
+     * @name 出行搭子请求创建页面的翻译
+     */
+    create_trip: {
+        trip_purpose: {
+            title: "您的出行目的是"
+        },
+        transportation: {
+            title: "选择期望的出行方式"
+        }
+    },
+    /**
+     * @name 沉浸式创建搭子请求组件的翻译
+     */
+    immersive_create: {
+        operations: {
+            next: {
+                text: "下一步",
+            },
+            skip_all: {
+                text: "直接填表",
+                create_failed: "创建失败"
+            },
+            finish: {
+                text: "检查并发布",
+                l2type_not_selected: "类型丢失"
+            }
+        },
+        l2type_picker: {
+            title: "选择二级类型以继续"
+        }
+    },
+    timeline: {
+        title: "进展"
+    },
+    timeline_item: {
+        "draft": {
+            title: "草稿",
+            description: "搭子请求处于草稿状态，需要完善信息后发布",
+            actions: {
+                edit: "编辑",
+                publish: "发布",
+                delete: "删除"
+            }
+        },
+        "joinable": {
+            title: "可加入",
+            description: "其它用户可以申请加入该搭子请求\n系统会为您匹配合适的搭子",
+            actions: {
+                approve_applications: "审批申请",
+                ready: "已就绪",
+                share: "分享"
+            }
+        },
+        "ready": {
+            title: "已就绪",
+            description: "搭子已组成，可以开始执行活动",
+            actions: {
+                start: "开始",
+                view_contract: "查看契约",
+                cancel: "取消"
+            }
+        },
+        "performing": {
+            title: "执行中",
+            description: "搭子活动正在进行中",
+            actions: {
+                view_progress: "查看进度",
+                contact: "联系搭子",
+                report: "举报"
+            }
+        },
+        "settling": {
+            title: "结算中",
+            description: "活动已完成，正在进行费用结算",
+            actions: {
+                view_settlement: "查看结算",
+                confirm: "确认",
+                dispute: "申诉"
+            }
+        },
+        "closed": {
+            title: "已关闭",
+            description: "搭子请求已完成并关闭",
+            actions: {
+                view_summary: "查看总结",
+                rate: "评价",
+                share: "分享"
+            }
+        },
+        "cancelled": {
+            title: "已取消",
+            description: "搭子请求已被取消",
+            actions: {
+                view_reason: "查看原因",
+                repost: "重新发布"
+            }
+        },
+        "merged": {
+            title: "已合并",
+            description: "搭子请求已与其他请求合并",
+            actions: {
+                view_merged: "查看合并后的请求"
+            }
+        }
+    },
+    /** 搭子请求模块API翻译 */
+    api: {
+        v1_partner_request_get_list: {
+            name: "获取搭子请求列表",
+        }
+    }
+
+    approval: {
+        status: {
+            pending: "审批中",
+            approved: "通过",
+            rejected: "驳回"
+        },
+        operation: {
+            approve: "同意",
+            reject: "驳回",
+            approved: "你已同意",
+            rejected: "你已驳回"
+        },
+        type: {
+            prefix: "类型：",
+            one_veto: "一票否决",
+            half: "半数通过",
+        },
+        default: {
+            title: "审批"
+        },
+        hint: {
+            need_their_approve: "还需要他们的同意",
+            has_approved: "已经同意",
+        }
+    }
+};

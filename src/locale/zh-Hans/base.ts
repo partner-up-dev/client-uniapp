@@ -1,0 +1,205 @@
+// Module Base's Zh-Hans Transaltion File
+
+import type { named } from "@/locale/types"
+
+export default {
+  label: {
+    edit: {
+      replace: "选择",
+      add: '新增'
+    }
+  },
+  visibility: {
+    self: '仅自己可见',
+    any: '任何人可见'
+  },
+  numberic_value: {
+    unit: {
+      age_year: '岁',
+      year: '年',
+      minute: '分钟',
+    }
+  },
+  money: {
+    prefix: {
+      CNY: "￥",
+      EUR: "€",
+      USD: "$",
+      JPY: "¥",
+    },
+    postfix: {
+      CNY: "元",
+      EUR: "欧元",
+      USD: "美元",
+      JPY: "日元",
+    }
+  },
+  weekday: {
+    monday: "周一",
+    tuesday: "周二",
+    wednesday: "周三",
+    thursday: "周四",
+    friday: "周五",
+    saturday: "周六",
+    sunday: "周日"
+  },
+  route_map: {
+    toast: {
+      fail_to_plan: "路线规划失败",
+      fail_to_set_markers: "标记点设置失败",
+      fail_to_add_markers: "标记点添加失败",
+      fail_to_remove_markers: "标记点移除失败",
+      fail_to_obtain_map_context: "无法操作地图",
+      fail_to_include_points: "无法调整视野",
+      fail_to_move_to_location: "无法移动中心",
+    },
+    marker: {
+      from: "出发地",
+      to: "目的地",
+      waypoint: ({ named }: { named: named }) => `途经点${named('index')}`
+    },
+    static_driven_info: {
+      fare: {
+        taxi_fare: "打车约",
+        unit: "￥"
+      },
+      distance: {
+        unit: "km"
+      },
+      duration: {
+        unit: "min"
+      }
+    },
+    dynamic_driven_info: {
+      speed: {
+        unit: "km/h"
+      },
+      duration: {
+        unit: "min"
+      },
+      distance: {
+        unit: "km"
+      },
+    }
+  },
+  /**
+   * @name 路线编辑器组件的翻译
+   */
+  route_editor: {
+    rules: {
+      location_required: "请选择地点",
+      datetime_after_now: "出发不能早于现在",
+      datetime_orderly: "时间顺序错误",
+      departure_datetime_required: "请选择出发时间"
+    },
+    placeholder: {
+      departure: "点击选择出发地",
+      arrival: "点击选择目的地",
+      waypoint: "点击选择途经点"
+    },
+    immersive: {
+      departure: {
+        title: "从",
+        location: {
+          placeholder: "点击选择出发地"
+        },
+        text: "出发"
+      },
+      waypoint: {
+        title: "经过",
+        location: {
+          placeholder: "点击选择途径点"
+        },
+      },
+      arrival: {
+        title: "到",
+        location: {
+          placeholder: "点击选择目的地"
+        },
+      },
+      operations: {
+        navigate: "导航",
+        add_waypoint: "添加途径点",
+      },
+      select_location: {
+        get_location_failed: "无法申请地点"
+      },
+      navigate: {
+        waypoint_not_supported: "暂不支持规划途径点",
+        location_not_selected: "路线信息不完整"
+      },
+      add_waypoint: {
+        limit_reached: "最多4个"
+      }
+    }
+  },
+  /**
+   * @name 出行目的选择器的翻译
+   */
+  trip_purpose_picker: {
+    purpose_text: {
+      common: "无",
+      railway_dropoff: "赶火车",
+      railway_pickup: "下火车",
+      airport_pickup: "下飞机",
+      airport_dropoff: "赶飞机",
+      commute: "上下班"
+    }
+  },
+  /**
+   * @name 出行方式选择器的翻译
+   */
+  transportation_picker: {
+    name: {
+      self_drive_automobile: "私家车",
+      ride_hailing: "网约车",
+      moped: "电瓶车"
+    }
+  },
+  gender: {
+    male: "男性",
+    female: "女性",
+    unknown: "不愿透露"
+  },
+  /** 选择地点组合式函数的翻译 */
+  use_select_location: {
+    report: {
+      v1_base_get_location_failed: "无法保存地点"
+    }
+  },
+  /** 地点选择器翻译 */
+  location_picker: {
+    value: {
+      placeholder: "点击选择地点"
+    }
+  },
+  route_item_datetime: {
+    no_bring_ahead: "不可提前",
+    no_put_off: "不可推迟",
+  },
+  /**
+   * @name 路线节点地点编辑器组件的翻译
+   */
+  route_item_location_editor: {
+    field: {
+      friendly_address: {
+        title: "地点名称",
+        subtitle: "例如：学校、公司、家",
+        placeholder: "请输入地点名称"
+      },
+      address: {
+        title: "详细地址",
+        placeholder: "点击选择地址"
+      }
+    },
+    button: {
+      choose_location: "选择地点",
+      cancel: "取消",
+      confirm: "确认"
+    },
+    toast: {
+      save_success: "保存成功",
+      save_failed: "保存失败"
+    }
+  }
+}

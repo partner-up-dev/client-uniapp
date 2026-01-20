@@ -1,0 +1,398 @@
+export default {
+  split_the_bill: {
+    title: "AA | 平账",
+  },
+  split_bill: {
+    title: {
+      default: "平账账单",
+    },
+    type: {
+      postpay: "付后账单",
+      prepay: "付前账单"
+    },
+    currency: {
+      prefix: {
+        CNY: "￥",
+        USD: "$",
+        EUR: "€"
+      }
+    }
+  },
+  split_bill_status_tag: {
+    status_text: {
+      draft: "草稿",
+      distributed: "已分配",
+      ready: "一切就绪",
+      splitting: "正在结平",
+      contributed: "等待实付",
+      prepay_paid: "已实付",
+      refunding: "退款中",
+      closed: "已完成",
+      error: "错误",
+      prosecuted: "人工介入",
+      undefined: "未定义",
+      cancelled: "已取消"
+    }
+  },
+  split_bill_type_tag: {
+    type_text: {
+      postpay: "付后账单",
+      prepay: "付前账单"
+    }
+  },
+  create_split_bill_button: {
+    text: "添加你的账单"
+  },
+  split_the_bill_display: {
+
+  },
+  split_the_bill_p_r_content_item: {
+    front_title: "分摊费用",
+    back_title: "分摊费用条款"
+  },
+  split_the_bill_media: {
+    title: {
+      empty: "暂无账单...",
+      default: "平账"
+    },
+    tips: {
+      go_to_create: "有需要AA的账单吗？点击下方按钮提交！"
+    },
+    glance: {
+      bill_total: {
+        text: "张账单"
+      },
+      money_total: {
+        text: "元"
+      }
+    },
+  },
+  split_the_bill_simple_display: {
+    comprehensive_status: {
+      pending: "需要分摊",
+      paid: "已分摊",
+      transferring: "转给支付者中",
+      transferred: "已转账",
+      refunding: "退款中",
+      closed: "已完成",
+      undefined: "未知",
+      cancelled: "已取消"
+    },
+  },
+  split_bill_simple_display: {
+    card: {
+      total: "总计："
+    },
+    inline: {
+      label: {
+        need_distribution: "请设置分摊配置",
+        need_approval: "需要你的审批",
+        need_refund: "你需要退款少付的部分",
+        need_contribution: "你需要分摊该账单",
+        normal: {
+          draft: "等待设置分摊配置",
+          ready: "一切就绪，等待结平",
+          splitting: "正在结平...",
+          contributed: "全部已支付",
+          prepay_paid: "付前账单已支付",
+          payer_need_to_refund: "支付者应当退款",
+          payer_refunded: "已退还您多付的部分",
+          closed: "已完成",
+          prosecuted: "人工介入中...",
+          error: "错误的状态，请联系人工介入",
+          cancelled: "已取消",
+          rejected: "被否决"
+        }
+      },
+      value: {
+
+      }
+    }
+  },
+  split_bill_editor: {
+    form: {
+      type: {
+        title: "账单类型",
+        label: "付后：已经产生的账单；付前：未来将产生的账单",
+        options: {
+          postpay: "付后账单",
+          prepay: "付前账单"
+        }
+      },
+      title: {
+        title: "账单标题",
+        placeholder: ""
+      },
+      description: {
+        title: "账单说明",
+        placeholder: "简要描述账单的来源及其它注意事项"
+      },
+      actual: {
+        title: "实付",
+        suffix: "元",
+        placeholder: "",
+        required: "实付是必填的",
+        invalid: "实付的金额无效"
+      },
+      actual_range: {
+        title: "预计金额",
+        prefix: {
+          min: "最低",
+          max: "最高"
+        },
+        suffix: {
+          min: "元",
+          max: "元"
+        },
+        required: "至少填写最大或最小金额",
+        reversed: "金额大小不符合顺序"
+      },
+      payee: {
+        title: "收款方"
+      },
+      payer: {
+        title: "付款方",
+        placehoder: "点击选择"
+      },
+      paid_at: {
+        title: "支付时间",
+        required: "付后账单需填写支付时间",
+        prepay_null: "付前账单不可以填写支付时间",
+        not_future: "支付时间不能是未来",
+      },
+      details: {
+        title: "账单明细",
+        label: "条目名称：条目金额"
+      },
+      proof: {
+        title: "账单凭证",
+        label: "小票、收据、转账记录等",
+        modal: {
+          before_remove: {
+            title: "移除该凭证？"
+          }
+        }
+      }
+    },
+    quick_actions: {
+      title: "快捷操作",
+      smart_upload: {
+        button_text: "上传账单图片",
+        button_desc: "智能识别账单信息"
+      }
+    },
+    basic_form: {
+      title: "账单基础信息"
+    },
+    advanced_form: {
+      title: "更多"
+    },
+    operation: {
+      edit: {
+        modal_title: "确定吗？",
+        modal_content: "你修改了金额，这可能需要你重新配置分摊配置"
+      }
+    }
+  },
+  split_bill_create: {
+    title: {
+      default: "创建平账账单"
+    },
+    operation: {
+      back_to_edit: "返回编辑"
+    },
+    stage3: {
+      tip: "已经提交！前往详情页查看"
+    }
+  },
+  split_bill_distribution_editor: {
+    title: "编辑分摊配置",
+    operation: {
+      submit: {
+        button_text: "提交",
+        modal_title: "确定吗？",
+        modal_content: "提交后，你的搭子将审批该账单，审批期间不可修改账单内容。"
+      },
+      save: "保存",
+      new_distribution_item: "新增分摊者"
+    },
+    form: {
+      at_least_one: "至少需要一个分摊者",
+      distribution_total_equal_actual: "分摊总额必须等于实付金额",
+      distribution_total_equal_actual_range: "分摊总额必须等于预估范围的最大值"
+    }
+  },
+  split_bill_distribution_item_editor: {
+    operation: {
+      remove: "移除"
+    },
+    form: {
+      type: {
+        options: {
+          relative: "相对",
+          absolute: "绝对"
+        }
+      },
+      value: {
+        suffix: {
+          relative: "%",
+          absolute: "元"
+        },
+        placeholder: {
+          relative: "输入百分比",
+          absolute: "输入金额"
+        },
+        invalid_money: "不合法的金额；不能为零",
+        invalid_percentage: "不合法的百分比"
+      }
+    }
+  },
+  split_bill_detail: {
+    actual: {
+      seg_1: "实付",
+      seg_2: "于",
+      seg_2_1: "给"
+    },
+    actual_range: {
+      seg_1: "预计约",
+      connector: {
+        more_than: "以上",
+        less_than: "以下"
+      }
+    },
+    details: {
+      title: "账单明细"
+    },
+    status_description: {
+      title: "状态说明",
+      as: {
+        contributor: "作为贡献者",
+        payer: "作为支付者",
+        creator: "作为创建者"
+      },
+      desc: {
+        draft: {
+          creator: "账单还未提交，点击下方按钮提交。（账单可能因上一次审批不通过而退回该状态，请修正后重新提交）"
+        },
+        rejected: {
+          creator: "账单审批不通过，请在群内与您的搭子们协商后重新提交",
+          contributor: "账单已被您或其它分摊者驳回"
+        },
+        distributed: {
+          creator: "请提醒分摊者与支付者审批该账单",
+          contributor: "您以及其它分摊者需要审批该账单",
+          payer: "您需要审批该账单"
+        },
+        ready: {
+          creator: "没什么要做的",
+          payer: "账单已通过审批，等待分摊者支付",
+          contributor: "账单已通过审批，请支付您的分摊金额"
+        },
+        contributed: {
+          creator: "没什么要做的",
+          payer: "所有贡献者已支付，您支付账单后（点击'我已支付'按钮上报）款项将会转入您的账户",
+          contributor: "您以及您的贡献者们已分摊该账单，等待支付者实付该账单并上报实际费用，系统会进行多退少补"
+        },
+        prepay_paid: {
+          creator: "没什么要做的",
+          payer: "您已报告支付事件；系统正在处理多退少补",
+          contributor: "支付者已经实付该账单，系统正在处理多退少补"
+        },
+        refunding: {
+          creator: "系统正在退还贡献者多付的款项",
+          payer: "您实付的金额少于贡献金额，系统正在退还贡献者多付的款项，剩余的金额将转入到您的账户",
+          contributor: "实付金额少于贡献金额，系统正在按照您的贡献比例进行退款"
+        },
+        closed: {
+          creator: "本账单已经完全结平",
+          payer: "本账单已经完全结平",
+          contributor: "本账单已经完全结平"
+        },
+        on_prosecuted: {
+          payer: "账单出现异常或纠纷，已经提交人工介入",
+          contributor: "账单出现异常或纠纷，已经提交人工介入",
+          creator: "账单出现异常或纠纷，已经提交人工介入"
+        },
+        cancelled: {
+          payer: "账单已取消，在下方查看具体原因",
+          contributor: "账单已取消，在下方查看具体原因",
+          creator: "账单已取消，在下方查看具体原因"
+        }
+      }
+    },
+    distribution: {
+      title: "分摊详情"
+    },
+    other_info: {
+      created_by: "创建者",
+      payer: "支付者",
+      approval: "查看审批",
+      partner_request: "查看搭子请求",
+      contribute_before: "需在此前完成分摊",
+      cancel_reason: "取消原因",
+      proof: "查看账单凭证",
+      supplementary_split_bill: "补充账单",
+    },
+    cancel_reason: {
+      contribution_expired: "超时未完成分摊",
+      normal: "无理由",
+      manual_override: "客服取消",
+      payer_disabled: "支付者无法履行服务"
+    },
+    operations: {
+      contribute: "分摊该账单",
+      contribution_tip: {
+        contributed: "所有分摊者已支付",
+        waiting_for_payer: "，等待支付者支付该账单",
+        paid: "你已支付"
+      },
+      i_have_paid: "我已支付该账单",
+      refund: "退还少付的部分",
+      refunded: "你已退款",
+      distribute: "提交账单"
+    },
+    placeholder: {
+      proof: "没有上传"
+    },
+    toast: {
+      contribution: {
+        success: "分摊成功",
+        refreshing: "查询中..."
+      }
+    },
+    contribute: {
+      title: "分摊账单",
+      confirm: "确认",
+      payment_platform_id: {
+        wechat: "微信支付",
+        alipay: "支付宝",
+        bill99: "快钱",
+        unionpay: "银联支付",
+      },
+      payment_platform_desc: {
+        wechat: "0.6%手续费"
+      },
+      refreshing: "查询支付结果...",
+      refresh_failed: "查询失败",
+    }
+  },
+  split_bill_distribution_item_display: {
+    simple_status_text: {
+      pending: "应付",
+      paid: "已付",
+      transaferring: "已付",
+      transferred: "已付",
+      refunding: "已付",
+      closed: "已付",
+      error: "错误",
+      cancelled: "已取消"
+    },
+    refund_text: {
+      refunded: "已退款",
+      need_to_be_refunded: "应退款"
+    },
+    placeholder: {
+      contributor: "贡献者信息缺失",
+    }
+  }
+}
