@@ -22,8 +22,8 @@
 - [ ] PR Create Use type specific form
 - [ ] 重构国际化
   - [x] messages 模块化杂乱不清晰且过度设计
-  - typescript 与 i18n Ally 兼容性不好，换成 json
-  - 工程化: lint (eslint-plugin-vue-i18n), Type Schema, automation (vue-i18n-extract)
+  - [ ] typescript 与 i18n Ally 兼容性不好，换成 json
+  - [x] 工程化: lint (eslint-plugin-vue-i18n), Type Schema, automation (vue-i18n-extract)
   - use 的拆分是没有必要的，直接放在 index 里就行
   - src/locales/AGENTS.md, and <>
 

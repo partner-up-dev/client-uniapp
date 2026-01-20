@@ -1,15 +1,31 @@
 import { createI18n } from 'vue-i18n';
 
-import zh_cnm_Hans from '@/locale/zh-Hans';
-import en_us from '@/locale/en-US';
+import enUs from '@/locale/en-US';
+import zhHans from '@/locale/zh-Hans';
+import type { Locale, MessageSchema } from '@/locale/schema';
 
-let i18nConfig = {
-    locale: uni.getLocale(),
-    fallbackLocale: 'zh-Hans',
-    messages: {
-        'zh-Hans': zh_cnm_Hans,
-        'en-US': en_us
+const messages = {
+    'zh-Hans': zhHans,
+    'en-US': enUs
+} as const;
+
+const resolveLocale = (rawLocale: string | undefined): Locale => {
+    if (!rawLocale) {
+        return 'zh-Hans';
     }
+
+    const isEnglishLocale = rawLocale === 'en-US' || rawLocale === 'en';
+    return isEnglishLocale ? 'en-US' : 'zh-Hans';
 };
 
-export default createI18n(i18nConfig);
+const locale = resolveLocale(uni.getLocale());
+
+const i18n = createI18n<{ message: MessageSchema }, Locale>({
+    legacy: false,
+    globalInjection: true,
+    locale,
+    fallbackLocale: 'zh-Hans',
+    messages
+});
+
+export default i18n;
