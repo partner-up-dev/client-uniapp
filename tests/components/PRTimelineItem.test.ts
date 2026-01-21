@@ -4,7 +4,7 @@ import PRTimelineItem from '@/components/partner_request/PRTimelineItem/PRTimeli
 import { PRStatus } from '@/business/partner_request';
 
 // Mock the useTranslate composable
-vi.mock('@/locale/use', () => ({
+vi.mock('@/locale', () => ({
   useTranslate: () => ({
     dt: vi.fn((key: string, fallback: string) => {
       // Mock translations based on key

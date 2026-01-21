@@ -5,7 +5,7 @@ import * as v from "valibot";
 import { hideLoading, showLoading, errorReport } from "@/utils/vendor";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { Chat } from "../communication/chat";
 import { useChatStore } from "@/store/communication/chat";
 

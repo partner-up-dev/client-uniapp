@@ -3,7 +3,7 @@
 
 import { PAGE_ID, TABBAR_PAGE_ID } from "@/data/enum";
 import { PAGE_PATH } from "@/data/mapper";
-import { t } from "@/locale/use";
+import { t } from "@/locale";
 import { isInEnum } from ".";
 
 

@@ -1,4 +1,4 @@
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
 import { HTTPApiClient } from "../http-api";

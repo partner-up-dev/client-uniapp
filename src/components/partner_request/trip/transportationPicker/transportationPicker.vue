@@ -18,7 +18,7 @@ import {
   TRANSPORTATION_ICONS,
 } from "./transportationPicker";
 import type { Transportation } from "@/business/partner_request/trip";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import PuScrollView from "@partner-up-dev/design-uniapp/components/puScrollView/puScrollView.vue";
 
 const { dt } = useTranslate("base.transportation_picker");
@@ -38,16 +38,27 @@ function handleSelect(transportation: Transportation) {
 </script>
 
 <template>
-  <PuScrollView direction="x" :edge-fade="fade ? 'auto' : undefined" :class="['transportation-picker']">
-    <view v-for="(transportation, index) in TRANSPORTATION_OPTIONS" :key="index" :class="[
-      'transportation-picker__item',
-      'transportation-card',
-      modelValue === transportation ? 'is-selected' : '',
-    ]" @click="handleSelect(transportation)">
-      <text :class="[
-        'transportation-card__icon',
-        TRANSPORTATION_ICONS[transportation],
-      ]"></text>
+  <PuScrollView
+    direction="x"
+    :edge-fade="fade ? 'auto' : undefined"
+    :class="['transportation-picker']"
+  >
+    <view
+      v-for="(transportation, index) in TRANSPORTATION_OPTIONS"
+      :key="index"
+      :class="[
+        'transportation-picker__item',
+        'transportation-card',
+        modelValue === transportation ? 'is-selected' : '',
+      ]"
+      @click="handleSelect(transportation)"
+    >
+      <text
+        :class="[
+          'transportation-card__icon',
+          TRANSPORTATION_ICONS[transportation],
+        ]"
+      ></text>
       <view class="transportation-card__text">
         {{ dt(`name.${transportation}`) }}
       </view>

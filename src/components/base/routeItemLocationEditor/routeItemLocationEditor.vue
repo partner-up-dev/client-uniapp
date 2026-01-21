@@ -8,7 +8,7 @@ export default {
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { usePickLocation } from "@/components/base/locationPicker/usePickLocation";
 import { Location, type LocationRef } from "@/business/base/route";
 import { useBaseLocationStore } from "@/store/base/location";
@@ -45,7 +45,7 @@ function createEmptyLocation(): Location {
 const currentLocation = ref<Location>(
   props.modelValue && locationStore.fetchById(props.modelValue)
     ? locationStore.fetchById(props.modelValue)!
-    : createEmptyLocation()
+    : createEmptyLocation(),
 );
 
 const errorMessage = ref<string>("");
@@ -167,7 +167,7 @@ watch(
       // 清空当前地点
       currentLocation.value = createEmptyLocation();
     }
-  }
+  },
 );
 
 // ==================== Expose ====================

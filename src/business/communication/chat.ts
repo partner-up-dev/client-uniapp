@@ -2,7 +2,7 @@ import * as v from "valibot";
 import { V, nullable, instance } from "../index";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { AccountRefV } from "../account";
 import { Message } from "./message";
 import { type ChatRef, ChatRefV } from ".";

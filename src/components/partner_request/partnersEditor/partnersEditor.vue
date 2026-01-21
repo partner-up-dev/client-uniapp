@@ -2,19 +2,35 @@
   <view class="partners-editor">
     <!-- Partners List -->
     <view class="partners-editor__list">
-      <PartnerEditor v-for="(partner, index) in internalPartners" :key="index" v-model:role="partner.role"
-        v-model:player="partner.player" @select-role="onSelectRole(index)" @remove="onRemovePartner(index)" />
+      <PartnerEditor
+        v-for="(partner, index) in internalPartners"
+        :key="index"
+        v-model:role="partner.role"
+        v-model:player="partner.player"
+        @select-role="onSelectRole(index)"
+        @remove="onRemovePartner(index)"
+      />
     </view>
 
     <!-- Add Button -->
     <view class="partners-editor__add-button">
-      <PuButton :text="dt('add_partner')" theme="Surface" type="WithText" prefix-icon="i-mdi-plus"
-        @click="onAddButtonClick" />
+      <PuButton
+        :text="dt('add_partner')"
+        theme="Surface"
+        type="WithText"
+        prefix-icon="i-mdi-plus"
+        @click="onAddButtonClick"
+      />
     </view>
 
     <!-- Partner Role Picker -->
-    <PartnerPicker v-model:visible="pickerVisible" v-model="selectedRoleId" :pr-type="props.prType" mode="single"
-      @select="onRoleSelected" />
+    <PartnerPicker
+      v-model:visible="pickerVisible"
+      v-model="selectedRoleId"
+      :pr-type="props.prType"
+      mode="single"
+      @select="onRoleSelected"
+    />
   </view>
 </template>
 
@@ -30,7 +46,7 @@ import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useOptionalVModel } from "@/composables/props";
 import { partnersEditorProps, partnersEditorEmits } from "./partnersEditor";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import PartnerEditor from "../PartnerEditor/PartnerEditor.vue";
 import PartnerPicker from "../partnerPicker/partnerPicker.vue";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";

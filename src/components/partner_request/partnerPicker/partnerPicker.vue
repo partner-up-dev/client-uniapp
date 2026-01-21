@@ -1,12 +1,22 @@
 <template>
-  <PuDrawer v-model:visible="drawerVisible" :title="dt('title')" :height="props.height">
+  <PuDrawer
+    v-model:visible="drawerVisible"
+    :title="dt('title')"
+    :height="props.height"
+  >
     <view class="partner-picker">
       <!-- Partner Role List -->
       <view class="partner-picker__list">
-        <PartnerRoleComp v-for="role in availableRoles" :key="role.id" :role="role" :class="[
-          'partner-picker__item',
-          { 'is-selected': isSelected(role.id) },
-        ]" @click="onPartnerRoleClick(role)" />
+        <PartnerRoleComp
+          v-for="role in availableRoles"
+          :key="role.id"
+          :role="role"
+          :class="[
+            'partner-picker__item',
+            { 'is-selected': isSelected(role.id) },
+          ]"
+          @click="onPartnerRoleClick(role)"
+        />
       </view>
 
       <!-- Confirm Button for Multiple Mode -->
@@ -40,7 +50,7 @@ import {
   PartnerRole,
   type PartnerRoleRef,
 } from "@/business/partner_request/partner";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 
 const props = defineProps(partnerPickerProps);
 const emit = defineEmits(partnerPickerEmits);
@@ -64,7 +74,7 @@ const selectedValue = useOptionalVModel<PartnerRoleRef | PartnerRoleRef[]>({
 // ==================== Computed ====================
 
 const { availableRoles, bindPRType } = PartnerRole.useAvailableRoles(
-  props.prType
+  props.prType,
 );
 bindPRType(() => props.prType);
 
@@ -89,7 +99,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 // ==================== Methods ====================
@@ -131,7 +141,7 @@ function onPartnerRoleClick(role: PartnerRole) {
 function onConfirmClick() {
   selectedValue.value = [...internalSelectedIds.value];
   const selectedRoles = availableRoles.value.filter((role) =>
-    internalSelectedIds.value.includes(role.id)
+    internalSelectedIds.value.includes(role.id),
   );
   emit("confirm", selectedRoles);
   drawerVisible.value = false;

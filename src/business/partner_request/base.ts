@@ -1,7 +1,7 @@
 import { Partner } from "./partner";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { computed, ref, watch } from "vue";
 import { instance, V, nullable, limit_string } from "../index";
 import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".";

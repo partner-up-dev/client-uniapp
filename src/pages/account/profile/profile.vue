@@ -14,7 +14,7 @@ export default {
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { AccountBaseProfile } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
@@ -29,7 +29,7 @@ const { dt } = useTranslate("account");
 const propsSchema = v.object({
   id: v.pipe(
     v.string(),
-    v.transform((value) => value)
+    v.transform((value) => value),
   ),
 });
 
@@ -109,8 +109,14 @@ onLoad((query) => {
 
       <!-- 操作按钮区域 -->
       <view class="profile-page__operations">
-        <PuButton :text="dt('profile.operation.chat_with_me')" prefix-icon="i-mdi-message-text-outline"
-          theme="PrimaryContainer" type="WithText" size="Small" @click="onDirectMessageClick" />
+        <PuButton
+          :text="dt('profile.operation.chat_with_me')"
+          prefix-icon="i-mdi-message-text-outline"
+          theme="PrimaryContainer"
+          type="WithText"
+          size="Small"
+          @click="onDirectMessageClick"
+        />
       </view>
     </view>
 

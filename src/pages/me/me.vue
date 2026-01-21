@@ -17,7 +17,7 @@ export default {
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { AccountBaseProfile, Account } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
@@ -175,15 +175,31 @@ onShow(() => {
         {{ dt("welcome") }}
       </text>
 
-      <view class="profile-metadata relative" :style="simpleProfileStyle" v-if="isLoggedIn">
+      <view
+        class="profile-metadata relative"
+        :style="simpleProfileStyle"
+        v-if="isLoggedIn"
+      >
         <view class="absolute top-4 right-4">
-          <PuButton v-if="isEditing" prefix-icon="i-mdi-image-edit-outline" theme="Surface" type="OnlyIcon" size="Small"
-            @click="onWallpaperEditClick" />
+          <PuButton
+            v-if="isEditing"
+            prefix-icon="i-mdi-image-edit-outline"
+            theme="Surface"
+            type="OnlyIcon"
+            size="Small"
+            @click="onWallpaperEditClick"
+          />
         </view>
 
         <view class="flex flex-row justify-between items-center space-p-x-med">
-          <Avatar :src="userAvatar" size="xLarge" radius="none" uploadBucket="image"
-            :uploadKey="`avatars/${baseProfile?.id}`" :editable="isEditing" />
+          <Avatar
+            :src="userAvatar"
+            size="xLarge"
+            radius="none"
+            uploadBucket="image"
+            :uploadKey="`avatars/${baseProfile?.id}`"
+            :editable="isEditing"
+          />
 
           <view class="flex flex-col items-end text-align-right">
             <text class="joined-at">
@@ -193,39 +209,98 @@ onShow(() => {
               {{ userNickname }}
             </view>
 
-            <input class="nickname nickname-editor" v-else :value="userNickname"
-              :maxlength="AccountBaseProfile.NICKNAME_MAX_LENGTH" :placeholder="dt('nickname.placeholder')"
-              type="nickname" @confirm="onNicknameConfirm" @input="onNicknameInput" />
+            <input
+              class="nickname nickname-editor"
+              v-else
+              :value="userNickname"
+              :maxlength="AccountBaseProfile.NICKNAME_MAX_LENGTH"
+              :placeholder="dt('nickname.placeholder')"
+              type="nickname"
+              @confirm="onNicknameConfirm"
+              @input="onNicknameInput"
+            />
           </view>
         </view>
       </view>
 
       <view class="me-page__content">
-        <Cell :title="dt('my_partner_requests.title')" :subtitle="dt('my_partner_requests.subtitle')"
-          suffix-icon="i-mdi-chevron-right" size="medium" @click="onMyPartnerRequestsClick" />
+        <Cell
+          :title="dt('my_partner_requests.title')"
+          :subtitle="dt('my_partner_requests.subtitle')"
+          suffix-icon="i-mdi-chevron-right"
+          size="medium"
+          @click="onMyPartnerRequestsClick"
+        />
 
         <view class="me-page__operations">
-          <PuButton v-if="isLoggedIn" :text="dt('actions.edit_profile')" prefix-icon="i-mdi-pencil-outline"
-            theme="Surface" type="WithText" size="Small" :active="isEditing" @click="onEditProfileClick" />
-          <PuButton v-if="isLoggedIn" :text="dt('actions.logout')" prefix-icon="i-mdi-logout" theme="Surface"
-            type="WithText" size="Small" @click="onLogoutClick" />
-          <PuButton v-if="!isLoggedIn" :text="dt('actions.login')" prefix-icon="i-mdi-login" theme="PrimaryContainer"
-            type="WithText" size="Small" @click="onLoginClick" />
-          <PuButton :text="dt('actions.help')" prefix-icon="i-mdi-help-circle-outline" theme="Surface"
-            :type="isLoggedIn ? 'WithText' : 'OnlyIcon'" size="Small" @click="onHelpClick" />
+          <PuButton
+            v-if="isLoggedIn"
+            :text="dt('actions.edit_profile')"
+            prefix-icon="i-mdi-pencil-outline"
+            theme="Surface"
+            type="WithText"
+            size="Small"
+            :active="isEditing"
+            @click="onEditProfileClick"
+          />
+          <PuButton
+            v-if="isLoggedIn"
+            :text="dt('actions.logout')"
+            prefix-icon="i-mdi-logout"
+            theme="Surface"
+            type="WithText"
+            size="Small"
+            @click="onLogoutClick"
+          />
+          <PuButton
+            v-if="!isLoggedIn"
+            :text="dt('actions.login')"
+            prefix-icon="i-mdi-login"
+            theme="PrimaryContainer"
+            type="WithText"
+            size="Small"
+            @click="onLoginClick"
+          />
+          <PuButton
+            :text="dt('actions.help')"
+            prefix-icon="i-mdi-help-circle-outline"
+            theme="Surface"
+            :type="isLoggedIn ? 'WithText' : 'OnlyIcon'"
+            size="Small"
+            @click="onHelpClick"
+          />
         </view>
 
         <!-- 编辑个人信息卡片 -->
         <view class="base-profile-form" v-if="isEditing">
-          <Field :title="dt('edit_card.fields.bio.title')" :value="baseProfile?.bio || undefined"
-            :value-placeholder="dt('edit_card.fields.bio.placeholder')" editor-type="common_input" size="medium"
-            @confirm="onBioConfirm" />
-          <Field :title="dt('edit_card.fields.gender.title')" :value="baseProfile?.gender || undefined"
-            :value-formmater="genderFormatter" :value-placeholder="dt('edit_card.fields.gender.placeholder')"
-            editor-type="common_picker" :editor-data="GENDER_OPTIONS" size="medium" @confirm="onGenderConfirm" />
-          <Field :title="dt('edit_card.fields.mbti.title')" :value="baseProfile?.mbti || undefined"
-            :value-formmater="mbtiFormatter" :value-placeholder="dt('edit_card.fields.mbti.placeholder')"
-            editor-type="common_picker" :editor-data="MBTI_OPTIONS" size="medium" @confirm="onMbtiConfirm" />
+          <Field
+            :title="dt('edit_card.fields.bio.title')"
+            :value="baseProfile?.bio || undefined"
+            :value-placeholder="dt('edit_card.fields.bio.placeholder')"
+            editor-type="common_input"
+            size="medium"
+            @confirm="onBioConfirm"
+          />
+          <Field
+            :title="dt('edit_card.fields.gender.title')"
+            :value="baseProfile?.gender || undefined"
+            :value-formmater="genderFormatter"
+            :value-placeholder="dt('edit_card.fields.gender.placeholder')"
+            editor-type="common_picker"
+            :editor-data="GENDER_OPTIONS"
+            size="medium"
+            @confirm="onGenderConfirm"
+          />
+          <Field
+            :title="dt('edit_card.fields.mbti.title')"
+            :value="baseProfile?.mbti || undefined"
+            :value-formmater="mbtiFormatter"
+            :value-placeholder="dt('edit_card.fields.mbti.placeholder')"
+            editor-type="common_picker"
+            :editor-data="MBTI_OPTIONS"
+            size="medium"
+            @confirm="onMbtiConfirm"
+          />
         </view>
       </view>
     </view>

@@ -7,7 +7,7 @@ import { PartnerSubApplication } from '@/business/partner_request/application';
 import { PartnerRole } from '@/business/partner_request/partner';
 
 // Mock the locale composable
-vi.mock('@/locale/use', () => ({
+vi.mock('@/locale', () => ({
   useTranslate: () => ({
     dt: (key: string) => key,
   }),

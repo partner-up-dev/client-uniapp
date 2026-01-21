@@ -1,6 +1,6 @@
 // Types of component:partner_request:commute:commuteDatetimeForm
 
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import type { Weekday } from "@/business/base";
 import { CommutePRForm } from "@/business/partner_request/commute";
 import type { PropType } from "vue";

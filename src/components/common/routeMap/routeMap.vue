@@ -4,21 +4,28 @@
  * @docs https://git.hadream.ltd/anana/application/uniapp/-/wikis/Base/RouteMap
  */
 export default {
-  name: 'routeMap',
+  name: "routeMap",
   options: {
-    ...BasicComponentOptions
-  }
+    ...BasicComponentOptions,
+  },
 };
 </script>
 
 <script setup lang="ts">
-import type { Marker, Polyline } from './types';
-import type { QQMapDirectionResult, QQMapRouteUnion } from '@/utils/lbs/types';
-import type { Coord, DriverLocation } from '@/types/partner_request/trip';
-import { QQMapSDK, decompressPolyline } from '@/utils/lbs/index.js';
-import { errorReport, formateTimestamp, getMenuButtonPosition } from '@/utils';
-import log from '@/utils/log';
-import { computed, getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
+import type { Marker, Polyline } from "./types";
+import type { QQMapDirectionResult, QQMapRouteUnion } from "@/utils/lbs/types";
+import type { Coord, DriverLocation } from "@/types/partner_request/trip";
+import { QQMapSDK, decompressPolyline } from "@/utils/lbs/index.js";
+import { errorReport, formateTimestamp, getMenuButtonPosition } from "@/utils";
+import log from "@/utils/log";
+import {
+  computed,
+  getCurrentInstance,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import {
   RouteMapEmits,
   RouteMapProps,
@@ -32,20 +39,21 @@ import {
   CAR_OFF_TRACT_THRESHOLD,
   MARKER_ANCHOR,
   CAR_ROTATE_THRESHOLD,
-  POLYLINE_WIDTH
-} from './types';
-import { BasicComponentOptions } from '@/utils/vue';
-import { locationToCoordStr } from '@/store/base/location';
-import { useTranslate } from '@/locale/use';
-import { useBaseRoute } from '../useRoute';
+  POLYLINE_WIDTH,
+} from "./types";
+import { BasicComponentOptions } from "@/utils/vue";
+import { locationToCoordStr } from "@/store/base/location";
+import { useTranslate } from "@/locale";
+import { useBaseRoute } from "../useRoute";
 
-const { domain_t } = useTranslate('base.route_map');
+const { domain_t } = useTranslate("base.route_map");
 
 const props = defineProps(RouteMapProps);
 const emit = defineEmits(RouteMapEmits);
 
 // composables
-const { route, departureLoc, waypointLocs, arrivalLoc, locFromIndex } = useBaseRoute();
+const { route, departureLoc, waypointLocs, arrivalLoc, locFromIndex } =
+  useBaseRoute();
 
 // data
 const planning_result = ref<QQMapRouteUnion<typeof props.planMode>[]>([]);
@@ -84,21 +92,21 @@ const cur_car_stciked = ref<Coord>();
  */
 function getUserLocation(cb: () => void = () => undefined) {
   uni.getLocation({
-    type: 'gcj02',
+    type: "gcj02",
     success(res) {
       user_location.value = {
         latitude: res.latitude,
-        longitude: res.longitude
+        longitude: res.longitude,
       };
       cb();
-    }
+    },
   });
 }
 /**
  * @name 处理气泡点击事件
  */
 function onMarkerCalloutTap(e: { detail: { markerId: number } }) {
-  emit('callout_tap', e.detail.markerId);
+  emit("callout_tap", e.detail.markerId);
 }
 
 /**
@@ -114,7 +122,7 @@ function plan() {
     .map((location) => {
       return locationToCoordStr(location);
     })
-    .join(';');
+    .join(";");
 
   QQMapSDK.direction({
     mode: props.planMode,
@@ -126,13 +134,13 @@ function plan() {
         planning_result.value = res.result.routes;
         is_planning.value = false;
       } else {
-        errorReport(domain_t('toast.fail_to_plan'));
+        errorReport(domain_t("toast.fail_to_plan"));
       }
     },
     fail: (errors: any) => {
       log.error(errors);
-      errorReport(domain_t('toast.fail_to_plan'));
-    }
+      errorReport(domain_t("toast.fail_to_plan"));
+    },
   });
 }
 /**
@@ -150,18 +158,20 @@ function autoplayCar() {
   }
 
   // 计算目标�?
-  const primary_polyline_points = polylines.value[primary_polyline_index.value].points;
-  const target_coord = primary_polyline_points[car_autoplay_target_coord_index.value];
+  const primary_polyline_points =
+    polylines.value[primary_polyline_index.value].points;
+  const target_coord =
+    primary_polyline_points[car_autoplay_target_coord_index.value];
   const current_coord = {
     latitude: car_marker.value?.latitude || 0,
-    longitude: car_marker.value?.longitude || 0
+    longitude: car_marker.value?.longitude || 0,
   };
 
   // 计算车头方向；正北为0度，顺时针旋�?
   const heading =
     (Math.atan2(
       target_coord.latitude - current_coord.latitude,
-      target_coord.longitude - current_coord.longitude
+      target_coord.longitude - current_coord.longitude,
     ) *
       180) /
     Math.PI;
@@ -180,10 +190,15 @@ function autoplayCar() {
       // 跑动结束，更新目标点
       car_autoplay_target_coord_index.value += CAR_AUTOPLAY_SPEED;
 
-      if (car_autoplay_target_coord_index.value < primary_polyline_points.length) {
+      if (
+        car_autoplay_target_coord_index.value < primary_polyline_points.length
+      ) {
         // 继续
         car_autoplay_timeout_id.value = setTimeout(autoplayCar, 1000);
-      } else if (car_autoplay_target_coord_index.value === primary_polyline_points.length - 1) {
+      } else if (
+        car_autoplay_target_coord_index.value ===
+        primary_polyline_points.length - 1
+      ) {
         // 跑完最后一�?
         car_autoplay_timeout_id.value = setTimeout(autoplayCar, 1000);
       } else {
@@ -193,7 +208,7 @@ function autoplayCar() {
     },
     fail() {
       car_autoplay_timeout_id.value = setTimeout(autoplayCar, 1000);
-    }
+    },
   });
 }
 /**
@@ -203,7 +218,8 @@ function autoplayCar() {
  */
 function startAutoplayCar() {
   // 计算初始目标点（车辆位置在当前多段线所有点中最接近的点 + CAR_AUTOPLAY_SPEED个坐标点�?
-  const primary_polyline_points = polylines.value[primary_polyline_index.value].points;
+  const primary_polyline_points =
+    polylines.value[primary_polyline_index.value].points;
   const car_position = props.carPosition;
   if (car_position) {
     // 计算距离差�?
@@ -211,14 +227,15 @@ function startAutoplayCar() {
       return {
         diff: Math.sqrt(
           Math.pow(point.latitude - car_position.lat, 2) +
-            Math.pow(point.longitude - car_position.lng, 2)
+            Math.pow(point.longitude - car_position.lng, 2),
         ),
-        index
+        index,
       };
     });
     // 排序，取最小�?
     distance_diffs.sort((a, b) => a.diff - b.diff);
-    car_autoplay_target_coord_index.value = distance_diffs[0].index + CAR_AUTOPLAY_SPEED;
+    car_autoplay_target_coord_index.value =
+      distance_diffs[0].index + CAR_AUTOPLAY_SPEED;
     cur_car_stciked.value = primary_polyline_points[distance_diffs[0].index];
 
     // 超出路线，直接移动到最�?
@@ -234,8 +251,8 @@ function startAutoplayCar() {
   car_autoplay_points.value = [
     {
       latitude: car_position?.lat || 0,
-      longitude: car_position?.lng || 0
-    }
+      longitude: car_position?.lng || 0,
+    },
   ];
 
   // 避免忘记关闭pause_car_auto_playing
@@ -267,7 +284,7 @@ function isOffTrack(coord: Coord) {
 
       return {
         diff: R * c, // distance in meters
-        index
+        index,
       };
     });
     distance_diffs.sort((a, b) => a.diff - b.diff);
@@ -288,13 +305,13 @@ function recordCarPositionHistory(newVal: DriverLocation) {
   // 记录车辆历史轨迹
   const is_off_track = isOffTrack({
     latitude: newVal.lat,
-    longitude: newVal.lng
+    longitude: newVal.lng,
   });
   if (!props.stickCarToPolyline || (props.stickCarToPolyline && is_off_track)) {
     // 如果没有开启贴线移动，或者发生了偏移，则记录实际值进入历史记�?
     car_history_points.value.push({
       latitude: newVal.lat,
-      longitude: newVal.lng
+      longitude: newVal.lng,
     });
   } else {
     // 如果开启了，则记录贴线�?
@@ -303,7 +320,7 @@ function recordCarPositionHistory(newVal: DriverLocation) {
     } else {
       car_autoplay_points.value.push({
         latitude: newVal.lat,
-        longitude: newVal.lng
+        longitude: newVal.lng,
       });
     }
   }
@@ -313,7 +330,9 @@ function recordCarPositionHistory(newVal: DriverLocation) {
  */
 function calculateHeading(from: Coord, to: Coord) {
   let heading =
-    (Math.atan2(to.longitude - from.longitude, to.latitude - from.latitude) * 180) / Math.PI;
+    (Math.atan2(to.longitude - from.longitude, to.latitude - from.latitude) *
+      180) /
+    Math.PI;
 
   // Convert to 0-360° range (clockwise from North)
   heading = 90 - heading;
@@ -339,23 +358,24 @@ const routeMarkers = computed((): Marker[] => {
     waypoints = waypointLocs.value;
   } else {
     // by plan result
-    const primary_polyline_points = polylines.value[primary_polyline_index.value].points;
+    const primary_polyline_points =
+      polylines.value[primary_polyline_index.value].points;
     departure = {
       lat: primary_polyline_points[0].latitude,
-      lng: primary_polyline_points[0].longitude
+      lng: primary_polyline_points[0].longitude,
     };
     arrival = {
       lat: primary_polyline_points[primary_polyline_points.length - 1].latitude,
-      lng: primary_polyline_points[primary_polyline_points.length - 1].longitude
+      lng: primary_polyline_points[primary_polyline_points.length - 1].longitude,
     };
-    waypoints = (planning_result.value[primary_polyline_index.value].waypoints || []).map(
-      (waypoint) => {
-        return {
-          lat: waypoint.location.lat,
-          lng: waypoint.location.lng
-        };
-      }
-    );
+    waypoints = (
+      planning_result.value[primary_polyline_index.value].waypoints || []
+    ).map((waypoint) => {
+      return {
+        lat: waypoint.location.lat,
+        lng: waypoint.location.lng,
+      };
+    });
   }
 
   // [departure]
@@ -363,17 +383,17 @@ const routeMarkers = computed((): Marker[] => {
     id: 0,
     latitude: departure.lat,
     longitude: departure.lng,
-    title: domain_t('marker.from'),
-    iconPath: '/static/icon/map-marker-from.png',
+    title: domain_t("marker.from"),
+    iconPath: "/static/icon/map-marker-from.png",
     anchor: MARKER_ANCHOR,
     customCallout: props.showCallout
       ? {
           anchorX: 0,
           anchorY: 0,
-          display: 'ALWAYS'
+          display: "ALWAYS",
         }
       : undefined,
-    ...ROUTE_MARKER_SIZE
+    ...ROUTE_MARKER_SIZE,
   });
   // waypoints
   result.push(
@@ -382,36 +402,36 @@ const routeMarkers = computed((): Marker[] => {
         id: index + 1,
         latitude: waypoint.lat,
         longitude: waypoint.lng,
-        title: domain_t('marker.waypoint', { index: index + 1 }),
-        iconPath: '/static/icon/map-marker-waypoint.png',
+        title: domain_t("marker.waypoint", { index: index + 1 }),
+        iconPath: "/static/icon/map-marker-waypoint.png",
         anchor: MARKER_ANCHOR,
         customCallout: props.showCallout
           ? {
               anchorX: 0,
               anchorY: 0,
-              display: 'ALWAYS'
+              display: "ALWAYS",
             }
           : undefined,
-        ...ROUTE_MARKER_SIZE
+        ...ROUTE_MARKER_SIZE,
       };
-    })
+    }),
   );
   // [arrival]
   result.push({
     id: props.route.length - 1,
     latitude: arrival.lat,
     longitude: arrival.lng,
-    title: domain_t('marker.to'),
-    iconPath: '/static/icon/map-marker-to.png',
+    title: domain_t("marker.to"),
+    iconPath: "/static/icon/map-marker-to.png",
     anchor: MARKER_ANCHOR,
     customCallout: props.showCallout
       ? {
           anchorX: 0,
           anchorY: 0,
-          display: 'ALWAYS'
+          display: "ALWAYS",
         }
       : undefined,
-    ...ROUTE_MARKER_SIZE
+    ...ROUTE_MARKER_SIZE,
   });
 
   return result;
@@ -420,7 +440,9 @@ const routeMarkers = computed((): Marker[] => {
  * @name 渲染到地图上的标记点
  */
 const markers = computed((): Marker[] => {
-  return [car_marker.value, ...routeMarkers.value].filter((marker) => marker !== null);
+  return [car_marker.value, ...routeMarkers.value].filter(
+    (marker) => marker !== null,
+  );
 });
 /**
  * @name 汽车历史轨迹多段�?
@@ -430,7 +452,9 @@ const markers = computed((): Marker[] => {
  * 只有开启自动跑动，才加载自动跑动的历史轨迹
  */
 const carHistoryPolyline = computed((): Polyline | null => {
-  const points = [...(props.carAutoplay ? car_autoplay_points.value : car_history_points.value)];
+  const points = [
+    ...(props.carAutoplay ? car_autoplay_points.value : car_history_points.value),
+  ];
 
   return props.showCarHistory && points.length >= 2
     ? {
@@ -438,8 +462,8 @@ const carHistoryPolyline = computed((): Polyline | null => {
         points,
         width: POLYLINE_WIDTH,
         borderWidth: 1,
-        color: POLYLINE_COLOR['invalid'],
-        borderColor: POLYLINE_BORDER_COLOR['invalid']
+        color: POLYLINE_COLOR["invalid"],
+        borderColor: POLYLINE_BORDER_COLOR["invalid"],
       }
     : null;
 });
@@ -459,8 +483,8 @@ const planningPolylines = computed((): Polyline[] => {
       points: decompressPolyline(path.polyline),
       width: POLYLINE_WIDTH,
       borderWidth: 1,
-      color: POLYLINE_COLOR[is_primary ? 'primary' : 'secondary'],
-      borderColor: POLYLINE_BORDER_COLOR[is_primary ? 'primary' : 'secondary']
+      color: POLYLINE_COLOR[is_primary ? "primary" : "secondary"],
+      borderColor: POLYLINE_BORDER_COLOR[is_primary ? "primary" : "secondary"],
     };
   });
 });
@@ -474,8 +498,8 @@ const customPolyline = computed((): Polyline | null => {
         points: props.customPolylinePoints,
         width: POLYLINE_WIDTH,
         borderWidth: 1,
-        color: POLYLINE_COLOR['primary'],
-        borderColor: POLYLINE_BORDER_COLOR['primary']
+        color: POLYLINE_COLOR["primary"],
+        borderColor: POLYLINE_BORDER_COLOR["primary"],
       }
     : null;
 });
@@ -510,13 +534,13 @@ const centerPoint = computed((): Coord | null => {
   } else if (props.centerMode === 99) {
     return {
       latitude: Math.abs(departureLoc.value.lat + arrivalLoc.value.lat) / 2,
-      longitude: Math.abs(departureLoc.value.lng + arrivalLoc.value.lng) / 2
+      longitude: Math.abs(departureLoc.value.lng + arrivalLoc.value.lng) / 2,
     };
   } else if (props.centerMode === 98) {
     if (props.carPosition)
       return {
         latitude: props.carPosition.lat,
-        longitude: props.carPosition.lng
+        longitude: props.carPosition.lng,
       };
   }
   // 应该再添加一个主要多段线的中心点
@@ -524,7 +548,7 @@ const centerPoint = computed((): Coord | null => {
     const location = locFromIndex(props.centerMode);
     return {
       latitude: location.lat,
-      longitude: location.lng
+      longitude: location.lng,
     };
   }
   // fallback
@@ -544,15 +568,15 @@ const includePoints = computed((): Coord[] => {
     return [
       {
         latitude: location.lat,
-        longitude: location.lng
-      }
+        longitude: location.lng,
+      },
     ];
   }
 
   if (props.customPolylinePoints && props.customPolylinePoints.length) {
     return [
       props.customPolylinePoints[0],
-      props.customPolylinePoints[props.customPolylinePoints.length - 1]
+      props.customPolylinePoints[props.customPolylinePoints.length - 1],
       // 避免反复缩放的缓兵之�?
       // ...props.carPosition ? [{
       //     latitude: props.carPosition.lat,
@@ -564,20 +588,20 @@ const includePoints = computed((): Coord[] => {
       // departure
       {
         latitude: departureLoc.value.lat,
-        longitude: departureLoc.value.lng
+        longitude: departureLoc.value.lng,
       },
       // waypoints
       ...waypointLocs.value.map((waypoint) => {
         return {
           latitude: waypoint.lat,
-          longitude: waypoint.lng
+          longitude: waypoint.lng,
         };
       }),
       // arrival
       {
         latitude: arrivalLoc.value.lat,
-        longitude: arrivalLoc.value.lng
-      }
+        longitude: arrivalLoc.value.lng,
+      },
       // ...props.carPosition ? [{
       //     latitude: props.carPosition.lat,
       //     longitude: props.carPosition.lng
@@ -606,24 +630,26 @@ const dynamicDrivenInfoStyle = computed(() => {
   return {
     top: `${getMenuButtonPosition().top}px`,
     right: `${getMenuButtonPosition().right + getMenuButtonPosition().width + 6}px`,
-    height: `${getMenuButtonPosition().height}px`
+    height: `${getMenuButtonPosition().height}px`,
   };
 });
 
 const fareText = computed(
   () =>
-    domain_t('static_driven_info.fare.taxi_fare') +
-    domain_t('static_driven_info.fare.unit') +
-    planning_result.value[primary_polyline_index.value].taxi_fare?.fare
+    domain_t("static_driven_info.fare.taxi_fare") +
+    domain_t("static_driven_info.fare.unit") +
+    planning_result.value[primary_polyline_index.value].taxi_fare?.fare,
 );
 
 const distanceDurationText = computed(
   () =>
-    (planning_result.value[primary_polyline_index.value].distance / 1000).toFixed(1) +
-    domain_t('static_driven_info.distance.unit') +
-    ' ' +
+    (planning_result.value[primary_polyline_index.value].distance / 1000).toFixed(
+      1,
+    ) +
+    domain_t("static_driven_info.distance.unit") +
+    " " +
     planning_result.value[primary_polyline_index.value].duration +
-    domain_t('static_driven_info.duration.unit')
+    domain_t("static_driven_info.duration.unit"),
 );
 
 // watch
@@ -653,7 +679,7 @@ watch(
       if (props.planRoute) plan();
     }
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 );
 
 // [carPosition]
@@ -663,9 +689,9 @@ watch(
     if (newVal) {
       const is_off_track = isOffTrack({
         latitude: newVal.lat,
-        longitude: newVal.lng
+        longitude: newVal.lng,
       });
-      console.log('is_off_track', is_off_track);
+      console.log("is_off_track", is_off_track);
 
       // if from invalid to valid, add marker first
       if (!oldVal) {
@@ -677,22 +703,22 @@ watch(
           latitude: newVal.lat,
           longitude: newVal.lng,
           rotate: 0,
-          iconPath: '/static/icon/map-marker-driver.png',
+          iconPath: "/static/icon/map-marker-driver.png",
           anchor: MARKER_ANCHOR,
           customCallout: props.showCallout
             ? {
                 anchorX: 0,
                 anchorY: 0,
-                display: 'ALWAYS'
+                display: "ALWAYS",
               }
             : undefined,
-          ...CAR_MARKER_SIZE
+          ...CAR_MARKER_SIZE,
         };
 
         // 添加到历史记�?
         car_history_points.value.push({
           latitude: newVal.lat,
-          longitude: newVal.lng
+          longitude: newVal.lng,
         });
 
         // 启动惯性播�?
@@ -724,7 +750,7 @@ watch(
 
         // 计算旋转角度
         // 计算新的旋转角：如果开启了贴线且不偏离路线，则新的角度为车辆旧位置和新的最贴近位置的变化角
-        console.log('last destination', last_destination.value);
+        console.log("last destination", last_destination.value);
         // const new_heading = (props.stickCarToPolyline && !is_off_track) && cur_car_stciked.value && last_destination.value
         //     ? calculateHeading(
         //         last_destination.value,
@@ -732,7 +758,7 @@ watch(
         //     )
         //     : newVal.heading;
         const new_heading = newVal.heading;
-        console.log('heading', new_heading);
+        console.log("heading", new_heading);
 
         // 计算目标位置：开启了贴线且不偏离路线，则车辆标记点跟随主要多段线，否则即实际位置
         const destination =
@@ -740,9 +766,9 @@ watch(
             ? cur_car_stciked.value
             : {
                 latitude: newVal.lat,
-                longitude: newVal.lng
+                longitude: newVal.lng,
               };
-        console.log('destination', destination);
+        console.log("destination", destination);
 
         // 移动
         map_ref.value?.translateMarker({
@@ -761,16 +787,16 @@ watch(
             recordCarPositionHistory({
               lat: destination.latitude,
               lng: destination.longitude,
-              heading: new_heading
+              heading: new_heading,
             });
           },
           fail() {
             pause_car_auto_playing.value = false;
-          }
+          },
         });
       }
     } else {
-      console.log('remove car marker');
+      console.log("remove car marker");
 
       // remove marker
       car_marker.value = null;
@@ -780,7 +806,7 @@ watch(
       pause_car_auto_playing.value = true;
       clearTimeout(car_autoplay_timeout_id.value);
     }
-  }
+  },
 );
 
 // [markers]
@@ -803,8 +829,8 @@ watch(markers, (newVal, oldVal) => {
       markers: added_markers,
       clear: false,
       fail() {
-        errorReport(domain_t('toast.fail_to_add_markers'));
-      }
+        errorReport(domain_t("toast.fail_to_add_markers"));
+      },
     });
   }
 
@@ -813,8 +839,8 @@ watch(markers, (newVal, oldVal) => {
     map_ref.value?.removeMarkers({
       markerIds: removed_markers.map((marker) => marker.id),
       fail() {
-        errorReport(domain_t('toast.fail_to_remove_markers'));
-      }
+        errorReport(domain_t("toast.fail_to_remove_markers"));
+      },
     });
   }
 });
@@ -825,7 +851,7 @@ watch(
   () => {
     // 废弃与自定义多段线相关的值（不废弃其实也会重新计算，问题不大�?
     cur_car_stciked.value = undefined;
-  }
+  },
 );
 
 // [includePoints]
@@ -836,11 +862,11 @@ watch(
       points: includePoints.value,
       padding: includePointsPadding.value,
       fail() {
-        errorReport(domain_t('toast.fail_to_include_points'));
-      }
+        errorReport(domain_t("toast.fail_to_include_points"));
+      },
     });
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 // [centerPoint]
@@ -850,8 +876,8 @@ watch(centerPoint, (newVal) => {
       latitude: newVal.latitude,
       longitude: newVal.longitude,
       fail() {
-        errorReport(domain_t('toast.fail_to_move_to_location'));
-      }
+        errorReport(domain_t("toast.fail_to_move_to_location"));
+      },
     });
   }
 });
@@ -871,7 +897,7 @@ watch(pause_car_auto_playing, (newVal, oldVal) => {
 // expose
 defineExpose({
   resetCarHistory,
-  startAutoplayCar
+  startAutoplayCar,
 });
 
 // lifecycle
@@ -879,9 +905,9 @@ onMounted(() => {
   // get map context
   const component_instance = getCurrentInstance();
   if (component_instance) {
-    map_ref.value = uni.createMapContext('routeMap', component_instance);
+    map_ref.value = uni.createMapContext("routeMap", component_instance);
   } else {
-    errorReport(domain_t('toast.fail_to_obtain_map_context'));
+    errorReport(domain_t("toast.fail_to_obtain_map_context"));
   }
 });
 onUnmounted(() => {
@@ -907,31 +933,41 @@ onUnmounted(() => {
     @callouttap="onMarkerCalloutTap"
   >
     <view class="static-driven-info" v-if="showStaticDrivenInfo">
-      <view id="duration-distance" class="duration-distance item" v-if="showStaticDrivenInfo">
+      <view
+        id="duration-distance"
+        class="duration-distance item"
+        v-if="showStaticDrivenInfo"
+      >
         {{ distanceDurationText }}
       </view>
       <view
         id="fare"
         class="item fare"
         v-if="
-          showStaticDrivenInfo && planning_result[primary_polyline_index].taxi_fare !== undefined
+          showStaticDrivenInfo &&
+          planning_result[primary_polyline_index].taxi_fare !== undefined
         "
       >
         {{ fareText }}
       </view>
     </view>
 
-    <view class="dynamic-driven-info" :style="dynamicDrivenInfoStyle" v-if="dynamicDrivenInfo">
+    <view
+      class="dynamic-driven-info"
+      :style="dynamicDrivenInfoStyle"
+      v-if="dynamicDrivenInfo"
+    >
       <view class="dynamic-driven-info__item speed">
-        {{ dynamicDrivenInfo.speed.toFixed(2) }} {{ domain_t('dynamic_driven_info.speed.unit') }}
+        {{ dynamicDrivenInfo.speed.toFixed(2) }}
+        {{ domain_t("dynamic_driven_info.speed.unit") }}
       </view>
       <view class="dynamic-driven-info__item tta">
         {{ (dynamicDrivenInfo.remain_duration / 60).toFixed(1) }}
-        {{ domain_t('dynamic_driven_info.duration.unit') }}
+        {{ domain_t("dynamic_driven_info.duration.unit") }}
       </view>
       <view class="dynamic-driven-info__item dta">
         {{ (dynamicDrivenInfo.remain_length / 1000).toFixed(2) }}
-        {{ domain_t('dynamic_driven_info.distance.unit') }}
+        {{ domain_t("dynamic_driven_info.distance.unit") }}
       </view>
     </view>
 
@@ -943,15 +979,23 @@ onUnmounted(() => {
         :marker-id="marker.id"
       >
         <cover-view class="route-item-callout" v-if="marker.id !== CAR_MARKER_ID">
-          <cover-view class="route-item-callout__time" v-if="route[index].datetime">
-            {{ formateTimestamp(route[index].datetime[0] || 0, false, false, true) }}
+          <cover-view
+            class="route-item-callout__time"
+            v-if="route[index].datetime"
+          >
+            {{
+              formateTimestamp(route[index].datetime[0] || 0, false, false, true)
+            }}
           </cover-view>
           <cover-view class="route-item-callout__address">
             {{ locFromIndex(index).friendly_address }}
           </cover-view>
           <cover-view class="route-item-callout__edit"> > </cover-view>
         </cover-view>
-        <cover-view class="car-callout" v-if="marker.id === CAR_MARKER_ID && carCalloutText">
+        <cover-view
+          class="car-callout"
+          v-if="marker.id === CAR_MARKER_ID && carCalloutText"
+        >
           {{ carCalloutText }}
         </cover-view>
       </cover-view>

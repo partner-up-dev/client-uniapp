@@ -3,12 +3,12 @@ import { describe, it, expect, vi } from "vitest";
 // Mock the APIClient before importing PartnerRequestForm
 vi.mock("@/business/api", () => ({
   APIClient: class {
-    constructor() {}
-    requestHTTP() {}
+    constructor() { }
+    requestHTTP() { }
   },
 }));
 
-vi.mock("@/locale/use", () => ({
+vi.mock("@/locale", () => ({
   useTranslate: () => ({
     dt: (key: string) => key,
   }),

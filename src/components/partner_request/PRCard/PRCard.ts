@@ -2,7 +2,7 @@ import type { PropType } from "vue";
 import { PRType, PRStatus, type PRRef } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";
 import { type AccountRef } from "@/business/account";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 
 const { dt } = useTranslate('partner_request');
 

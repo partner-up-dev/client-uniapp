@@ -8,7 +8,7 @@ export default {
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { useOptionalVModel } from "@/composables/props";
 import { Location, Route, RouteForm, RouteItemForm } from "@/business/base/route";
 import {
@@ -59,7 +59,7 @@ const isImmersiveType = computed(() => props.type === "immersive");
 const departureItem = computed(() => route.value[0]);
 const arrivalItem = computed(() => route.value[route.value.length - 1]);
 const waypointItems = computed(() =>
-  route.value.slice(1, route.value.length - 1)
+  route.value.slice(1, route.value.length - 1),
 );
 
 const canAddWaypoint = computed(() => route.value.length < props.max);
@@ -213,7 +213,7 @@ watch(
       }
     });
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
@@ -344,7 +344,7 @@ watch(
     <template #full>
       <RouteItemDatetimeEditor
         v-if="editingItemIndex >= 0 && editingItemIndex < route.length"
-        :modelValue="(route[editingItemIndex].datetime as any)"
+        :modelValue="route[editingItemIndex].datetime as any"
         @confirm="onDatetimeEditorConfirm"
         @cancel="datetimeEditorVisible = false"
       />

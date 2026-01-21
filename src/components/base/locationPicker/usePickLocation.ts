@@ -2,7 +2,7 @@
 
 import { Location, LocationForm } from "@/business/base/route";
 import { EVENT } from "@/data/enum";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { type LocationRef } from "@/business/base/route";
 import { errorReport } from "@/utils/vendor";
 import { getTencentLBSPluginCredentialString } from "@/utils/lbs";

@@ -1,6 +1,6 @@
 // Types of component:partner_request:PRMetadataForm
 
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { PartnerRequestForm } from "@/business/partner_request/form";
 import type { PropType } from "vue";
 

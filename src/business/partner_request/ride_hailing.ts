@@ -1,6 +1,6 @@
 import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
-import { useTranslate } from '@/locale/use';
+import { useTranslate } from '@/locale';
 import { instance } from '..';
 import * as v from 'valibot';
 import { V } from '..';

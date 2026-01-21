@@ -70,7 +70,7 @@ export default {
 import { computed, ref } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { subApplicationProps, subApplicationEmits } from "./SubApplication";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { PartnerRole } from "@/business/partner_request/partner";
 import PuTextarea from "@partner-up-dev/design-uniapp/components/puTextarea/puTextarea.vue";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
@@ -88,7 +88,7 @@ const role = computed((): PartnerRole | undefined => {
 const roleName = computed(() => role.value?.name ?? "角色名称");
 const roleId = computed(() => role.value?.id ?? "00");
 const roleRule = computed(
-  () => role.value?.description ?? "角色的权利与义务明细"
+  () => role.value?.description ?? "角色的权利与义务明细",
 );
 
 const rationale = computed(() => props.subApplication.rationale || "");

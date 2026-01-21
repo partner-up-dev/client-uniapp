@@ -12,7 +12,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { computed, ref } from "vue";
 import { AccountBaseProfile } from "@/business/account/base";
 import { onLoad, onShow } from "@dcloudio/uni-app";

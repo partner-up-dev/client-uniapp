@@ -8,13 +8,22 @@
     </view>
 
     <view class="applying-roles">
-      <SubApplication v-for="(subApplication, index) in applyingPartners" :key="subApplication.role"
-        :subApplication="subApplication" :editable="true" @delete="onDeleteRole(index)" />
+      <SubApplication
+        v-for="(subApplication, index) in applyingPartners"
+        :key="subApplication.role"
+        :subApplication="subApplication"
+        :editable="true"
+        @delete="onDeleteRole(index)"
+      />
     </view>
 
     <!-- Operations: add role + submit -->
     <view class="ops" v-if="!props.externalOps">
-      <PuButton theme="SurfaceOutlined" text="添加角色" @click="showRoleDrawer = true" />
+      <PuButton
+        theme="SurfaceOutlined"
+        text="添加角色"
+        @click="showRoleDrawer = true"
+      />
       <PuButton theme="Primary" :text="dt('submit')" @click="submit" />
     </view>
 
@@ -25,7 +34,12 @@
           <text>无更多可用角色</text>
         </view>
         <view v-else class="roles">
-          <PartnerRoleComp v-for="role in availableRoles" :key="role" :roleId="role" @click="onSelectRole(role)" />
+          <PartnerRoleComp
+            v-for="role in availableRoles"
+            :key="role"
+            :roleId="role"
+            @click="onSelectRole(role)"
+          />
         </view>
       </PuDrawer>
     </root-portal>
@@ -43,7 +57,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, onBeforeUpdate, onMounted, ref, watch } from "vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import PuDrawer from "@partner-up-dev/design-uniapp/components/puDrawer/puDrawer.vue";
 import PartnerRoleComp from "../PartnerRole/PartnerRole.vue";
@@ -76,11 +90,11 @@ watch(
       }
     });
   },
-  { immediate: true }
+  { immediate: true },
 );
 // 选中的角色 ID 列表
 const selectedRoles = computed<PartnerRoleRef[]>(() =>
-  applyingPartners.value.map((i) => i.role)
+  applyingPartners.value.map((i) => i.role),
 );
 
 // 可用的角色（未被选择且可申请）
@@ -101,7 +115,7 @@ const showRoleDrawer = ref(false);
 function onSelectRole(roleId: PartnerRoleRef) {
   // 添加子申请项
   applyingPartners.value.push(
-    new PartnerSubApplication({ role: roleId, rationale: null })
+    new PartnerSubApplication({ role: roleId, rationale: null }),
   );
   emit("change", selectedRoles.value);
   showRoleDrawer.value = false;

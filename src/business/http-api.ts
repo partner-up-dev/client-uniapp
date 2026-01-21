@@ -1,5 +1,5 @@
 import { EVENT } from "@/data/enum";
-import { t } from "@/locale/use";
+import { t } from "@/locale";
 import store from "@/store";
 import { useAccountStore } from "@/store/account";
 import log from "@/utils/log";

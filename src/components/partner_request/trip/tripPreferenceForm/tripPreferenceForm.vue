@@ -7,7 +7,7 @@ export default {
 
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { ref, computed, watch } from "vue";
 import { useOptionalVModel } from "@/composables/props";
 import { TripPreference } from "@/business/partner_request/trip";
@@ -37,7 +37,7 @@ const tripPreference = useOptionalVModel({
 
 // 行李数量（个）
 const luggageNumber = ref<number | undefined>(
-  tripPreference.value.luggage ? tripPreference.value.luggage / 20 : undefined
+  tripPreference.value.luggage ? tripPreference.value.luggage / 20 : undefined,
 );
 
 // 航班号
@@ -75,7 +75,7 @@ watch(
     luggageNumber.value = newValue.luggage ? newValue.luggage / 20 : undefined;
     flightNumber.value = newValue.flight || "";
     railwayNumber.value = newValue.railway || "";
-  }
+  },
 );
 
 // Validation
@@ -107,39 +107,71 @@ defineExpose({
 
 <template>
   <view class="trip-preference-form">
-    <Cell :title="dt('purpose.title')" :value="purposeText" is-link @click="handlePurposeClick" />
+    <Cell
+      :title="dt('purpose.title')"
+      :value="purposeText"
+      is-link
+      @click="handlePurposeClick"
+    />
 
     <Cell :title="dt('luggage.prefix')">
       <template #value>
         <view class="luggage-input">
-          <PuInput v-model="luggageNumber" :placeholder="dt('luggage.placeholder')" type="number" inputmode="numeric"
-            no-border />
+          <PuInput
+            v-model="luggageNumber"
+            :placeholder="dt('luggage.placeholder')"
+            type="number"
+            inputmode="numeric"
+            no-border
+          />
           <text class="luggage-unit">{{ dt("luggage.unit") }}</text>
         </view>
       </template>
     </Cell>
 
-    <Cell v-if="
-      tripPreference.purpose === 'airport_dropoff' ||
-      tripPreference.purpose === 'airport_pickup'
-    " :title="dt('flight.placeholder')">
+    <Cell
+      v-if="
+        tripPreference.purpose === 'airport_dropoff' ||
+        tripPreference.purpose === 'airport_pickup'
+      "
+      :title="dt('flight.placeholder')"
+    >
       <template #value>
-        <PuInput v-model="flightNumber" :placeholder="dt('flight.placeholder')" no-border />
+        <PuInput
+          v-model="flightNumber"
+          :placeholder="dt('flight.placeholder')"
+          no-border
+        />
       </template>
     </Cell>
 
-    <Cell v-if="
-      tripPreference.purpose === 'railway_dropoff' ||
-      tripPreference.purpose === 'railway_pickup'
-    " :title="dt('train.placeholder')">
+    <Cell
+      v-if="
+        tripPreference.purpose === 'railway_dropoff' ||
+        tripPreference.purpose === 'railway_pickup'
+      "
+      :title="dt('train.placeholder')"
+    >
       <template #value>
-        <PuInput v-model="railwayNumber" :placeholder="dt('train.placeholder')" no-border />
+        <PuInput
+          v-model="railwayNumber"
+          :placeholder="dt('train.placeholder')"
+          no-border
+        />
       </template>
     </Cell>
 
     <!-- Purpose Picker Drawer -->
-    <PuDrawer v-model:visible="showPurposeDrawer" :title="dt('purpose.title')" height="30vh">
-      <TripPurposePicker style="height: 110px" :model-value="tripPreference.purpose" @select="handlePurposeSelect" />
+    <PuDrawer
+      v-model:visible="showPurposeDrawer"
+      :title="dt('purpose.title')"
+      height="30vh"
+    >
+      <TripPurposePicker
+        style="height: 110px"
+        :model-value="tripPreference.purpose"
+        @select="handlePurposeSelect"
+      />
     </PuDrawer>
   </view>
 </template>

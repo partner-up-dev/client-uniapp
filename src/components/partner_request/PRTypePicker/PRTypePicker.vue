@@ -16,14 +16,14 @@ import Card from "@/components/common/card/card.vue";
 import PuScrollView from "@partner-up-dev/design-uniapp/components/puScrollView/puScrollView.vue";
 import { computed } from "vue";
 import { PRL1Type, PRL1Type2PRType, PRType } from "@/business/partner_request";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 
 // 根据泛型 T 推断 select 事件的类型
 type SelectType<Mode extends OptionMode> = Mode extends "l1"
   ? PRL1Type
   : Mode extends "l2"
-  ? PRType
-  : never;
+    ? PRType
+    : never;
 
 const props = defineProps(prTypePickerProps);
 const emit = defineEmits<{
@@ -93,10 +93,19 @@ function onCardClick(type: SelectType<T>) {
 
 <template>
   <view :class="rootClass" :style="customStyle">
-    <PuScrollView :direction="scrollDirection" :edge-fade="fade ? 'auto' : undefined" class="pr-type-picker__scroll">
-      <Card v-for="(type, index) in options" :key="type"
-        :class="['pr-type-picker__item', isLastItem(index) ? 'last-child' : '']" :title="getTypeTitle(type)"
-        :description="getTypeDescription(type)" @click="onCardClick(type)" />
+    <PuScrollView
+      :direction="scrollDirection"
+      :edge-fade="fade ? 'auto' : undefined"
+      class="pr-type-picker__scroll"
+    >
+      <Card
+        v-for="(type, index) in options"
+        :key="type"
+        :class="['pr-type-picker__item', isLastItem(index) ? 'last-child' : '']"
+        :title="getTypeTitle(type)"
+        :description="getTypeDescription(type)"
+        @click="onCardClick(type)"
+      />
     </PuScrollView>
   </view>
 </template>

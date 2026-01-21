@@ -12,16 +12,14 @@ import {
   routeItemDatetimeProps,
   routeItemDatetimeEmits,
 } from "./routeItemDatetime";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 
-const { dt } = useTranslate('base.route_item_datetime')
+const { dt } = useTranslate("base.route_item_datetime");
 
 const props = defineProps(routeItemDatetimeProps);
 defineEmits(routeItemDatetimeEmits);
 if (!props.datetime)
   throw new Error("RouteItemDatetime: datetime prop is required");
-
-
 </script>
 
 <template>
@@ -32,8 +30,12 @@ if (!props.datetime)
         ~{{ props.datetime.timeRange.end }}
       </text>
     </view>
-    <view class="no-bring-ahead" v-if="props.datetime.bring_ahead === 0">{{ dt('no_bring_ahead') }}</view>
-    <view class="no-put-off" v-if="props.datetime.put_off === 0">{{ dt('no_put_off') }}</view>
+    <view class="no-bring-ahead" v-if="props.datetime.bring_ahead === 0">{{
+      dt("no_bring_ahead")
+    }}</view>
+    <view class="no-put-off" v-if="props.datetime.put_off === 0">{{
+      dt("no_put_off")
+    }}</view>
   </view>
 </template>
 

@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup lang="ts" generic="T extends PRType">
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import PuAccordion from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordion.vue";
 import PuAccordionItem from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordionItem.vue";
 import PuForm from "@partner-up-dev/design-uniapp/components/puForm/puForm.vue";
@@ -60,7 +60,7 @@ watch(
   (newType) => {
     emit("update:modelValue", createFormByType(newType));
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 async function save(): Promise<void> {
@@ -101,7 +101,7 @@ function publish(): Promise<void> {
             ],
             complete: resolve,
           });
-        })
+        }),
     )
     .then(() => {
       publishing.value = true;
@@ -146,12 +146,12 @@ defineExpose({
         <PRRideHailingForm
           v-if="props.type === PRType.RideHailing"
           ref="rideHailingFormRef"
-          :form="(props.modelValue as RideHailingPRForm)"
+          :form="props.modelValue as RideHailingPRForm"
         />
         <PRCommuteForm
           v-if="props.type === PRType.Commute"
           ref="commuteDatetimeFormRef"
-          :form="(props.modelValue as CommutePRForm)"
+          :form="props.modelValue as CommutePRForm"
         />
       </PuAccordion>
     </PuForm>

@@ -37,7 +37,7 @@ export default {
 import { BasicComponentOptions } from "@/utils/vue";
 import { prTimelineProps } from "./PRTimeline";
 import PRTimelineItem from "../PRTimelineItem/PRTimelineItem.vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { PRStatus, PRStatusOrder } from "@/business/partner_request";
 
 const props = defineProps(prTimelineProps);

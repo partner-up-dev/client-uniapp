@@ -21,7 +21,7 @@ If a component name conflicts with a built-in element name, prefix it with `PU`.
 <script setup lang="ts">
 import { defineProps, defineEmits, defineModel } from 'vue';
 import { compNameProps, compNameEmits } from './compName';
-import { useTranslate } from '@/locale/use';
+import { useTranslate } from '@/locale';
 
 // Props from separate module
 const props = defineProps(compNameProps);

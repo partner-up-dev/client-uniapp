@@ -8,7 +8,7 @@ export default {
 import { BasicComponentOptions } from "@/utils/vue";
 import { LocationPickerEmits, LocationPickerProps } from "./locationPicker";
 import { usePickLocation } from "./usePickLocation";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { Location } from "@/business/base/route";
 
 const { dt } = useTranslate("base.location_picker");
@@ -29,8 +29,8 @@ const { location } = Location.use(props.modelValue);
           props.modelValue
             ? location?.friendly_address
             : props.placeholder
-            ? props.placeholder
-            : dt("value.placeholder")
+              ? props.placeholder
+              : dt("value.placeholder")
         }}
       </view>
     </slot>

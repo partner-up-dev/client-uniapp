@@ -13,7 +13,7 @@ import { withFallback } from "@/utils";
 import type { LocationRef } from "@/business/base/route";
 import { useBaseLocationStore } from "@/store/base/location";
 import { computed, ref, watch } from "vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 // import GetPhoneNumber from "@/components/account/getPhoneNumber/getPhoneNumber.vue";
 
 const { dt } = useTranslate("common.field");
@@ -78,20 +78,29 @@ watch(editor_activating, (new_val, old_val) => {
         {{ title }}
       </slot>
     </view>
-    <PuPicker v-if="editorType === 'common_picker'" v-model="innner_value" :columns="editorData"
-      @confirm="onPickerEditorConfirm" @open="activateEditor" @cancel="deactivateEditor">
+    <PuPicker
+      v-if="editorType === 'common_picker'"
+      v-model="innner_value"
+      :columns="editorData"
+      @confirm="onPickerEditorConfirm"
+      @open="activateEditor"
+      @cancel="deactivateEditor"
+    >
       <view :class="['field__value']">
         {{
           withFallback(
             value,
             valueFormmater || ((val) => val),
-            inValuePlaceholder
+            inValuePlaceholder,
           )
         }}
       </view>
     </PuPicker>
-    <LocationPicker v-else-if="editorType === 'location_picker'" :modelValue="(innner_value as LocationRef)"
-      @confirm="onPickerEditorConfirm">
+    <LocationPicker
+      v-else-if="editorType === 'location_picker'"
+      :modelValue="innner_value as LocationRef"
+      @confirm="onPickerEditorConfirm"
+    >
       <view :class="['field__value']">
         {{
           withFallback(
@@ -99,33 +108,47 @@ watch(editor_activating, (new_val, old_val) => {
             (val) =>
               useBaseLocationStore().fetchById(val)?.friendly_address ||
               inValuePlaceholder,
-            inValuePlaceholder
+            inValuePlaceholder,
           )
         }}
       </view>
     </LocationPicker>
-    <view :class="['field__value']" v-if="editorType === 'common_input'" @click="activateEditor">
-      <input :class="['field__input-value']" v-if="editor_activating" :value="innner_value?.toString()"
-        :placeholder="inValuePlaceholder" @confirm="onInputEditorConfirm" @blur="deactivateEditor"
-        @input="innner_value = $event.detail.value" />
+    <view
+      :class="['field__value']"
+      v-if="editorType === 'common_input'"
+      @click="activateEditor"
+    >
+      <input
+        :class="['field__input-value']"
+        v-if="editor_activating"
+        :value="innner_value?.toString()"
+        :placeholder="inValuePlaceholder"
+        @confirm="onInputEditorConfirm"
+        @blur="deactivateEditor"
+        @input="innner_value = $event.detail.value"
+      />
       <view v-if="!editor_activating">
         {{
           withFallback(
             value,
             valueFormmater || ((val) => val),
-            inValuePlaceholder
+            inValuePlaceholder,
           )
         }}
       </view>
     </view>
     <view :class="['field__value']" v-if="editorType === 'get_phone_number'">
-      <GetPhoneNumber v-model:show="editor_activating" @success="onPickerEditorConfirm" @cancel="deactivateEditor" />
+      <GetPhoneNumber
+        v-model:show="editor_activating"
+        @success="onPickerEditorConfirm"
+        @cancel="deactivateEditor"
+      />
       <view @click="activateEditor">
         {{
           withFallback(
             value,
             valueFormmater || ((val) => val),
-            inValuePlaceholder
+            inValuePlaceholder,
           )
         }}
       </view>

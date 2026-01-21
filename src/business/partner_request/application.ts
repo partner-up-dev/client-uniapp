@@ -6,7 +6,7 @@ import { ChatRefV } from '../communication';
 import { PartnerRoleRefV } from './partner';
 import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
-import { useTranslate } from '@/locale/use';
+import { useTranslate } from '@/locale';
 import { DatetimeV } from '../base';
 
 export type PartnerApplicationRef = number;

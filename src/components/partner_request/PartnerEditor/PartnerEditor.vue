@@ -30,7 +30,7 @@ import { computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useOptionalVModel } from "@/composables/props";
 import { partnerEditorProps, partnerEditorEmits } from "./PartnerEditor";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { PartnerRole } from "@/business/partner_request/partner";
 import { useAccountStore } from "@/store/account";
 
@@ -55,7 +55,7 @@ const player = useOptionalVModel<string | null>({
 
 // Get role information
 const { partnerRole, bindId: bindRoleId } = PartnerRole.use(
-  props.role ?? undefined
+  props.role ?? undefined,
 );
 bindRoleId(() => props.role);
 

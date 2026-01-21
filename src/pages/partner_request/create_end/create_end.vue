@@ -4,7 +4,7 @@ import { onLoad, onShow } from "@dcloudio/uni-app";
 import * as v from "valibot";
 import ScaffoldLayout from "@/components/common/layout/scaffoldLayout.vue";
 import NavBar from "@/components/common/navBar/navBar.vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import PRForm from "@/components/partner_request/PRForm/PRForm.vue";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import { errorReport, navigate } from "@/utils/vendor";
@@ -26,15 +26,15 @@ const propsSchema = v.object({
   cache: v.optional(
     v.pipe(
       v.string(),
-      v.transform((value) => value === "true")
-    )
+      v.transform((value) => value === "true"),
+    ),
   ),
   type: v.optional(v.enum(PRType)),
   immersive: v.optional(
     v.pipe(
       v.string(),
-      v.transform((value) => value === "true")
-    )
+      v.transform((value) => value === "true"),
+    ),
   ),
 });
 
@@ -153,7 +153,7 @@ onLoad(
         introduction: null,
       });
     }
-  }
+  },
 );
 
 onShow(() => {

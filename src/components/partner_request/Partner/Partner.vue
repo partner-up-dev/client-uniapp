@@ -54,7 +54,7 @@ import { computed, ref, watch, onMounted } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { useOptionalVModel } from "@/composables/props";
 import { partnerProps, partnerEmits } from "./Partner";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import Account from "@/components/account/account/account.vue";
 import { PartnerRole } from "@/business/partner_request/partner";
 import { useAccountStore } from "@/store/account";
@@ -72,22 +72,22 @@ const role = computed((): PartnerRole | undefined => {
 const idText = computed(() => `#${props.partner._id}`);
 const roleName = computed(() => role.value?.name ?? "角色名称");
 const roleRule = computed(
-  () => role.value?.description ?? "角色的权利与义务明细"
+  () => role.value?.description ?? "角色的权利与义务明细",
 );
 
 const accountStore = useAccountStore();
 const isPlayingByYou = computed(
-  () => !!props.partner.player && accountStore.isMe(props.partner.player)
+  () => !!props.partner.player && accountStore.isMe(props.partner.player),
 );
 const isPlayingByOther = computed(
-  () => !!props.partner.player && !isPlayingByYou.value
+  () => !!props.partner.player && !isPlayingByYou.value,
 );
 const isPlaying = computed(() => !!props.partner.player);
 
 const typeClass = computed(() => "type-default");
 
 const chevronIcon = computed(() =>
-  expand.value ? "i-mdi-chevron-up" : "i-mdi-chevron-down"
+  expand.value ? "i-mdi-chevron-up" : "i-mdi-chevron-down",
 );
 
 // Localized fallbacks
@@ -103,7 +103,7 @@ const expand = useOptionalVModel<boolean>({
 });
 
 const stateClass = computed(() =>
-  expand.value ? "partner--expand" : "partner--fold"
+  expand.value ? "partner--expand" : "partner--fold",
 );
 
 // Handlers

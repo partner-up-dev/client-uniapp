@@ -1,16 +1,30 @@
 <template>
   <view class="pr-geo-element-filter">
     <!-- 地图预览组件 -->
-    <PuMap v-model:center="mapCenter" v-model:activeElement="activeElement" :elements="elements"
-      :map-id="'pr-geo-filter-map'" :height="props.mapHeight">
+    <PuMap
+      v-model:center="mapCenter"
+      v-model:activeElement="activeElement"
+      :elements="elements"
+      :map-id="'pr-geo-filter-map'"
+      :height="props.mapHeight"
+    >
       <view class="pu-map-operation" @tap="onReset">
         <text class="i-mdi-filter-off"></text>
       </view>
     </PuMap>
     <!-- 所有元素预览：使用 swiper；当前展示的元素即 activeElement -->
-    <swiper class="geo-elements" v-if="swiperCurrent !== undefined" :current="swiperCurrent" circular
-      @change="onSwiperChange">
-      <swiper-item v-for="(el, idx) in elements" :key="idx" class="geo-elements item">
+    <swiper
+      class="geo-elements"
+      v-if="swiperCurrent !== undefined"
+      :current="swiperCurrent"
+      circular
+      @change="onSwiperChange"
+    >
+      <swiper-item
+        v-for="(el, idx) in elements"
+        :key="idx"
+        class="geo-elements item"
+      >
         <GeoElementPreview :element="el" />
       </swiper-item>
     </swiper>
@@ -37,7 +51,7 @@ import { type GeoElement } from "@/components/common/GeoElement/GeoElement";
 import { type Coord } from "@/business/base/route";
 import { mockElements } from "./PRGeoElementFilter";
 import { makeStringProp } from "@/utils/props";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 
 const { dt } = useTranslate("partner_request.geo_filter");
 
@@ -55,7 +69,7 @@ const activeElement = ref<GeoElementWithIndex | undefined | null>();
 
 // swiper 与 activeElement 双向同步
 const swiperCurrent = computed<number | undefined>(
-  () => activeElement.value?.index
+  () => activeElement.value?.index,
 );
 
 function onSwiperChange(e: any) {

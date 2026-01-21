@@ -5,7 +5,7 @@ import { decompressPolyline, QQMapSDK } from "@/utils/lbs/index.js";
 import { QQMapDirectionMode, type QQMapDirectionResult } from "@/utils/lbs/types";
 import log from "@/utils/log";
 import { errorReport } from "@/utils/vendor";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
 import { HTTPApiClient } from "@/business/http-api";

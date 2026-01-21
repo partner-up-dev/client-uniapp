@@ -5,7 +5,7 @@ import store from "@/store";
 import { AccountRefV } from "../account";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { DatetimeV } from "../base";
 import { ChatRefV } from ".";
 

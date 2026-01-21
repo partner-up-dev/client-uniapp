@@ -14,7 +14,7 @@ import { type Transportation } from "@/business/base";
 import { RouteForm } from "@/business/base/route";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { EVENT } from "@/data/enum";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import TripPurposePicker from "@/components/partner_request/trip/tripPurposePicker/tripPurposePicker.vue";
 import { RideHailingPreference } from "@/business/partner_request/ride_hailing";
 import TransportationPicker from "@/components/partner_request/trip/transportationPicker/transportationPicker.vue";
@@ -61,7 +61,7 @@ const dep_datetime_editor_popup = ref(false);
  */
 function onImmersiveCreateNext(
   source: "parent" | "user",
-  current: string | ImmersiveCreateStep
+  current: string | ImmersiveCreateStep,
 ) {
   if (source === "user") {
     if (current === "tripPurpose") {

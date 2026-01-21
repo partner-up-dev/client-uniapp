@@ -1,6 +1,6 @@
 // Types of component:partner_request:ride_hailing:PRRideHailingForm
 
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 import type { PropType } from "vue";
 

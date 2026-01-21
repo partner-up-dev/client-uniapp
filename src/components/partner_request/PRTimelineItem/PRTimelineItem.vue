@@ -14,14 +14,22 @@
       <view class="pr-ti__actions">
         <!-- Type:Draft -->
         <template v-if="type === PRStatus.Draft">
-          <PuButton :theme="isCurrent ? 'PrimaryContainer' : 'Plain'" type="Bar" :text="dt('actions.edit')"
-            suffix-icon="i-mdi-chevron-right" />
+          <PuButton
+            :theme="isCurrent ? 'PrimaryContainer' : 'Plain'"
+            type="Bar"
+            :text="dt('actions.edit')"
+            suffix-icon="i-mdi-chevron-right"
+          />
           <PuButton theme="Plain" type="Bar" :text="dt('actions.delete')" />
         </template>
         <!-- Type:Joinable -->
         <template v-if="type === PRStatus.Joinable">
-          <PuButton :theme="isCurrent ? 'PrimaryContainer' : 'Plain'" type="Bar"
-            :text="dt('actions.approve_applications')" suffix-icon="i-mdi-chevron-right" />
+          <PuButton
+            :theme="isCurrent ? 'PrimaryContainer' : 'Plain'"
+            type="Bar"
+            :text="dt('actions.approve_applications')"
+            suffix-icon="i-mdi-chevron-right"
+          />
           <PuButton theme="Plain" type="Bar" :text="dt('actions.ready')" />
           <PuButton theme="Plain" type="Bar" :text="dt('actions.share')" />
         </template>
@@ -41,7 +49,7 @@ export default {
 import { computed, ref } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import { prTimelineItemProps, prTimelineItemEmits } from "./PRTimelineItem";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { useOptionalVModel } from "@/composables/props";
 import { PRStatus } from "@/business/partner_request";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";

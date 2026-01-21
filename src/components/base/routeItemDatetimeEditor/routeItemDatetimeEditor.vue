@@ -20,7 +20,7 @@ import { RouteItemDatetime } from "@/business/base/route";
 import Cell from "@/components/common/cell/cell.vue";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import PuPicker from "@partner-up-dev/design-uniapp/components/puPicker/puPicker.vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import dayjs from "dayjs";
 
 const props = defineProps(routeItemDatetimeEditorProps);
@@ -32,7 +32,7 @@ const { dt } = useTranslate("common");
 
 /** 内部状态 - 允许取消更改 */
 const internalData = ref<RouteItemDatetime>(
-  RouteItemDatetime.parse(deepcopy(props.modelValue))
+  RouteItemDatetime.parse(deepcopy(props.modelValue)),
 );
 
 /** 日期选择器显示的日期（转换为 Date 对象用于 picker） */
@@ -68,11 +68,11 @@ const putOff = computed({
 const currentDisplay = computed(() => {
   const datetimeStr = formatDatetimeDisplay(
     internalData.value.datetime,
-    internalData.value.time
+    internalData.value.time,
   );
   const timeLossStr = formatTimeLoss(
     internalData.value.bring_ahead,
-    internalData.value.put_off
+    internalData.value.put_off,
   );
   return `${datetimeStr} - ${timeLossStr}`;
 });
@@ -179,35 +179,74 @@ defineExpose({
     <!-- 表单区域 -->
     <view class="route-item-datetime-editor__form">
       <!-- 日期时间选择 -->
-      <picker mode="date" :value="pickerDate.toISOString().split('T')[0]"
-        :start="new Date(minDatetime).toISOString().split('T')[0]" @change="onDatetimeChange">
-        <Cell title="日期" :value="pickerDate ? dayjs(pickerDate).format('YYYY年MM月DD日') : '请选择'
-          " suffix-icon="i-mdi-chevron-right" />
+      <picker
+        mode="date"
+        :value="pickerDate.toISOString().split('T')[0]"
+        :start="new Date(minDatetime).toISOString().split('T')[0]"
+        @change="onDatetimeChange"
+      >
+        <Cell
+          title="日期"
+          :value="
+            pickerDate ? dayjs(pickerDate).format('YYYY年MM月DD日') : '请选择'
+          "
+          suffix-icon="i-mdi-chevron-right"
+        />
       </picker>
 
-      <picker mode="time" :value="pickerDate
-        ? `${String(pickerDate.getHours()).padStart(2, '0')}:${String(
-          pickerDate.getMinutes()
-        ).padStart(2, '0')}`
-        : '00:00'
-        " @change="onTimeChange">
-        <Cell title="时间" :value="pickerDate ? dayjs(pickerDate).format('HH:mm') : '请选择'"
-          suffix-icon="i-mdi-chevron-right" />
+      <picker
+        mode="time"
+        :value="
+          pickerDate
+            ? `${String(pickerDate.getHours()).padStart(2, '0')}:${String(
+                pickerDate.getMinutes(),
+              ).padStart(2, '0')}`
+            : '00:00'
+        "
+        @change="onTimeChange"
+      >
+        <Cell
+          title="时间"
+          :value="pickerDate ? dayjs(pickerDate).format('HH:mm') : '请选择'"
+          suffix-icon="i-mdi-chevron-right"
+        />
       </picker>
 
       <!-- 可提前时间 -->
-      <PuPicker v-model="bringAhead" :columns="TIME_LOSS_OPTIONS" label="可提前" placeholder="请选择" value-key="value"
-        label-key="label" @confirm="emit('change', internalData)" />
+      <PuPicker
+        v-model="bringAhead"
+        :columns="TIME_LOSS_OPTIONS"
+        label="可提前"
+        placeholder="请选择"
+        value-key="value"
+        label-key="label"
+        @confirm="emit('change', internalData)"
+      />
 
       <!-- 可推迟时间 -->
-      <PuPicker v-model="putOff" :columns="TIME_LOSS_OPTIONS" label="可推迟" placeholder="请选择" value-key="value"
-        label-key="label" @confirm="emit('change', internalData)" />
+      <PuPicker
+        v-model="putOff"
+        :columns="TIME_LOSS_OPTIONS"
+        label="可推迟"
+        placeholder="请选择"
+        value-key="value"
+        label-key="label"
+        @confirm="emit('change', internalData)"
+      />
     </view>
 
     <!-- 操作按钮 -->
     <view class="route-item-datetime-editor__operations">
-      <PuButton :text="dt('button.cancel')" theme="Surface" @click="onCancelButtonClick" />
-      <PuButton :text="dt('button.save')" theme="Primary" @click="onConfirmButtonClick" />
+      <PuButton
+        :text="dt('button.cancel')"
+        theme="Surface"
+        @click="onCancelButtonClick"
+      />
+      <PuButton
+        :text="dt('button.save')"
+        theme="Primary"
+        @click="onConfirmButtonClick"
+      />
     </view>
   </view>
 </template>

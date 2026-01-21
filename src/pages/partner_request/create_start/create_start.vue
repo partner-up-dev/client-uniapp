@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import NavBar from "@/components/common/navBar/navBar.vue";
-import { useTranslate } from "@/locale/use";
+import { useTranslate } from "@/locale";
 import { usePartnerRequestStore } from "@/store/partner_request";
 import type { PRL1Type, PRRef } from "@/business/partner_request";
 import { computed, ref } from "vue";
