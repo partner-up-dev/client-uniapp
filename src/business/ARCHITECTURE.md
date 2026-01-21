@@ -29,7 +29,7 @@ Page/Component
 
 ## i18n & errors
 
-- Use `useTranslate()` for API messages and UI-facing strings.
+- Use the global composer (`t` from `src/locale`) for API messages and user-facing strings; keep them in the global JSONC bundles.
 - Error reporting flows through `errorReport()`.
 
 ## Modules

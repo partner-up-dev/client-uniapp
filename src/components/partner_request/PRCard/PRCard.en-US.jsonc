@@ -1,0 +1,19 @@
+{
+  "type": {
+    "null": "Unknown",
+    "undefined": "Unknown",
+    "ride_hailing": "Ride-hailing",
+    "travel": "Travel",
+    "trip": "Trip",
+    "commute": "Commute",
+    "moped": "Moped",
+    "hitchhiking": "Hitchhiking"
+  },
+  "placeholder": {
+    "primary": "Partner request summary",
+    "secondary": "Partner request details"
+  },
+  "actions": {
+    "join": "Join"
+  }
+}

@@ -43,10 +43,11 @@ import {
 } from "./types";
 import { BasicComponentOptions } from "@/utils/vue";
 import { locationToCoordStr } from "@/store/base/location";
-import { useTranslate } from "@/locale";
 import { useBaseRoute } from "../useRoute";
+import { useI18n } from "vue-i18n";
+import { localMessages } from "./routeMap";
 
-const { domain_t } = useTranslate("base.route_map");
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 const props = defineProps(RouteMapProps);
 const emit = defineEmits(RouteMapEmits);
@@ -134,12 +135,12 @@ function plan() {
         planning_result.value = res.result.routes;
         is_planning.value = false;
       } else {
-        errorReport(domain_t("toast.fail_to_plan"));
+        errorReport(lt("toast.fail_to_plan"));
       }
     },
     fail: (errors: any) => {
       log.error(errors);
-      errorReport(domain_t("toast.fail_to_plan"));
+      errorReport(lt("toast.fail_to_plan"));
     },
   });
 }
@@ -383,7 +384,7 @@ const routeMarkers = computed((): Marker[] => {
     id: 0,
     latitude: departure.lat,
     longitude: departure.lng,
-    title: domain_t("marker.from"),
+    title: lt("marker.from"),
     iconPath: "/static/icon/map-marker-from.png",
     anchor: MARKER_ANCHOR,
     customCallout: props.showCallout
@@ -402,7 +403,7 @@ const routeMarkers = computed((): Marker[] => {
         id: index + 1,
         latitude: waypoint.lat,
         longitude: waypoint.lng,
-        title: domain_t("marker.waypoint", { index: index + 1 }),
+        title: lt("marker.waypoint", { index: index + 1 }),
         iconPath: "/static/icon/map-marker-waypoint.png",
         anchor: MARKER_ANCHOR,
         customCallout: props.showCallout
@@ -421,7 +422,7 @@ const routeMarkers = computed((): Marker[] => {
     id: props.route.length - 1,
     latitude: arrival.lat,
     longitude: arrival.lng,
-    title: domain_t("marker.to"),
+    title: lt("marker.to"),
     iconPath: "/static/icon/map-marker-to.png",
     anchor: MARKER_ANCHOR,
     customCallout: props.showCallout
@@ -636,8 +637,8 @@ const dynamicDrivenInfoStyle = computed(() => {
 
 const fareText = computed(
   () =>
-    domain_t("static_driven_info.fare.taxi_fare") +
-    domain_t("static_driven_info.fare.unit") +
+    lt("static_driven_info.fare.taxi_fare") +
+    lt("static_driven_info.fare.unit") +
     planning_result.value[primary_polyline_index.value].taxi_fare?.fare,
 );
 
@@ -646,10 +647,10 @@ const distanceDurationText = computed(
     (planning_result.value[primary_polyline_index.value].distance / 1000).toFixed(
       1,
     ) +
-    domain_t("static_driven_info.distance.unit") +
+    lt("static_driven_info.distance.unit") +
     " " +
     planning_result.value[primary_polyline_index.value].duration +
-    domain_t("static_driven_info.duration.unit"),
+    lt("static_driven_info.duration.unit"),
 );
 
 // watch
@@ -829,7 +830,7 @@ watch(markers, (newVal, oldVal) => {
       markers: added_markers,
       clear: false,
       fail() {
-        errorReport(domain_t("toast.fail_to_add_markers"));
+        errorReport(lt("toast.fail_to_add_markers"));
       },
     });
   }
@@ -839,7 +840,7 @@ watch(markers, (newVal, oldVal) => {
     map_ref.value?.removeMarkers({
       markerIds: removed_markers.map((marker) => marker.id),
       fail() {
-        errorReport(domain_t("toast.fail_to_remove_markers"));
+        errorReport(lt("toast.fail_to_remove_markers"));
       },
     });
   }
@@ -862,7 +863,7 @@ watch(
       points: includePoints.value,
       padding: includePointsPadding.value,
       fail() {
-        errorReport(domain_t("toast.fail_to_include_points"));
+        errorReport(lt("toast.fail_to_include_points"));
       },
     });
   },
@@ -876,7 +877,7 @@ watch(centerPoint, (newVal) => {
       latitude: newVal.latitude,
       longitude: newVal.longitude,
       fail() {
-        errorReport(domain_t("toast.fail_to_move_to_location"));
+        errorReport(lt("toast.fail_to_move_to_location"));
       },
     });
   }
@@ -907,7 +908,7 @@ onMounted(() => {
   if (component_instance) {
     map_ref.value = uni.createMapContext("routeMap", component_instance);
   } else {
-    errorReport(domain_t("toast.fail_to_obtain_map_context"));
+    errorReport(lt("toast.fail_to_obtain_map_context"));
   }
 });
 onUnmounted(() => {
@@ -959,15 +960,15 @@ onUnmounted(() => {
     >
       <view class="dynamic-driven-info__item speed">
         {{ dynamicDrivenInfo.speed.toFixed(2) }}
-        {{ domain_t("dynamic_driven_info.speed.unit") }}
+        {{ lt("dynamic_driven_info.speed.unit") }}
       </view>
       <view class="dynamic-driven-info__item tta">
         {{ (dynamicDrivenInfo.remain_duration / 60).toFixed(1) }}
-        {{ domain_t("dynamic_driven_info.duration.unit") }}
+        {{ lt("dynamic_driven_info.duration.unit") }}
       </view>
       <view class="dynamic-driven-info__item dta">
         {{ (dynamicDrivenInfo.remain_length / 1000).toFixed(2) }}
-        {{ domain_t("dynamic_driven_info.distance.unit") }}
+        {{ lt("dynamic_driven_info.distance.unit") }}
       </view>
     </view>
 

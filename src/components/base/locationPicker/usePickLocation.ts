@@ -2,12 +2,16 @@
 
 import { Location, LocationForm } from "@/business/base/route";
 import { EVENT } from "@/data/enum";
-import { useTranslate } from "@/locale";
+import { useI18n } from "vue-i18n";
 import { type LocationRef } from "@/business/base/route";
 import { errorReport } from "@/utils/vendor";
 import { getTencentLBSPluginCredentialString } from "@/utils/lbs";
-
-const { dt } = useTranslate("base.use_select_location");
+import enUs from "./usePickLocation.en-US.jsonc";
+import zhHans from "./usePickLocation.zh-Hans.jsonc";
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // @ts-ignore
 const chooseLocationPlugin = requirePlugin('chooseLocation');  // 全局只需要注册一次
@@ -28,6 +32,7 @@ const RESIDENTIAL_POI_CATEGORY: string[] = ["280000", "240000"];
 export function usePickLocation(
   locationSetter: (location: Location) => void,
 ) {
+  const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
   // methods
   /**
    * @name 处理“选择地点”被点击
@@ -96,7 +101,7 @@ export function usePickLocation(
     locationForm.put().then(location => {
       locationSetter(location);
     }).catch(() => {
-      errorReport(dt('report.v1_base_get_location_failed'))
+      errorReport(lt('report.v1_base_get_location_failed'))
     });
   }
 

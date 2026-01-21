@@ -1,0 +1,16 @@
+{
+  "button": {
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "time_loss": {
+    "on_time": "On time",
+    "bring_ahead": "Up to {minutes} minutes early",
+    "put_off": "Up to {minutes} minutes late",
+    "separator": ", "
+  },
+  "datetime": {
+    "time_prefix": "Time: ",
+    "unset": "Not set"
+  }
+}

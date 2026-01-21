@@ -1,12 +1,14 @@
 import uni from '@dcloudio/vite-plugin-uni';
-import { defineConfig } from 'vite';
+import json5 from 'vite-plugin-json5';
+import { defineConfig, type Plugin, type UserConfigExport } from 'vite';
 
 // https://vitejs.dev/config/
-export default async () => {
+export default async (): Promise<UserConfigExport> => {
   const UnoCSS = (await import("unocss/vite")).default;
   return defineConfig({
     plugins: [
       uni(),
+      json5(),
       UnoCSS()
     ],
     css: {

@@ -26,7 +26,7 @@ Index and quick reference for the `src/pages` folder.
 **Shared conventions** (applies to all Vue code):
 
 - Use `<script setup>` for Vue 3 Composition API
-- Use `useTranslate()` for all user-facing text (never hard-code)
+- Localize all user-facing text with `useI18n`; prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })`
 - Use UniApp tags only: `<view>`, `<text>`, `<image>`, etc.
 - Prefer `Promise.then().catch()` over `async/await`
 - Use SCSS design tokens: `sys-var('color-primary')`
@@ -46,7 +46,7 @@ See [shared conventions](../../docs/.agents/shared-conventions.md) for complete 
 
 - `src/utils/vendor.ts` — `navigate()`, `errorReport()`
 - `src/utils/tabbar.ts` — tabbar sync helpers
-- `src/locale/use.ts` — `useTranslate()`
+- `src/locale/index.ts` — i18n setup and global composer
 
 **Common components:**
 

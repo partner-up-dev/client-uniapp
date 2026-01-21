@@ -6,14 +6,18 @@ export default {
 </script>
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
-import { LocationPickerEmits, LocationPickerProps } from "./locationPicker";
+import {
+  LocationPickerEmits,
+  LocationPickerProps,
+  localMessages,
+} from "./locationPicker";
 import { usePickLocation } from "./usePickLocation";
-import { useTranslate } from "@/locale";
 import { Location } from "@/business/base/route";
+import { useI18n } from "vue-i18n";
 
-const { dt } = useTranslate("base.location_picker");
 const props = defineProps(LocationPickerProps);
 const emit = defineEmits(LocationPickerEmits);
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 const { selectLocation } = usePickLocation((location) => {
   emit("update:modelValue", location.id);
   emit("confirm", location.id);
@@ -30,7 +34,7 @@ const { location } = Location.use(props.modelValue);
             ? location?.friendly_address
             : props.placeholder
               ? props.placeholder
-              : dt("value.placeholder")
+              : lt("value.placeholder")
         }}
       </view>
     </slot>

@@ -4,6 +4,13 @@ import dayjs from "dayjs";
 import type { PropType } from "vue";
 import type { RouteItemDatetimeForm } from "@/business/base/route";
 import { makeNumberProp } from "@/utils/props";
+import enUs from "./routeItemDatetimeEditor.en-US.jsonc";
+import zhHans from "./routeItemDatetimeEditor.zh-Hans.jsonc";
+
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件相关类型定义 ====================
 
@@ -17,17 +24,15 @@ export interface TimeLossOption {
 
 // ==================== 组件常量定义 ====================
 
-/**
- * 时间误差选项列表（单位：分钟）
- */
-export const TIME_LOSS_OPTIONS: TimeLossOption[] = [
-  { value: 0, label: "0 分钟" },
-  { value: 5, label: "5 分钟" },
-  { value: 10, label: "10 分钟" },
-  { value: 15, label: "15 分钟" },
-  { value: 30, label: "30 分钟" },
-  { value: 60, label: "60 分钟" },
-];
+const TIME_LOSS_VALUES = [0, 5, 10, 15, 30, 60] as const;
+const DATETIME_FORMAT = "YYYY年MM月DD日 HH:mm";
+
+export function buildTimeLossOptions(t: (key: string, params?: Record<string, unknown>) => string): TimeLossOption[] {
+  return TIME_LOSS_VALUES.map((value) => ({
+    value,
+    label: `${value} ${t("dynamic_driven_info.duration.unit")}`,
+  }));
+}
 
 // ==================== 组件 Props 定义 ====================
 
@@ -60,36 +65,44 @@ export const routeItemDatetimeEditorEmits = {
 /**
  * 格式化时间误差选项为字符串
  */
-export function formatTimeLoss(bringAhead?: number | null, putOff?: number | null): string {
+export function formatTimeLoss(
+  bringAhead: number | null | undefined,
+  putOff: number | null | undefined,
+  t: (key: string, params?: Record<string, unknown>) => string,
+): string {
   const ahead = bringAhead ?? 0;
   const off = putOff ?? 0;
 
   if (ahead === 0 && off === 0) {
-    return "准时";
+    return t("time_loss.on_time");
   }
 
   const parts: string[] = [];
   if (ahead > 0) {
-    parts.push(`可提前 ${ahead} 分钟`);
+    parts.push(t("time_loss.bring_ahead", { minutes: ahead }));
   }
   if (off > 0) {
-    parts.push(`可推迟 ${off} 分钟`);
+    parts.push(t("time_loss.put_off", { minutes: off }));
   }
 
-  return parts.join("，");
+  return parts.join(t("time_loss.separator"));
 }
 
 /**
  * 获取日期时间的显示文本
  */
-export function formatDatetimeDisplay(datetime?: Date | null, time?: string | null): string {
+export function formatDatetimeDisplay(
+  datetime: Date | null | undefined,
+  time: string | null | undefined,
+  t: (key: string) => string,
+): string {
   if (datetime) {
-    return dayjs(datetime).format('YYYY年MM月DD日 HH:mm');
+    return dayjs(datetime).format(DATETIME_FORMAT);
   }
 
   if (time) {
-    return `时间：${time}`;
+    return `${t("datetime.time_prefix")}${time}`;
   }
 
-  return "未设置";
+  return t("datetime.unset");
 }

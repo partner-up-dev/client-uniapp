@@ -5,11 +5,11 @@ import * as v from "valibot";
 import { hideLoading, showLoading, errorReport } from "@/utils/vendor";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { Chat } from "../communication/chat";
 import { useChatStore } from "@/store/communication/chat";
 
-const { dt } = useTranslate("account");
+const dt = (key: string): string => t(`account.${key}`);
 
 export class AccountBaseProfile extends V.class(v.object({
   id: v.string(),
@@ -77,7 +77,7 @@ export class Account {
 
   static mainClient = new HTTPApiClient({
     modulePrefix: "/account",
-    dt: useTranslate("account").dt,
+    dt,
   });
 
   static dbClient = new DBApiClient({

@@ -1,0 +1,17 @@
+{
+  "button": {
+    "cancel": "取消",
+    "save": "保存"
+  },
+  "time_loss": {
+    "on_time": "准时",
+    "unit": "分钟",
+    "bring_ahead": "可提前 {minutes} 分钟",
+    "put_off": "可推迟 {minutes} 分钟",
+    "separator": "，"
+  },
+  "datetime": {
+    "time_prefix": "时间：",
+    "unset": "未设置"
+  }
+}

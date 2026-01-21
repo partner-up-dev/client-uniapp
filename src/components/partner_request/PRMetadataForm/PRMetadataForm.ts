@@ -1,10 +1,14 @@
 // Types of component:partner_request:PRMetadataForm
 
-import { useTranslate } from "@/locale";
 import { PartnerRequestForm } from "@/business/partner_request/form";
 import type { PropType } from "vue";
+import enUs from "./PRMetadataForm.en-US.jsonc";
+import zhHans from "./PRMetadataForm.zh-Hans.jsonc";
 
-export const { dt: domain_t } = useTranslate('partner_request.common_editor');
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件 Props 定义 ====================
 export const prMetadataFormProps = {

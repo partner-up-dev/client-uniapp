@@ -31,14 +31,14 @@
       <!-- 主要信息 -->
       <view class="primary-info">
         <text class="primary-text">{{
-          partnerRequest.title || "搭子请求主要内容概览"
+          partnerRequest.title || lt("placeholder.primary")
         }}</text>
       </view>
 
       <!-- 次要信息 -->
       <view class="secondary-info">
         <text class="secondary-text">{{
-          partnerRequest.introduction || "搭子请求次要内容概览"
+          partnerRequest.introduction || lt("placeholder.secondary")
         }}</text>
       </view>
     </view>
@@ -46,16 +46,32 @@
     <!-- 操作区域 - Draft 类型不显示 -->
     <view v-if="props.type !== 'Draft'" class="operations">
       <!-- 复制按钮 -->
-      <PuButton theme="Surface" type="OnlyIcon" size="Small" prefix-icon="i-mdi-content-copy"
-        @click.stop="onCopyClick" />
+      <PuButton
+        theme="Surface"
+        type="OnlyIcon"
+        size="Small"
+        prefix-icon="i-mdi-content-copy"
+        @click.stop="onCopyClick"
+      />
 
       <!-- 收藏按钮 -->
-      <PuButton theme="Surface" type="OnlyIcon" size="Small" prefix-icon="i-mdi-bookmark-outline"
-        @click.stop="onBookmarkClick" />
+      <PuButton
+        theme="Surface"
+        type="OnlyIcon"
+        size="Small"
+        prefix-icon="i-mdi-bookmark-outline"
+        @click.stop="onBookmarkClick"
+      />
 
       <!-- 加入按钮 -->
-      <PuButton theme="PrimaryContainer" type="WithText" size="Small" text="加入" prefix-icon="i-mdi-plus"
-        @click.stop="onJoinClick" />
+      <PuButton
+        theme="PrimaryContainer"
+        type="WithText"
+        size="Small"
+        :text="lt('actions.join')"
+        prefix-icon="i-mdi-plus"
+        @click.stop="onJoinClick"
+      />
     </view>
   </view>
 </template>
@@ -77,6 +93,7 @@ import {
   formatPRType,
   generateMockPartnerRequest,
   generateMockPartners,
+  localMessages,
 } from "./PRCard";
 import { BasicComponentOptions } from "@/utils/vue";
 import { PRStatus } from "@/business/partner_request";
@@ -84,9 +101,11 @@ import { PartnerRequest } from "@/business/partner_request/base";
 import { navigate } from "@/utils/vendor";
 import { PAGE_ID } from "@/data/enum";
 import { getTimeLossFromNow } from "@/utils/time";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps(prCardProps);
 const emit = defineEmits(prCardEmits);
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 // 验证至少提供一个必需的 prop
 if (!props.partnerRequest && !props.prId) {
@@ -96,7 +115,7 @@ if (!props.partnerRequest && !props.prId) {
 // 使用 usePR composable 处理数据加载
 const { pr, bindPR, bindPRId } = PartnerRequest.use(
   props.prId,
-  props.partnerRequest
+  props.partnerRequest,
 );
 bindPR(() => props.partnerRequest);
 bindPRId(() => props.prId);
@@ -116,7 +135,7 @@ const partners = computed(() => {
 
 // 格式化类型文本
 const formattedType = computed(() => {
-  return formatPRType(partnerRequest.value.type);
+  return formatPRType(partnerRequest.value.type, lt);
 });
 
 // 格式化创建时间（用于 Draft 类型）

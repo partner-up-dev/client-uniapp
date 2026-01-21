@@ -1,10 +1,14 @@
 // Types of component:partner_request:ride_hailing:PRRideHailingForm
 
-import { useTranslate } from "@/locale";
 import type { RideHailingPRForm } from "@/business/partner_request/ride_hailing";
 import type { PropType } from "vue";
+import enUs from "./PRRideHailingForm.en-US.jsonc";
+import zhHans from "./PRRideHailingForm.zh-Hans.jsonc";
 
-export const { dt: domain_t, t } = useTranslate('partner_request.ride_hailing.specific_content_editor');
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件 Props 定义 ====================
 export const rideHailingFormProps = {

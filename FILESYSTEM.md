@@ -84,10 +84,9 @@ Shared helpers:
 
 ### locale/
 
-- `index.ts` — i18n creation.
-- `use.ts` — `useTranslate()` helpers.
-- `uni-app.*.ts` — base locale bundles.
-- `en-US/`, `zh-Hans/` — language domain files.
+- `index.ts` — i18n creation using JSONC aggregates.
+- `schema.ts`, `types.ts`, `vue-i18n.d.ts` — typings derived from zh-Hans aggregate.
+- `en-US/`, `zh-Hans/` — global domain bundles in JSONC.
 
 ### styles/
 

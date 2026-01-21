@@ -20,20 +20,15 @@ If a component name conflicts with a built-in element name, prefix it with `PU`.
 ```vue
 <script setup lang="ts">
 import { defineProps, defineEmits, defineModel } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { compNameProps, compNameEmits } from './compName';
-import { useTranslate } from '@/locale';
+import { localMessages } from './compName.messages';
 
-// Props from separate module
 const props = defineProps(compNameProps);
-
-// Events from separate module
 const emit = defineEmits(compNameEmits);
-
-// v-model binding (when needed)
 const modelValue = defineModel<string>();
 
-// i18n
-const { dt, t } = useTranslate('domain_name');
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 // Component logic here
 </script>

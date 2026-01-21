@@ -1,110 +1,106 @@
 ---
 applyTo: "**/*.vue, **/composables/*.ts, **/use*.ts"
-description: "Vue.js framework idioms and best practices. Follow these guidelines when editing the template, script sections or composables"
+description: "Vue.js framework idioms and best practices under UniApp. Follow these guidelines when editing the template, script sections or composables"
 ---
 
-## 1. Syntax Usage
+## 1. UniApp & MiniProgram Constraints
 
-### 1.1 Component Definition
+### 1.1 Environment Restrictions (No DOM/BOM)
 
-[Mandatory] Use Composition API with `<script setup>` syntax.
+- [Critical] No `window` or `document`
+  - The MiniProgram logic layer runs in JSCore, not a browser.
+  - Forbidden: `window`, `document`, `navigator`, `localStorage`, `cookie`.
+  - Replacement:
+    - `window.innerWidth` -> `uni.getWindowInfo().windowWidth`
+    - `localStorage` -> `uni.setStorageSync` / `uni.getStorageSync`
+    - `alert` -> `uni.showModal` / `uni.showToast`
+    - `fetch` -> `uni.request`
 
-### 1.2 Reactivity
+## 1.2 Tag & Component Usage
 
-- [Recommended] Use ref for Primitives and Object References
-- [Recommended] Use shallowRef for Large Data Structures
-  - When dealing with large immutable datasets (e.g., large JSON trees from APIs, Map/GeoJSON data) that do not require deep reactivity, use shallowRef instead of ref.
-  - Usage: Trigger updates by replacing the entire .value, or use triggerRef for internal mutations.
-- [Standard] When accepting arguments in Composables that could be a value, a ref, or a getter, use toValue() (or unref in older versions) to normalize them.
-  ```ts
-  // Good: Flexible Composable Input
-  function useFeature(input) {
-    const value = toValue(input); // handles ref, getter, or raw value
-    // ...
-  }
-  ```
+- [Mandatory] Follow the [UniApp Native Component Guide](/docs/.agents/miniprogram-compatibility/native-components.md)
 
-### 1.3 Computed Properties
+Quick reference:
+
+- `<div>`, `<section>`, `<ul>`, `<li>` -> `<view>`
+- `<span>`, `<i>`, `<b>`, `<strong>` -> `<text>` (inline) or `<view>` (block)
+- `<img>` -> `<image>`
+- `<a>` -> `<navigator :url="...">`
+- `<select>` -> `<picker>`
+
+## 2. Lifecycle & Routing
+
+### 2.1 Dual Lifecycle Model
+
+- [Critical] Component vs. Page lifecycle
+  - Component hooks: `onMounted`, `onUnmounted` for reusable logic.
+  - Page hooks: `onLoad`, `onShow`, `onPullDownRefresh` for page init and data fetching.
+  - `onLoad` receives query params; `onMounted` does not.
+
+### 2.2 Routing
+
+- [Forbidden] `vue-router`
+  - UniApp uses its own routing based on `pages.json`.
+  - Use the `navigate` we wrapped from `src/utils/vendor`.
+
+## 3. Reactivity & Data Flow
+
+### 3.1 Granular State Control
+
+- [Recommended] Use `ref` for primitives and object references.
+- [Recommended] Use `shallowRef` for large immutable datasets to reduce bridge cost.
+  - Trigger updates by replacing `.value` or use `triggerRef` for internal mutation.
+
+### 3.2 toValue Normalization (Vue 3.3+)
+
+- [Standard] When accepting args that could be a value, a ref, or a getter, use `toValue()` (or `unref` in older versions).
+
+### 3.3 watch Timing & Cleanup
+
+- [Critical] watch defaults to `flush: 'pre'`.
+  - If accessing native UI nodes (via `uni.createSelectorQuery`), use `flush: 'post'` or `nextTick`.
+- [Mandatory] Use `onCleanup` to cancel stale requests/timers.
+
+## 4. Component Architecture
+
+### 4.1 Component Definition
+
+- [Mandatory] Use Composition API with `<script setup>` syntax.
+
+### 4.2 Computed Properties
 
 - [Mandatory] Use `computed(() => ...)` for derived state.
-- [Forbidden] Do not execute side effects (e.g., async requests, DOM modifications, state mutations) inside a computed getter. Computed properties must be pure functions.
+- [Forbidden] Do not execute side effects inside computed getters.
 
-### 1.4 watch Timing & Cleanup
+### 4.3 Dependency Injection (Provide/Inject)
 
-- [Critical] Understanding Flush Timing
-  - watch defaults to flush: 'pre' (runs before DOM update).
-  - If you need to access the updated DOM inside the watcher, use flush: 'post' (or watchPostEffect).
-- [Mandatory] Side Effect Cleanup
-  - Use the onCleanup callback in watchers to cancel stale network requests or timers.
-    ```ts
-    watch(id, async (newId, oldId, onCleanup) => {
-      const controller = new AbortController();
-      onCleanup(() => controller.abort());
-      data.value = await fetch(`/api/${newId}`, { signal: controller.signal });
-    });
-    ```
+- [Mandatory] Use `Symbol` keys for provide/inject.
+- [Pitfall] Provide reactivity (pass the `ref`, not `.value`).
+- [Standard] Use `readonly()` for provided state if children should not mutate it.
 
-## 2. Control Flow
+## 6. Common Pitfalls & Subtle Bugs
 
-### 2.1 Component Interface
+### 6.1 Z-Index Trap
 
-- [Advanced] Multiple `v-model` bindings
-  - Use specific names for `v-model` when a component manages multiple states, rather than generic props/emits.
-  - Syntax: `v-model:title="pageTitle"` -> `defineProps(['title'])` + `defineEmits(['update:title'])`.
-  - Use `const model = defineModel('title')`.
+- [Pitfall] Native components (`<map>`, `<video>`, `<canvas>`, `<textarea>`) cannot be covered by normal view elements.
+- Use `<cover-view>` / `<cover-image>` for overlays.
 
-### 2.3 Dependency Injection (Provide/Inject)
+### 6.3 Global Event Bus
 
-- [Mandatory] Injection Keys
-  - Always use Symbol as keys for provide/inject to avoid name collisions.
-- [Pitfall] Reactivity Gaps
-  - When providing a reactive object, ensure it is wrapped in ref or reactive. If you provide a raw value (e.g., provide('count', count.value)), the consumer receives a static value. Provide the ref itself.
-  - Read-only: Use readonly() on provided state if the child should not mutate it.
+- [Standard] Use `uni.$emit` / `uni.$on` for cross-page events and always `uni.$off` in `onUnmounted`.
 
+### 6.4 nextTick Necessity
 
-## 3. Common Pitfalls & Subtle Bugs
+- [Pitfall] Mutating state and immediately reading DOM size/scroll values, Use `nextTick()` before measuring UI.
 
-### 3.1 nextTick Necessity
+## 7. Formatting & Style
 
-- [Pitfall] Mutating state and immediately trying to read the DOM height/width/scroll position.
-  - Fix: Vue updates the DOM asynchronously. You must await nextTick() after state mutation before measuring DOM.
-  ```ts
-    const addItem = async () => {
-    list.value.push(newItem);
-    await nextTick();
-    listContainer.value.scrollTop = listContainer.value.scrollHeight;
-  };
-  ```
+### 7.1 Naming Conventions
 
-## 4. Formatting & Style
+- Name event handlers with `on<Element><Event>` (e.g., `onButtonClick`).
 
-### 4.1 Naming Conventions
-- Name event handler with `on<Element><Event>` (eg. `onButtonClick`)
+## 8. Documentation
 
-## 5. Documentation
+### 8.1 Sections Division
 
-### 5.1 Sections Division
-
-- [Recommended] Separate data, computed, methods, and lifecycle hooks into distinct sections within the `<script setup>` block using comments.
-  ```ts
-  // --- data ---
-  const count = ref(0);
-
-  // --- computed ---
-  const doubleCount = computed(() => count.value * 2);
-
-  // --- methods ---
-  function increment() {
-    count.value++;
-  }
-
-  // --- watchers ---
-  watch(count, (newVal) => {
-    console.log('Count changed to', newVal);
-  });
-
-  // --- lifecycle hooks ---
-  onMounted(() => {
-    console.log('Component mounted');
-  });
-  ```
+- [Recommended] Separate data, computed, methods, watchers, and lifecycle hooks into distinct sections within `<script setup>` using comments.

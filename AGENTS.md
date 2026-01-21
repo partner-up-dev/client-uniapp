@@ -41,8 +41,8 @@ See [src/business/AGENTS.md](src/business/AGENTS.md) for business layer developm
 
 ## i18n
 
-- i18n setup: `src/locale/index.ts` + `src/locale/use.ts` (`useTranslate`).
-- Avoid hard-coded text; use `useTranslate` and `dt()`.
+- i18n setup: `src/locale/index.ts` loads JSONC aggregates (`src/locale/zh-Hans/*.jsonc`, `src/locale/en-US/*.jsonc`) and derives types from zh-Hans.
+- Avoid hard-coded text; use `useI18n`. Prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })`; use global `t` for shared keys.
 
 ## Styling
 
@@ -77,3 +77,15 @@ See `.env.example` for required variables: `VITE_BACKEND_MAIN_URL`, `VITE_PGRST_
 - Dev (Weixin): `pnpm dev:mp-weixin`
 - Tests: `pnpm test:h5` or `pnpm test:mp-weixin`
 - Type check: `pnpm type-check`
+
+## Development Guidelines
+
+- Before starting any work in a directory, check whether the following documents exist in that directory.
+  If any of them exist, you MUST read only those that are relevant to the current task.
+  If the relevant documents are outdated or inconsistent with the current state, you MUST update them immediately.
+  The documents are:
+  - `AGENTS.md`
+  - `ARCHITECTURE.md`
+  - `FILESYSTEM.md`: Lists the files in the current directory and its subdirectories (unless a subdirectory has its own `FILESYSTEM.md`) and briefly explains their purposes.
+  - `compName.md`
+  - `moduleName.md`

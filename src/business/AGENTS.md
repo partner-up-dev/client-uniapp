@@ -15,7 +15,7 @@ This folder contains the domain models and API clients used by pages/components.
 
 - HTTP: use `HTTPApiClient` and return `body.parsed` with an explicit schema.
 - DB: use `DBApiClient` for PostgREST queries; keep auth headers in sync.
-- Use `useTranslate()` / `dt()` for API error strings and user-facing text.
+- Use the app composer (`t` from `src/locale`) for API/user-facing messages; keep text in the global JSONC bundles.
 
 ## Forms and validation
 

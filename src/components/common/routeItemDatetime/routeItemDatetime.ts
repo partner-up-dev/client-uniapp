@@ -1,5 +1,12 @@
 import type { PropType } from "vue";
 import type { RouteItemDatetime } from "@/business/base/route";
+import enUs from "./routeItemDatetime.en-US.jsonc";
+import zhHans from "./routeItemDatetime.zh-Hans.jsonc";
+
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件 Props 定义 ====================
 export const routeItemDatetimeProps = {

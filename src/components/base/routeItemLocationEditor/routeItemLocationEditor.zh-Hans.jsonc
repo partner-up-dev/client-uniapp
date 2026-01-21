@@ -1,0 +1,26 @@
+{
+  "field": {
+    "friendly_address": {
+      "title": "地点名称",
+      "subtitle": "例如：学校、公司、家",
+      "placeholder": "请输入地点名称"
+    },
+    "address": {
+      "title": "详细地址",
+      "placeholder": "点击选择地址"
+    }
+  },
+  "button": {
+    "choose_location": "选择地点",
+    "cancel": "取消",
+    "confirm": "确认"
+  },
+  "toast": {
+    "save_success": "保存成功",
+    "save_failed": "保存失败"
+  },
+  "validation": {
+    "location_required": "请选择地点",
+    "friendly_address_required": "请输入地点名称"
+  }
+}

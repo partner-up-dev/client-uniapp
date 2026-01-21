@@ -6,7 +6,7 @@ import { ChatRefV } from '../communication';
 import { PartnerRoleRefV } from './partner';
 import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
-import { useTranslate } from '@/locale';
+import { t } from '@/locale';
 import { DatetimeV } from '../base';
 
 export type PartnerApplicationRef = number;
@@ -50,9 +50,11 @@ export class PartnerApplication extends V.class(v.object({
   sub_applications: SubApplicationsV,
 })) {
 
+  private static dt = (key: string): string => t(`partner_request.application.${key}`);
+
   static mainClient = new HTTPApiClient<typeof PartnerApplication>({
     modulePrefix: '/partner_request/application',
-    dt: useTranslate('partner_request.application').dt,
+    dt: PartnerApplication.dt,
     fallbackSchema: PartnerApplication,
   });
 

@@ -5,7 +5,7 @@ import { decompressPolyline, QQMapSDK } from "@/utils/lbs/index.js";
 import { QQMapDirectionMode, type QQMapDirectionResult } from "@/utils/lbs/types";
 import log from "@/utils/log";
 import { errorReport } from "@/utils/vendor";
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { useBaseLocationStore } from "@/store/base/location";
 import store from "@/store";
 import { HTTPApiClient } from "@/business/http-api";
@@ -14,7 +14,8 @@ import dayjs from "dayjs";
 import { DatetimeV } from ".";
 import md5 from 'crypto-js/md5';
 
-const { dt } = useTranslate('base.route_map');
+const routeMapDt = (key: string): string => t(`base.route_map.${key}`);
+const locationDt = (key: string): string => t(`base.location.${key}`);
 
 export type LocationRef = string;
 export const LocationRefV = v.string();
@@ -28,7 +29,7 @@ export class Location extends V.class(v.object({
 })) {
   static mainClient = new HTTPApiClient<typeof Location>({
     modulePrefix: '/base/location',
-    dt: useTranslate('base.location').dt,
+    dt: locationDt,
     fallbackSchema: Location,
   });
 
@@ -233,14 +234,14 @@ export class RoutePlanning extends V.class(v.object({
                   });
                 });
               } else {
-                errorReport(dt('toast.fail_to_plan'));
+                errorReport(routeMapDt('toast.fail_to_plan'));
               }
               loading.value = false;
             },
             fail: (errors: any) => {
               loading.value = false;
               log.error(errors);
-              errorReport(dt('toast.fail_to_plan'));
+              errorReport(routeMapDt('toast.fail_to_plan'));
             }
           });
         }

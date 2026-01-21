@@ -2,7 +2,7 @@ import * as v from "valibot";
 import { V, nullable, instance } from "../index";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { AccountRefV } from "../account";
 import { Message } from "./message";
 import { type ChatRef, ChatRefV } from ".";
@@ -21,6 +21,8 @@ export enum ChatStatus {
   Blocked = "blocked",
 }
 
+const chatDt = (key: string): string => t(`communication.chat.${key}`);
+
 export class Chat extends V.class(v.object({
   _id: ChatRefV,
   created_at: DatetimeV,
@@ -36,7 +38,7 @@ export class Chat extends V.class(v.object({
   // API client for Chat-related endpoints
   static mainClient = new HTTPApiClient({
     modulePrefix: '/chat',
-    dt: useTranslate('chat').dt,
+    dt: chatDt,
     fallbackSchema: Chat,
   });
 

@@ -2,9 +2,13 @@ import type { PropType } from "vue";
 import { PRType, PRStatus, type PRRef } from "@/business/partner_request";
 import { PartnerRequest } from "@/business/partner_request/base";
 import { type AccountRef } from "@/business/account";
-import { useTranslate } from "@/locale";
+import enUs from "./PRCard.en-US.jsonc";
+import zhHans from "./PRCard.zh-Hans.jsonc";
 
-const { dt } = useTranslate('partner_request');
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件 Props 定义 ====================
 export const prCardProps = {
@@ -72,6 +76,6 @@ export function generateMockPartners(count: number = 3): AccountRef[] {
  * @param type 搭子类型
  * @returns 格式化后的类型文本
  */
-export function formatPRType(type: PRType): string {
-  return dt(`type.${type}`) || "未知";
+export function formatPRType(type: PRType, t: (key: string) => string): string {
+  return t(`type.${type}`) || t('type.undefined');
 }

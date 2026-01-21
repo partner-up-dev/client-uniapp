@@ -1,4 +1,4 @@
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { PRRefV, PRType } from ".";
 import { AccountRefV } from "../account";
 import { HTTPApiClient } from "../http-api";
@@ -13,6 +13,8 @@ import { usePartnerStore } from "@/store/partner_request/partner";
 export type PartnerRoleRef = number;
 export const PartnerRoleRefV = v.number();
 
+const partnerRoleDt = (key: string): string => t(`partner_request.partner_role.${key}`);
+
 export class PartnerRole extends V.class(v.object({
   id: PartnerRoleRefV,
   name: v.string(),
@@ -21,7 +23,7 @@ export class PartnerRole extends V.class(v.object({
 })) {
   static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/partner_role',
-    dt: useTranslate('partner_request.partner_role').dt,
+    dt: partnerRoleDt,
     fallbackSchema: PartnerRole,
   })
 

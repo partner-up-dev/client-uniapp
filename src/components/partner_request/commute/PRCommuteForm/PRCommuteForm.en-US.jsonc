@@ -1,0 +1,26 @@
+{
+  "collapse_title": {
+    "route": "Commute route",
+    "time": "Commute time",
+    "transportation": "Transport"
+  },
+  "on_at": {
+    "title": "Start work time",
+    "label": "When to leave from home"
+  },
+  "off_at": {
+    "title": "End work time",
+    "label": "When to leave from office"
+  },
+  "workdays": {
+    "title": "Workdays"
+  },
+  "transportation": {
+    "title": "Transportation",
+    "placeholder": "Tap to select"
+  },
+  "rules": {
+    "either_or_on_off_at": "Provide either start or end time",
+    "workdays_required": "Select at least one workday"
+  }
+}

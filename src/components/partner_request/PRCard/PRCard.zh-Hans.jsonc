@@ -1,0 +1,19 @@
+{
+  "type": {
+    "null": "未知搭子",
+    "undefined": "未知搭子",
+    "ride_hailing": "网约车搭子",
+    "travel": "旅游搭子",
+    "trip": "出行搭子",
+    "commute": "通勤搭子",
+    "moped": "电驴搭子",
+    "hitchhiking": "便车搭子"
+  },
+  "placeholder": {
+    "primary": "搭子请求主要内容概览",
+    "secondary": "搭子请求次要内容概览"
+  },
+  "actions": {
+    "join": "加入"
+  }
+}

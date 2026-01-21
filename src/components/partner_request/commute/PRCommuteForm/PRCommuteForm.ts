@@ -1,11 +1,15 @@
 // Types of component:partner_request:commute:commuteDatetimeForm
 
-import { useTranslate } from "@/locale";
 import type { Weekday } from "@/business/base";
 import { CommutePRForm } from "@/business/partner_request/commute";
 import type { PropType } from "vue";
+import enUs from "./PRCommuteForm.en-US.jsonc";
+import zhHans from "./PRCommuteForm.zh-Hans.jsonc";
 
-export const { dt: domain_t, t } = useTranslate('partner_request.commute.specific_content_editor');
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件 Props 定义 ====================
 export const commuteDatetimeFormProps = {

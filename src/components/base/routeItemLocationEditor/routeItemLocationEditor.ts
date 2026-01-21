@@ -2,6 +2,13 @@ import type { PropType } from "vue";
 import { makeStringProp, makeBooleanProp } from "@/utils/props";
 import type { LocationRef } from "@/business/base/route";
 import type { Location } from "@/business/base/route";
+import enUs from "./routeItemLocationEditor.en-US.jsonc";
+import zhHans from "./routeItemLocationEditor.zh-Hans.jsonc";
+
+export const localMessages = {
+  "zh-Hans": zhHans,
+  "en-US": enUs,
+} as const;
 
 // ==================== 组件相关类型定义 ====================
 
@@ -58,20 +65,23 @@ export const routeItemLocationEditorEmits = {
  * @param location 待验证的地点数据
  * @returns 错误信息，如果验证通过则返回空字符串
  */
-export function validateLocation(location: Partial<Location>): string {
+export function validateLocation(
+  location: Partial<Location>,
+  t: (key: string) => string,
+): string {
   // 检查经纬度是否有效
   if (location.lat === undefined || location.lng === undefined || location.lat === 0) {
-    return "请选择地点";
+    return t("validation.location_required");
   }
 
   // 检查地址数组是否为空
   if (!location.address || location.address.length === 0) {
-    return "请选择地点";
+    return t("validation.location_required");
   }
 
   // 检查地址昵称
   if (!location.friendly_address || location.friendly_address.trim() === "") {
-    return "请输入地点名称";
+    return t("validation.friendly_address_required");
   }
 
   return "";

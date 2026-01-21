@@ -10,12 +10,12 @@ import { BasicComponentOptions } from "@/utils/vue";
 import {
   commuteDatetimeFormProps,
   commuteDatetimeFormEmits,
-  domain_t,
-  t,
+  localMessages,
   type CommuteDatetimeFormExpose,
 } from "./PRCommuteForm";
 import type { Weekday } from "@/business/base";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import PuAccordion from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordion.vue";
 import PuAccordionItem from "@partner-up-dev/design-uniapp/components/puAccordion/puAccordionItem.vue";
 import PuCheckbox from "@partner-up-dev/design-uniapp/components/puCheckbox/puCheckbox.vue";
@@ -28,6 +28,7 @@ import RouteEditor from "@/components/base/routeEditor/routeEditor.vue";
 
 const props = defineProps(commuteDatetimeFormProps);
 const emit = defineEmits(commuteDatetimeFormEmits);
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 // data
 const activeNames = ref<string[]>(["route", "time"]);
@@ -66,44 +67,85 @@ const weekdayOptions: Weekday[] = [
 <template>
   <view class="commute-datetime-form">
     <PuAccordion v-model="activeNames">
-      <PuAccordionItem name="route" :title="domain_t('collapse_title.route')">
+      <PuAccordionItem name="route" :title="lt('collapse_title.route')">
         <view class="space-p-y-med">
           <PuFormItem prop="route" :includeSub="true">
-            <RouteEditor ref="routeEditorRef" :modelValue="props.form.route" type="normal" :disableDatetime="true" />
+            <RouteEditor
+              ref="routeEditorRef"
+              :modelValue="props.form.route"
+              type="normal"
+              :disableDatetime="true"
+            />
           </PuFormItem>
         </view>
       </PuAccordionItem>
 
-      <PuAccordionItem name="time" :title="domain_t('collapse_title.time')">
+      <PuAccordionItem name="time" :title="lt('collapse_title.time')">
         <!-- 上班时间 -->
         <picker mode="time" :value="form.on_at || ''" @change="handleOnAtChange">
-          <Cell type="horizontal" size="large" :title="domain_t('on_at.title')"
-            :value="form.on_at || domain_t('on_at.label')" suffix-icon="i-mdi-chevron-right" />
+          <Cell
+            type="horizontal"
+            size="large"
+            :title="lt('on_at.title')"
+            :value="form.on_at || lt('on_at.label')"
+            suffix-icon="i-mdi-chevron-right"
+          />
         </picker>
 
         <!-- 下班时间 -->
-        <picker mode="time" :value="form.off_at || ''" @change="handleOffAtChange">
-          <Cell type="horizontal" size="large" :title="domain_t('off_at.title')"
-            :value="form.off_at || domain_t('off_at.label')" suffix-icon="i-mdi-chevron-right" />
+        <picker
+          mode="time"
+          :value="form.off_at || ''"
+          @change="handleOffAtChange"
+        >
+          <Cell
+            type="horizontal"
+            size="large"
+            :title="lt('off_at.title')"
+            :value="form.off_at || lt('off_at.label')"
+            suffix-icon="i-mdi-chevron-right"
+          />
         </picker>
 
         <!-- 工作日 -->
-        <Cell type="vertical" size="large" :title="domain_t('workdays.title')">
+        <Cell type="vertical" size="large" :title="lt('workdays.title')">
           <template #value>
-            <PuCheckboxGroup v-model="form.workdays" :min="1" inline @change="onFormChange('workdays')">
-              <PuCheckbox v-for="day in weekdayOptions" :key="day" :model-value="day" shape="button" size="small">
-                {{ t(`base.weekday.${day}`) }}
+            <PuCheckboxGroup
+              v-model="form.workdays"
+              :min="1"
+              inline
+              @change="onFormChange('workdays')"
+            >
+              <PuCheckbox
+                v-for="day in weekdayOptions"
+                :key="day"
+                :model-value="day"
+                shape="button"
+                size="small"
+              >
+                {{ lt(`base.weekday.${day}`) }}
               </PuCheckbox>
             </PuCheckboxGroup>
           </template>
         </Cell>
       </PuAccordionItem>
 
-      <PuAccordionItem name="transportation" :title="domain_t('collapse_title.transportation')">
-        <Cell type="horizontal" size="large" :title="domain_t('transportation.title')" :value="form.transportation
-          ? t(`base.transportation_picker.name.${form.transportation}`)
-          : domain_t('transportation.placeholder')
-          " suffix-icon="i-mdi-chevron-right" @click="transPickerVisible = true" />
+      <PuAccordionItem
+        name="transportation"
+        :title="lt('collapse_title.transportation')"
+      >
+        <Cell
+          type="horizontal"
+          size="large"
+          :title="lt('transportation.title')"
+          :value="
+            form.transportation
+              ? lt(`base.transportation_picker.name.${form.transportation}`)
+              : lt('transportation.placeholder')
+          "
+          suffix-icon="i-mdi-chevron-right"
+          @click="transPickerVisible = true"
+        />
       </PuAccordionItem>
     </PuAccordion>
 
@@ -114,10 +156,13 @@ const weekdayOptions: Weekday[] = [
 
     <!-- Transportation Picker Drawer -->
     <PuDrawer v-model:visible="transPickerVisible" position="bottom">
-      <TransportationPicker v-model="form.transportation" @select="
-        onFormChange('transportation');
-      transPickerVisible = false;
-      " />
+      <TransportationPicker
+        v-model="form.transportation"
+        @select="
+          onFormChange('transportation');
+          transPickerVisible = false;
+        "
+      />
     </PuDrawer>
   </view>
 </template>

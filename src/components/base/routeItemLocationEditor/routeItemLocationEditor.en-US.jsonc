@@ -1,0 +1,26 @@
+{
+  "field": {
+    "friendly_address": {
+      "title": "Place name",
+      "subtitle": "e.g. school, office, home",
+      "placeholder": "Enter place name"
+    },
+    "address": {
+      "title": "Address",
+      "placeholder": "Tap to choose address"
+    }
+  },
+  "button": {
+    "choose_location": "Choose location",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "toast": {
+    "save_success": "Saved",
+    "save_failed": "Save failed"
+  },
+  "validation": {
+    "location_required": "Please choose a location",
+    "friendly_address_required": "Please enter a place name"
+  }
+}

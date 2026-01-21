@@ -1,7 +1,7 @@
 import { Partner } from "./partner";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { computed, ref, watch } from "vue";
 import { instance, V, nullable, limit_string } from "../index";
 import { type PRRef, PRRefV, PRType, PRStatus, PRL1Type, PRType2L1Type } from ".";
@@ -10,6 +10,8 @@ import { DatetimeV } from "../base";
 
 // Export PartnerRequestForm from form.ts
 export { PartnerRequestForm } from "./form";
+
+const dt = (key: string): string => t(`partner_request.${key}`);
 
 
 export class PartnerRequest extends V.class(v.object({
@@ -29,7 +31,7 @@ export class PartnerRequest extends V.class(v.object({
 
   static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request',
-    dt: useTranslate('partner_request').dt,
+    dt,
     fallbackSchema: PartnerRequest,
   })
 

@@ -1,0 +1,39 @@
+{
+  "toast": {
+    "fail_to_plan": "路线规划失败",
+    "fail_to_set_markers": "标记点设置失败",
+    "fail_to_add_markers": "标记点添加失败",
+    "fail_to_remove_markers": "标记点移除失败",
+    "fail_to_obtain_map_context": "无法操作地图",
+    "fail_to_include_points": "无法调整视野",
+    "fail_to_move_to_location": "无法移动中心"
+  },
+  "marker": {
+    "from": "出发地",
+    "to": "目的地",
+    "waypoint": "途经点{index}"
+  },
+  "static_driven_info": {
+    "fare": {
+      "taxi_fare": "打车约",
+      "unit": "￥"
+    },
+    "distance": {
+      "unit": "km"
+    },
+    "duration": {
+      "unit": "min"
+    }
+  },
+  "dynamic_driven_info": {
+    "speed": {
+      "unit": "km/h"
+    },
+    "duration": {
+      "unit": "min"
+    },
+    "distance": {
+      "unit": "km"
+    }
+  }
+}

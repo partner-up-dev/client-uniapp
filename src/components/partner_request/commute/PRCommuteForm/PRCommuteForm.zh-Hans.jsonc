@@ -1,0 +1,26 @@
+{
+  "collapse_title": {
+    "route": "通勤路线",
+    "time": "通勤时间",
+    "transportation": "交通"
+  },
+  "on_at": {
+    "title": "上班时间",
+    "label": "何时从家里出发"
+  },
+  "off_at": {
+    "title": "下班时间",
+    "label": "何时从公司出发"
+  },
+  "workdays": {
+    "title": "工作日"
+  },
+  "transportation": {
+    "title": "交通方式",
+    "placeholder": "点击选择"
+  },
+  "rules": {
+    "either_or_on_off_at": "上下班时间必须填写一个",
+    "workdays_required": "工作日至少一天"
+  }
+}

@@ -3,6 +3,13 @@
 import type { LocationRef } from "@/business/base/route";
 import { makeBooleanProp, makeStringProp } from "@/utils/props";
 import type { PropType } from "vue";
+import enUs from "./locationPicker.en-US.jsonc";
+import zhHans from "./locationPicker.zh-Hans.jsonc";
+
+export const localMessages = {
+    "zh-Hans": zhHans,
+    "en-US": enUs,
+} as const;
 
 export const LocationPickerProps = {
     /**

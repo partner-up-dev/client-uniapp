@@ -1,6 +1,6 @@
 import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
-import { useTranslate } from '@/locale';
+import { t } from '@/locale';
 import { instance } from '..';
 import * as v from 'valibot';
 import { V } from '..';
@@ -13,6 +13,8 @@ import { PartnerForm } from './partner';
 
 export type RideHailingOrderRef = number;
 export const RideHailingOrderRefV = v.number();
+
+const dt = (key: string): string => t(`partner_request.${key}`);
 
 export class RideHailingPreference extends V.class(v.object({
   ride_types: v.optional(v.array(v.string()), () => [])
@@ -32,7 +34,7 @@ export class RideHailingPR extends PartnerRequest.extend(v.object({
 
   static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/ride_hailing',
-    dt: useTranslate('partner_request').dt,
+    dt,
     fallbackSchema: RideHailingPR,
   });
 

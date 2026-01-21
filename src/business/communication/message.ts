@@ -5,12 +5,14 @@ import store from "@/store";
 import { AccountRefV } from "../account";
 import { HTTPApiClient } from "../http-api";
 import { DBApiClient } from "../db-api";
-import { useTranslate } from "@/locale";
+import { t } from "@/locale";
 import { DatetimeV } from "../base";
 import { ChatRefV } from ".";
 
 export type MessageRef = number;
 export const MessageRefV = v.number();
+
+const messageDt = (key: string): string => t(`communication.message.${key}`);
 
 export enum MessageType {
   Plain = "plain",
@@ -53,7 +55,7 @@ export class Message extends V.class(v.object({
   // API client for Message-related endpoints
   static mainClient = new HTTPApiClient({
     modulePrefix: '/chat',
-    dt: useTranslate('chat.message').dt,
+    dt: messageDt,
     fallbackSchema: Message,
   });
 

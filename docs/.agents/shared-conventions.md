@@ -16,18 +16,9 @@ Common conventions that apply to all Vue components, pages, and UI code in this 
 ## i18n (internationalization)
 
 - **Never hard-code text**: All user-facing text must use localization
-- **Use `useTranslate()`**: Import from `src/locale/use.ts`
-- **Domain-scoped translations**: Use `dt()` for domain-specific keys
-- **Global translations**: Use `t()` for common/shared keys
-
-Example:
-
-```typescript
-const { dt, t } = useTranslate("domain_name");
-
-dt("welcome.greeting")  // looks up "domain_name.welcome.greeting"
-t("common.yes")         // looks up "common.yes"
-```
+- **Global keys**: use the app composer via `useI18n()` and call fully qualified keys (e.g., `common.button.confirm`).
+- **Local scope**: for component/page text, provide `localMessages` and call `useI18n({ inheritLocale: true, messages: localMessages })`, then use the returned `t` (commonly aliased `lt`).
+- **Placeholders**: use named placeholders (`{value}`) in JSONC; avoid function-style interpolation.
 
 ## Error handling
 
@@ -57,7 +48,7 @@ t("common.yes")         // looks up "common.yes"
 **Core utilities**:
 
 - `src/utils/vendor.ts` — `navigate()`, `errorReport()`, UniApp helpers
-- `src/locale/use.ts` — `useTranslate()` hook
+- `src/locale/index.ts` — i18n and global composer
 - `src/utils/format.ts`, `src/utils/string.ts` — formatting helpers
 - `src/utils/time.ts` — time/datetime utilities
 

@@ -8,7 +8,7 @@ export default {
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
-import { useTranslate } from "@/locale";
+import { useI18n } from "vue-i18n";
 import { usePickLocation } from "@/components/base/locationPicker/usePickLocation";
 import { Location, type LocationRef } from "@/business/base/route";
 import { useBaseLocationStore } from "@/store/base/location";
@@ -18,6 +18,7 @@ import {
   routeItemLocationEditorEmits,
   validateLocation,
   FRIENDLY_ADDRESS_MAX_LENGTH,
+  localMessages,
 } from "./routeItemLocationEditor";
 import Cell from "@/components/common/cell/cell.vue";
 import PuInput from "@partner-up-dev/design-uniapp/components/puInput/puInput.vue";
@@ -26,7 +27,7 @@ import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton
 const props = defineProps(routeItemLocationEditorProps);
 const emit = defineEmits(routeItemLocationEditorEmits);
 
-const { dt } = useTranslate("base.route_item_location_editor");
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 // ==================== State ====================
 
@@ -83,7 +84,7 @@ function onCancelClick() {
 
 async function onConfirmClick() {
   // 验证地点数据
-  const validationError = validateLocation(currentLocation.value);
+  const validationError = validateLocation(currentLocation.value, lt);
   if (validationError) {
     errorMessage.value = validationError;
     uni.showToast({
@@ -117,16 +118,16 @@ async function onConfirmClick() {
       emit("confirm", currentLocation.value as Location);
 
       uni.showToast({
-        title: dt("toast.save_success"),
+        title: lt("toast.save_success"),
         icon: "success",
       });
     } else {
       throw new Error("Failed to get location ID");
     }
   } catch (error) {
-    errorMessage.value = dt("toast.save_failed");
+    errorMessage.value = lt("toast.save_failed");
     uni.showToast({
-      title: dt("toast.save_failed"),
+      title: lt("toast.save_failed"),
       icon: "none",
     });
   } finally {
@@ -183,15 +184,15 @@ defineExpose({
     <view class="route-item-location-editor__form">
       <!-- 地点名称输入框 -->
       <Cell
-        :title="dt('field.friendly_address.title')"
-        :subtitle="dt('field.friendly_address.subtitle')"
+        :title="lt('field.friendly_address.title')"
+        :subtitle="lt('field.friendly_address.subtitle')"
         type="default"
         size="small"
       >
         <template #value>
           <PuInput
             v-model="currentLocation.friendly_address"
-            :placeholder="dt('field.friendly_address.placeholder')"
+            :placeholder="lt('field.friendly_address.placeholder')"
             :maxlength="FRIENDLY_ADDRESS_MAX_LENGTH"
             :show-word-limit="true"
             size="large"
@@ -201,7 +202,7 @@ defineExpose({
 
       <!-- 地址选择 -->
       <Cell
-        :title="dt('field.address.title')"
+        :title="lt('field.address.title')"
         type="default"
         size="small"
         suffix-icon="i-mdi-chevron-right"
@@ -216,7 +217,7 @@ defineExpose({
                 : '',
             ]"
           >
-            {{ hasAddress ? addressDisplay : dt("field.address.placeholder") }}
+            {{ hasAddress ? addressDisplay : lt("field.address.placeholder") }}
           </text>
         </template>
       </Cell>
@@ -231,7 +232,7 @@ defineExpose({
     <view class="route-item-location-editor__operations">
       <view class="route-item-location-editor__choose-btn">
         <PuButton
-          :text="dt('button.choose_location')"
+          :text="lt('button.choose_location')"
           theme="SurfaceOutlined"
           type="WithText"
           size="Medium"
@@ -241,7 +242,7 @@ defineExpose({
 
       <view class="route-item-location-editor__cancel-btn">
         <PuButton
-          :text="dt('button.cancel')"
+          :text="lt('button.cancel')"
           theme="SurfaceOutlined"
           type="WithText"
           size="Medium"
@@ -251,7 +252,7 @@ defineExpose({
 
       <view class="route-item-location-editor__confirm-btn">
         <PuButton
-          :text="dt('button.confirm')"
+          :text="lt('button.confirm')"
           theme="Primary"
           type="WithText"
           size="Medium"

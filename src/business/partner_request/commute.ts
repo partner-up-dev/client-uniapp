@@ -1,6 +1,6 @@
 import { HTTPApiClient } from '../http-api';
 import { DBApiClient } from '../db-api';
-import { useTranslate } from '@/locale';
+import { t } from '@/locale';
 import { instance } from '..';
 import * as v from 'valibot';
 import { V } from '..';
@@ -11,6 +11,8 @@ import { Route, RouteForm } from '../base/route';
 import { TripPreference } from './trip';
 import { WeekdayV, TransportationV } from '../base';
 import { PartnerForm } from './partner';
+
+const dt = (key: string): string => t(`partner_request.${key}`);
 
 /**
  * 通勤搭子请求
@@ -27,7 +29,7 @@ export class CommutePR extends PartnerRequest.extend(v.object({
 
   static mainClient = new HTTPApiClient({
     modulePrefix: '/partner_request/commute',
-    dt: useTranslate('partner_request').dt,
+    dt,
     fallbackSchema: CommutePR,
   });
 

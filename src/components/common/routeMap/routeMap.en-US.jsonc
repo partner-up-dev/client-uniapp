@@ -1,0 +1,39 @@
+{
+  "toast": {
+    "fail_to_plan": "Route planning failed",
+    "fail_to_set_markers": "Failed to set markers",
+    "fail_to_add_markers": "Failed to add markers",
+    "fail_to_remove_markers": "Failed to remove markers",
+    "fail_to_obtain_map_context": "Cannot operate map",
+    "fail_to_include_points": "Failed to fit points",
+    "fail_to_move_to_location": "Failed to move center"
+  },
+  "marker": {
+    "from": "From",
+    "to": "To",
+    "waypoint": "Waypoint {index}"
+  },
+  "static_driven_info": {
+    "fare": {
+      "taxi_fare": "Taxi fare",
+      "unit": "¥"
+    },
+    "distance": {
+      "unit": "km"
+    },
+    "duration": {
+      "unit": "min"
+    }
+  },
+  "dynamic_driven_info": {
+    "speed": {
+      "unit": "km/h"
+    },
+    "duration": {
+      "unit": "min"
+    },
+    "distance": {
+      "unit": "km"
+    }
+  }
+}

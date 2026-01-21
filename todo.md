@@ -22,10 +22,11 @@
 - [ ] PR Create Use type specific form
 - [ ] 重构国际化
   - [x] messages 模块化杂乱不清晰且过度设计
-  - [ ] typescript 与 i18n Ally 兼容性不好，换成 json
+  - [ ] typescript 与 i18n Ally 兼容性不好，换成 jsonc；（用了函数的全部换成 NamedFormatting）
   - [x] 工程化: lint (eslint-plugin-vue-i18n), Type Schema, automation (vue-i18n-extract)
-  - use 的拆分是没有必要的，直接放在 index 里就行
-  - src/locales/AGENTS.md, and <>
+  - [x] use 的拆分是没有必要的，直接放在 index 里就行
+  - [ ] src/locales/AGENTS.md, and <https://gitee.com/penghg/uni-i18n>
+  - [ ] 参数化测试（先看看官方的可以吗，说不定好了）
 
 ## Auth & Profile (注册/登录/资料)
 

@@ -6,19 +6,24 @@ export default {
 </script>
 <script setup lang="ts">
 import { BasicComponentOptions } from "@/utils/vue";
-import { FieldEmits, FieldProps, type FieldValueType } from "./field";
+import {
+  FieldEmits,
+  FieldProps,
+  localMessages,
+  type FieldValueType,
+} from "./field";
 import PuPicker from "@partner-up-dev/design-uniapp/components/puPicker/puPicker.vue";
 import LocationPicker from "@/components/base/locationPicker/locationPicker.vue";
 import { withFallback } from "@/utils";
 import type { LocationRef } from "@/business/base/route";
 import { useBaseLocationStore } from "@/store/base/location";
 import { computed, ref, watch } from "vue";
-import { useTranslate } from "@/locale";
+import { useI18n } from "vue-i18n";
 // import GetPhoneNumber from "@/components/account/getPhoneNumber/getPhoneNumber.vue";
 
-const { dt } = useTranslate("common.field");
 const props = defineProps(FieldProps);
 const emit = defineEmits(FieldEmits);
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 // data
 const innner_value = ref<FieldValueType>(props.value);
@@ -29,11 +34,11 @@ const editor_activating = ref(false);
 const inValuePlaceholder = computed((): string => {
   if (!props.valuePlaceholder) {
     if (["common_picker", "location_picker"].includes(props.editorType)) {
-      return dt("placeholder.picker");
+      return lt("placeholder.picker");
     } else if (props.editorType === "common_input") {
-      return dt("placeholder.input");
+      return lt("placeholder.input");
     }
-    return dt("placeholder.empty");
+    return lt("placeholder.empty");
   }
   return props.valuePlaceholder;
 });

@@ -11,10 +11,11 @@ import { computed } from "vue";
 import {
   routeItemDatetimeProps,
   routeItemDatetimeEmits,
+  localMessages,
 } from "./routeItemDatetime";
-import { useTranslate } from "@/locale";
+import { useI18n } from "vue-i18n";
 
-const { dt } = useTranslate("base.route_item_datetime");
+const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
 
 const props = defineProps(routeItemDatetimeProps);
 defineEmits(routeItemDatetimeEmits);
@@ -31,10 +32,10 @@ if (!props.datetime)
       </text>
     </view>
     <view class="no-bring-ahead" v-if="props.datetime.bring_ahead === 0">{{
-      dt("no_bring_ahead")
+      lt("no_bring_ahead")
     }}</view>
     <view class="no-put-off" v-if="props.datetime.put_off === 0">{{
-      dt("no_put_off")
+      lt("no_put_off")
     }}</view>
   </view>
 </template>

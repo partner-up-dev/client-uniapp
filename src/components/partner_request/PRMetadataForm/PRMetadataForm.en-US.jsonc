@@ -1,0 +1,10 @@
+{
+  "title": {
+    "title": "Title",
+    "placeholder": "Key topic for this activity"
+  },
+  "introduction": {
+    "title": "Introduction",
+    "placeholder": "Additional notes"
+  }
+}

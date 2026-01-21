@@ -95,19 +95,9 @@ Stores live in `src/store/<domain>/` and follow the Pinia pattern.
 
 ## i18n integration
 
-All text is localized via `useTranslate()`:
+All text is localized via `useI18n`. For component/page text, provide `localMessages` next to the Vue file and call `useI18n({ inheritLocale: true, messages: localMessages })` (alias the returned `t` to `lt`). For shared/global keys, use the app composer (`useI18n()` or the exported `t` from `src/locale`) with fully qualified paths.
 
-```typescript
-const { dt, t } = useTranslate("home");
-
-// Domain-scoped: looks up "home.welcome.greeting"
-dt("welcome.greeting")
-
-// Global scope: looks up "common.yes"
-t("common.yes")
-```
-
-Language bundles are in `src/locale/<lang>/` and configured in `src/locale/index.ts`.
+Language bundles live in `src/locale/<lang>/*.jsonc` and are loaded in `src/locale/index.ts`.
 
 ## Page types
 
