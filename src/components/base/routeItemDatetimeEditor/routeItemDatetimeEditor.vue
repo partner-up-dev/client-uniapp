@@ -12,9 +12,9 @@ import { deepcopy } from "@/utils/object";
 import {
   routeItemDatetimeEditorProps,
   routeItemDatetimeEditorEmits,
-  TIME_LOSS_OPTIONS,
   formatDatetimeDisplay,
   formatTimeLoss,
+  buildTimeLossOptions,
 } from "./routeItemDatetimeEditor";
 import { RouteItemDatetime } from "@/business/base/route";
 import Cell from "@/components/common/cell/cell.vue";
@@ -26,7 +26,8 @@ import dayjs from "dayjs";
 const props = defineProps(routeItemDatetimeEditorProps);
 const emit = defineEmits(routeItemDatetimeEditorEmits);
 
-const { dt } = useTranslate("common");
+const { t, dt } = useTranslate("common");
+const TIME_LOSS_OPTIONS = buildTimeLossOptions(t);
 
 // ==================== 状态管理 ====================
 

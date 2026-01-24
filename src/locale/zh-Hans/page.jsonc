@@ -20,11 +20,94 @@
       "entertainment": "娱乐搭子",
       "study": "学习搭子",
       "exercise": "运动搭子",
-      "shopping": "购物搭子"
+      "shopping": "购物搭子",
     },
     "mapControls": {
       "reset": "重置地图",
-      "location": "定位"
-    }
-  }
+      "location": "定位",
+    },
+  },
+  /**
+   * @name 首页的翻译
+   */
+  "home": {
+    "welcome": {
+      "greet": {
+        "morning": "早上好,",
+        "noon": "中午好,",
+        "afternoon": "下午好,",
+        "evening": "晚上好,",
+      },
+      "nickname": "请登录",
+      "emoji": "👋",
+    },
+    /** 创建搭子请求块 */
+    "cpr": {
+      "title": "想找什么搭子？",
+      "waiting": {
+        "title": "正在为你寻找搭子",
+      },
+    },
+    /** 发现搭子请求 */
+    "prd": {
+      "title": "大家在找什么搭子",
+    },
+    "to_guide": {
+      "title": "初来乍到？",
+    },
+  },
+  /**我的页面翻译 */
+  "me": {
+    "title": "我的",
+    "welcome": "欢迎来到搭一把",
+    "user": {
+      "joined_at": "加入",
+      "placeholder_nickname": "登录搭一把",
+    },
+    "my_partner_requests": {
+      "title": "我的搭子请求",
+      "subtitle": "查看和管理你发起的搭子请求",
+    },
+    "nickname": {
+      "placeholder": "输入昵称",
+    },
+    "actions": {
+      "login": "登录",
+      "edit_profile": "编辑资料",
+      "logout": "退出登录",
+      "help": "帮助",
+    },
+    "logout": {
+      "success": "登出成功",
+    },
+    "edit_card": {
+      "title": "个人信息编辑",
+      "fields": {
+        "bio": {
+          "title": "个人简介",
+          "placeholder": "介绍一下自己吧",
+        },
+        "gender": {
+          "title": "性别",
+          "placeholder": "点击以选择",
+        },
+        "mbti": {
+          "title": "MBTI",
+          "placeholder": "点击以选择",
+        },
+      },
+    },
+    "my_lists": {
+      "partner_requests": {
+        "title": "我的搭子请求",
+        "description": "我发布的、参与的、收藏的",
+        "looking_for_partners": "正在寻找搭子",
+      },
+      "split_bills": {
+        "title": "我的分账账单",
+        "description": "",
+        "action_required": "需要操作！",
+      },
+    },
+  },
 }

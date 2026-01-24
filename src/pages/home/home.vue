@@ -20,7 +20,7 @@ import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Snackbar from "@/components/common/snackbar/snackbar.vue";
 import PRTypePicker from "@/components/partner_request/PRTypePicker/PRTypePicker.vue";
 
-const { dt } = useTranslate("home");
+const { dt } = useTranslate("page.home");
 const { baseProfile } = AccountBaseProfile.use();
 
 // 响应式数据

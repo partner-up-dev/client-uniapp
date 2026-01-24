@@ -22,7 +22,6 @@ import { AccountBaseProfile, Account } from "@/business/account/base";
 import SafeAreaInset from "@/components/common/safeAreaInset.vue";
 import Avatar from "@/components/common/avatar/avatar.vue";
 import Cell from "@/components/common/cell/cell.vue";
-import Card from "@/components/common/card/card.vue";
 import Field from "@/components/common/field/field.vue";
 import PuButton from "@partner-up-dev/design-uniapp/components/puButton/puButton.vue";
 import dayjs from "dayjs";
@@ -30,7 +29,7 @@ import { useChooseImage } from "@/business/oss/index";
 import { GENDER_OPTIONS, MBTI_OPTIONS } from "@/data/const";
 import type { FieldValueType } from "@/components/common/field/field";
 
-const { dt } = useTranslate("me");
+const { dt } = useTranslate("page.me");
 const { baseProfile } = AccountBaseProfile.use();
 const { chooseImageAndUpload } = useChooseImage();
 
