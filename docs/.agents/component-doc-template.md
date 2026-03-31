@@ -103,4 +103,4 @@ See existing component docs in `src/components/` for examples.
 
 - Shared conventions: `docs/.agents/shared-conventions.md`
 - Vue patterns: `docs/.agents/vue-patterns.md`
-- Styling guide: `docs/.agents/styling/index.md`
+- Styling guide: `docs/.agents/styling-guide.md`

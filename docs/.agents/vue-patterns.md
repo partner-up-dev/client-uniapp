@@ -2,8 +2,6 @@
 
 Standard patterns for Vue 3 components in this project.
 
-Applies to components in `src/components/` only. Pages do not define props, emits, or models.
-
 ## Component structure
 
 Each component typically lives in its own folder:
@@ -20,15 +18,20 @@ If a component name conflicts with a built-in element name, prefix it with `PU`.
 ```vue
 <script setup lang="ts">
 import { defineProps, defineEmits, defineModel } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { compNameProps, compNameEmits } from './compName';
-import { localMessages } from './compName.messages';
+import { useTranslate } from '@/locale/use';
 
+// Props from separate module
 const props = defineProps(compNameProps);
+
+// Events from separate module
 const emit = defineEmits(compNameEmits);
+
+// v-model binding (when needed)
 const modelValue = defineModel<string>();
 
-const { t: lt } = useI18n({ inheritLocale: true, messages: localMessages });
+// i18n
+const { dt, t } = useTranslate('domain_name');
 
 // Component logic here
 </script>
@@ -110,6 +113,61 @@ function updateValue(newVal: string) {
 <template>
   <input v-model="modelValue" />
 </template>
+```
+
+## Common patterns
+
+### Refs and reactive state
+
+```typescript
+import { ref, reactive, computed } from 'vue';
+
+const count = ref(0);
+const state = reactive({ name: '', age: 0 });
+const doubled = computed(() => count.value * 2);
+```
+
+### Lifecycle hooks (UniApp)
+
+```typescript
+import { onLoad, onReady, onShow, onHide, onUnload } from '@dcloudio/uni-app';
+
+onLoad((query) => {
+  // Page loaded, parse route params
+});
+
+onReady(() => {
+  // DOM ready
+});
+
+onShow(() => {
+  // Page shown (every time)
+});
+
+onHide(() => {
+  // Page hidden
+});
+
+onUnload(() => {
+  // Cleanup
+});
+```
+
+### Composables
+
+Extract reusable logic:
+
+```typescript
+// composables/useCounter.ts
+export function useCounter(initial = 0) {
+  const count = ref(initial);
+  const increment = () => count.value++;
+  const decrement = () => count.value--;
+  return { count, increment, decrement };
+}
+
+// In component
+const { count, increment } = useCounter(10);
 ```
 
 ## References
