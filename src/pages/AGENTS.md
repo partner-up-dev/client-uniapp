@@ -10,7 +10,8 @@ Index and quick reference for the `src/pages` folder.
 2. [ARCHITECTURE.md](ARCHITECTURE.md) — data flow, lifecycle, and patterns
 3. [FILESYSTEM.md](FILESYSTEM.md) — directory structure and file organization
 4. [Shared conventions](../../docs/.agents/shared-conventions.md) — common development rules
-5. [Styling guide](../../docs/.agents/styling/index.md) — styling conventions
+5. [Vue patterns](../../docs/.agents/vue-patterns.md) — Vue 3 component patterns
+6. [Styling guide](../../docs/.agents/styling-guide.md) — styling conventions
 
 ## Key conventions (must follow)
 
@@ -21,12 +22,11 @@ Index and quick reference for the `src/pages` folder.
 - Use Pinia stores from `src/store/<domain>` via hooks
 - Navigate via `navigate()` from `src/utils/vendor.ts`
 - Handle safe areas with `SafeAreaInset` and `SafeArea` components
-- Pages do not define props, emits, or models
 
 **Shared conventions** (applies to all Vue code):
 
 - Use `<script setup>` for Vue 3 Composition API
-- Localize all user-facing text with `useI18n`; prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })`
+- Use `useTranslate()` for all user-facing text (never hard-code)
 - Use UniApp tags only: `<view>`, `<text>`, `<image>`, etc.
 - Prefer `Promise.then().catch()` over `async/await`
 - Use SCSS design tokens: `sys-var('color-primary')`
@@ -46,7 +46,7 @@ See [shared conventions](../../docs/.agents/shared-conventions.md) for complete 
 
 - `src/utils/vendor.ts` — `navigate()`, `errorReport()`
 - `src/utils/tabbar.ts` — tabbar sync helpers
-- `src/locale/index.ts` — i18n setup and global composer
+- `src/locale/use.ts` — `useTranslate()`
 
 **Common components:**
 
@@ -57,7 +57,8 @@ See [shared conventions](../../docs/.agents/shared-conventions.md) for complete 
 **Shared documentation:**
 
 - [docs/.agents/shared-conventions.md](../../docs/.agents/shared-conventions.md) — common development rules
-- [docs/.agents/styling/index.md](../../docs/.agents/styling/index.md) — styling conventions
+- [docs/.agents/vue-patterns.md](../../docs/.agents/vue-patterns.md) — Vue 3 component patterns
+- [docs/.agents/styling-guide.md](../../docs/.agents/styling-guide.md) — styling conventions
 
 **Instructions:**
 
