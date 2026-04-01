@@ -46,7 +46,7 @@ Page / Component
 ### i18n
 
 - `src/locale/index.ts` configures `vue-i18n` with JSONC aggregates from `src/locale/{locale}/*.jsonc`.
-- Use `useI18n` for all text. Prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })` (alias the returned `t` to `lt`). Global keys use the app composer or the exported `t` from `src/locale`. Text should never be hard-coded.
+- Use `useTranslate()` from `src/locale` for domain/global keys. Prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })` (alias the returned `t` to `lt`). Shared/global keys can use the exported `t` from `src/locale`. Text should never be hard-coded.
 
 ### Styling
 

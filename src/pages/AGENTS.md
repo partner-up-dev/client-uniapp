@@ -11,7 +11,7 @@ Index and quick reference for the `src/pages` folder.
 3. [FILESYSTEM.md](FILESYSTEM.md) — directory structure and file organization
 4. [Shared conventions](../../docs/.agents/shared-conventions.md) — common development rules
 5. [Vue patterns](../../docs/.agents/vue-patterns.md) — Vue 3 component patterns
-6. [Styling guide](../../docs/.agents/styling-guide.md) — styling conventions
+6. [Styling guide](../../docs/.agents/styling/index.md) — styling conventions
 
 ## Key conventions (must follow)
 
@@ -26,7 +26,7 @@ Index and quick reference for the `src/pages` folder.
 **Shared conventions** (applies to all Vue code):
 
 - Use `<script setup>` for Vue 3 Composition API
-- Use `useTranslate()` for all user-facing text (never hard-code)
+- Use `useTranslate()` for domain/global text, and `useI18n` with localMessages for local page/component text
 - Use UniApp tags only: `<view>`, `<text>`, `<image>`, etc.
 - Prefer `Promise.then().catch()` over `async/await`
 - Use SCSS design tokens: `sys-var('color-primary')`
@@ -46,7 +46,7 @@ See [shared conventions](../../docs/.agents/shared-conventions.md) for complete 
 
 - `src/utils/vendor.ts` — `navigate()`, `errorReport()`
 - `src/utils/tabbar.ts` — tabbar sync helpers
-- `src/locale/use.ts` — `useTranslate()`
+- `src/locale/index.ts` — `useTranslate()`
 
 **Common components:**
 
@@ -58,9 +58,9 @@ See [shared conventions](../../docs/.agents/shared-conventions.md) for complete 
 
 - [docs/.agents/shared-conventions.md](../../docs/.agents/shared-conventions.md) — common development rules
 - [docs/.agents/vue-patterns.md](../../docs/.agents/vue-patterns.md) — Vue 3 component patterns
-- [docs/.agents/styling-guide.md](../../docs/.agents/styling-guide.md) — styling conventions
+- [docs/.agents/styling/index.md](../../docs/.agents/styling/index.md) — styling conventions
 
 **Instructions:**
 
 - `.github/instructions/vue.instructions.md` — Vue 3 conventions
-- `.github/instructions/style.instructions.md` — styling guidelines
+- `docs/.agents/styling/index.md` — styling guidelines

@@ -1,5 +1,7 @@
 # Locale Reorganization Results
 
+Status: Completed for structure; translations remain incomplete by design.
+
 ## Summary
 
 - Added a Python automation script to reorganize locale domains and enforce the split-bill rename.

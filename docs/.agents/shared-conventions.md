@@ -19,9 +19,10 @@ Common conventions that apply to all Vue components, pages, and UI code in this 
 ## i18n (internationalization)
 
 - **Never hard-code text**: All user-facing text must use localization
-- **Use `useTranslate()`**: Import from `src/locale/use.ts`
+- **Use `useTranslate()`**: Import from `src/locale` (module entry)
 - **Domain-scoped translations**: Use `dt()` for domain-specific keys
 - **Global translations**: Use `t()` for common/shared keys
+- **Local messages**: When a component/page defines local messages, use `useI18n({ inheritLocale: true, messages: localMessages })`
 
 Example:
 
@@ -55,12 +56,13 @@ t("common.yes")         // looks up "common.yes"
 - `.github/instructions/coding.instructions.md` — general coding conventions
 - `.github/instructions/typescript.instructions.md` — TypeScript-specific rules
 - `.github/instructions/vue.instructions.md` — Vue 3 component conventions
-- `.github/instructions/style.instructions.md` — styling guidelines
+- `docs/.agents/styling/index.md` — styling conventions index
+- `docs/style.md` — style patterns and examples
 
 **Core utilities**:
 
 - `src/utils/vendor.ts` — `navigate()`, `errorReport()`, UniApp helpers
-- `src/locale/use.ts` — `useTranslate()` hook
+- `src/locale/index.ts` — `useTranslate()` hook
 - `src/utils/format.ts`, `src/utils/string.ts` — formatting helpers
 - `src/utils/time.ts` — time/datetime utilities
 

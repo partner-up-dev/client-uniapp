@@ -19,7 +19,6 @@ Keep locale keys and structures consistent across locales. The base schema comes
 
 - Add or rename keys in zh-Hans JSONC first, then mirror in en-US.
 - Prefer short, stable key paths; deduplicate by linking or reusing shared global keys.
-- Use `useI18n`:
-  - Global: `const { t } = useI18n()` and call fully-qualified keys.
-  - Local scope: `useI18n({ inheritLocale: true, messages: localMessages })` with component-local keys.
+- Use `useTranslate()` from `src/locale/index.ts` for domain/global keys and the exported `t` for shared keys.
+- Use `useI18n({ inheritLocale: true, messages: localMessages })` for component/page-local messages.
 - Run pnpm i18n:extract after changes to check missing/unused keys.

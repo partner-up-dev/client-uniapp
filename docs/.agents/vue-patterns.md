@@ -15,11 +15,13 @@ If a component name conflicts with a built-in element name, prefix it with `PU`.
 
 ## Standard template
 
+Note: if a component/page defines local messages, use `useI18n({ inheritLocale: true, messages: localMessages })` for those local keys and keep `useTranslate()` for domain or global keys.
+
 ```vue
 <script setup lang="ts">
 import { defineProps, defineEmits, defineModel } from 'vue';
 import { compNameProps, compNameEmits } from './compName';
-import { useTranslate } from '@/locale/use';
+import { useTranslate } from '@/locale';
 
 // Props from separate module
 const props = defineProps(compNameProps);

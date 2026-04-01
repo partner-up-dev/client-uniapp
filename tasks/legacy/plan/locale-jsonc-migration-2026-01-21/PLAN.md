@@ -74,7 +74,7 @@
 4. Update component imports/usage (deferred):
    - Replace `useTranslate()` usage with `useI18n({ inheritLocale: true, messages: localMessages })`
    - Use `const { t: lt } = useI18n(...)` and `lt('key')`
-   - See the per-file checklist in docs/plan/locale-jsonc-migration-2026-01-21/COMPONENTS_TO_UPDATE.md
+   - See the per-file checklist in tasks/legacy/plan/locale-jsonc-migration-2026-01-21/COMPONENTS_TO_UPDATE.md
 
 ### Phase 4: Validation & Documentation
 
@@ -138,4 +138,4 @@
 1. Remove remaining legacy TS locale domain files under `src/locale/{locale}/` and ensure aggregators only rely on JSONC.
 2. Update `src/locale/index.ts` and `src/locale/schema.ts` to source types/messages from JSONC aggregates only.
 3. Refresh locale docs to the JSONC + local scope pattern (`src/locale/AGENTS.md`, references in pages/business docs if they mention `useTranslate`).
-4. Record outcomes in `docs/plan/locale-jsonc-migration-2026-01-21/RESULT.md` after changes.
+4. Record outcomes in `tasks/legacy/plan/locale-jsonc-migration-2026-01-21/RESULT.md` after changes.

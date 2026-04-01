@@ -95,7 +95,7 @@ Stores live in `src/store/<domain>/` and follow the Pinia pattern.
 
 ## i18n integration
 
-All text is localized via `useI18n`. For component/page text, provide `localMessages` next to the Vue file and call `useI18n({ inheritLocale: true, messages: localMessages })` (alias the returned `t` to `lt`). For shared/global keys, use the app composer (`useI18n()` or the exported `t` from `src/locale`) with fully qualified paths.
+All text is localized. Use `useTranslate()` from `src/locale` for domain/global keys. For component/page-local text, provide `localMessages` next to the Vue file and call `useI18n({ inheritLocale: true, messages: localMessages })` (alias the returned `t` to `lt`). For shared/global keys without a domain prefix, use the exported `t` from `src/locale` with fully qualified paths.
 
 Language bundles live in `src/locale/<lang>/*.jsonc` and are loaded in `src/locale/index.ts`.
 
@@ -121,7 +121,7 @@ BusinessModel.method()
 
 ## Styling and theming
 
-Pages use SCSS design tokens and UnoCSS utilities. See `.github/instructions/style.instructions.md` and `src/styles/presets/design.ts` for details.
+Pages use SCSS design tokens and UnoCSS utilities. See `docs/.agents/styling/index.md`, `docs/style.md`, and `src/styles/presets/design.ts` for details.
 
 ## Testing
 
@@ -152,7 +152,7 @@ Pages are integration-tested via `tests/pages/`. See test setup in `tests/setup.
 
 - `src/business/` — domain models and API clients
 - `src/store/` — Pinia stores with persistence
-- `src/locale/use.ts` — `useTranslate()` hook
+- `src/locale/index.ts` — `useTranslate()` hook
 
 ### Instructions
 
@@ -160,4 +160,4 @@ Pages are integration-tested via `tests/pages/`. See test setup in `tests/setup.
 - `src/pages/ARCHITECTURE.md` — page architecture and data flow
 - `src/pages/FILESYSTEM.md` — page directory structure
 - `.github/instructions/vue.instructions.md` — Vue 3 component conventions
-- `.github/instructions/style.instructions.md` — styling guidelines
+- `docs/.agents/styling/index.md` — styling guidelines

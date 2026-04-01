@@ -42,7 +42,8 @@ See [src/business/AGENTS.md](src/business/AGENTS.md) for business layer developm
 ## i18n
 
 - i18n setup: `src/locale/index.ts` loads JSONC aggregates (`src/locale/zh-Hans/*.jsonc`, `src/locale/en-US/*.jsonc`) and derives types from zh-Hans.
-- Avoid hard-coded text; use `useI18n`. Prefer component/page-local messages with `useI18n({ inheritLocale: true, messages: localMessages })`; use global `t` for shared keys.
+- Avoid hard-coded text; use `useTranslate()` for domain/global keys and `t` for shared keys.
+- For component/page-local messages, use `useI18n({ inheritLocale: true, messages: localMessages })` and alias the local `t` if needed.
 
 ## Styling
 
@@ -58,6 +59,29 @@ See [src/business/AGENTS.md](src/business/AGENTS.md) for business layer developm
 ## Environment variables
 
 See `.env.example` for required variables: `VITE_BACKEND_MAIN_URL`, `VITE_PGRST_URL`, `VITE_TENCENT_LBS_KEY`, etc.
+
+## SVC v9.1 Execution Protocol
+
+Use this protocol to prevent scope drift and protect durable docs.
+
+- Repository mapping: root `tasks/` is the canonical SVC task layer in this repo.
+
+- Mode A (Exploration): work only in `tasks/`; do not edit PRD/TDD/production code. Capture uncertainty and open questions.
+- Mode B (Solidification): restate scope and invariants, await confirmation, then promote stable truths into PRD or Product TDD.
+- Mode C (Execution): restate scope and invariants, await confirmation, then implement tests and code changes.
+
+Pre-execution restatement (required for reference-sensitive or logic-altering changes):
+
+- target
+- target path or anchor
+- state or context
+- operation
+- scope (in and out)
+- invariants
+- likely affected files
+- uncertainty
+
+Mode A note: if a durable doc looks outdated during exploration, record it in the task doc and defer updates to Mode B.
 
 ## Conventions (must follow)
 

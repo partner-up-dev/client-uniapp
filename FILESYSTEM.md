@@ -13,7 +13,8 @@ This document maps the current layout (based on source inspection, not legacy do
 - `uno.config.ts` — UnoCSS presets, transformers, safelist.
 - `vitest.config.ts` — test setup and coverage rules.
 - `vite-plugins/` — custom build/test plugins.
-- `docs/` — project documentation and exploration plans.
+- `docs/` — project durable documentation (PRD/TDD/deployment/alignment).
+- `tasks/` — canonical task layer (active tasks, templates, and legacy task archives).
 - `tests/` — Vitest tests and mocks.
 - `src/` — application source.
 

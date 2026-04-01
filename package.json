@@ -12,7 +12,8 @@
     "build:mp-weixin": "uni build -p mp-weixin --mode production",
     "type-check": "vue-tsc --noEmit",
     "lint:vue": "eslint --cache \"src/**/*.vue\" \"tests/**/*.vue\"",
-    "i18n:extract": "cross-env NODE_OPTIONS=--require ts-node/register/transpile-only vue-i18n-extract --config vue-i18n-extract.config.cjs"
+    "i18n:extract": "cross-env NODE_OPTIONS=--require ts-node/register/transpile-only vue-i18n-extract --config vue-i18n-extract.config.cjs",
+    "docs:check": "node scripts/check-docs-integrity.js"
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-4080720251210001",
