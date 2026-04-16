@@ -38,12 +38,13 @@
 - Contract: approval of any sub-application approves the whole application unless PRD changes first.
 - Verification: role application changes must preserve sub-application identity and approval semantics.
 
-## CONTRACT-MESSAGE-UNREAD
+## CONTRACT-COMMUNICATION-CHAT-FLOW
 
-- Owner anchors: `src/store/communication/message.ts`, `src/store/communication/chat.ts`
-- Contract: message history is keyed by chat id, latest message id is the first history entry, and `totalUnread` is derived from per-chat unread counts.
-- Contract: `read()` decrements unread state and rolls back if backend reporting fails.
-- Verification: message changes must check unread decrement, rollback, newest-first history ordering, and thread recursion behavior where touched.
+- Owner anchors: `src/store/communication/chat.ts`, `src/business/communication/chat.ts`, `src/business/communication/message.ts`, `src/components/communication/ChatEntry/`, `src/components/communication/ChatContent/`
+- Contract: `useChatStore` owns the active local chat list and unread counts; there is no active persisted message-cache store authority.
+- Contract: message history and latest-message previews are fetched through `Chat.get_messages()`, with caller-owned pagination and ordering.
+- Contract: plain-text send flow uses `Message.send()` and refreshes the visible chat content after a successful send.
+- Verification: communication changes must check notification chat filtering, unread badges, latest-message preview ordering, chat thread load/refresh, and send-then-refresh behavior.
 
 ## CONTRACT-OSS-UPLOAD
 

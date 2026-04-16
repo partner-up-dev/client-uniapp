@@ -14,7 +14,8 @@ This file records cross-unit state ownership. It does not document every local r
 | Navigation IDs | `src/data/enum.ts` | pages, utilities, stores | enum edits | `PAGE_ID` without `PAGE_PATH` creates broken typed navigation. |
 | Navigation paths | `src/data/mapper.ts` | `navigate()` | mapper edits | `PAGE_PATH` without `pages.json` registration points to a dead route. |
 | Tabbar runtime state | `src/custom-tab-bar/index.js`, `src/utils/tabbar.ts` | tab pages, notification/profile flows | tabbar helper calls | Tabbar route/index mismatch breaks switchTab behavior or selected state. |
-| Message cache and unreads | `src/store/communication/message.ts` | chat, notifications, tabbar activity | message API calls and store actions | Incorrect rollback/order corrupts unread totals or latest-message display. |
+| Chat list and unreads | `src/store/communication/chat.ts` | notification page, chat entries, tabbar activity | account login chat load and explicit chat unread mutations | Incorrect chat ids or unread counts corrupt notification badges or latest-activity display. |
+| Message retrieval and send | `src/business/communication/chat.ts`, `src/business/communication/message.ts` | chat page, chat content, chat entries | backend chat/message API calls | Treating message history as a persisted store cache can show stale messages; refresh flow must remain explicit. |
 | Storage keys | `LOCAL_STORAGE_KEY` in `src/data/enum.ts` | Pinia persistence, tabbar avatar, domain caches | enum edits | Renaming keys without migration can orphan persisted state. |
 
 ## Authority Rules

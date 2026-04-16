@@ -28,7 +28,6 @@ This document maps the store directory structure.
 
 - `index.ts` — Module index
 - `chat.ts` — Chat state and unread counts store
-- `message.ts` — Message history and unread state store
 
 ### migration/
 

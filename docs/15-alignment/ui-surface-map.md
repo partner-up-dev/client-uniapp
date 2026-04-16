@@ -37,7 +37,7 @@ Do not put product semantics here. Use `docs/10-prd/` for product truth and `doc
 - Tabbar ID: `TABBAR_PAGE_ID.NOTIFICATION`
 - Route: `/pages/notification/notification`
 - Registered in `pages.json`: yes
-- Primary anchors: `src/pages/notification/notification.vue`, `src/store/communication/message.ts`, `src/custom-tab-bar/index.js`, `src/custom-tab-bar/index.wxml`
+- Primary anchors: `src/pages/notification/notification.vue`, `src/components/communication/ChatEntry/`, `src/store/communication/chat.ts`, `src/custom-tab-bar/index.js`, `src/custom-tab-bar/index.wxml`
 
 ### surface.tab.me
 
@@ -77,7 +77,7 @@ Do not put product semantics here. Use `docs/10-prd/` for product truth and `doc
 - Page ID: `PAGE_ID.CHAT`
 - Route: `/pages/communication/chat`
 - Registered in `pages.json`: yes
-- Primary anchors: `src/pages/communication/chat.vue`, `src/store/communication/message.ts`, `src/store/communication/chat.ts`, `src/business/communication/`
+- Primary anchors: `src/pages/communication/chat.vue`, `src/components/communication/ChatContent/`, `src/store/communication/chat.ts`, `src/business/communication/`
 
 ## Account Surfaces
 

@@ -89,7 +89,7 @@ Stores are grouped by domain:
 - `account/` — user session and auth
 - `api/` — external API caching (Aliyun STS, account API tokens)
 - `base/` — base entity caching (locations, requirements)
-- `communication/` — chat and message state
+- `communication/` — chat list and unread state
 - `migration/` — data migration between app versions
 - `partner_request/` — request drafts and role caching
 - `setting/` — app-level preferences

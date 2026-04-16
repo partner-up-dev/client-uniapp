@@ -8,7 +8,7 @@ It does not own PRD claims, cross-unit contracts, runtime topology, or task evid
 
 - [http-api-client/](http-api-client/): main backend HTTP client, auth header injection, lazy response parsing, and 401 retry behavior
 - [db-api-client/](db-api-client/): reusable PostgREST client with fresh per-operation auth headers
-- [notification-message-store/](notification-message-store/): communication message cache, unread state, history ordering, and read rollback behavior
+- [communication-chat-flow/](communication-chat-flow/): active chat list, unread state, latest-message preview, message retrieval, and send refresh behavior
 
 ## Admission Rule
 

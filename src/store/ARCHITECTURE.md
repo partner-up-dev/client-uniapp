@@ -170,24 +170,6 @@ actions: {
 }
 ```
 
-**communication/message** — Message state  
-Stores messages and history keyed by message/chat ID.
-
-```typescript
-state: {
-  messages: Record<number, Message>;
-  history_messages: Record<number, number[]>; // chat_id -> message_ids
-  unreads: Record<number, number>; // chat_id -> count
-}
-getters: {
-  message(message_id, refresh), unread(chat_id), totalUnread, unreadList,
-  lastMessage(chat_id), lastMessageId(chat_id), historyMessages(chat_id, page)
-}
-actions: {
-  read(message_id), unreadHandler(data, chat_id, mode)
-}
-```
-
 ### Special-purpose stores
 
 **migration/** — Data migration between app versions  

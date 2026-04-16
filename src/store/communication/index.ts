@@ -1,1 +1,1 @@
-// Notification's Store Module
+// Communication store module index

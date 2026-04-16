@@ -31,7 +31,7 @@
 
 - Claim intent: users can coordinate through chat after partner-related activity.
 - Evaluation dimensions: messages are visible, new messages update local activity state, chat can be entered from relevant surfaces.
-- Evidence expectation: chat page, communication models, and message store support the flow.
+- Evidence expectation: chat page, communication models, and active unread state support the flow.
 - Source rationale: [_drivers/market-and-user-pressures.md](../_drivers/market-and-user-pressures.md), [_drivers/business-and-service-objectives.md](../_drivers/business-and-service-objectives.md)
 - Realization pointers: [20-product-tdd/claim-realization-matrix.md](../../20-product-tdd/claim-realization-matrix.md)
 - Impact on existing claims: supports active participation after browsing or joining.
