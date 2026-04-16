@@ -8,13 +8,13 @@
 		},
 		"lib": ["esnext", "dom"],
 		"moduleResolution": "Bundler",
+		"ignoreDeprecations": "5.0",
+		"importsNotUsedAsValues": "remove",
 		"types": [
 			"@dcloudio/types",
 			"@uni-helper/uni-app-types",
 			"vitest/jsdom",
-			"node",
-			"types/node",
-			"@partner-up-dev/design-uniapp/types"
+			"node"
 		]
 	},
 	"vueCompilerOptions": {

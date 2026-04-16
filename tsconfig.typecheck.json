@@ -1,0 +1,11 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"],
+			"@partner-up-dev/design-uniapp/components/*.vue": [
+				"./src/types/design-uniapp-component.d.ts"
+			]
+		}
+	}
+}

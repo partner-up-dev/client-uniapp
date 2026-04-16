@@ -10,8 +10,9 @@
     "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin vitest",
     "build:mp-alipay": "uni build -p mp-alipay --mode production",
     "build:mp-weixin": "uni build -p mp-weixin --mode production",
-    "type-check": "vue-tsc --noEmit",
-    "lint:vue": "eslint --cache \"src/**/*.vue\" \"tests/**/*.vue\"",
+    "type-check": "vue-tsc --noEmit -p tsconfig.typecheck.json",
+    "lint:vue": "eslint --cache --no-error-on-unmatched-pattern \"src/**/*.vue\" \"tests/**/*.vue\"",
+    "quality": "pnpm type-check && pnpm lint:vue",
     "i18n:extract": "cross-env NODE_OPTIONS=--require ts-node/register/transpile-only vue-i18n-extract --config vue-i18n-extract.config.cjs"
   },
   "dependencies": {
@@ -63,7 +64,7 @@
     "eslint-plugin-vue": "9.32.0",
     "jsonc-parser": "^3.3.0",
     "ts-node": "10.9.2",
-    "typescript": "^4.9.4",
+    "typescript": "5.4.5",
     "unocss": "65.5.0",
     "unocss-preset-weapp": "^66.0.2",
     "vite": "5.2.8",
@@ -71,6 +72,6 @@
     "vitest": "3.2.4",
     "vue-eslint-parser": "9.4.3",
     "vue-i18n-extract": "2.0.6",
-    "vue-tsc": "^1.0.24"
+    "vue-tsc": "2.0.29"
   }
 }

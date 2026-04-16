@@ -45,7 +45,7 @@ export default {
 import { ref, computed } from "vue";
 import { BasicComponentOptions } from "@/utils/vue";
 import PuMap from "@/components/common/PUMap/PUMap.vue";
-import type { GeoElementWithIndex } from "@partner-up-dev/design-uniapp";
+import type { GeoElementWithIndex } from "@/components/common/PUMap/PUMap";
 import GeoElementPreview from "@/components/common/GeoElement/GeoElement.vue";
 import { type GeoElement } from "@/components/common/GeoElement/GeoElement";
 import { type Coord } from "@/business/base/route";

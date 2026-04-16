@@ -8,7 +8,10 @@ export default {
 import { BasicComponentOptions } from "@/utils/vue";
 import { CellProps, CellEmits } from "./cell";
 import { inject, computed } from "vue";
-import type { FormErrorState } from "@partner-up-dev/design-uniapp";
+
+interface FormErrorState {
+  errors: Record<string, string>;
+}
 
 const props = defineProps(CellProps);
 const emit = defineEmits(CellEmits);

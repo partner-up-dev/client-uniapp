@@ -103,6 +103,7 @@ Read folder-level `AGENTS.md`, `ARCHITECTURE.md`, and `FILESYSTEM.md` before edi
 - Dev H5: `pnpm dev:h5`
 - Tests H5: `pnpm test:h5`
 - Tests Weixin: `pnpm test:mp-weixin`
+- Static quality gate: `pnpm quality`
 - Type check: `pnpm type-check`
 - Vue lint: `pnpm lint:vue`
 - i18n extraction: `pnpm i18n:extract`

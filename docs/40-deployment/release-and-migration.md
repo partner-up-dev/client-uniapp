@@ -13,6 +13,7 @@
 
 ## Verification Commands
 
+- Aggregate static quality gate: `pnpm quality`
 - Type check: `pnpm type-check`
 - H5 tests: `pnpm test:h5`
 - Weixin-platform tests: `pnpm test:mp-weixin`
