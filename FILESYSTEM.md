@@ -13,7 +13,7 @@ This document maps the current layout (based on source inspection, not legacy do
 - `uno.config.ts` — UnoCSS presets, transformers, safelist.
 - `vitest.config.ts` — test setup and coverage rules.
 - `vite-plugins/` — custom build/test plugins.
-- `docs/` — project durable documentation (PRD/TDD/deployment/alignment).
+- `docs/` — project durable documentation (SVC meta, PRD, TDD, deployment, alignment, and repo-specific conventions).
 - `tasks/` — canonical task layer (active tasks, templates, and legacy task archives).
 - `tests/` — Vitest tests and mocks.
 - `src/` — application source.
@@ -109,3 +109,13 @@ Weixin custom tabbar implementation and styling.
 ### data/
 
 Enums, constants, and mapping tables (e.g., `PAGE_ID`, `PAGE_PATH`).
+
+## docs/
+
+- `00-meta/` — SVC typed input routes, mode SOPs, impact handshake, and concept dictionary.
+- `10-prd/` — product intent and observable behavior, derived as `_drivers/ -> behavior/ -> domain-structure/`.
+- `15-alignment/` — alignment substrate for reference-sensitive coordination.
+- `20-product-tdd/` — cross-unit technical contracts.
+- `30-unit-tdd/` — unit-level durable design memory.
+- `40-deployment/` — runtime and operational truths.
+- `.agents/` — repo-specific coding and styling conventions for agents.

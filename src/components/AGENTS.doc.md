@@ -1,96 +1,11 @@
-# AGENTS.md of component documentation
+# Component Documentation Notes
 
-This guide covers how to write and read component docs.
+The canonical component documentation template is [../../docs/.agents/component-doc-template.md](../../docs/.agents/component-doc-template.md).
 
-## Best Practices
+Do not maintain a second template in this folder.
 
-- Readers are Coding Agents; optimize for token efficiency
-  - Write only what’s necessary; avoid redundancy (if naming is self-explanatory, don’t explain “what it is”)
-  - Keep language concise and clear
-- Prefer structure over prose (use lists/tables where possible)
-- Keep terminology consistent with the codebase and existing docs
-- Document behaviors, constraints, and edge cases over implementation trivia
-- Put defaults, ranges, and validation rules next to the relevant prop/event/model
-- Avoid restating obvious UI; highlight user-visible states and transitions
-- Link to shared concepts instead of duplicating (use `docs/` or existing component docs)
-- If a section is not applicable, omit it rather than writing “N/A”
+Use component docs for component-local API, props, events, slots, models, observable UI states, and local edge cases. Link outward for durable owners:
 
-## Doc Template
-
-```markdown
-# compName
-
-## Rationale
-
-Why this component is needed.
-
-## Goals
-
-The component’s goals (core functionality).
-
-## Key Concepts
-
-Key concepts, mainly domain-specific terms (list only; details live in `docs/`).
-
-## Specification
-
-Refine the goals into content, UI/UX, behavior, etc.
-
-## Implementation
-
-Implementation details.
-
-### Props
-
-- `propName` (`type`, `defaultVal`, [required]): Description
-
-#### propName
-
-> Only when the prop is complex.
-
-### Events
-
-- `eventName(param: ParamType)`: Description
-
-#### eventName
-
-> Only when the event is complex.
-
-### Models
-
-- `modelValue`: Type, default, description
-
-#### model name
-
-> Only when the model binding is complex.
-
-### Slots
-
-- `default`: Description
-- `header`: Description
-
-#### slot name
-
-> Only when the slot is complex.
-
-### Methods
-
-- `methodName(param: ParamType): ReturnType {}`: Description
-
-#### methodName
-
-> Only when the method is complex.
-
-### Watches
-
-- `props.propName`: Describe callback behavior
-- `refValue`: Describe callback behavior
-
-#### watch target
-
-> Only when the watch target is complex.
-
-## Other
-
-Notes
-```
+- product terms and rules: [../../docs/10-prd/glossary.md](../../docs/10-prd/glossary.md)
+- surface IDs and route addresses: [../../docs/15-alignment/ui-surface-map.md](../../docs/15-alignment/ui-surface-map.md)
+- cross-unit contracts: [../../docs/20-product-tdd/cross-unit-contracts.md](../../docs/20-product-tdd/cross-unit-contracts.md)

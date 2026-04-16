@@ -1,14 +1,46 @@
-# Task lifecycle
+# Task layer
 
-tasks is the canonical sandbox for volatile work (Mode A).
+`tasks/` is the volatile workspace for planning, exploration, diagnostics, and temporary artifacts.
+
+Task notes are procedural and non-authoritative. Promote stable knowledge into PRD, TDD, Deployment, local `AGENTS.md`, or Alignment only after it passes the promotion test.
+
+## Current task protocol
+
+Use the typed input route from root `AGENTS.md` before choosing a mode:
+
+- `Intent`: product behavior, scope, policy, or strategy
+- `Constraint`: technical or environment boundary change with stable product behavior
+- `Reality`: bug, anomaly, failed check, or mismatch between expected and observed state
+- `Artifact`: bounded one-off deliverable
+
+Then choose the active mode for the current slice:
+
+- `Explore`
+- `Solidify`
+- `Execute`
+- `Diagnose`
+
+Input type decides durable ownership. Mode decides working posture.
+
+## Minimum viable task anchors
+
+Every non-trivial task must include:
+
+- Objective & Hypothesis
+- Guardrails Touched
+- Verification
+
+These anchors are required because they keep task work bounded without turning task notes into durable architecture.
 
 ## Required artifacts
 
-- PLAN.md for every task, with status, owner, mode, and restatement fields
-- RESULT.md for completed or cancelled tasks
-- Use the templates under tasks/templates, including the promotion checklist
+- Use `tasks/templates/PLAN.template.md` for new non-trivial tasks.
+- Use `tasks/templates/RESULT.template.md` for completed or cancelled tasks.
+- Use `tasks/templates/PROMOTION-CHECKLIST.md` before promoting any task finding into durable docs.
 
-## Status values
+Small single-step changes may skip a task folder when the request is local, low-risk, and already clear.
+
+## Lifecycle status values
 
 - Draft
 - Active
@@ -19,18 +51,22 @@ tasks is the canonical sandbox for volatile work (Mode A).
 
 ## Lifecycle rules
 
-- Mode A work stays in tasks only
-- Use Mode B to promote stable truths into PRD or Product TDD
-- Use Mode C for code changes after restatement and confirmation
-- Completed tasks must include a promotion review in RESULT.md
+- Keep uncertain reasoning in `tasks/`.
+- Do not treat task findings as current product or architecture truth.
+- Do not edit PRD/TDD/Deployment from vague prompts; explore first.
+- Reality work starts with evidence; no evidence, no modification.
+- Completed or cancelled tasks should record verification and promotion review in `RESULT.md`.
 
-## Legacy locations
+## Legacy archives
 
-tasks/legacy/plan and tasks/legacy/explore-plan are legacy archives. New tasks must live in tasks.
+These roots are historical archives:
 
-## Legacy guardrails
+- `tasks/legacy/plan/`
+- `tasks/legacy/explore-plan/`
+- old SVC migration folders such as `tasks/svc-v9/` and `tasks/svc-v91-*`
 
-- Treat `tasks/legacy/plan/` and `tasks/legacy/explore-plan/` as read-only history
-- Do not create new task folders in legacy roots
-- Re-open legacy work by creating a new `tasks/<task>/PLAN.md` and linking back
-- Keep archive notices in `tasks/legacy/plan/README.md` and `tasks/legacy/explore-plan/README.md`
+Rules:
+
+- Do not create new work in legacy roots.
+- Do not maintain historical task conclusions as current governance.
+- Re-open legacy work by creating a new `tasks/<task>/PLAN.md` and linking back to the old record.

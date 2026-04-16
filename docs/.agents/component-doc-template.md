@@ -15,6 +15,14 @@ Template and best practices for writing component documentation.
 - Link to shared concepts instead of duplicating (use `docs/` or existing component docs)
 - If a section is not applicable, omit it rather than writing "N/A"
 
+## Owner Guard
+
+- Component docs own component-local API, props, events, slots, models, observable UI states, and local edge cases.
+- Product why, business rules, and domain language belong in `docs/10-prd/`.
+- Surface IDs and route addresses belong in `docs/15-alignment/ui-surface-map.md`.
+- Cross-unit contracts belong in `docs/20-product-tdd/`.
+- Link to those owners instead of copying their truth into component docs.
+
 ## Doc Template
 
 ```markdown
@@ -22,19 +30,19 @@ Template and best practices for writing component documentation.
 
 ## Rationale
 
-Why this component is needed.
+Component-local reason for this component. Do not restate product strategy.
 
 ## Goals
 
-The component's goals (core functionality).
+Component-local goals and observable UI contract.
 
 ## Key Concepts
 
-Key concepts, mainly domain-specific terms (list only; details live in `docs/`).
+Key terms used by the component. Link domain terms to `docs/10-prd/glossary.md`.
 
 ## Specification
 
-Refine the goals into content, UI/UX, behavior, etc.
+Component-local content, UI states, behavior, and constraints.
 
 ## Implementation
 
@@ -103,4 +111,4 @@ See existing component docs in `src/components/` for examples.
 
 - Shared conventions: `docs/.agents/shared-conventions.md`
 - Vue patterns: `docs/.agents/vue-patterns.md`
-- Styling guide: `docs/.agents/styling-guide.md`
+- Styling guide: `docs/.agents/styling/index.md`

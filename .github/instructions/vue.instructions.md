@@ -18,7 +18,7 @@ description: "Vue.js framework idioms and best practices under UniApp. Follow th
 
 ## 1.2 Tag & Component Usage
 
-- [Mandatory] Follow the [UniApp Native Component Guide](/docs/.agents/miniprogram-compatibility/native-components.md)
+- [Mandatory] Follow the [UniApp Native Component Guide](../../docs/.agents/miniprogram-compatibility/native-components.md)
 
 Quick reference:
 
@@ -40,8 +40,8 @@ Quick reference:
 ### 2.2 Routing
 
 - [Forbidden] `vue-router`
-  - UniApp uses its own routing based on `pages.json`.
-  - Use the `navigate` we wrapped from `src/utils/vendor`.
+  - UniApp uses its own routing based on `src/pages.json`.
+  - Use the `navigate()` wrapper from `src/utils/vendor.ts`.
 
 ## 3. Reactivity & Data Flow
 

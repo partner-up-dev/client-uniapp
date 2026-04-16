@@ -69,4 +69,4 @@
 - 支持无障碍性标准
 - 提供点击反馈效果
 - 兼容性：支持所有Uniapp目标平台
-- 可在 PUForm 中使用，设置 `formProp` 属性后会自动显示验证错误信息，详见 [PUForm 文档](../PUForm/PUForm.md)
+- 可在提供 `puFormErrors` / `puFormCellPadding` 注入上下文的表单中使用；设置 `formProp` 后会显示对应字段的验证错误。

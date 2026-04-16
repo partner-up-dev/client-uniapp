@@ -1,45 +1,47 @@
-# Change request template
+# Alignment Substrate Request Template
 
-Use this template for reference-sensitive or logic-altering changes.
+Use this template only when MVT does not sufficiently constrain a reference-sensitive or boundary-crossing change.
 
-## Mode selection
+## Request Metadata
 
-- Mode: A / B / C
-- Volatility trigger:
-- Why this mode:
+- request id:
+- input route: Intent / Constraint / Reality / Artifact
+- current mode: Explore / Solidify / Execute / Diagnose
+- requester:
+- target surface:
+- owning durable layer:
 
-## Restatement (required)
+## Coordination Primitives
 
-- Target:
-- Target path or anchor:
-- State or context:
-- Operation (taxonomy ID from operation-taxonomy.md):
-- Scope (in):
-- Scope (out):
-- Invariants:
-- Likely affected files:
-- Uncertainty:
+### Reference
 
-## Addressing block (required for Mode B/C)
+- object:
+- address:
 
-- Surface ID(s) from ui-surface-map.md:
-- Route or Page ID:
-- Component or module anchor:
-- Contract anchor (if cross-unit):
+### Mutation Contract
 
-## Desired outcome
+- operation:
+- invariants / boundaries:
 
--
+### Grounding and Synchronization
 
-## Evidence and references
+- applicable state / context:
+- evidence:
+- protocol / handshake checkpoint:
 
--
+## Desired State Diff
 
-## Out of scope
+- from:
+- to:
 
--
+## Blast Radius Forecast
 
-## Approval
+- touched anchors / files:
+- downstream surfaces at risk:
+- explicitly out of scope:
 
-- Confirmed by:
-- Date:
+## Acceptance Check
+
+- verification contract:
+- evidence to record:
+- promotion or cleanup after completion:

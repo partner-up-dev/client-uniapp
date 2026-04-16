@@ -1,20 +1,32 @@
-# Release and migration
+# Release and Migration
 
-## Build commands
+## Development Commands
 
-- pnpm dev:mp-weixin
-- pnpm dev:mp-alipay
-- pnpm dev:h5
-- pnpm build:mp-weixin
-- pnpm build:mp-alipay
+- Weixin mini-program: `pnpm dev:mp-weixin`
+- Alipay mini-program: `pnpm dev:mp-alipay`
+- H5 development: `pnpm dev:h5`
 
-## Verification
+## Build Commands
 
-- pnpm type-check
-- pnpm test:h5
-- pnpm test:mp-weixin
+- Weixin mini-program: `pnpm build:mp-weixin`
+- Alipay mini-program: `pnpm build:mp-alipay`
 
-## Migration notes
+## Verification Commands
 
-- Update pages.json and data/enum.ts together when adding new pages
-- Keep locale JSONC bundles in sync across zh-Hans and en-US
+- Type check: `pnpm type-check`
+- H5 tests: `pnpm test:h5`
+- Weixin-platform tests: `pnpm test:mp-weixin`
+- Vue lint: `pnpm lint:vue`
+- i18n extraction audit: `pnpm i18n:extract`
+
+## Migration Checks
+
+- Page additions or route changes must update `src/pages.json`, `src/data/enum.ts`, `src/data/mapper.ts`, and `docs/15-alignment/ui-surface-map.md` together.
+- Tabbar changes must update `src/pages.json`, `src/custom-tab-bar/index.js`, `src/data/mapper.ts`, and `src/utils/tabbar.ts` together.
+- Locale bundle changes should keep `src/locale/zh-Hans/*.jsonc` and `src/locale/en-US/*.jsonc` structurally compatible.
+- Environment changes must update `.env.example` and [runtime-authority.md](runtime-authority.md).
+
+## Non-Claims
+
+- There is no durable repo-level docs integrity command.
+- Temporary task-local scripts may be used during migrations but must not be documented here as permanent release checks.

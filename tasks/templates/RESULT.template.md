@@ -1,6 +1,6 @@
 # <Task title> - Result
 
-Status: Completed
+Status: Completed / Cancelled
 Owner:
 Date:
 
@@ -8,19 +8,29 @@ Date:
 
 -
 
+## Outcome
+
+- Final state:
+- Verification:
+- Known residual risk:
+
 ## Changes
 
 -
 
-## Tests
+## Tests and checks
 
-- Not run (reason)
+- Not run:
 
-## Promotions
+## Promotion review
 
-- PRD updates:
-- Product TDD updates:
-- Unit TDD updates:
+- PRD:
+- Product TDD:
+- Unit TDD:
+- Deployment:
+- Alignment:
+- Local AGENTS:
+- Stayed in tasks:
 
 ## Follow-ups
 

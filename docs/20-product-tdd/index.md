@@ -1,16 +1,26 @@
-# Product TDD index
+# Product TDD Index
 
-This layer captures cross-unit technical truths that code alone does not communicate cheaply.
+This layer owns cross-unit technical contracts needed to realize PRD claims.
 
-## Contents
+It does not own product intent, unit-local implementation memory, runtime topology, or task evidence.
 
-- unit-topology.md
-- system-state-and-authority.md
-- cross-unit-contracts.md
-- claim-realization-matrix.md
+## Inputs
 
-## Rules
+- Product behavior: [../10-prd/behavior/claims.md](../10-prd/behavior/claims.md)
+- Product rules: [../10-prd/behavior/rules-and-invariants.md](../10-prd/behavior/rules-and-invariants.md)
+- Alignment addresses when targeting is ambiguous: [../15-alignment/ui-surface-map.md](../15-alignment/ui-surface-map.md)
 
-- Keep content contract-focused and short
-- Link to executable guardrails when available
-- If a contract can be enforced in code or tests, prefer that over prose
+## Files
+
+- [unit-topology.md](unit-topology.md): repo-level technical units and ownership boundaries
+- [system-state-and-authority.md](system-state-and-authority.md): cross-unit state authorities and derived readers
+- [cross-unit-contracts.md](cross-unit-contracts.md): contracts between pages, components, stores, business models, API clients, and platform wrappers
+- [claim-realization-matrix.md](claim-realization-matrix.md): PRD claim realization anchors and verification gaps
+
+## Update Rules
+
+- Update PRD first when user-visible behavior, claims, workflows, or product invariants change.
+- Update Product TDD when a change crosses unit boundaries or changes technical authority.
+- Push unit-local rationale into `docs/30-unit-tdd/` only when local design memory is worth preserving.
+- Push runtime, build, environment, or rollback truth into `docs/40-deployment/`.
+- Prefer code and tests over prose when a contract can be enforced cheaply.

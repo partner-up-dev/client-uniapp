@@ -24,7 +24,7 @@ Handle device safe areas (notches, rounded corners, etc.):
 </SafeAreaInset>
 ```
 
-**SafeArea component** (`src/components/common/safeArea.vue`):
+**SafeArea component** (`src/components/common/safeArea/safeArea.vue`):
 
 ```vue
 <SafeArea>

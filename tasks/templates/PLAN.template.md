@@ -3,28 +3,41 @@
 Status: Draft
 Owner:
 Date:
-Mode: A
 
-## Restatement (required for Mode B and Mode C)
+## MVT core
 
-Target:
-Target path or anchor:
-State or context:
-Operation:
-Scope (in):
-Scope (out):
-Invariants:
-Likely affected files:
-Uncertainty:
+- Objective & Hypothesis:
+- Guardrails Touched:
+- Verification:
 
-## Objectives
+## Route and mode
 
--
+- Input Type: Intent / Constraint / Reality / Artifact
+- Active Mode: Explore / Solidify / Execute / Diagnose
+- Governing Anchors:
 
-## Out of scope
+## Restatement
 
--
+Required before durable-doc or code mutation.
+
+- Target:
+- Target path or anchor:
+- State or context:
+- Operation:
+- Scope in:
+- Scope out:
+- Invariants:
+- Likely affected files:
+- Uncertainty:
 
 ## Plan
 
 1.
+
+## Optional exploration scaffold
+
+- Perturbation:
+- Impact hypothesis:
+- Temporary assumptions:
+- Negotiation triggers:
+- Promotion candidates:

@@ -23,7 +23,7 @@ This map records the completed migration from legacy task roots into root `tasks
 - `tasks/legacy/explore-plan/business-layer-2026-01-18` (status: archived placeholder; RESULT-only)
 - `tasks/legacy/explore-plan/pages-2026-01-18` (status: archived placeholder; RESULT-only)
 - `tasks/legacy/explore-plan/store-layer-2026-01-18` (status: archived placeholder; RESULT-only)
-- `tasks/legacy/explore-plan/svc-v91-governance-2026-03-31` (status: historical snapshot; superseded by `docs/svc-v91/drift-register.md`)
+- `tasks/legacy/explore-plan/svc-v91-governance-2026-03-31` (status: historical snapshot; superseded by current SVC docs and `tasks/align-svc-98/` migration evidence)
 
 ## Operating rule
 

@@ -1,115 +1,110 @@
 # PartnerUp Uniapp
 
-This repository is a UniApp (Vue 3) client for PartnerUp, primarily targeting mini-program platforms (Weixin, Alipay).
+This repository is a UniApp (Vue 3) client for PartnerUp, primarily targeting mini-program platforms such as Weixin and Alipay.
 
 ## What boots the app
 
-- Entry: `src/main.ts` creates the app, registers Pinia + `pinia-plugin-unistorage`, and installs i18n.
-- App lifecycle: `src/App.vue` calls `Account.login(false)` during `onLaunch()` and sets global background styles.
-- Pages and tabbar: `src/pages.json` declares pages; tabbar is custom via `src/custom-tab-bar`.
+- Entry: `src/main.ts` creates the app, registers Pinia with `pinia-plugin-unistorage`, installs i18n, and loads global styles.
+- App lifecycle: `src/App.vue` calls `Account.login(false)` during `onLaunch()`.
+- Pages and tabbar: `src/pages.json` declares pages; Weixin custom tabbar files live in `src/custom-tab-bar/`.
 
-## Domain structure (business logic)
+## Durable owners
 
-The primary domain logic lives in `src/business/`:
+- `docs/00-meta/`: SVC route protocols, mode SOPs, impact handshake rules, and framework concepts.
+- `docs/10-prd/`: product intent, observable behavior, and business glossary.
+- `docs/15-alignment/`: optional coordination substrate for reference-sensitive work.
+- `docs/20-product-tdd/`: cross-unit technical contracts and authority.
+- `docs/30-unit-tdd/`: durable design memory for complex logical units.
+- `docs/40-deployment/`: runtime and operational truths.
+- `tasks/`: volatile planning, investigation, diagnostics, and temporary artifacts.
+- Local `AGENTS.md`: tactical constraints and tripwires near the code they govern.
 
-- Shared model helpers: `src/business/index.ts` provides `V.class`, `V.formClass`, `nullable()`, `instance()`, `limit_string()`.
-- HTTP API: `src/business/http-api.ts` wraps `@uni-helper/uni-network` with interceptors, auth header injection, 401 retry, and lazy parsing via `Body`.
-- DB API: `src/business/db-api.ts` wraps PostgREST (`src/libs/postgrest-js`) with per-request auth headers.
-- Domains: `account/`, `partner_request/`, `communication/`, `base/`, `oss/`.
+Old SVC task folders under `tasks/` are archive context, not current operating authority.
 
-Use `V.class` / `V.formClass` when declaring models and form validators. For API calls, prefer `HTTPApiClient` and `DBApiClient` attached to model classes.
+## Operating loop
 
-See [src/business/AGENTS.md](src/business/AGENTS.md) for business layer development guide.
+1. Classify the request as `Intent`, `Constraint`, `Reality`, or `Artifact`.
+2. Identify the durable owner and blast radius before editing.
+3. For non-trivial work, keep volatile reasoning in `tasks/`.
+4. Select the active mode for the current slice: `Explore`, `Solidify`, `Execute`, or `Diagnose`.
+5. Load only the needed route doc, mode SOP, local `AGENTS.md`, and governing PRD/TDD/deployment docs.
+6. Expand into alignment substrate fields only when references, boundaries, state, evidence, or blast radius are ambiguous.
+7. Execute the smallest safe change and verify it.
+8. Promote stable knowledge only after it passes the promotion test.
 
-## UI structure
+Input type decides ownership. Mode decides the current working posture. Mode never overrides durable ownership.
 
-- Pages: `src/pages/<domain>/<pageName>/` with `<pageName>.vue`, `.scss`, `.md` (tabbar pages are at top-level under `pages/`). See [src/pages/AGENTS.md](src/pages/AGENTS.md) for page development guide.
-- Components: see the per-folder agent notes at `src/components/AGENTS.md`.
-- Common UI helpers: `src/components/common/`, `src/composables/`.
+## Input routes
 
-## State management
+- `Intent`: business wants new behavior, scope, policy, or strategy. Update PRD first.
+- `Constraint`: product behavior stays stable, but technical, dependency, performance, or environment boundaries change. Update Product TDD or Unit TDD where durable memory is justified.
+- `Reality`: observed behavior diverges from expectation. Diagnose with evidence first; no evidence, no modification.
+- `Artifact`: produce a bounded deliverable. Keep it tactical unless reuse and stability are proven.
 
-- Store: Pinia (`src/store/index.ts`).
-- Persistence: `pinia-plugin-unistorage` is enabled globally.
-- Key stores: `src/store/account`, `src/store/communication`.
+## Mode guide
 
-## Navigation
+- `Explore`: map unknowns, alternatives, temporary assumptions, and next decision points.
+- `Solidify`: restate findings into stable claims, contracts, decisions, or promotion candidates.
+- `Execute`: make a clear and verified edit.
+- `Diagnose`: collect evidence for bugs, anomalies, corrupt state, or unexplained behavior.
 
-- Page IDs and paths: `src/data/enum.ts`, `src/data/mapper.ts`.
-- Navigation helper: `src/utils/vendor.ts` (`navigate`).
-- Custom tabbar: `src/custom-tab-bar` + helpers in `src/utils/tabbar.ts`.
+Mode transitions are non-linear. A single task can move between modes as evidence changes.
 
-## i18n
+## Impact handshake
 
-- i18n setup: `src/locale/index.ts` loads JSONC aggregates (`src/locale/zh-Hans/*.jsonc`, `src/locale/en-US/*.jsonc`) and derives types from zh-Hans.
-- Avoid hard-coded text; use `useTranslate()` for domain/global keys and `t` for shared keys.
-- For component/page-local messages, use `useI18n({ inheritLocale: true, messages: localMessages })` and alias the local `t` if needed.
+Before mutating durable truth or making a non-local change, restate:
 
-## Styling
+- Address and object
+- State diff: from -> to
+- Blast radius forecast
+- Invariants that must remain true
+- Verification that will bound side effects
 
-- UnoCSS: `uno.config.ts` + `src/styles/presets/design.ts`.
-- SCSS design tokens: injected via Vite config, use `sys-var()` and mixins (`pu-font`, `pu-elevation`, `pu-icon`).
+If evidence is missing or ownership is unclear, return to `Explore` or `Diagnose`.
 
-## Tooling & tests
+## Project structure
 
-- Vite + Uni plugin (`vite.config.ts`).
-- Conditional compile plugin for tests: `vite-plugins/vite-plugin-uni-conditional-compile.ts`.
-- Vitest: `vitest.config.ts`, global Uni API mocks in `tests/setup.ts`.
+- Business logic: `src/business/`
+- Pages: `src/pages/`
+- Components: `src/components/`
+- State: `src/store/`
+- Locale: `src/locale/`
+- Navigation: `src/data/enum.ts`, `src/data/mapper.ts`, `src/utils/vendor.ts`
+- Custom tabbar: `src/custom-tab-bar/`
 
-## Environment variables
+Read folder-level `AGENTS.md`, `ARCHITECTURE.md`, and `FILESYSTEM.md` before editing that folder when they exist.
 
-See `.env.example` for required variables: `VITE_BACKEND_MAIN_URL`, `VITE_PGRST_URL`, `VITE_TENCENT_LBS_KEY`, etc.
+## Domain and API conventions
 
-## SVC v9.1 Execution Protocol
+- Use `V.class` / `V.formClass` for business models and forms.
+- Use `nullable()` for nullable fields and `instance()` for nested model types.
+- Use `DatetimeV` for date-like fields.
+- Prefer `HTTPApiClient` and `DBApiClient` attached to model classes for API calls.
+- Keep business logic in `src/business/`; stores should cache state and expose minimal mutations.
 
-Use this protocol to prevent scope drift and protect durable docs.
+## UI and i18n conventions
 
-- Repository mapping: root `tasks/` is the canonical SVC task layer in this repo.
+- Use UniApp tags such as `<view>`, `<text>`, and `<image>`, not web-only tags.
+- Use `<script setup>` for Vue 3 components.
+- Avoid hard-coded user-facing text.
+- Use `useTranslate()` for domain/global keys.
+- Use `useI18n({ inheritLocale: true, messages: localMessages })` for component/page-local messages.
 
-- Mode A (Exploration): work only in `tasks/`; do not edit PRD/TDD/production code. Capture uncertainty and open questions.
-- Mode B (Solidification): restate scope and invariants, await confirmation, then promote stable truths into PRD or Product TDD.
-- Mode C (Execution): restate scope and invariants, await confirmation, then implement tests and code changes.
+## Code conventions
 
-Pre-execution restatement (required for reference-sensitive or logic-altering changes):
-
-- target
-- target path or anchor
-- state or context
-- operation
-- scope (in and out)
-- invariants
-- likely affected files
-- uncertainty
-
-Mode A note: if a durable doc looks outdated during exploration, record it in the task doc and defer updates to Mode B.
-
-## Conventions (must follow)
-
-- Read and follow documentation at each folder level: `AGENTS.md`, `ARCHITECTURE.md`, `FILESYSTEM.md`.
-  - Root level provides project overview
-  - `src/business/`: domain models and API patterns
-  - `src/pages/`: page development and structure
-  - `src/components/`: component patterns
-  - `.github/instructions/`: detailed implementation guidelines
-- Prefer `Promise.then().catch()` over `async/await` for TS.
+- Prefer `Promise.then().catch()` over `async/await` for TypeScript in this repo.
 - Keep conditions readable; extract complex checks into named variables.
 - Avoid "WHAT" comments; only add "WHY" or high-level overview comments.
-- Use UniApp tags (`<view>`, `<text>`, `<image>`), not web-only tags.
+- Use SCSS design tokens via `sys-var()` and project mixins when styling.
 
 ## Useful commands
 
-- Dev (Weixin): `pnpm dev:mp-weixin`
-- Tests: `pnpm test:h5` or `pnpm test:mp-weixin`
+- Dev Weixin: `pnpm dev:mp-weixin`
+- Dev H5: `pnpm dev:h5`
+- Tests H5: `pnpm test:h5`
+- Tests Weixin: `pnpm test:mp-weixin`
 - Type check: `pnpm type-check`
+- Vue lint: `pnpm lint:vue`
+- i18n extraction: `pnpm i18n:extract`
 
-## Development Guidelines
-
-- Before starting any work in a directory, check whether the following documents exist in that directory.
-  If any of them exist, you MUST read only those that are relevant to the current task.
-  If the relevant documents are outdated or inconsistent with the current state, you MUST update them immediately.
-  The documents are:
-  - `AGENTS.md`
-  - `ARCHITECTURE.md`
-  - `FILESYSTEM.md`: Lists the files in the current directory and its subdirectories (unless a subdirectory has its own `FILESYSTEM.md`) and briefly explains their purposes.
-  - `compName.md`
-  - `moduleName.md`
+Do not add a permanent docs-integrity script by default. If a migration needs temporary documentation audits, keep them task-local.
