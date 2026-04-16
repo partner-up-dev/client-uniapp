@@ -1,5 +1,5 @@
 # Change hazards
 
 - Reusing a single builder can send stale auth headers
-- Removing the missing-env guard causes silent failures later
+- Moving or removing the missing-env guard changes whether failures happen at construction time or operation time
 - Altering schema defaults can break queries across modules
